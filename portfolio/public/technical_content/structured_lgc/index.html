@@ -1,0 +1,304 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+
+
+  <title>Sebastian Sciarra - Structured Latent Growth Curve Models: Modelling Nonlinear Patterns of Change with Latent Variables</title>
+
+  <meta name="author" content="Sebastian Sciarra">
+
+   
+     <link rel="stylesheet" href="/css/style.css"/>
+    
+        <link rel="stylesheet" href="/css/_syntax.css"/>
+        <link rel="stylesheet" href="/css/_syntax.min.7c7915c814b1f44a2b4dbad37271732f73f981954022834b4f60c10102df641d.css">
+
+  <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
+  <meta name="description" content="Seb&#39;s portfolio site">
+
+ 
+  
+</head>
+<body>
+<div class="container">
+
+
+
+  
+   <script src="https://kit.fontawesome.com/23dde744ab.js" crossorigin="anonymous"></script>
+
+   
+    <script type = 'text/javascript'>
+      function active() {
+         document.getElementsByClassName('navbar-links')[0].classList.toggle('active');
+      }
+      </script>
+
+  
+  
+      <link rel="stylesheet" href="/css/_navbar.css"/>
+      <link rel="stylesheet" href="/css/_navbar.min.8a3bb72e8be497c6ab8b4bf091af2f0ddce3eac22aff40af31db3ce3dfa1c7fa.css">
+
+    <div class = 'navbar'>
+       <h1>Blog Contents </h1>
+
+       <ul class = 'navbar-links'>
+        <li><a class = 'home', href = "/home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a class = 'technical', href = "/technical_content"><i class="fa-solid fa-gears"></i> Technical Content</a></li>
+        <li><a class = 'coding', href = "/coding_tricks"><i class="fa-solid fa-code"></i> Coding Demos & Tricks</a></li>
+        <li><a class = 'simulation', href = "/simulation_exps"><i class="fa-brands fa-buromobelexperte"></i> Simulation Experiments</a></li>
+        <li><a class = 'resources', href = "/mlresources"><i class="fa-solid fa-key"></i> ML Resources</a></li>
+        <li><a class = 'about', href = "/about"><i class="fa-solid fa-question"></i> About</a></li>
+        <li><a class = 'portal', href = "/"><i class="fa-solid fa-circle-chevron-left"></i> back to portal</a></li>
+
+       </ul>
+
+      <button hef = '#', class = "toggle-button",  onclick="active()">
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+      </button>
+  </div>
+
+
+
+
+
+<link rel="alternate" type="application/rss+xml" href="http://example.com/feed" >
+<main>
+<div class = 'blog_post'>
+
+     <div class = 'header'>
+
+        <h2 class = 'blog_title'> Structured Latent Growth Curve Models: Modelling Nonlinear Patterns of Change with Latent Variables </h2>
+
+        <div class = 'blog_summary'>  </div>
+
+         <br>
+
+        <time> <b> Published </b> <br>
+        11 January 2023
+        </time>
+
+    </div>
+
+
+    <script type="text/javascript"
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+      
+     <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       tex2jax: {
+         inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+         processEscapes: true,
+         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+       },
+       TeX: {equationNumbers: { autoNumber: "AMS" }}
+     });
+   </script>
+
+
+  <div class = 'content'>
+    <div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot1}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been (see Figure \ref{fig:gg-oz-plot})</span> </div>
+
+
+  </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+
+function createCopyButton(highlightDiv) {
+  const button = document.createElement("button");
+  button.className = "copy-code-button";
+  button.type = "button";
+  button.innerText = "Copy";
+  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
+  addCopyButtonToDom(button, highlightDiv);
+}
+
+async function copyCodeToClipboard(button, highlightDiv) {
+  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
+
+  try {
+    result = await navigator.permissions.query({ name: "clipboard-write" });
+    if (result.state == "granted" || result.state == "prompt") {
+      await navigator.clipboard.writeText(codeToCopy);
+    } else {
+      copyCodeBlockExecCommand(codeToCopy, highlightDiv);
+    }
+  } catch (_) {
+    copyCodeBlockExecCommand(codeToCopy, highlightDiv);
+  }
+  finally {
+    codeWasCopied(button);
+  }
+}
+
+
+function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
+  const textArea = document.createElement("textArea");
+  textArea.contentEditable = 'true'
+  textArea.readOnly = 'false'
+  textArea.className = "copyable-text-area";
+  textArea.value = codeToCopy;
+  highlightDiv.insertBefore(textArea, highlightDiv.firstChild);
+  const range = document.createRange()
+  range.selectNodeContents(textArea)
+  const sel = window.getSelection()
+  sel.removeAllRanges()
+  sel.addRange(range)
+  textArea.setSelectionRange(0, 999999)
+  document.execCommand("copy");
+  highlightDiv.removeChild(textArea);
+}
+
+function codeWasCopied(button) {
+  button.blur();
+  button.innerText = "Copied!";
+  setTimeout(function() {
+    button.innerText = "Copy";
+  }, 2000);
+}
+
+function addCopyButtonToDom(button, highlightDiv) {
+  highlightDiv.insertBefore(button, highlightDiv.firstChild);
+  const wrapper = document.createElement("div");
+  wrapper.className = "highlight-wrapper";
+  highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
+  wrapper.appendChild(highlightDiv);
+}
+
+
+document.querySelectorAll(".highlight")
+  .forEach(highlightDiv =>  createCopyButton(highlightDiv));
+
+
+
+
+const caption_tags = document.querySelectorAll('table caption');
+
+
+const table_nums = {};
+
+
+for (let i = 0; i < caption_tags.length; i++) {
+
+  
+  const match = caption_tags[i].innerHTML.match(/\(\\#tab:([^)]+)\)/);
+
+  
+  
+  table_nums[match[1]] = i+ 1;
+
+  
+  caption_tags[i].innerHTML = caption_tags[i].innerHTML.replace(match[0], '<span id="tab:'+ match[1] + '">Table ' + (i+1) + '<br></span>');
+}
+
+
+const p_elements = document.querySelectorAll('p, tfoot, caption, .figNote');
+const table_refs = [];
+
+for (const element of p_elements) {
+  if (element.innerHTML.includes('Table \\ref\{tab:')) {
+    table_refs.push(element);
+  }
+}
+
+  
+for (let i = 0; i < Object.keys(table_nums).length; i++) {
+
+  
+  table_label = Object.keys(table_nums)[i];
+  table_number = Object.values(table_nums)[i];
+
+ for (let j = 0; j < table_refs.length; j++){
+
+    
+    label_to_match = new RegExp('\\\\ref\\{tab:' + table_label + '\\}', 'g');
+
+   
+   text = table_refs[j].innerHTML.replace(label_to_match, '<a href="#tab:' + table_label + '">' + table_number + '</a>');
+
+
+   table_refs[j].innerHTML = text;
+  }
+}
+
+
+
+
+const fig_caption_tags = document.querySelectorAll('div.figure span.figLabel');
+
+
+const potential_fig_references = document.querySelectorAll('p, tfoot, caption, .figNote');
+const figure_refs = [];
+
+for (const ref of potential_fig_references) {
+  if (ref.innerHTML.includes('Figure \\ref\{fig:')) {
+    figure_refs.push(ref);
+  }
+}
+
+const figure_nums_list = {};
+
+
+for (let i = 0; i < fig_caption_tags.length; i++) {
+
+  
+  const match = fig_caption_tags[i].innerHTML.match(/\\ref{fig:[^}]+}/g);
+  const fig_label = fig_caption_tags[i].innerHTML.match(/fig:(.*?)}/);
+
+  
+  
+  figure_nums_list[fig_label[1]]= i+ 1;
+
+  
+  fig_caption_tags[i].innerHTML = fig_caption_tags[i].innerHTML.replace(match, '<span id="fig:'+ fig_label[1] + '">' + (i+1) + '</span>');
+
+}
+
+
+
+  
+for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
+
+  
+  figure_label = Object.keys(figure_nums_list)[i];
+  figure_number = Object.values(figure_nums_list)[i];
+
+
+ for (let j = 0; j < figure_refs.length; j++){
+
+    
+    label_to_match = new RegExp('\\\\ref\\{fig:' + figure_label + '\\}', 'g')
+
+   
+   text = figure_refs[j].innerHTML.replace(label_to_match, '<a href="#fig:' + figure_label + '">' + figure_number + '</a>');
+
+   figure_refs[j].innerHTML = text;
+  }
+}
+
+
+
+const external_links = document.querySelectorAll("a[href*=https]");
+external_links.forEach(link => link.setAttribute("target", "_blank"))
+external_links.forEach(link => link.setAttribute("rel", "noopener noreferrer")) 
+
+</script>
+
+
+
+
+      </div>
+    </body>
+</html>
+

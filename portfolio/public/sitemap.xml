@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://example.org/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://example.org/technical_content/structured_lgc/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://example.org/technical_content/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://example.org/categories/</loc>
+  </url><url>
+    <loc>http://example.org/coding_tricks/</loc>
+  </url><url>
+    <loc>http://example.org/coding_tricks/em_algorithm/</loc>
+  </url><url>
+    <loc>http://example.org/technical_content/em_algorithm/</loc>
+  </url><url>
+    <loc>http://example.org/home/</loc>
+  </url><url>
+    <loc>http://example.org/simulation_exps/</loc>
+  </url><url>
+    <loc>http://example.org/tags/</loc>
+  </url><url>
+    <loc>http://example.org/simulation_exps/phacking/p_hacking/</loc>
+  </url>
+</urlset>

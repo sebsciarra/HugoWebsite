@@ -1,0 +1,45 @@
+
+<!-- adds navigation bar on all pages except home page-->
+{{ if ne .IsHome true }}
+
+  <!-- allows any icon to be pulled from fontawesome -->
+   <script src="https://kit.fontawesome.com/23dde744ab.js" crossorigin="anonymous"></script>
+
+   <!-- function for showing table of contents for phone screens  -->
+    <script type = 'text/javascript'>
+      function active() {
+         document.getElementsByClassName('navbar-links')[0].classList.toggle('active');
+      }
+      </script>
+
+  <!-- styling for navbar -->
+  {{ $css := resources.Get "css/_navbar.scss" | toCSS | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ "css/_navbar.css" | relURL }}"/>
+      <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+    <div class = 'navbar'>
+       <h1>Blog Contents </h1>
+
+       <ul class = 'navbar-links'>
+        <li><a class = 'home', href = "/home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a class = 'technical', href = "/technical_content"><i class="fa-solid fa-gears"></i> Technical Content</a></li>
+        <li><a class = 'coding', href = "/coding_tricks"><i class="fa-solid fa-code"></i> Coding Demos & Tricks</a></li>
+        <li><a class = 'simulation', href = "/simulation_exps"><i class="fa-brands fa-buromobelexperte"></i> Simulation Experiments</a></li>
+        <li><a class = 'resources', href = "/mlresources"><i class="fa-solid fa-key"></i> ML Resources</a></li>
+        <li><a class = 'about', href = "/about"><i class="fa-solid fa-question"></i> About</a></li>
+        <li><a class = 'portal', href = "/"><i class="fa-solid fa-circle-chevron-left"></i> back to portal</a></li>
+
+       </ul>
+
+      <button hef = '#', class = "toggle-button",  onclick="active()">
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+      </button>
+  </div>
+
+{{ end }}
+
+
+<!-- adds rss feed-->
+<link rel="alternate" type="application/rss+xml" href="http://example.com/feed" >

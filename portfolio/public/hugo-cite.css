@@ -1,0 +1,110 @@
+/* =============================================================================
+/* Hugo-Cite.css
+/* ----------------------------------------------------------------------------- */
+
+:root {
+  --navbar-color: #002241;
+  --navbar-width: 20rem;
+  --home-color: #d170c7;
+  --technical-color: #33c304; 
+  --coding-color:  #e38f01;
+  --simulation-color: #c7547d;
+  --resources-color: #0678e1;
+  --about-color: #d4bd04;
+  --hover-color: #00182d; 
+}
+.hugo-cite-bibliography{
+   padding-left: 2rem ;
+  text-indent: -2rem ;
+  line-height: 1.2rem;
+ 
+  width: 100%;
+}
+
+dd{
+  display: inline-block;
+  padding: 0;
+}
+
+.hugo-cite-group {
+  display: inline-block;
+  position: relative; /* needed to reference box to pop up and for parentheses to wrap reference  */
+  font-size: 12px; /* reduce to avoid some breaks */
+  color: var(--navbar-color); 
+}
+
+/* specification for popup */
+.hugo-cite-group
+  .hugo-cite-citation {
+    visibility: hidden;
+    font-family: palatino;
+    background-color: #ffffff;
+    border: 1px solid var(--navbar-color);
+    padding: 1rem;
+    position: absolute;
+    width: 350px;
+    max-width: 100vw;
+    z-index: 1;
+    bottom: 140%;
+    left: 0;
+    margin-left: 0%;
+
+    z-index: 1;
+    transition:
+      visibility 0s 0.2s,  /* delay until box disappears */
+      transform .3s ease 0s,
+      opacity .3s ease 0s;
+    opacity: 1;
+    transform: translateY(-8px);
+}
+
+.hugo-cite-group:hover
+  .hugo-cite-citation {
+    visibility: visible;
+    transition: visibility 0s 0s, transform 0s, opacity 0s;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* remove underlining from in-text citations*/ 
+.hugo-cite-group a { 
+  text-decoration: none;
+}
+
+.hugo-cite-group a:visited {
+   color: gray; 
+}
+
+
+.hugo-cite-group a:hover, .hugo-cite-group span[itemprop="familyName"]:hover{
+  color: blue; 
+  text-decoration: underline; 
+  }
+  
+  
+/* doi colors*/ 
+ a[href*="https://doi"]{
+    text-decoration: none;
+    color: blue;
+}
+
+ a[href*="https://doi"]:visited{
+    color: gray;
+}
+
+ a[href*="https://doi"]:hover{
+    text-decoration: underline;
+    color: blue;
+}
+
+
+
+
+/* Visually Hidden utility class */
+.visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}

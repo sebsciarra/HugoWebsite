@@ -1,0 +1,18 @@
+{ "repos" : 
+  [
+    {
+      "name": "nonlinsSims",
+      "url": "https://github.com/sciarraseb/nonlinSims"
+  }, 
+  {
+    "name": "nonlinSimsAnalysis",
+    "url": "https://github.com/sciarraseb/nonlinSimsAnalysis" 
+  },
+  {
+    "name": "pHacking",
+    "url": "https://github.com/sciarraseb/pHacking" 
+    
+  }
+] 
+  
+}

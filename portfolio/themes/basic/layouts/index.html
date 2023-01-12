@@ -1,0 +1,21 @@
+
+{{ define "main" }} <!-- pulls information from content/index.md. The baseof.html file tells Hugo 
+to take the 'main' block and put it into the <main> section. Note that all content of homepage is specifie by this file. _index.md file
+is blank -->
+<h1>{{ .Site.Title}}</h1>
+
+  <ul id='links'>
+			<li>
+				<a href='/home'>Blog</a>
+			</li>
+			<li>
+				<a href='http://www.github.com/sciarraseb' target='_blank'>Code</a>
+			</li>
+			<li>
+				<a href='http://www.linkedin.com' target='_blank'>LinkedIn</a>
+			</li>
+	</ul>
+
+<p><code>seb@sciarra.com</code></p>
+
+{{ end }}

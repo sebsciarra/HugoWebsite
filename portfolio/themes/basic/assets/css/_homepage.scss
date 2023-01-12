@@ -1,0 +1,55 @@
+
+/*old color --> rgba(0, 0, 0, 0.8) */
+html {
+  font-family: -apple-system, Helvetica, sans-serif;
+  color: #00182d;
+  padding-bottom: 1rem;
+  padding-top: 1em;
+  line-height: 1.5em;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+
+/*content box */
+.container {
+  font-family: Arial;
+  font-size: 15px;
+  line-height: 1.5em; /*line spacing */
+  padding-top: 5%;
+  padding-left: 25%;
+  width: 80%;
+}
+
+/*modifies title */
+h1 {
+ font-family: Helvetica;
+ font-size: 25px;
+}
+
+/*modifies email font */
+code {
+color: #00182d;
+ position: relative;
+ top: 20px;
+ font-family: monospace; 
+ font-size: 15px;
+}
+
+/*modifies unordered list on homepage */
+ul { 
+  list-style:none;
+  padding-left:0;
+}
+
+
+/* unvisited link */
+a:visited, a:link {
+   color: #00182d;
+}
+
+/* removes underline when cursor is on a link */
+a:hover {
+  text-decoration: none;
+}

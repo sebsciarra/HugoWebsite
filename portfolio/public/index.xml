@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home  on Sebastian Sciarra</title>
+    <link>http://example.org/</link>
+    <description>Recent content in Home  on Sebastian Sciarra</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Structured Latent Growth Curve Models: Modelling Nonlinear Patterns of Change with Latent Variables</title>
+      <link>http://example.org/technical_content/structured_lgc/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/technical_content/structured_lgc/</guid>
+      <description> Figure \ref{fig:gg-oz-plot1} Title of Figure Note. Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been (see Figure \ref{fig:gg-oz-plot}) </description>
+    </item>
+    
+    <item>
+      <title>Expectancy-Maximization Algorithm</title>
+      <link>http://example.org/coding_tricks/em_algorithm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/coding_tricks/em_algorithm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems</title>
+      <link>http://example.org/technical_content/em_algorithm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/technical_content/em_algorithm/</guid>
+      <description>This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.</description>
+    </item>
+    
+    <item>
+      <title>The effect of p-hacking on false positive rates</title>
+      <link>http://example.org/simulation_exps/phacking/p_hacking/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/simulation_exps/phacking/p_hacking/</guid>
+      <description>$$ \gamma $$
+#this is a comment more comment print(&amp;#39;my website my website my website my website my website my website my website my website my website my website my website my website my website my website my website&amp;#39;) print(1 + 2) print(&amp;#39;another&amp;#39;) </description>
+    </item>
+    
+  </channel>
+</rss>

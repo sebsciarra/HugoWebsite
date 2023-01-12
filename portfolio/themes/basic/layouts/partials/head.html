@@ -1,0 +1,58 @@
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Uses homepage title (i.e., Seb's portfolio website) on homepage if the page has no title content explicitly listed.
+  Otherwise, it uses the Site's parameter desription in the source documentation-->
+
+
+  <title>
+  {{- if .Page.IsHome -}}
+    {{ .Site.Title }}
+  {{- else -}}
+    {{ .Site.Title }} - {{ .Title}}
+  {{- end -}}
+  </title>
+
+  <meta name="author" content="{{ .Site.Params.author }}">
+
+   <!--  resources.Get function uses the assets directory as its base path. toCSS allows Sass preprocessor to be use  -->
+   {{- if .Page.IsHome -}}
+     {{ $css := resources.Get "css/_homepage.scss" | toCSS | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ "css/_homepage.css" | relURL }}"/>
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+  {{- else -}}
+    {{ $css := resources.Get "css/style.scss" | toCSS | minify | fingerprint }}
+     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}"/>
+    {{ $css := resources.Get "css/_syntax.scss"  | toCSS | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ "css/_syntax.css" | relURL }}"/>
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+  <link rel="stylesheet" type="text/css" href="{{ "/hugo-cite.css" | relURL }}" />
+
+  {{- end -}}
+
+
+  <!-- Uses homepage description from config.toml (i.e., Seb's portfolio website) on homepage if the page has no description content explicitly listed.
+  Otherwise, it uses the Site's parameter desription in the source documentation-->
+  <meta name="description" content="
+  {{- with .Page.Description -}}
+    {{ . }}
+  {{- else -}}
+    {{ .Site.Params.description }}
+  {{- end -}}">
+
+ <!--title attribute contains title of page. Note that $ signs are used to indicate to Hugo that you are looking in the global scope
+ the link tag is created in the last line. Note that safeHTML should only be used with links that you trust-->
+  {{ range .AlternativeOutputFormats -}}
+    {{- $link := `<link rel="%s" type="%s" href="%s" title="%s">` -}}
+    {{- $title := printf "%s - %s" $.Page.Title $.Site.Title -}}
+
+    {{- if $.Page.IsHome -}}
+      {{ $title = $.Site.Title }}
+    {{- end -}}
+
+    {{ printf $link .Rel .MediaType.Type .Permalink $title | safeHTML }}
+  {{- end }}
+</head>
