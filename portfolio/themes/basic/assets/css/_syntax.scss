@@ -2,21 +2,21 @@
   --navbar-color: #002241;
   --navbar-width: 20rem;
   --home-color: #d170c7;
-  --technical-color: #33c304; 
+  --technical-color: #33c304;
   --coding-color:  #e38f01;
   --simulation-color: #cc7c99;
   --resources-color: #0678e1;
   --about-color: #d4bd04;
-  --hover-color: #00182d; 
+  --hover-color: #00182d;
 }
 
 /* Background */ .bg { color: red; }
-/* PreWrapper */ 
+/* PreWrapper */
 /* code chunk features for R code chunks */
 .chroma {/*color of parentheses*/
          background-color: rgba(116, 170, 219, 0.30);
         padding: 0rem;
-         max-width: 85%; 
+         max-width: 85%;
          margin: 0 auto; /*centers block of text*/
          white-space: normal;
   font-size: 12;
@@ -38,7 +38,7 @@ div[language="python"] .chroma .line.hl{
 
 /* code chunk color for bash (inherits all other features from .chroma defined above) */
 div[language="bash"] .chroma {
-  background-color:black; 
+  background-color:black;
 }
 
 .inline-src .language-bash{
@@ -47,16 +47,19 @@ div[language="bash"] .chroma {
 
 
 div[language="bash"] .chroma .line.hl {
-  background-color:gray; 
+  background-color:gray;
 }
 
+div[class='error']{
+  color: red;
+}
 /* change text color of bash code*/
-code[class = "language-{.r}"]  {
+code[class = "r-code"]  {
   display:block;
   color: var(--hover-color); /*color of parentheses*/
   background-color: rgba(116, 170, 219, 0.30);
   margin: 0 auto; //*centers block of text*/
-  max-width: 85%; 
+  max-width: 85%;
   white-space: pre-line;
   font-size: 12;
 }
@@ -105,7 +108,7 @@ code[class = "language-{.r}"]  {
   border-bottom-left-radius: 4px;
   white-space: normal;
   padding: 4px 4px 5px 4px;
-  margin: 0; 
+  margin: 0;
   cursor: pointer;
 }
 
@@ -127,7 +130,7 @@ code[class = "language-{.r}"]  {
 .inline-src {color: var(--hover-color); /*color of parentheses*/
          background-color: rgba(116, 170, 219, 0.30);
          padding: 0rem;
-         max-width: 90%; 
+         max-width: 90%;
          margin: 0 auto; /*centers block of text*/
          white-space: normal;
   font-size: 12;
@@ -142,10 +145,10 @@ code[class = "language-{.r}"]  {
 /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
 
 /* LineHighlight */ .chroma .hl {background-color: rgba(116, 170, 219, 0.5);
-          
-          max-width: 100%; 
+
+          max-width: 100%;
           margin: 0 auto; }
-          
+
 /* LineNumbersTable */ .chroma .lnt { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
 /* LineNumbers */ .chroma .ln { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
 
@@ -153,7 +156,7 @@ code[class = "language-{.r}"]  {
 /* Line */ .chroma .line { display: flex; }
 /* Keyword */ .chroma .k { color: blue }
 
-/* KeywordConstant; NULL, NA */ .chroma .kc, { color: #cf57c2} 
+/* KeywordConstant; NULL, NA */ .chroma .kc, { color: #cf57c2}
 
 /* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
 /* KeywordNamespace */ .chroma .kn { color: var(--navbar-color) }
@@ -172,7 +175,7 @@ div[language="bash"] .chroma .nc { color: white }
 /* NameDecorator */ .chroma .nd { color: #a6e22e }
 /* NameEntity */ .chroma .ni {  }
 /* NameException */ .chroma .ne { color: #a6e22e }
-/* NameFunction; function code color  */ .chroma .nf { color: var(--resources-color); } 
+/* NameFunction; function code color  */ .chroma .nf { color: var(--resources-color); }
 /* NameFunctionMagic */ .chroma .fm {}
 
 /* NameLabel */ .chroma .nl {  }
@@ -215,8 +218,8 @@ div[language="bash"] .chroma .nc { color: white }
 /* Operator; plus symbol*/ .chroma .o { color: black }
 
 
-/* OperatorWord */ .chroma .ow { color: #f92672 } 
-/* Punctuation; color of parentheses */ .chroma .p { color: var(--navbar-color); } 
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Punctuation; color of parentheses */ .chroma .p { color: var(--navbar-color); }
 div[language="bash"] .chroma .o {color: white; }
 .inline-src .language-bash .o{color:white;}
 

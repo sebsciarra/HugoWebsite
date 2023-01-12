@@ -15,6 +15,13 @@ tags: []
 
 
 
+```r 
+1 + "a"
+```
+<div class = 'error'> 
+Error in 1 + "a": non-numeric argument to binary operator
+
+</div>
 
 That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
@@ -40,6 +47,24 @@ var <- function(x1, x2){
   else {print (x2)}
 }
 ```
+
+
+<pre><code class = 'r-code'>
+[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
+[1] 3
+[1] 1.5
+[1] "another"
+NULL
+[1] NA
+[1] TRUE
+[1] "\n"
+$number_measurements
+[1]  5  7  9 11
+
+$spacing
+[1] "equal"    "time_inc"
+</pre></code>
+
 
 
 Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
