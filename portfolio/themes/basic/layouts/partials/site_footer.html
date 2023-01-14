@@ -1,0 +1,38 @@
+
+<footer class="site-footer">
+  {{ if or (site.GetPage "terms.md") (site.GetPage "privacy.md") }}
+  <p class="powered-by">
+    {{ with site.GetPage "privacy.md" }}
+      {{ printf "<a href=\"%s\">%s</a>" .RelPermalink .Title | safeHTML }}
+    {{ end }}
+    {{ with site.GetPage "terms.md" }}
+      {{ if site.GetPage "privacy.md" }} &middot; {{ end }}
+      {{ printf "<a href=\"%s\">%s</a>" .RelPermalink .Title | safeHTML }}
+    {{ end }}
+  </p>
+  {{ end }}
+
+  <!-- Init code folding -->
+  {{ partial "article_footer_js.html" . }}
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+  <script src="{{ "js/external_links.js" | relURL }}"></script>
+   <script src="{{ "js/number_tables.js" | relURL }}"></script>
+  <script src="{{ "js/number_figures.js" | relURL }}"></script>
+  <script src="{{ "js/copy_code.js" | relURL }}"></script>
+
+  <script src="{{ "js/jquery_load.js" | relURL }}"></script>
+<script src="{{ "js/transition.js" | relURL }}"></script>
+<script src="{{ "js/collapse.js" | relURL }}"></script>
+<script src="{{ "js/dropdown.js" | relURL }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+
+</footer>
+
+
+

@@ -3,7 +3,7 @@ title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Pr
 draft: false
 summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
 article_type: technical
-csl: "/Users/sebastiansciarra/Library/R/4.0/library/papaja/rmd/apa7.csl"
+csl: ""
 output:
   bookdown::html_document2:
      keep_md: true
@@ -18,10 +18,10 @@ tags: []
 ```r 
 1 + "a"
 ```
-<div class = 'error'> 
-Error in 1 + "a": non-numeric argument to binary operator
 
-</div>
+```
+Error in 1 + "a": non-numeric argument to binary operator
+```
 
 That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
@@ -38,19 +38,17 @@ print(NULL)
 print(NA)
 print(TRUE)
 "\n"
-list('number_measurements' = c(5, 7, 9, 11),
-     'spacing' = c('equal', 'time_inc')) 
+list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
  
 var <- function(x1, x2){
-   
+shiny::HTML("&nbsp;")
+ 
   if (x1 > 2) {print(x1)} 
   else {print (x2)}
 }
 ```
 
-
-<pre><code class = 'r-code'>
-[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
+<pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
 [1] 3
 [1] 1.5
 [1] "another"
@@ -63,8 +61,7 @@ $number_measurements
 
 $spacing
 [1] "equal"    "time_inc"
-</pre></code>
-
+</code></pre>
 
 
 Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
@@ -72,17 +69,22 @@ Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2
 [link](https://github.com/gohugoio/hugo/issues/9442)
 
 If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
-
 ```r {hl_lines=[2,3,4],language=python}
-tup = ('Groucho', 'Marx', 'Xavier')
+tup = ['Groucho', 'Marx', 'Xavier']
 list_ex = list(["food", 538, True, 1.454])
-type(tup)  #tuple 
+sorted(tup)
+ 
 list_ex2 = list([1 + 2, "a" * 5, 3])  
  
 #deleting variables 
 del(list_ex2)
 list_ex.count(2)  
 ```
+
+
+<pre><code class='python-code'>['Groucho', 'Marx', 'Xavier']
+0
+</code></pre>
 
 
 

@@ -1,14 +1,25 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
-title = "Sebastian Sciarra" #title of website 
-theme = ["basic", "hugo-cite"]#use basic theme 
+title = "Sebastian Sciarra" #title of website
+theme = ["basic", "hugo-cite"]#use basic theme
+
+############################
+## Code folding
+############################
+
+# Set to true to disable code folding
+disable_codefolding = false
+# Set to "hide" or "show" all codes by default
+codefolding_show = "show"
+# Set to true to exclude the "Show/hide all" button
+codefolding_nobutton = true
 
 pygmentsUseClasses = true
 pygmentsCodefences = true #allows .Rmd code fences to be used and properly converted
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.html", "static/blog/\\*_files/", "README"] 
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.html", "static/blog/\\*_files/", "README"]
 
 [params]
-  author = "Sebastian Sciarra" 
+  author = "Sebastian Sciarra"
   description = "Seb's portfolio site"
   gh_url = "https://api.github.com/users"
   gh_user = "sciarraseb"
@@ -16,7 +27,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.h
   coding =  "coding_summ"
   simulation =  "simulation_summ"
   resources =  "ml_resources"
-  
 
 
 [markup]
@@ -53,6 +63,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.h
       strikethrough = true
       table = true
 
-    
-     
+
+
 

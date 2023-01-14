@@ -1,4 +1,5 @@
 {{ define "main" }}
+
 <div class = 'blog_post'>
 
      <div class = 'header'>
@@ -16,12 +17,20 @@
     </div>
 
 
-    <script type="text/javascript"
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
+  <div class = 'content'>
+    {{ .Content}}
+
+  </div>
+
+
+</div>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
       <!--mathjax modification to enable latex equations-->
-     <script type="text/x-mathjax-config">
+<script type="text/x-mathjax-config">
      MathJax.Hub.Config({
        tex2jax: {
          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
@@ -30,204 +39,13 @@
        },
        TeX: {equationNumbers: { autoNumber: "AMS" }}
      });
-   </script>
-
-
-  <div class = 'content'>
-    {{ .Content}}
-
-  </div>
-
-</div>
-
-
-<!--remove all formatting on tables so that .css file can overwrite the formatting set by kbl -->
-<script type="text/javascript">
-
-// https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/
-function createCopyButton(highlightDiv) {
-  const button = document.createElement("button");
-  button.className = "copy-code-button";
-  button.type = "button";
-  button.innerText = "Copy";
-  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
-  addCopyButtonToDom(button, highlightDiv);
-}
-
-async function copyCodeToClipboard(button, highlightDiv) {
-  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
-
-  try {
-    result = await navigator.permissions.query({ name: "clipboard-write" });
-    if (result.state == "granted" || result.state == "prompt") {
-      await navigator.clipboard.writeText(codeToCopy);
-    } else {
-      copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-    }
-  } catch (_) {
-    copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-  }
-  finally {
-    codeWasCopied(button);
-  }
-}
-
-
-function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
-  const textArea = document.createElement("textArea");
-  textArea.contentEditable = 'true'
-  textArea.readOnly = 'false'
-  textArea.className = "copyable-text-area";
-  textArea.value = codeToCopy;
-  highlightDiv.insertBefore(textArea, highlightDiv.firstChild);
-  const range = document.createRange()
-  range.selectNodeContents(textArea)
-  const sel = window.getSelection()
-  sel.removeAllRanges()
-  sel.addRange(range)
-  textArea.setSelectionRange(0, 999999)
-  document.execCommand("copy");
-  highlightDiv.removeChild(textArea);
-}
-
-function codeWasCopied(button) {
-  button.blur();
-  button.innerText = "Copied!";
-  setTimeout(function() {
-    button.innerText = "Copy";
-  }, 2000);
-}
-
-function addCopyButtonToDom(button, highlightDiv) {
-  highlightDiv.insertBefore(button, highlightDiv.firstChild);
-  const wrapper = document.createElement("div");
-  wrapper.className = "highlight-wrapper";
-  highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
-  wrapper.appendChild(highlightDiv);
-}
-
-
-document.querySelectorAll(".highlight")
-  .forEach(highlightDiv =>  createCopyButton(highlightDiv));
-
-
-// TABLE MODIFICATIONS
-// find all instances where a <caption> inside tables. Also create a list (Map object) that tracks each unique table label (e.g., (\\#tab:parameterValues)) and assigns its a number (beginnning from 1) and increases by 1 \\)
-const caption_tags = document.querySelectorAll('table caption');
-
-//list of table labels and numbers
-const table_nums = {};
-
-// fix all table titles to be of the format Table i <br> table_title
-for (let i = 0; i < caption_tags.length; i++) {
-
-  // identify string to replace (i.e., matching string) by extracting strings of the format `(\#tab:` followed by any number of   characters until a `)` is reached. ([^)]+)\)/
-  const match = caption_tags[i].innerHTML.match(/\(\\#tab:([^)]+)\)/);
-
-  //add table tag to list
-  //table_nums.set(match[0], i+ 1);
-  table_nums[match[1]] = i+ 1;
-
-  // replace each match of these instances with <span id="tab:table_name">Table i: </span> --> makes tables have a corresponding   label with number(e.g., Table 1)
-  caption_tags[i].innerHTML = caption_tags[i].innerHTML.replace(match[0], '<span id="tab:'+ match[1] + '">Table ' + (i+1) + '<br></span>');
-}
-
-// identify all p element that referece a table (i.e., contain Table \\ref\{tab:)
-const p_elements = document.querySelectorAll('p, tfoot, caption, .figNote');
-const table_refs = [];
-
-for (const element of p_elements) {
-  if (element.innerHTML.includes('Table \\ref\{tab:')) {
-    table_refs.push(element);
-  }
-}
-
-  // for each label, iterate through all identified <p> elements containing a table reference and replace the latex reference with an HTML reference that includes the table number that corresponds to that table label
-for (let i = 0; i < Object.keys(table_nums).length; i++) {
-
-  //extract the table label
-  table_label = Object.keys(table_nums)[i];
-  table_number = Object.values(table_nums)[i];
-
- for (let j = 0; j < table_refs.length; j++){
-
-    //get table label from the rth <p> element that contains a table reference and extract the specific label
-    label_to_match = new RegExp('\\\\ref\\{tab:' + table_label + '\\}', 'g');
-
-   // replace original latex table reference (\ref{tab:table_name}) with html reference
-   text = table_refs[j].innerHTML.replace(label_to_match, '<a href="#tab:' + table_label + '">' + table_number + '</a>');
-
-
-   table_refs[j].innerHTML = text;
-  }
-}
-
-
-// FIGURE MODIFICATIONS
-// figure labels to modify
-const fig_caption_tags = document.querySelectorAll('div.figure span.figLabel');
-
-// identify all p element that referece a table (i.e., contain Table \\ref\{tab:)
-const potential_fig_references = document.querySelectorAll('p, tfoot, caption, .figNote');
-const figure_refs = [];
-//
-for (const ref of potential_fig_references) {
-  if (ref.innerHTML.includes('Figure \\ref\{fig:')) {
-    figure_refs.push(ref);
-  }
-}
-
-const figure_nums_list = {};
-
-// fix all table titles to be of the format Table i <br> table_title
-for (let i = 0; i < fig_caption_tags.length; i++) {
-
-  // identify string to replace (i.e., matching string) by extracting strings of the format `(\#tab:` followed by any number of   characters until a `)` is reached. ([^)]+)\)/
-  const match = fig_caption_tags[i].innerHTML.match(/\\ref{fig:[^}]+}/g);
-  const fig_label = fig_caption_tags[i].innerHTML.match(/fig:(.*?)}/);
-
-  //add table tag to list
-  //table_nums.set(match[0], i+ 1);
-  figure_nums_list[fig_label[1]]= i+ 1;
-
-  // replace each match of these instances with <span id="tab:table_name">Table i: </span> --> makes tables have a corresponding   label with number(e.g., Table 1)
-  fig_caption_tags[i].innerHTML = fig_caption_tags[i].innerHTML.replace(match, '<span id="fig:'+ fig_label[1] + '">' + (i+1) + '</span>');
-
-}
-
-
-
-  // for each label, iterate through all identified <p> elements containing a table reference and replace the latex reference with an HTML //reference that includes the table number that corresponds to that table label
-for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
-
-  //extract the table label
-  figure_label = Object.keys(figure_nums_list)[i];
-  figure_number = Object.values(figure_nums_list)[i];
-
-
- for (let j = 0; j < figure_refs.length; j++){
-
-    //get figure label from the rth <p> element that contains a table reference and extract the specific label
-    label_to_match = new RegExp('\\\\ref\\{fig:' + figure_label + '\\}', 'g')
-
-   // replace original latex table reference (\ref{tab:table_name}) with html reference
-   text = figure_refs[j].innerHTML.replace(label_to_match, '<a href="#fig:' + figure_label + '">' + figure_number + '</a>');
-
-   figure_refs[j].innerHTML = text;
-  }
-}
-
-
-// EXTERNAL LINKS OPEN NEW TAB
-const external_links = document.querySelectorAll("a[href*=https]");
-external_links.forEach(link => link.setAttribute("target", "_blank"))
-external_links.forEach(link => link.setAttribute("rel", "noopener noreferrer")) //prevents malicious use of links
-
 </script>
 
 
 
 {{ end }}
+
+
 
 
 

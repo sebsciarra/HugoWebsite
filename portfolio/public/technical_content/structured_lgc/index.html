@@ -1,3 +1,4 @@
+
 <html>
 <head>
   <meta charset="utf-8">
@@ -13,16 +14,21 @@
      <link rel="stylesheet" href="/css/style.css"/>
     
         <link rel="stylesheet" href="/css/_syntax.css"/>
-        <link rel="stylesheet" href="/css/_syntax.min.7c7915c814b1f44a2b4dbad37271732f73f981954022834b4f60c10102df641d.css">
+        <link rel="stylesheet" href="/css/_syntax.min.835579d6ab521516844e59f80bee41b13f0f6618f15f75350a2f7e817370e86f.css">
 
   <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
   <meta name="description" content="Seb&#39;s portfolio site">
 
  
   
+
 </head>
+
+
+
 <body>
-<div class="container">
+
+      <div class="container">
 
 
 
@@ -31,10 +37,12 @@
 
    
     <script type = 'text/javascript'>
+
       function active() {
          document.getElementsByClassName('navbar-links')[0].classList.toggle('active');
       }
-      </script>
+
+    </script>
 
   
   
@@ -65,9 +73,14 @@
 
 
 
-
 <link rel="alternate" type="application/rss+xml" href="http://example.com/feed" >
+
+
+
+
+
 <main>
+
 <div class = 'blog_post'>
 
      <div class = 'header'>
@@ -79,27 +92,10 @@
          <br>
 
         <time> <b> Published </b> <br>
-        11 January 2023
+        14 January 2023
         </time>
 
     </div>
-
-
-    <script type="text/javascript"
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-
-      
-     <script type="text/x-mathjax-config">
-     MathJax.Hub.Config({
-       tex2jax: {
-         inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-         processEscapes: true,
-         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-       },
-       TeX: {equationNumbers: { autoNumber: "AMS" }}
-     });
-   </script>
 
 
   <div class = 'content'>
@@ -108,11 +104,30 @@
 
   </div>
 
+
 </div>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+      
+<script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       tex2jax: {
+         inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+         processEscapes: true,
+         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+       },
+       TeX: {equationNumbers: { autoNumber: "AMS" }}
+     });
+</script>
 
 
 
 <script type="text/javascript">
+
 
 
 function createCopyButton(highlightDiv) {
@@ -124,7 +139,10 @@ function createCopyButton(highlightDiv) {
   addCopyButtonToDom(button, highlightDiv);
 }
 
+
 async function copyCodeToClipboard(button, highlightDiv) {
+
+  
   const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
 
   try {
@@ -179,6 +197,17 @@ function addCopyButtonToDom(button, highlightDiv) {
 
 document.querySelectorAll(".highlight")
   .forEach(highlightDiv =>  createCopyButton(highlightDiv));
+
+
+
+function createFoldButton(highlightDiv) {
+  const button = document.createElement("button");
+  button.className = "fold-code-button";
+  button.type = "button";
+  button.innerText = "Hide";
+  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
+  addCopyButtonToDom(button, highlightDiv);
+}
 
 
 
@@ -285,20 +314,43 @@ for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
 
    figure_refs[j].innerHTML = text;
   }
+
 }
 
-
-
-const external_links = document.querySelectorAll("a[href*=https]");
-external_links.forEach(link => link.setAttribute("target", "_blank"))
-external_links.forEach(link => link.setAttribute("rel", "noopener noreferrer")) 
 
 </script>
 
 
+        </main>
+<footer class="site-footer">
+  
+
+  
+  
 
 
-      </div>
+
+
+
+
+ <script type = 'text/javascript'>
+
+
+</script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+</footer>
+
+
+
+
+</div>
+
+
     </body>
+
 </html>
 

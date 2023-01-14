@@ -55,4 +55,9 @@
 
     {{ printf $link .Rel .MediaType.Type .Permalink $title | safeHTML }}
   {{- end }}
+
+  {{- partial "head_custom" . }}
+
 </head>
+
+

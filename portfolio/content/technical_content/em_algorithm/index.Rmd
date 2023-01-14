@@ -16,7 +16,7 @@ tags: []
 ```{r package_loading_1, include=F}
 #load packages   
 library(easypackages) 
-packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'papaja', 
+packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'papaja', 'shiny',
               'ggbrace', 'cowplot', 'knitr', 'RefManageR', 'reticulate', 'gluedown')
 libraries(packages)  
 #use_python(python = "/usr/local/bin/python3.9")
@@ -41,22 +41,37 @@ knitr::knit_hooks$set(
   }
 )
 
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
 
-knitr::knit_hooks$set(error = function(x, options) { 
-  paste(c('\n\n:::{style="color:Crimson; background-color: SeaShell;"}',
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
        
-        ':::'), collapse = '\n')
-})
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
 
+knitr::knit_hooks$set(output = chunk_class)
 
-knitr::knit_hooks$set(error = function(x, options) { 
-  paste(c("<div class = 'error'> ",
-        gsub('^## Error', '**Error**', x),
-        '</div>'), collapse = '\n')
-})
-
-
-
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
 
 ```
 
@@ -67,7 +82,7 @@ knitr::knit_hooks$set(error = function(x, options) {
 That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
-```{r results = 'hold', echo=T, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
+```{r show-code,  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website
 #my website my website my website my website my website my website my website 
 #my website my website my website my website my website
@@ -79,11 +94,34 @@ print(NULL)
 print(NA)
 print(TRUE)
 "\n"
-list('number_measurements' = c(5, 7, 9, 11),
-     'spacing' = c('equal', 'time_inc')) 
+list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
  
 var <- function(x1, x2){
-   
+shiny::HTML("&nbsp;")
+ 
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+
+``` 
+
+```{r show-results,  class_name = 'r-code', results = 'hold', echo=F, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
+#this is a comment  more comment my website m , . , y website my website my website
+#my website my website my website my website my website my website my website 
+#my website my website my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+shiny::HTML("&nbsp;")
+
   if (x1 > 2) {print(x1)} 
   else {print (x2)}
 }
@@ -96,14 +134,27 @@ Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2
 [link](https://github.com/gohugoio/hugo/issues/9442)
 
 If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
-
-```{python, eval=F, comment = 'python', hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
-
-tup = ('Groucho', 'Marx', 'Xavier')
+```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
+tup = ['Groucho', 'Marx', 'Xavier']
 list_ex = list(["food", 538, True, 1.454])
-type(tup)  #tuple 
+sorted(tup)
+ 
 list_ex2 = list([1 + 2, "a" * 5, 3])  
  
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+
+
+```{python, echo=F, eval=T,  class_name = 'python-code', results = 'hold', hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
+
+tup = ['Groucho', 'Marx', 'Xavier']
+list_ex = list(["food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
 #deleting variables 
 del(list_ex2)
 list_ex.count(2)  

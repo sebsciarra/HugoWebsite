@@ -1,11 +1,25 @@
+
 <html>
-    {{- partial "head.html" . -}}
-<body>
-<div class="container">
+  {{- partial "head.html" . -}}
+   {{- partial "head_custom.html" . -}}
+
+    <body>
+
+      <div class="container">
+
         {{- partial "header.html" . -}}
-<main>
+
+        <main>
         {{- block "main" . }}{{- end }}
+        </main>
+
+        {{- partial "site_footer.html" . }}
+
+        {{- partial "article_footer_js.html" . -}}
       </div>
+
+
     </body>
+
 </html>
 
