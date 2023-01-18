@@ -14,7 +14,7 @@
 /* PreWrapper */
 /* code chunk features for R code chunks */
 .chroma {/*color of parentheses*/
-         background-color: rgba(116, 170, 219, 0.30);
+         //background-color: rgba(116, 170, 219, 0.30);
         padding: 0rem;
          max-width: 85%;
          margin: 0 auto; /*centers block of text*/
@@ -78,81 +78,92 @@ code[class = "python-code"]  {
 
 
 //// CODE FOLDING
-/* Code folding */
 
-#code-folding-buttons {float: right;}
-#code-folding-buttons .pull-right > .dropdown-menu {
-    right: 0;
-    left: auto;
-}
-#code-folding-buttons .btn.btn-default.btn-xs.dropdown-toggle {
-    float: right;
-}
-#code-folding-buttons.open > .dropdown-menu {
-    display: block;
-}
-#code-folding-buttons .dropdown-menu li {
-    padding: 5px;
+.row {
+    display: flex;
+    //margin-left: auto;
+    //margin-right: auto;
+    //width: 85%;
+
 }
 
 /* Each code block button */
 .code-folding-btn {
   position: relative;
+  cursor: pointer;
+  font-family: Helvetica;
   color: white;
-  background: var(--navbar-color);
+  background-color:  rgba(57, 57, 57, 1);
   text-align: center;
-  right: 60px;
-   font-size: 13px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 14px;
-  padding: 6px;
   letter-spacing: 0.5px;
-   width: 65px;
-  border: var(--navbar-color);
+  left: 1046%;
+  width: 65px;
+  border: rgba(57, 57, 57, 1);
   border-top-left-radius: 0;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
-   white-space: normal;
-  padding: 4px 4px 5px 4px;
-  margin: 0;
-  cursor: pointer;
-  font-family: palatino;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.row:has(.btn[aria-expanded = "false"]) {
+  background-color: rgba(116, 170, 219, 0.30);
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+
+.row:has(.btn[aria-expanded = "true"]) {
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+
+
+/*removes all content when code block is hidden */
+.collapse{
+ display: none;
+}
+
+.in {
+    display: block ;
 
 }
+
+
+.collapsing {
+    -webkit-transition-delay: 0.5s;
+    transition-delay: 0.5;
+    visibility: hidden;
+}
+
+.collapse.show {
+    -webkit-transition-delay: 0.5s;
+    transition-delay: 0.5s;
+    visibility: hidden;
+
+}
+
+
+
 
 
 .code-folding-btn:hover {
- opacity: 0.8;
  font-weight: bold;
-  background: var(--hover-color);
-}
-
-.row {
-    display: flex;
-}
-.col-md-12 {
-    margin: 0 0 0 auto;
-}
-
-/*removes all content when code block is hidden */
-.collapse {
-    display: none;
-}
-.in {
-    display: block ;
-    border-radius: 5px;
+  background: #343333;
 }
 
 
-/* Main show/hide button */
-#code-folding-buttons {float: right;}
 
-#code-folding-buttons .dropdown-menu {
-    min-width: 80px;
-     border-bottom: 2pt solid;
-    font-size: 14px;
-}
+
+
+//// LINE NUMBERS
+
 
 ////
 
@@ -173,6 +184,7 @@ code[class = "python-code"]  {
 .chroma .lntd:first-child {
   padding: 7px 7px 7px 10px;
   margin: 0;
+
 }
 
 .chroma .lntd:last-child {
@@ -205,11 +217,12 @@ code[class = "python-code"]  {
   cursor: pointer;
 }
 
+
 .copy-code-button:hover,
 .copy-code-button:focus,
 .copy-code-button:active,
 .copy-code-button:active:hover {
-  opacity: 0.8;
+  background-color: var(--hover-color);
   font-weight: bold;
 }
 

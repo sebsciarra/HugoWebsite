@@ -17,7 +17,7 @@ window.initializeCodeFolding = function(show) {
   var currentIndex = 1;
 
   // select all R code blocks
- var rCodeBlocks = $('div.highlight');
+ var rCodeBlocks = $('div.highlight, code.r-code');
   rCodeBlocks.each(function() {
 
     // create a collapsable div to wrap the code in
@@ -35,7 +35,7 @@ window.initializeCodeFolding = function(show) {
     }
 
     // add a show code button right above
-    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Expand') + '</span>');
     var showCodeButton = $('<button type="button" class="btn btn-light btn-sm code-folding-btn pull-right"></button>');
     showCodeButton.append(showCodeText);
     showCodeButton
@@ -50,11 +50,27 @@ window.initializeCodeFolding = function(show) {
     buttonCol.append(showCodeButton);
     buttonRow.append(buttonCol);
 
+
+
+
+
+
+    //accord_buttons.forEach((btn) => {
+    //  btn.addEventListener('click', ()=> {
+    //
+    //    const panel = btn.nextElementSibling; // selects element that followers the button (in this case, the body)
+    //    panel.classList.toggle('active');
+    //    btn.classList.toggle('active');
+    //    });
+    //});
+
+
+
     div.before(buttonRow);
 
     // update state of button on show/hide
     div.on('hidden.bs.collapse', function () {
-      showCodeText.text('Code');
+      showCodeText.text('Expand');
     });
     div.on('show.bs.collapse', function () {
       showCodeText.text('Hide');
@@ -62,5 +78,16 @@ window.initializeCodeFolding = function(show) {
   });
 
 }
+
+  // Get the table by its id
+  var table = document.getElementById("myTable");
+  var firstRow = table.rows[0];
+  var lastRow = table.rows[table.rows.length-1];
+  // Hide all rows except the first and last rows of the first column
+  for (var i = 1; i < table.rows.length - 1; i++) {
+    table.rows[i].style.display = "none";
+  }
+  firstRow.style.display = "";
+  lastRow.style.display = "";
 
 

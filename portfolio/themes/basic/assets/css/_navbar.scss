@@ -2,12 +2,12 @@
   --navbar-color: #002241;
   --navbar-width: 20rem;
   --home-color: #d170c7;
-  --technical-color: #33c304; 
+  --technical-color: #33c304;
   --coding-color:  #e38f01;
   --simulation-color: #c7547d;
   --resources-color: #0678e1;
   --about-color: #d4bd04;
-  --hover-color: #00182d; 
+  --hover-color: #00182d;
 }
 
 
@@ -44,20 +44,20 @@ hr{
 
 // TABLES
 
-table { 
+table {
   color: var(--hover-color);
   margin-bottom: 3rem;
    margin-top: 3rem;
   font-family: Helvetica;
   width: fit-content;
-  font-size: 12px; 
-  margin-left: auto; 
+  font-size: 12px;
+  margin-left: auto;
   margin-right: auto;
-  border-top: 1.5px solid; 
-  border-bottom: 1.5px solid; 
+  border-top: 1.5px solid;
+  border-bottom: 1.5px solid;
   border-collapse: collapse;
 }
-caption { 
+caption {
   font-size: 12px;
   text-align: left;
   font-style: italic;
@@ -71,23 +71,23 @@ br{
 
 span[id*="tab"]{
   font-weight: bold;
-  font-style: normal; 
+  font-style: normal;
 }
 
 
 
 /* thick line above footnote */
-tfoot{ 
+tfoot{
   border-top: 1.5px solid var(--hover-color);
   display: table-footer-group;
 }
- 
- 
-/* sem width to very small value; that way, the footnote width will always defaul to the table width because the width set 
+
+
+/* sem width to very small value; that way, the footnote width will always defaul to the table width because the width set
 in .css file will always be too small*/
 tfoot td{
-  width: 1rem; 
-  
+  width: 1rem;
+
 }
 
 /* thick line separating header from body */
@@ -96,9 +96,9 @@ th {
 }
 
 
-.blog_post { 
+.blog_post {
   padding: 0;
-  margin-left: var(--navbar-width); 
+  margin-left: var(--navbar-width);
   font-family: Helvetica;
   background: white;
 }
@@ -108,7 +108,7 @@ th {
   border-bottom: 0.5px solid var(--navbar-color);
   border-right: 0.5px solid var(--navbar-color);
   position: relative;
-  max-width: 50rem; 
+  max-width: 50rem;
   margin: 0 auto;
   margin-top: 5rem;
   text-align: left;
@@ -121,13 +121,13 @@ th {
     height: 1.75rem;
     position: absolute;
     top:  -0.25rem;
-    left: -0.5rem; 
-    border-top: 3px solid var(--hover-color); 
-    border-left: 3px solid var(--hover-color); 
+    left: -0.5rem;
+    border-top: 3px solid var(--hover-color);
+    border-left: 3px solid var(--hover-color);
 }
 
-.blog_title { 
-  color: var(--hover-color); 
+.blog_title {
+  color: var(--hover-color);
   background: white;
   font-size: 1.75rem;
   text-align: left;
@@ -146,30 +146,30 @@ br{
   display: block;
   margin-bottom: 10rem;
 }
-  
-time{ 
-  color: var(--navbar-color); 
+
+time{
+  color: var(--navbar-color);
   font-size: 0.6em;
   padding-bottom: 2rem;
 }
 
-.content { 
+.content {
     position: relative;
-    max-width: 50rem; 
-    height: fit-content; 
+    max-width: 50rem;
+    height: fit-content;
     margin: 0 auto;
     margin-top: 5rem;
     background: white;
-    color: var(--hover-color); 
+    color: var(--hover-color);
     font-size: 14px;
     font-family: palatino;
 }
 
-#refs, a[role=doc-biblioref]:hover{ 
+#refs, a[role=doc-biblioref]:hover{
   color: gray;
 }
 
-#refs a:visited, a[role=doc-biblioref]:visited{ 
+#refs a:visited, a[role=doc-biblioref]:visited{
   color: var(--hover-color);
 }
 
@@ -180,36 +180,36 @@ time{
 }
 
 
-a[role=doc-biblioref]:hover { 
+a[role=doc-biblioref]:hover {
   text-decoration: none;
   color: gray;
 }
 
 
-a[href*="eq"] { 
+a[href*="eq"] {
   font-family: no-parens;
 }
-a[href*="eq"]:visited{ 
+a[href*="eq"]:visited{
    color: gray;
 }
 
-a[href*="eq"]:hover{ 
+a[href*="eq"]:hover{
    color: blue;
    font-weight: bold;
    text-decoration: underline;
 }
 
 
-a[href*="#"]{ 
+a[href*="#"]{
    color: blue;
    text-decoration: none;
 }
 
-a[href*="#"]:visited{ 
+a[href*="#"]:visited{
    color: gray;
 }
 
-a[href*="#"]:hover{ 
+a[href*="#"]:hover{
    color: blue;
    text-decoration: underline;
 }
@@ -220,12 +220,12 @@ a[href*="#"]:hover{
   margin-top: 3rem;
   margin-bottom: 5rem;
   margin-left: auto;
-  margin-right: auto; 
+  margin-right: auto;
   font-family: Helvetica;
   font-size: 9pt;
   position: relative; /*needed to enable corner borders */
   display: block;
- 
+
   max-width: 85%;
 }
 
@@ -236,14 +236,14 @@ img{
 }
 
 
-.figTop{ 
+.figTop{
   display: block;
 }
 
 .figLabel{
    margin-left: 0.5rem;
   color: var(--navbar-color);
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .figTitle{
@@ -266,9 +266,9 @@ img{
     height: 2.25rem;
     position: absolute;
     bottom: -0.5rem;
-    right: 1rem; 
-    border-bottom: 1.5px solid var(--hover-color); 
-    border-right: 1.5px solid var(--hover-color); 
+    right: 1rem;
+    border-bottom: 1.5px solid var(--hover-color);
+    border-right: 1.5px solid var(--hover-color);
 }
 
 .figure:after {
@@ -278,9 +278,9 @@ img{
     height: 2.25rem;
     position: absolute;
     top: -0.5rem;
-    left: 0rem; 
-    border-top: 1.5px solid var(--hover-color); 
-    border-left: 1.5px solid var(--hover-color); 
+    left: 0rem;
+    border-top: 1.5px solid var(--hover-color);
+    border-left: 1.5px solid var(--hover-color);
 }
 
 
@@ -306,26 +306,26 @@ img{
 
 
 
-h2, h3, h4, h5, h6 { 
+h2, h3, h4, h5, h6 {
    font-family: Helvetica;
    text-align: left;
-   color: var(--hover-color); 
+   color: var(--hover-color);
 }
 
-h2 { 
+h2 {
    font-size: 35px;
 }
 
-h3 { 
+h3 {
   font-size: 25px;
-  border-bottom: 3px solid var(--hover-color); 
+  border-bottom: 3px solid var(--hover-color);
 }
 
-h4 { 
+h4 {
   font-size: 20px;
 }
 
-h5 { 
+h5 {
   font-size: 17px;
 }
 
@@ -345,9 +345,9 @@ h5 {
 
 
 
-p { 
-  text-indent: 0rem; 
-  color:  var(--hover-color); 
+p {
+  text-indent: 0rem;
+  color:  var(--hover-color);
 }
 
 
@@ -355,15 +355,15 @@ p {
 .page_holder, {
   box-sizing: border-box;
   padding: 0;
-  margin-left: var(--navbar-width); 
+  margin-left: var(--navbar-width);
   font-family: baskerville;
 }
 
 
 .technical_summ, .simulation_summ, .coding_summ,  {
     position: relative;
-    max-width: 45rem; 
-    height: 100%; 
+    max-width: 45rem;
+    height: 100%;
     margin: 0 auto;
     margin-top: 5rem;
     background: white;
@@ -379,7 +379,7 @@ p {
     position: absolute;
     top: 0%;
     right: 0;
-    left: -2rem; 
+    left: -2rem;
     border-right: 5px solid var(--technical-color);
 }
 
@@ -392,7 +392,7 @@ p {
     position: absolute;
     top: 0%;
     right: 0;
-    left: -2rem; 
+    left: -2rem;
     border-right: 5px solid var(--coding-color);
 }
 
@@ -406,7 +406,7 @@ p {
     position: absolute;
     top: 0%;
     right: 0;
-    left: -2rem; 
+    left: -2rem;
     border-right: 5px solid var(--simulation-color);
 }
 
@@ -424,18 +424,18 @@ p {
   text-decoration: none;
 }
 
-.items { 
+.items {
   font-size: 15px;
   list-style: none;
   margin-bottom: 0.25rem;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
-.items a:visited { 
+.items a:visited {
   color: black;
 }
 
-.items a:hover { 
+.items a:hover {
   color: #9a9a9a;
 }
 
@@ -447,7 +447,7 @@ body {
 
 
 /*side panel of navigation bar  */
- .navbar { 
+ .navbar {
   position: fixed;
   left: 0;
   top: 0;
@@ -457,7 +457,7 @@ body {
 }
 
 /*font specification of sidebar title  */
-h1 { 
+h1 {
   display: block;
   color: white;
   text-align: right;
@@ -470,9 +470,9 @@ h1 {
 }
 
 /*specification of list style*/
-.navbar-links{ 
-  margin: 0; 
-  padding: 0; 
+.navbar-links{
+  margin: 0;
+  padding: 0;
   text-align: right;
   font-size: 15px;
   list-style: none;
@@ -491,7 +491,7 @@ h1 {
  .navbar-links a:hover {
  font-weight: bold;
  text-decoration: underline;
- background-color: #00182d;  
+ background-color: #00182d;
 }
 
 .home{
@@ -506,7 +506,7 @@ h1 {
   color: var(--coding-color);
 }
 
-.simulation { 
+.simulation {
   color: var(--simulation-color);
 }
 
@@ -518,7 +518,7 @@ h1 {
   color: var(--about-color);
 }
 
-.portal { 
+.portal {
   color: #fff;
   font-size: 12px;
   position: absolute;
@@ -527,7 +527,7 @@ h1 {
   }
 
 /*styling for toggle button*/
-.toggle-button { 
+.toggle-button {
   position: absolute; /*allows bars to be positioned in top right corner*/
   top: 25px;
   right: 20px;
@@ -536,8 +536,8 @@ h1 {
   justify-content: space-between;
   width: 30px;
   height: 21px;
-  background: #002241; 
-  border: none;
+  background: #002241;
+  border: white;
 }
 
 .toggle-button .bar{
@@ -548,9 +548,9 @@ h1 {
 }
 
 
-@media (max-width: 1000px) { 
-  
-  
+@media (max-width: 1000px) {
+
+
 .page_holder, .blog_post{
   box-sizing: border-box;
   padding: 0;
@@ -558,56 +558,56 @@ h1 {
   max-width: 800px;
 }
 
-.page_holder .page_content { 
+.page_holder .page_content {
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
 
 
-  
+
     /*change sidebar to a topbar*/
     .navbar {
     height: 0;
     width: 100%;
     position: fixed;
     }
-    
+
     /*h1 title is vertically oriented */
    h1{
     text-align: center;
-    padding-top: 1rem; 
-    padding-bottom: 1rem; 
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
 
   /*toggle button appears as three vertically oriented lines  */
-  .toggle-button { 
+  .toggle-button {
     display: flex;
   }
 
     /*list items are vertically oriented  */
   .navbar-links li a{
     text-align: center;
-    background-color: var(--navbar-color); 
+    background-color: var(--navbar-color);
   }
-  
-  
-  .portal { 
+
+
+  .portal {
   position: initial;
   }
 
    /*removes navigation bar when unclicked */
   .navbar-links{
-    display: none; 
+    display: none;
     padding: 0;
   }
-  
+
   /*if actve, then display = flex and list items are shown in their vertical orientation  */
-  .navbar-links.active { 
+  .navbar-links.active {
     display: flex;
     flex-direction: column;
   }
-  
+
 }
 
 

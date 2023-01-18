@@ -3,7 +3,6 @@ title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Pr
 draft: false
 summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
 article_type: technical
-csl: "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
 output:
   bookdown::html_document2:
      keep_md: true
@@ -75,6 +74,21 @@ knitr::knit_hooks$set(output = chunk_class)
 
 ```
 
+
+
+ <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <strong>Accordion 1</strong><i class="fas fa-angle-down"></i>
+        </button>
+        <div class="accordion-body">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis atque,
+          voluptates minima quod quisquam et quasi debitis officia non illo
+          harum iure eos reprehenderit quaerat, veritatis asperiores facilis qui
+          neque.
+        </div>
+      </div>
+    </div>
 ```{r, error=TRUE}
 1 + "a"
 ```
@@ -83,9 +97,9 @@ That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
 ```{r show-code,  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
-#this is a comment  more comment my website m , . , y website my website my website
-#my website my website my website my website my website my website my website 
-#my website my website my website my website my website
+#this is a comment  more comment my website m , . , y website my website my website 
+#my website my website my website my website my website my website my website my 
+#website my website my website my website my website
 print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
 print(1 + 2)
 mean(x = c(1, 2))

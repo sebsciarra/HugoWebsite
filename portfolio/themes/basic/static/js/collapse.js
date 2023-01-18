@@ -32,7 +32,7 @@
 
   Collapse.VERSION  = '3.3.7'
 
-  Collapse.TRANSITION_DURATION = 350
+  Collapse.TRANSITION_DURATION = 0 // immediate change in button label
 
   Collapse.DEFAULTS = {
     toggle: true

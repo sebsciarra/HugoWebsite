@@ -1,8 +1,8 @@
-{{/* 
+{{/*
   APA-Style Citation
 
 
-  Book Template : 
+  Book Template :
 
     Author Surname, First Initial. Second Initial. (Year). <i>Book title: Subtitle</i>. Place of Publication: Publisher. [DOI]
 
@@ -23,7 +23,7 @@
   <span itemprop="author" itemscope itemtype="https://schema.org/Person">
     {{- with $author.family -}}<!--include family name of first author/ -->
     <span itemprop="familyName">{{ . }}</span>
-    {{- end -}} 
+    {{- end -}}
     {{- with $author.given -}},&#32; <!--comma + space after each family name*/ -->
     <meta itemprop="givenName" content="{{ . }}" />
     {{ substr . 0 1}}.   <!--inserts initials of given from index 0*/ -->
@@ -51,7 +51,7 @@
   <span itemprop="editor" itemscope itemtype="https://schema.org/Person">
     {{- with $editor.family -}}
     <span itemprop="familyName">{{ . }}</span>
-    {{- end -}} 
+    {{- end -}}
     {{- with $editor.given -}},&#32;
     <meta itemprop="givenName" content="{{ . }}" />
     {{ substr . 0 1 }}.
@@ -131,7 +131,7 @@
 {{/* -------------------- BEGIN TYPES -------------------- */}}
 {{/* -------------------- BEGIN BOOK TYPE -------------------- */}}
 {{- if eq .type "book" -}}
-<span itemscope 
+<span itemscope
       itemtype="https://schema.org/Book"
       data-type="book">
   {{- if .author -}}
@@ -178,7 +178,7 @@
 
 {{/* -------------------- BEGIN CHAPTER TYPE -------------------- */}}
 {{- else if eq .type "chapter" -}}
-<span itemscope 
+<span itemscope
       itemtype="https://schema.org/Chapter"
       data-type="chapter">
   {{ template "authorPart" . }}
@@ -258,7 +258,7 @@
     {{- end -}}
     {{- if isset . "issue" }}({{ .issue }})
     {{- end -}}
-    </i>.{{- end -}}
+    </i>,{{- end -}} <!--replace period with comma -->
   {{- if isset . "page" -}}
   &#32;<span itemprop="pagination">{{ replace .page "-" "–" }}</span>.
   {{- end -}}
