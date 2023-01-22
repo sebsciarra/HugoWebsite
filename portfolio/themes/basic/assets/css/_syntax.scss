@@ -10,17 +10,19 @@
   --hover-color: #00182d;
 }
 
+
+
 /* Background */ .bg { color: red; }
 /* PreWrapper */
 /* code chunk features for R code chunks */
 .chroma {/*color of parentheses*/
-         //background-color: rgba(116, 170, 219, 0.30);
-        padding: 0rem;
-         max-width: 85%;
-         margin: 0 auto; /*centers block of text*/
-         white-space: normal;
+  padding: 0rem;
+  margin: 0 auto; /*centers block of text*/
+  white-space: normal;
   font-size: 12;
+  //background-color: rgba(116, 170, 219, 0.30);  //make sure it is transparent so that background of
 }
+
 
 /* code chunk color for Pyhton (inherits all other features from .chroma defined above) */
 div[language="python"] .chroma {
@@ -29,11 +31,11 @@ div[language="python"] .chroma {
 
 
 .inline-src .language-python{
-    background-color:rgba(105, 255, 155, 0.2);
+    background-color: rgba(105, 255, 155, 0.2);
 }
 
 div[language="python"] .chroma .line.hl{
-  background-color:rgba(105, 255, 155, 0.5);
+  background-color: rgba(105, 255, 155, 0.5);
 }
 
 /* code chunk color for bash (inherits all other features from .chroma defined above) */
@@ -53,87 +55,183 @@ div[language="bash"] .chroma .line.hl {
 div[class='error']{
   color: red;
 }
+
 /* change text color of bash code*/
 code[class = "r-code"]  {
-  display:block;
+  display: block;
   color: var(--hover-color); /*color of parentheses*/
   background-color: rgba(116, 170, 219, 0.30);
   margin: 0 auto; //*centers block of text*/
-  max-width: 85%;
+  max-width: 100%;
   white-space: pre-line;
   font-size: 12;
 }
+
+
 
 code[class = "python-code"]  {
   display:block;
   color: var(--hover-color); /*color of parentheses*/
   background-color:rgba(105, 255, 155, 0.2);
   margin: 0 auto; //*centers block of text*/
-  max-width: 85%;
+  max-width: 100%;
   white-space: pre-line;
   font-size: 12;
 }
 
+//// CODE FOLDING + LINE NUMBERS ////
+.chroma{
+  margin-left: 0;
+}
 
+
+td {
+  white-space: pre;
+}
+
+pre {
+  border-right: 0;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+
+table[id = "codeTable"]{
+   border: none; //width of columns is determined only by the predetermined widths below
+    table-layout: fixed;
+    width: 100%;
+}
+
+
+code[data-lang='r'] [data-number]::after {
+  content: attr(data-number);
+  font-size: 9px;
+}
+
+.line-number{
+  color: #202A44;
+}
+
+[data-button]::after {
+  content: attr(data-button);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-family: Helvetica;
+  color: white;
+}
+
+[data-button]:hover::after{
+    font-weight: bold;
+}
+
+/*removes white space between columns */
+table[id = "codeTable"] td:nth-child(3){
+  padding: 0;
+}
+
+/*slightly increase spacing between borders and number */
+table[id = "codeTable"] td:nth-child(1){
+  padding-right: 0.25rem;
+   text-align: right;
+}
+
+table td:nth-child(1), table td:nth-child(3) {
+    width: 7.5%;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+//color of second column of tables containing R code
+code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color: rgba(116, 170, 219, 0.30);
+  border-left: 2pt solid rgba(116, 170, 219, 0.50);
+  padding: 0;
+}
+
+
+.copy-button {
+  position: absolute;
+   width: 100%;
+  height: 20px;
+  color: white;
+  font-family: Helvetica;
+  font-size: 13px;
+  right: 0%;
+  top: 0%;
+  opacity: .95;
+  background-color: var(--navbar-color);
+  border: var(--navbar-color);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  float: right;
+  display: block;
+  width: calc(7.5/85*100%);
+  padding-right: 0;
+  padding-top: 0;
+  z-index: 1; //place button on top of table cell
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -webkit-touch-callout: none;
+}
+
+.copy-button:hover{
+  font-weight: bold;
+   background: var(--hover-color);
+}
+
+
+td{
+  padding: 0;
+  margin: 0;
+  font-family: monospace;
+  font-size: 12px;
+  position: relative;
+}
+
+button[id = "collapseButton"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  color: white;
+  font-family: Helvetica;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  background-color: rgba(57, 57, 57, 1);
+  border: rgba(57, 57, 57, 1);
+  border-top-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0px;
+  text-align: center;
+  cursor: pointer;
+  float: left;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+button[id = "collapseButton"]:hover{
+  font-weight: bold;
+   background: #343333;
+}
 
 
 //// CODE FOLDING
 
-.row {
-    display: flex;
-    //margin-left: auto;
-    //margin-right: auto;
-    //width: 85%;
-
-}
-
-/* Each code block button */
-.code-folding-btn {
-  position: relative;
-  cursor: pointer;
-  font-family: Helvetica;
-  color: white;
-  background-color:  rgba(57, 57, 57, 1);
-  text-align: center;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 14px;
-  letter-spacing: 0.5px;
-  left: 1046%;
-  width: 65px;
-  border: rgba(57, 57, 57, 1);
-  border-top-left-radius: 0;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 14px;
-}
-
-.row:has(.btn[aria-expanded = "false"]) {
-  background-color: rgba(116, 170, 219, 0.30);
-  margin-left: auto;
-  margin-right: auto;
-  width: 85%;
-}
-
-.row:has(.btn[aria-expanded = "true"]) {
-  margin-left: auto;
-  margin-right: auto;
-  width: 85%;
-}
-
-
-/*removes all content when code block is hidden */
-.collapse{
- display: none;
-}
-
-.in {
-    display: block ;
-
-}
 
 
 .collapsing {
@@ -218,14 +316,6 @@ code[class = "python-code"]  {
 }
 
 
-.copy-code-button:hover,
-.copy-code-button:focus,
-.copy-code-button:active,
-.copy-code-button:active:hover {
-  background-color: var(--hover-color);
-  font-weight: bold;
-}
-
 .copyable-text-area {
   position: absolute;
   height: 0;
@@ -253,10 +343,12 @@ code[class = "python-code"]  {
 /* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
 /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
 
-/* LineHighlight */ .chroma .hl {background-color: rgba(116, 170, 219, 0.5);
-
-          max-width: 100%;
-          margin: 0 auto; }
+/* LineHighlight */
+.chroma .hl {
+  background-color: rgba(116, 170, 219, 0.5);
+  max-width: 100%;
+  height: 100%;
+}
 
 /* LineNumbersTable */ .chroma .lnt { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
 /* LineNumbers */ .chroma .ln { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }

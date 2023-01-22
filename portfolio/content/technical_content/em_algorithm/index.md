@@ -14,8 +14,10 @@ tags: []
 
 
 
-  
-  
+
+
+This is some text. 
+
 ```r 
 1 + "a"
 ```
@@ -24,154 +26,16 @@ tags: []
 Error in 1 + "a": non-numeric argument to binary operator
 ```
 
-
-
-
-<table id="myTable">
-  <tr>
-    <td><span data-text="1"></span></td>
-    <td id="secondCol-Row-1" class="second-col"> <div class = 'highlight-wrapper'> <pre tabindex="0" class="chroma"><code><span class="o">+</span> <span class="s">"a"</span></code></pre><button class="copy-button"> <button class="copy-button"><span data-text="Copy"></span></button> </div></td>
-    <td colspan="1"><button id="collapseButton"><span data-text="Hide"></span></button></td>
-  </tr>
-  <tr>
-    <td><span data-text="2"></span></td>
-    <td  id="secondCol-Row-2" class="second-col">Second Column - Row 2</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><span data-text="3"></span></td>
-    <td id="secondCol-Row-3" class="second-col">Second Column - Row 3</td>
-    <td></td>
-  </tr>
-</table>
-
-This is some text. 
-
-
-<style>
-  
-table[id = "myTable"]{
-  width: 100%;
-   border: none;
-}
-
-[data-text]::after {
-  content: attr(data-text);
-}
-
-/*removes white space between columns */
-table[id = "myTable"] td:nth-child(3){
-  padding: 0; 
-  vertical-align: top;
-}
-
-
-/*slightly increase spacing between borders and number */
-table[id = "myTable"] td:nth-child(1){
-  padding-right: 0.25rem;
-  
-}
-  
- table td:first-child, table td:nth-child(3) {
-    width: 7.5%;
-    text-align: right;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
-  }
-  
-  td:nth-child(2) {
-  position: relative; 
-    background-color: rgba(116, 170, 219, 0.30);
-    width: 85%;
-    border-left: 2pt solid rgba(116, 170, 219, 0.50); 
-    padding-top: 0; 
-    padding-right: 0; 
-  }
-  
-  /* Style for second column */
-table td:nth-child(2)::selection {
-    background: #b3d4fc;
-    color: #000;
-}
-
-
-
-
-.copy-button{
-  position: absolute; 
-  font-weight: 500;
-  height: 20px; 
-  letter-spacing: 0.5px;
-  right: 0%; 
-  top: 0%; 
-  font-size: 13px; 
-  color: white;
-  opacity: .95;
-  background-color: var(--navbar-color);
-  border: var(--navbar-color);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 4px;
-  text-align: center; 
-  cursor: pointer;
-  float: right;
-  display: block;
-  width: calc(7.5/85*100%);
-  padding-right: 0; 
-  padding-top: 0;
-  z-index: 1; 
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
-
-button[id = "collapseButton"] {
-  background-color:  rgba(57, 57, 57, 1);
-  cursor: pointer;
-  font-family: Helvetica;
-  color: white;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 500;
-  opacity: .95;
-  letter-spacing: 0.5px;
-   width: 100%;
-  border: rgba(57, 57, 57, 1);
-  vertical-align: top; 
-  font-size: 13px;
-  font-weight: 500;
-  height: 20px; 
-  border-top-left-radius: 0;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 0;
-    -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
-
-button[id = "collapseButton"]:hover{
-  font-weight: bold;
-   background: #343333;
-}
-
-</style>
-
-
-
-
-
-
 That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
-```r {hl_lines=[2,3-5]}
+```r {hl_lines=[1,2,5]}
 #this is a comment  more comment my website m , . , y website my website my website 
-#my website my website my website my website my website my website my website my 
-#website my website my website my website my website
-print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
+#my website my website my website my website my website my website my website my  
+#my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website
+      website my website my   website my website my website my website my website my website')  
+
 print(1 + 2)
 mean(x = c(1, 2))
 print('another')
@@ -179,16 +43,33 @@ print(NULL)
 print(NA)
 print(TRUE)
 "\n"
-list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
- 
+list('number_measurements' = c(5, 7, 9, 11),
+     'spacing' = c('equal', 'time_inc'))
+
 var <- function(x1, x2){
-shiny::HTML("&nbsp;")
- 
+
   if (x1 > 2) {print(x1)} 
   else {print (x2)}
 }
 ```
 
+```r {language=java}
+let codeTable = document.createElement("table");
+codeTable.setAttribute('id', "codeTable");
+
+//add rows to table by adding each element of lines
+for (let t = 0; t < lines.length; t++) {
+  let row = codeTable.insertRow(-1);
+
+  let newCell1 = row.insertCell(0); //insert line number
+  let newCell2 = row.insertCell(1);
+  let newCell3 = row.insertCell(2);
+
+  newCell1.innerHTML = "<span class= 'line-number' data-number='" + (t+1)  + "'" + "id = '" + (t+1) + "'></span>";
+  newCell2.innerHTML = lines[t];
+  newCell3.innerHTML = "";
+}
+```
 <pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
 [1] 3
 [1] 1.5
@@ -211,12 +92,12 @@ Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2
 
 If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
 ```r {hl_lines=[2,3,4],language=python}
-tup = ['Groucho', 'Marx', 'Xavier']
+    tup = ['Groucho', 'Marx', 'Xavier']
 list_ex = list(["food", 538, True, 1.454])
 sorted(tup)
- 
+
 list_ex2 = list([1 + 2, "a" * 5, 3])  
- 
+
 #deleting variables 
 del(list_ex2)
 list_ex.count(2)  

@@ -16,7 +16,7 @@ tags: []
 #load packages   
 library(easypackages) 
 packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'papaja', 'shiny',
-              'ggbrace', 'cowplot', 'knitr', 'RefManageR', 'reticulate', 'gluedown')
+              'ggbrace', 'cowplot', 'knitr', 'RefManageR', 'reticulate', 'gluedown', 'formatR')
 libraries(packages)  
 #use_python(python = "/usr/local/bin/python3.9")
 
@@ -64,7 +64,7 @@ chunk_class <- function(before, options, envir) {
     
 }
 
-knitr::knit_hooks$set(output = chunk_class)
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 
 #knitr::knit_hooks$set(output = function(x, options) { 
 #  paste(c("<pre><code class = 'r-code'>",
@@ -76,19 +76,8 @@ knitr::knit_hooks$set(output = chunk_class)
 
 
 
- <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-header">
-          <strong>Accordion 1</strong><i class="fas fa-angle-down"></i>
-        </button>
-        <div class="accordion-body">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis atque,
-          voluptates minima quod quisquam et quasi debitis officia non illo
-          harum iure eos reprehenderit quaerat, veritatis asperiores facilis qui
-          neque.
-        </div>
-      </div>
-    </div>
+This is some text. 
+
 ```{r, error=TRUE}
 1 + "a"
 ```
@@ -96,11 +85,13 @@ knitr::knit_hooks$set(output = chunk_class)
 That's some text with a footnote.[^1]$^{,}$ This is a change. More9
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
-```{r show-code,  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
+```{r r-code,  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website 
-#my website my website my website my website my website my website my website my 
-#website my website my website my website my website
-print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
+#my website my website my website my website my website my website my website my  
+#my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website
+      website my website my   website my website my website my website my website my website')  
+
 print(1 + 2)
 mean(x = c(1, 2))
 print('another')
@@ -108,17 +99,35 @@ print(NULL)
 print(NA)
 print(TRUE)
 "\n"
-list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
- 
+list('number_measurements' = c(5, 7, 9, 11),
+     'spacing' = c('equal', 'time_inc'))
+
 var <- function(x1, x2){
-shiny::HTML("&nbsp;")
- 
+
   if (x1 > 2) {print(x1)} 
   else {print (x2)}
 }
 
+
 ``` 
 
+```{r java-code, engine = 'javascript', echo=T, eval=F, hlopts = list(language = 'java')}
+let codeTable = document.createElement("table");
+codeTable.setAttribute('id', "codeTable");
+
+//add rows to table by adding each element of lines
+for (let t = 0; t < lines.length; t++) {
+  let row = codeTable.insertRow(-1);
+
+  let newCell1 = row.insertCell(0); //insert line number
+  let newCell2 = row.insertCell(1);
+  let newCell3 = row.insertCell(2);
+
+  newCell1.innerHTML = "<span class= 'line-number' data-number='" + (t+1)  + "'" + "id = '" + (t+1) + "'></span>";
+  newCell2.innerHTML = lines[t];
+  newCell3.innerHTML = "";
+}
+```
 ```{r show-results,  class_name = 'r-code', results = 'hold', echo=F, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website
 #my website my website my website my website my website my website my website 
@@ -148,13 +157,13 @@ Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2
 [link](https://github.com/gohugoio/hugo/issues/9442)
 
 If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
-```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
-tup = ['Groucho', 'Marx', 'Xavier']
+```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3', tidy=F}
+    tup = ['Groucho', 'Marx', 'Xavier']
 list_ex = list(["food", 538, True, 1.454])
 sorted(tup)
- 
+
 list_ex2 = list([1 + 2, "a" * 5, 3])  
- 
+
 #deleting variables 
 del(list_ex2)
 list_ex.count(2)  
