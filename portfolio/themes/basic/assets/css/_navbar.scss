@@ -56,6 +56,8 @@ table {
   border-top: 1.5px solid;
   border-bottom: 1.5px solid;
   border-collapse: collapse;
+
+
 }
 caption {
   font-size: 12px;
@@ -87,6 +89,7 @@ tfoot{
 in .css file will always be too small*/
 tfoot td{
   width: 1rem;
+   word-wrap: break-word;
 
 }
 

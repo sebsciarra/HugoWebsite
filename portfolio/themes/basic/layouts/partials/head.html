@@ -23,8 +23,6 @@
     <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
   {{- else -}}
-    {{ $css := resources.Get "css/style.scss" | toCSS | minify | fingerprint }}
-     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}"/>
     {{ $css := resources.Get "css/_syntax.scss"  | toCSS | minify | fingerprint }}
         <link rel="stylesheet" href="{{ "css/_syntax.css" | relURL }}"/>
         <link rel="stylesheet" href="{{ $css.RelPermalink }}">

@@ -20,14 +20,10 @@
   margin: 0 auto; /*centers block of text*/
   white-space: normal;
   font-size: 12;
-  //background-color: rgba(116, 170, 219, 0.30);  //make sure it is transparent so that background of
 }
 
 
 /* code chunk color for Pyhton (inherits all other features from .chroma defined above) */
-div[language="python"] .chroma {
-  background-color:rgba(105, 255, 155, 0.2);
-}
 
 
 .inline-src .language-python{
@@ -38,10 +34,55 @@ div[language="python"] .chroma .line.hl{
   background-color: rgba(105, 255, 155, 0.5);
 }
 
-/* code chunk color for bash (inherits all other features from .chroma defined above) */
-div[language="bash"] .chroma {
-  background-color:black;
+
+div[language ='python'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color: rgba(105, 255, 155, 0.2);
+  border-left: 2pt solid rgba(105, 255, 155, 0.50);
+  padding: 0;
 }
+
+
+
+div[language ='java'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color:  rgba(255,105,130, 0.20);
+  border-left: 2pt solid rgba(255,105,130, 0.50);;
+  padding: 0;
+}
+
+
+
+div[language ='css'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color:  rgba(245,216,102, 0.2);
+  border-left: 2pt solid  rgba(245,216,102, 0.50);
+  padding: 0;
+}
+
+div[language ='html'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color:  rgba(203,203,203, 0.2);
+  border-left: 2pt solid  rgba(203,203,203, 0.50);
+  padding: 0;
+}
+
+div[language ='bash'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color:  black;
+  border-left: 2pt solid  gray;
+  padding: 0;
+}
+
+/* code chunk color for bash (inherits all other features from .chroma defined above) */
+//div[language="bash"] .chroma {
+//  background-color:black;
+//}
 
 .inline-src .language-bash{
     background-color:black;
@@ -57,10 +98,11 @@ div[class='error']{
 }
 
 /* change text color of bash code*/
-code[class = "r-code"]  {
+code[class = "r-code"] table td:nth-child(2)  {
   display: block;
   color: var(--hover-color); /*color of parentheses*/
   background-color: rgba(116, 170, 219, 0.30);
+  border-left: 2pt solid rgba(116, 170, 219, 0.30);
   margin: 0 auto; //*centers block of text*/
   max-width: 100%;
   white-space: pre-line;
@@ -68,16 +110,25 @@ code[class = "r-code"]  {
 }
 
 
+//make tables responsive for all code blocks responsivbe
+code[class = "language-r"] table td:nth-child(2)  {
+  white-space: pre-line;
+}
 
-code[class = "python-code"]  {
-  display:block;
+
+code[class = "python-code"]  table td:nth-child(2)   {
+  display: block;
   color: var(--hover-color); /*color of parentheses*/
   background-color:rgba(105, 255, 155, 0.2);
+  border-left: 2pt solid rgba(105, 255, 155, 0.50);
   margin: 0 auto; //*centers block of text*/
   max-width: 100%;
   white-space: pre-line;
   font-size: 12;
 }
+
+
+
 
 //// CODE FOLDING + LINE NUMBERS ////
 .chroma{
@@ -85,9 +136,6 @@ code[class = "python-code"]  {
 }
 
 
-td {
-  white-space: pre;
-}
 
 pre {
   border-right: 0;
@@ -98,12 +146,21 @@ pre {
 
 table[id = "codeTable"]{
    border: none; //width of columns is determined only by the predetermined widths below
-    table-layout: fixed;
+  table-layout: fixed;
     width: 100%;
 }
 
+td {
+  padding: 0;
+  margin: 0;
+  font-family: monospace;
+  font-size: 12px;
+  position: relative;
+}
 
-code[data-lang='r'] [data-number]::after {
+
+
+code[data-lang='r'] [data-number]::after, code[class *='-code'] [data-number]::after  {
   content: attr(data-number);
   font-size: 9px;
 }
@@ -152,10 +209,18 @@ code[data-lang='r'] table td:nth-child(2) {
   padding: 0;
 }
 
+code[data-lang='r'] table tr:nth-child(1) td:nth-child(2) {
+  padding-right: 60px; /* adjust this value to the width you want */
+}
+
+code[class='r-code'] table tr:nth-child(1) td:nth-child(2) {
+  padding-right: 60px; /* adjust this value to the width you want */
+}
+
+
 
 .copy-button {
   position: absolute;
-   width: 100%;
   height: 20px;
   color: white;
   font-family: Helvetica;
@@ -172,8 +237,7 @@ code[data-lang='r'] table td:nth-child(2) {
   text-align: center;
   cursor: pointer;
   float: right;
-  display: block;
-  width: calc(7.5/85*100%);
+  width: 60px;
   padding-right: 0;
   padding-top: 0;
   z-index: 1; //place button on top of table cell
@@ -190,13 +254,6 @@ code[data-lang='r'] table td:nth-child(2) {
 }
 
 
-td{
-  padding: 0;
-  margin: 0;
-  font-family: monospace;
-  font-size: 12px;
-  position: relative;
-}
 
 button[id = "collapseButton"] {
   position: absolute;
@@ -260,10 +317,6 @@ button[id = "collapseButton"]:hover{
 
 
 
-//// LINE NUMBERS
-
-
-////
 
 
 .highlight-wrapper {

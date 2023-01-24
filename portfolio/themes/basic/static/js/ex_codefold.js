@@ -1,37 +1,53 @@
 
-codeBlocks = document.querySelectorAll(".highlight");
+codeBlocks = document.querySelectorAll('.highlight, pre:has(code[class*="-code"])');
+
 var cumulative_length = 0;
 var starting_indices = [0];
 
 for (block = 0; block < codeBlocks.length; block++){
 
-   //previous block (track its length)
-  if (typeof codeBlocks[block-1] !== "undefined") {
+  ////previous block (track its length)
+  //f (typeof codeBlocks[block-1] !== "undefined") {
 
-    previous_code_block = codeBlocks[block].innerHTML;
+  // previous_code_block = codeBlocks[block].innerHTML;
 
-    previous_block_lines = previous_code_block.split("\n");
+  // previous_block_lines = previous_code_block.split("\n");
 
 
-    if (previous_block_lines.length < 2) {
-      var previous_block_length = previous_block_lines.length;
-      } else{
-      var previous_block_length = previous_block_lines.length - 1}//subtract one to eliminate last element that contains closing tags of spans, code, and pre
+  // if (previous_block_lines.length < 2) {
+  //   var previous_block_length = previous_block_lines.length;
+  //   } else{
+  //   var previous_block_length = previous_block_lines.length - 1}//subtract one to eliminate last element that contains closing tags of spans, code, and pre
 
-  } else{
-     var previous_block_length = 0;
-  }
+ //} else{
+ //   var previous_block_length = 0;
+ //}
   //current block
-  const code = codeBlocks[block].innerHTML;
-  const lines = code.split("\n");
 
-  //extract preamble code that will wrap table (<pre><code> elements)
-  const preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
+  if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
 
-  //remove preamble code from first element of lines and add copy button to the endof this element
-  lines[0] = lines[0].replace(preamble, '') + '<button class="copy-button" data-button="Copy"></button>';
-  table_end = lines[lines.length - 1]; //save last element
-  lines.splice(lines.length - 1, 1); //delete last element
+    var code = codeBlocks[block].outerHTML;
+    var lines = code.split("\n");
+    //extract preamble code that will wrap table (<pre><code> elements)
+    var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
+
+   ////remove preamble code from first element of lines and add copy button to the endof this element
+   lines[0] = lines[0].replace(preamble, '') + '<button class="copy-button" data-button="Copy"></button>';
+   table_end = lines[lines.length - 1]; //save last element
+   lines.splice(lines.length - 1, 1); //delete last element
+  } else {
+
+     var code = codeBlocks[block].innerHTML;
+     var lines = code.split("\n");
+
+    //extract preamble code that will wrap table (<pre><code> elements)
+    var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
+
+    //remove preamble code from first element of lines and add copy button to the endof this element
+    lines[0] = lines[0].replace(preamble, '') + '<button class="copy-button" data-button="Copy"></button>';
+    table_end = lines[lines.length - 1]; //save last element
+    lines.splice(lines.length - 1, 1); //delete last element
+  }
 
 
   //make sure empty lines have <br> element so that empty lines are included whenever code is copied
@@ -45,14 +61,10 @@ for (block = 0; block < codeBlocks.length; block++){
   let codeTable = document.createElement("table");
   codeTable.setAttribute('id', "codeTable");
 
-  //sum current and previous lengths
-
-
+  //starting and cumulative index numbers
   starting_indices.push(lines.length);
-   cumulative_length += lines.length;
-
+  cumulative_length += lines.length;
   starting_index = starting_indices.slice(0, block + 1).reduce((acc, cur) => acc + cur);
-  console.log(cumulative_length - starting_index );
 
   //add rows to table by adding each element of lines
   for (t=starting_index, line_num = 0; t < cumulative_length; t++, line_num++) {
@@ -72,12 +84,16 @@ for (block = 0; block < codeBlocks.length; block++){
   codeTable.rows[0].cells[2].innerHTML = '<button id ="collapseButton" data-button = "Hide"></button>';
 
   //compile complete table
-  complete_codeTable = preamble + codeTable.outerHTML + table_end;
 
+  complete_codeTable = preamble + codeTable.outerHTML + table_end
 
+   if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
+      codeBlocks[block].outerHTML = complete_codeTable
+   } else{
+       codeBlocks[block].innerHTML = complete_codeTable
+   }
 
-  codeBlocks[block].innerHTML = complete_codeTable;
-};
+}
 
 
 codeTables = document.querySelectorAll('#codeTable');
@@ -113,7 +129,7 @@ codeTables.forEach(function(codeTable){
 
       for (var x = 0; x < codeTable.length; x++) {
 
-        codeTable.rows[0].cells[0].innerHTML = firstRow + " – " + last_row_num;
+        //codeTable.rows[0].cells[0].innerHTML = firstRow + "–" + last_row_num;
         codeTable.rows[x].cells[1].innerHTML = ""; //replace all values of second column with an emptys tring
         codeTable.rows[x].cells[1].style.width = secondColWidth + "px"; //set width of second column to original width
       }
@@ -149,7 +165,63 @@ codeTables.forEach(function(codeTable){
 });
 
 
+
 });
+
+//COPY CODE
+async function copyCodeToClipboard(button, highlightDiv) {
+
+  // make sure non-breakble characters are not copied
+  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
+
+  try {
+    result = await navigator.permissions.query({ name: "clipboard-write" });
+    if (result.state == "granted" || result.state == "prompt") {
+      await navigator.clipboard.writeText(codeToCopy);
+    } else {
+      copyCodeBlockExecCommand(codeToCopy, highlightDiv);
+    }
+  } catch (_) {
+    copyCodeBlockExecCommand(codeToCopy, highlightDiv);
+  }
+  finally {
+    codeWasCopied(button);
+  }
+}
+
+
+function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
+  const textArea = document.createElement("textArea");
+  textArea.contentEditable = 'true'
+  textArea.readOnly = 'false'
+  textArea.className = "copyable-text-area";
+  textArea.value = codeToCopy;
+  highlightDiv.insertBefore(textArea, highlightDiv.firstChild);
+  const range = document.createRange()
+  range.selectNodeContents(textArea)
+  const sel = window.getSelection()
+  sel.removeAllRanges()
+  sel.addRange(range)
+  textArea.setSelectionRange(0, 999999)
+  document.execCommand("copy");
+  highlightDiv.removeChild(textArea);
+}
+
+function codeWasCopied(button) {
+  button.blur();
+  button.innerText = "Copied!";
+  setTimeout(function() {
+    button.innerText = "Copy";
+  }, 2000);
+}
+
+function addCopyButtonToDom(button, highlightDiv) {
+  highlightDiv.insertBefore(button, highlightDiv.firstChild);
+  const wrapper = document.createElement("div");
+  wrapper.className = "highlight-wrapper";
+  highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
+  wrapper.appendChild(highlightDiv);
+}
 
 
 

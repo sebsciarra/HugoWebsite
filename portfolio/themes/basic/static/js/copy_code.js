@@ -107,7 +107,7 @@ async function copyCodeToClipboard(button, highlightDiv) {
   finally {
     codeWasCopied(button);
   }
-}
+};
 
 
 function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
@@ -145,5 +145,5 @@ function addCopyButtonToDom(button, highlightDiv) {
 
 
 document.querySelectorAll(".highlight")
-  .forEach(highlightDiv =>  createCopyButton(highlightDiv));
+  .forEach(highlightDiv => createCopyButton(highlightDiv));
 
