@@ -6,24 +6,6 @@ var starting_indices = [0];
 
 for (block = 0; block < codeBlocks.length; block++){
 
-  ////previous block (track its length)
-  //f (typeof codeBlocks[block-1] !== "undefined") {
-
-  // previous_code_block = codeBlocks[block].innerHTML;
-
-  // previous_block_lines = previous_code_block.split("\n");
-
-
-  // if (previous_block_lines.length < 2) {
-  //   var previous_block_length = previous_block_lines.length;
-  //   } else{
-  //   var previous_block_length = previous_block_lines.length - 1}//subtract one to eliminate last element that contains closing tags of spans, code, and pre
-
- //} else{
- //   var previous_block_length = 0;
- //}
-  //current block
-
   if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
 
     var code = codeBlocks[block].outerHTML;
@@ -32,7 +14,7 @@ for (block = 0; block < codeBlocks.length; block++){
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
 
    ////remove preamble code from first element of lines and add copy button to the endof this element
-   lines[0] = lines[0].replace(preamble, '') + '<button class="copy-button" data-button="Copy"></button>';
+   lines[0] = lines[0].replace(preamble, '') //+ '<button class="copy-button" data-button="Copy"></button>';
    table_end = lines[lines.length - 1]; //save last element
    lines.splice(lines.length - 1, 1); //delete last element
   } else {
@@ -44,7 +26,7 @@ for (block = 0; block < codeBlocks.length; block++){
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
 
     //remove preamble code from first element of lines and add copy button to the endof this element
-    lines[0] = lines[0].replace(preamble, '') + '<button class="copy-button" data-button="Copy"></button>';
+    lines[0] = lines[0].replace(preamble, '') //+ '<button class="copy-button" data-button="Copy"></button>';
     table_end = lines[lines.length - 1]; //save last element
     lines.splice(lines.length - 1, 1); //delete last element
   }
@@ -168,7 +150,21 @@ codeTables.forEach(function(codeTable){
 
 });
 
-//COPY CODE
+
+
+//COPY BUTTON
+// https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/
+function createCopyButton(highlightDiv) {
+  const button = document.createElement("button");
+  button.className = "copy-code-button";
+  button.type = "button";
+  button.innerText = "Copy";
+  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
+  addCopyButtonToDom(button, highlightDiv);
+}
+
+
+
 async function copyCodeToClipboard(button, highlightDiv) {
 
   // make sure non-breakble characters are not copied
@@ -224,5 +220,7 @@ function addCopyButtonToDom(button, highlightDiv) {
 }
 
 
+document.querySelectorAll('.highlight')
+  .forEach(highlightDiv => createCopyButton(highlightDiv));
 
 

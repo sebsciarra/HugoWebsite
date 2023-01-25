@@ -76,7 +76,6 @@ codeTables.forEach(function(codeTable){
 
 
 
-
 //COPY BUTTON
 // https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/
 function createCopyButton(highlightDiv) {
@@ -107,7 +106,7 @@ async function copyCodeToClipboard(button, highlightDiv) {
   finally {
     codeWasCopied(button);
   }
-};
+}
 
 
 function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {

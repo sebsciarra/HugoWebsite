@@ -83,7 +83,7 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
-```{r r-code,  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
+```{r r-code, tag = 'R',  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website
 #my website my website my website my website my website my website my website my   
 #my website my website my website
@@ -238,7 +238,7 @@ Another paragraph begins and the spacing should not be too small from table abov
  Table \ref{tab:parameterValues}
  Table \ref{tab:parameterValues1}
  
-```{r parameterValues, echo=F, eval=F}
+```{r parameterValues, echo=F, eval=T}
 
 #specify parameters for parameter table 
 theta <- 3
