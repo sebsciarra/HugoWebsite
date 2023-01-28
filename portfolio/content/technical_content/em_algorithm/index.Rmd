@@ -76,14 +76,10 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 ```
 
 
-```{r, error=TRUE}
-1 + "a"
-```
-
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
-```{r r-code, tag = 'R',  echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
+```{r r-code,   echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website
 #my website my website my website my website my website my website my website my   
 #my website my website my website
@@ -108,6 +104,7 @@ var <- function(x1, x2){
 
 
 ``` 
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
 
 ```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3', tidy=F}
 tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
@@ -120,9 +117,10 @@ list_ex2 = list([1 + 2, "a" * 5, 3])
 del(list_ex2)
 list_ex.count(2)  
 ```
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
 
 
-```{r java-code, engine = 'javascript', echo=T, eval=F, hlopts = list(language = 'java')}
+```{r java-code, engine = 'js', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'java')}
 let codeTable = document.createElement("table");
 codeTable.setAttribute('id', "codeTable");
 
@@ -140,26 +138,33 @@ for (let t = 0; t < lines.length; t++) {
   newCell3.innerHTML = "";
 }
 ```
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
 
-```{r css-code, engine = 'css', echo=T, eval=F, hlopts = list(language = 'css')}
-div[language ='java'] code[data-lang='r'] table td:nth-child(2) {width: 85%;position: relative;
+```{r css-code, engine =  'css', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'css')}
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;position: relative;
   background-color:  rgba(255,105,130, 0.20);
-  border-left: 2pt solid rgba(255,105,130, 0.50);;
+  border-left: 2pt solid rgba(255,105,130, 0.50);
   padding: 0;
 }
 ```
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
 
-```{hmtl html-code, echo=T, eval=F, hlopts = list(language = 'html')}
+
+```{r html-code, echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3,']'),language = 'html')}
 <script src="{{ "js/external_links.js" | relURL }}"></script>
 <script src="{{ "js/number_tables.js" | relURL }}"></script>
 <script src="{{ "js/number_figures.js" | relURL }}"></script>
 ```
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
 
 ```{bash, engine = 'bash',  eval=F, hlopts=list(hl_lines= paste0('[', 1,']'), language = 'bash')}
 ls
  
 cd ~/Desktop/Home/blog_posts
 ```
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
+
 
 ```{r show-results,  class_name = 'r-code', results = 'hold', echo=F, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
 #this is a comment  more comment my website m , . , y website my website my website
@@ -206,16 +211,13 @@ list_ex.count(2)
 ```
 
 
-
-
-
 ```{r echo=F}
 fit = lm(dist ~ speed, data = cars)
 b = coef(summary(fit))
 ```
 
 
-The slope of the regression is `r b[2, 1]`. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) {{< inline-src python >}}print('NULL'){{< /inline-src >}} 
+The slope of the regression is `r b[2, 1]`. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) 
 
 $$
 \begin{alignat}{2}
@@ -232,7 +234,7 @@ $$
 see [section](#section)
 
  Table \ref{tab:parameterValues}  Table \ref{tab:parameterValues}
-Another paragraph begins and the spacing should not be too small from table above. {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}} 
+Another paragraph begins and the spacing should not be too small from table above. 
 
  Table \ref{tab:parameterValues1}
  Table \ref{tab:parameterValues}

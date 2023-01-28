@@ -1,0 +1,51 @@
+
+#refs, a[role=doc-biblioref]:hover{
+  color: gray;
+}
+
+#refs a:visited, a[role=doc-biblioref]:visited{
+  color: var(--hover-color);
+}
+
+/* unvisited link */
+#refs a:hover {
+  color: blue;
+  opacity: 1;
+}
+
+
+a[role=doc-biblioref]:hover {
+  text-decoration: none;
+  color: gray;
+}
+
+
+a[href*="eq"] {
+  font-family: no-parens;
+}
+a[href*="eq"]:visited{
+   color: gray;
+}
+
+a[href*="eq"]:hover{
+   color: blue;
+   font-weight: bold;
+   text-decoration: underline;
+}
+
+
+a[href*="#"]{
+   color: blue;
+   text-decoration: none;
+}
+
+a[href*="#"]:visited{
+   color: gray;
+}
+
+a[href*="#"]:hover{
+   color: blue;
+   text-decoration: underline;
+}
+
+

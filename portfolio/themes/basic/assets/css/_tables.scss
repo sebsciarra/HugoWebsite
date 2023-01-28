@@ -1,0 +1,53 @@
+
+// TABLES */
+table[class = 'table'] {
+  color: var(--hover-color);
+  margin-bottom: 3rem;
+   margin-top: 3rem;
+  font-family: Helvetica;
+  width: fit-content;
+  font-size: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: 1.5px solid ;
+  border-bottom: 1.5px solid !important;/* line at bottom of table */
+  border-collapse: collapse;
+}
+
+/* thick line separating header from body */
+th {
+  border-bottom: 1.5px solid var(--hover-color);
+}
+
+caption {
+  font-size: 12px;
+  text-align: left;
+  font-style: italic;
+  font-family: Helvetica;
+}
+
+
+br{
+  height: 1rem;
+}
+
+span[id*="tab"]{
+  font-weight: bold;
+  font-style: normal;
+}
+
+
+/* thick line above footnote */
+tfoot{
+  border-top: 1.5px solid var(--hover-color); /*border line above footnote */
+  display: table-footer-group;
+}
+
+
+/* sem width to very small value; that way, the footnote width will always defaul to the table width because the width set
+in .css file will always be too small*/
+tfoot td{
+  width: 1rem;
+   word-wrap: break-word;
+}
+

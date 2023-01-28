@@ -1,322 +1,5 @@
-:root {
-  --navbar-color: #002241;
-  --navbar-width: 20rem;
-  --home-color: #d170c7;
-  --technical-color: #33c304;
-  --coding-color:  #e38f01;
-  --simulation-color: #c7547d;
-  --resources-color: #0678e1;
-  --about-color: #d4bd04;
-  --hover-color: #00182d;
-}
 
 
-// FOOTNOTES
-.footnotes{
-  text-decoration: none;
-}
-
-.footnote-backref, .footnote-ref{
-  text-decoration: none;
-  color: blue;
-}
-
-.footnote-backref:visited, .footnote-ref:visited{
-  color: gray;
-}
-
-.footnote-backref:hover, .footnote-ref:hover{
-    color: blue;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-.footnote-backref:link, .footnote-ref:link{
-  color: blue;
-}
-
-hr{
- border-top: 3px double #333;
-}
-
-
-
-
-// TABLES
-
-table {
-  color: var(--hover-color);
-  margin-bottom: 3rem;
-   margin-top: 3rem;
-  font-family: Helvetica;
-  width: fit-content;
-  font-size: 12px;
-  margin-left: auto;
-  margin-right: auto;
-  border-top: 1.5px solid;
-  border-bottom: 1.5px solid;
-  border-collapse: collapse;
-
-
-}
-caption {
-  font-size: 12px;
-  text-align: left;
-  font-style: italic;
-  font-family: Helvetica;
-}
-
-
-br{
-  height: 1rem;
-}
-
-span[id*="tab"]{
-  font-weight: bold;
-  font-style: normal;
-}
-
-
-
-/* thick line above footnote */
-tfoot{
-  border-top: 1.5px solid var(--hover-color);
-  display: table-footer-group;
-}
-
-
-/* sem width to very small value; that way, the footnote width will always defaul to the table width because the width set
-in .css file will always be too small*/
-tfoot td{
-  width: 1rem;
-   word-wrap: break-word;
-
-}
-
-/* thick line separating header from body */
-th {
-  border-bottom: 1.5px solid var(--hover-color);
-}
-
-
-.blog_post {
-  padding: 0;
-  margin-left: var(--navbar-width);
-  font-family: Helvetica;
-  background: white;
-}
-
-
-
-.header {
-  padding-bottom: 1rem;
-  border-bottom: 0.5px solid var(--navbar-color);
-  border-right: 0.5px solid var(--navbar-color);
-  position: relative;
-  max-width: 50rem;
-  margin: 0 auto;
-  margin-top: 5rem;
-  text-align: left;
-}
-
-.header:after {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 1.75rem;
-    position: absolute;
-    top:  -0.25rem;
-    left: -0.5rem;
-    border-top: 3px solid var(--hover-color);
-    border-left: 3px solid var(--hover-color);
-}
-
-.blog_title {
-  color: var(--hover-color);
-  background: white;
-  font-size: 1.75rem;
-  text-align: left;
-}
-
-.blog_summary{
-  font-weight: bold;
-  padding-top: 1rem;
-  font-size: 0.85rem;
-}
-
-
-
-
-br{
-  display: block;
-  margin-bottom: 10rem;
-}
-
-time{
-  color: var(--navbar-color);
-  font-size: 0.6em;
-  padding-bottom: 2rem;
-}
-
-.content {
-    position: relative;
-    max-width: 50rem;
-    height: fit-content;
-    margin: 0 auto;
-    margin-top: 5rem;
-    background: white;
-    color: var(--hover-color);
-    font-size: 14px;
-    font-family: palatino;
-}
-
-#refs, a[role=doc-biblioref]:hover{
-  color: gray;
-}
-
-#refs a:visited, a[role=doc-biblioref]:visited{
-  color: var(--hover-color);
-}
-
-/* unvisited link */
-#refs a:hover {
-  color: blue;
-  opacity: 1;
-}
-
-
-a[role=doc-biblioref]:hover {
-  text-decoration: none;
-  color: gray;
-}
-
-
-a[href*="eq"] {
-  font-family: no-parens;
-}
-a[href*="eq"]:visited{
-   color: gray;
-}
-
-a[href*="eq"]:hover{
-   color: blue;
-   font-weight: bold;
-   text-decoration: underline;
-}
-
-
-a[href*="#"]{
-   color: blue;
-   text-decoration: none;
-}
-
-a[href*="#"]:visited{
-   color: gray;
-}
-
-a[href*="#"]:hover{
-   color: blue;
-   text-decoration: underline;
-}
-
-
-/*FIGURE FORMATTING*/
-.figure {
-  margin-top: 3rem;
-  margin-bottom: 5rem;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: Helvetica;
-  font-size: 9pt;
-  position: relative; /*needed to enable corner borders */
-  display: block;
-
-  max-width: 85%;
-}
-
-img{
-  display: block;
-  max-width: 90%;
-  margin: 0 auto;  /*centers images */
-}
-
-
-.figTop{
-  display: block;
-}
-
-.figLabel{
-   margin-left: 0.5rem;
-  color: var(--navbar-color);
-  font-weight: bold;
-}
-
-.figTitle{
-   margin-left: 0.5rem;
-  color: var(--navbar-color);
-  font-weight: none;
-}
-
-.figNote{
-  border-top: -5rem;
-  font-size: 9pt;
-  margin: 0 auto;
-}
-
-/*bottom-rightcorner border*/
-.figure:before {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 2.25rem;
-    position: absolute;
-    bottom: -0.5rem;
-    right: 1rem;
-    border-bottom: 1.5px solid var(--hover-color);
-    border-right: 1.5px solid var(--hover-color);
-}
-
-.figure:after {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 2.25rem;
-    position: absolute;
-    top: -0.5rem;
-    left: 0rem;
-    border-top: 1.5px solid var(--hover-color);
-    border-left: 1.5px solid var(--hover-color);
-}
-
-
-.r{
-  max-width: 80%;
-  margin: 0 auto; /*centers block of text*/
-}
-
-
-h2, h3, h4, h5, h6 {
-   font-family: Helvetica;
-   text-align: left;
-   color: var(--hover-color);
-}
-
-h2 {
-   font-size: 35px;
-}
-
-h3 {
-  font-size: 25px;
-  border-bottom: 3px solid var(--hover-color);
-}
-
-h4 {
-  font-size: 20px;
-}
-
-h5 {
-  font-size: 17px;
-}
 
 
 /* bottom right corner border */
@@ -333,11 +16,6 @@ h5 {
 }
 
 
-
-p {
-  text-indent: 0rem;
-  color:  var(--hover-color);
-}
 
 
 
@@ -418,14 +96,15 @@ p {
   list-style: none;
   margin-bottom: 0.25rem;
   font-weight: bold;
+  color: var(--navbar-color);
 }
 
 .items a:visited {
-  color: black;
+  color: #4B4747;
 }
 
 .items a:hover {
-  color: #9a9a9a;
+ text-decoration: underline;
 }
 
 
@@ -537,65 +216,66 @@ h1 {
 }
 
 
+
 @media (max-width: 1000px) {
 
 
-.page_holder, .blog_post{
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 800px;
-}
+  .page_holder, .blog_post{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 800px;
+  }
 
-.page_holder .page_content {
-  width: 100%;
-  height: 100%;
-}
-
-
-
-    /*change sidebar to a topbar*/
-    .navbar {
-    height: 0;
+  .page_holder .page_content {
     width: 100%;
-    position: fixed;
+    height: 100%;
+  }
+
+
+
+      /*change sidebar to a topbar*/
+      .navbar {
+      height: 0;
+      width: 100%;
+      position: fixed;
+      }
+
+      /*h1 title is vertically oriented */
+     h1{
+      text-align: center;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
 
-    /*h1 title is vertically oriented */
-   h1{
-    text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
+
+    /*toggle button appears as three vertically oriented lines  */
+    .toggle-button {
+      display: flex;
+    }
+
+      /*list items are vertically oriented  */
+    .navbar-links li a{
+      text-align: center;
+      background-color: var(--navbar-color);
+    }
 
 
-  /*toggle button appears as three vertically oriented lines  */
-  .toggle-button {
-    display: flex;
-  }
+    .portal {
+    position: initial;
+    }
 
-    /*list items are vertically oriented  */
-  .navbar-links li a{
-    text-align: center;
-    background-color: var(--navbar-color);
-  }
+     /*removes navigation bar when unclicked */
+    .navbar-links{
+      display: none;
+      padding: 0;
+    }
 
-
-  .portal {
-  position: initial;
-  }
-
-   /*removes navigation bar when unclicked */
-  .navbar-links{
-    display: none;
-    padding: 0;
-  }
-
-  /*if actve, then display = flex and list items are shown in their vertical orientation  */
-  .navbar-links.active {
-    display: flex;
-    flex-direction: column;
-  }
+    /*if actve, then display = flex and list items are shown in their vertical orientation  */
+    .navbar-links.active {
+      display: flex;
+      flex-direction: column;
+    }
 
 }
 

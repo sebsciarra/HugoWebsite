@@ -16,15 +16,19 @@
 
   <meta name="author" content="{{ .Site.Params.author }}">
 
-   <!--  resources.Get function uses the assets directory as its base path. toCSS allows Sass preprocessor to be use  -->
+   <!--  resources.Get function uses the assets directory (in theme folder where head.html is loated) as its base path. toCSS allows Sass preprocessor to be used  -->
    {{- if .Page.IsHome -}}
+
+     <!-- minify .css files so whitespace is deleted and loading is faster. Fingerprint .css files so that style changes are always updated.
+     Enable SaSS preprocessor with toCSS so that more capabilities can be activated (e.g., smaller CSS files, using import, math calculations). -->
      {{ $css := resources.Get "css/_homepage.scss" | toCSS | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ "css/_homepage.css" | relURL }}"/>
+     <link rel="stylesheet" href="{{ "css/_homepage.css" | relURL }}"/>
+    <!-- write file to public/css directory and place correct relative URL into HTML document -->
     <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
   {{- else -}}
-    {{ $css := resources.Get "css/_syntax.scss"  | toCSS | minify | fingerprint }}
-        <link rel="stylesheet" href="{{ "css/_syntax.css" | relURL }}"/>
+    {{ $css := resources.Get "css/_webStyling.scss"  | toCSS | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ "css/_webStyling.css" | relURL }}"/>
         <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
   <link rel="stylesheet" type="text/css" href="{{ "/hugo-cite.css" | relURL }}" />

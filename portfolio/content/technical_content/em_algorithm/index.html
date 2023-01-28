@@ -564,8 +564,6 @@ display: none;
 </div>
 
 
-<pre class="r"><code>1 + &quot;a&quot;</code></pre>
-<pre><code>Error in 1 + &quot;a&quot;: non-numeric argument to binary operator</code></pre>
 <p>That’s some text with a footnote.[^1]<span class="math inline">\(^{,}\)</span>
 [^1]: And that’s the footnote (see Table <span class="math inline">\(\ref{tab:parameterValues}\)</span>).</p>
 <p>``<code>r {hl_lines=[1,2,5]} #this is a comment  more comment my website m , . , y website my website my website #my website my website my website my website my website my website my website my    #my website my website my website print(&#39;my website my website my, , , ,.</code> website my website my website my website my website
@@ -583,7 +581,8 @@ list(‘number_measurements’ = c(5, 7, 9, 11),
 <p>if (x1 &gt; 2) {print(x1)}
 else {print (x2)}
 }</p>
-<pre><code>
+<pre><code>This is inline R code:{{&lt; inline-src r &gt;}}print(NULL){{&lt; /inline-src &gt;}} 
+
 ```r {hl_lines=[2,3,4],language=python}
 tup = [&#39;Groucho&#39;, &#39;Marx&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;, &#39;Xavier&#39;]
 list_ex = list([&quot;food&quot;, 538, True, 1.454, &quot;food&quot;, 538, True, 1.454, &quot;food&quot;, 538, True, 1.454, &quot;food&quot;, 538, True, 1.454])
@@ -594,7 +593,8 @@ list_ex2 = list([1 + 2, &quot;a&quot; * 5, 3])
 #deleting variables 
 del(list_ex2)
 list_ex.count(2)  </code></pre>
-<p>```r {language=java}
+<p>This is inline Python code: {{&lt; inline-src python &gt;}}print(‘NULL’){{&lt; /inline-src &gt;}}</p>
+<p>```r {hl_lines=[2,3,4],language=java}
 let codeTable = document.createElement(“table”);
 codeTable.setAttribute(‘id’, “codeTable”);</p>
 <p>//add rows to table by adding each element of lines
@@ -608,15 +608,20 @@ let newCell3 = row.insertCell(2);</p>
 newCell2.innerHTML = lines[t];
 newCell3.innerHTML = ““;
 }</p>
-<pre><code>
-```r {language=css}
-div[language =&#39;java&#39;] code[data-lang=&#39;r&#39;] table td:nth-child(2) {width: 85%;position: relative;
+<pre><code>This is inline Javascript code: {{&lt; inline-src js &gt;}}let codeTable = document.createElement(&quot;table&quot;);{{&lt; /inline-src &gt;}} 
+
+```r {hl_lines=[2,3,4],language=css}
+div[language =&#39;java&#39;] code[data-lang=&#39;r&#39;] table td:nth-child(2) {
+  width: 85%;position: relative;
   background-color:  rgba(255,105,130, 0.20);
-  border-left: 2pt solid rgba(255,105,130, 0.50);;
+  border-left: 2pt solid rgba(255,105,130, 0.50);
   padding: 0;
 }</code></pre>
-<p><code>r {language=html} &lt;script src=&quot;{{ &quot;js/external_links.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_tables.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_figures.js&quot; | relURL }}&quot;&gt;&lt;/script&gt;</code></p>
-<p><code>r {hl_lines=[1],language=bash} ls   cd ~/Desktop/Home/blog_posts</code></p>
+<p>This is inline CSS code: {{&lt; inline-src css &gt;}} background-color: rgba(255,105,130, 0.20);{{&lt; /inline-src &gt;}}</p>
+<p><code>r {hl_lines=[2,3],language=html} &lt;script src=&quot;{{ &quot;js/external_links.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_tables.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_figures.js&quot; | relURL }}&quot;&gt;&lt;/script&gt;</code>
+This is inline HTML code: {{&lt; inline-src html &gt;}} &lt;script src=“{{”js/external_links.js” | relURL }}“&gt;</script>{{&lt; /inline-src &gt;}}</p>
+<p><code>r {hl_lines=[1],language=bash} ls   cd ~/Desktop/Home/blog_posts</code>
+This is inline bash code: {{&lt; inline-src bash &gt;}}cd ~/Desktop/Home/blog_posts{{&lt; /inline-src &gt;}}</p>
 <pre><code class="r-code">[1] &quot;my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website&quot;
 [1] 3
 [1] 1.5
@@ -638,7 +643,7 @@ Some explanatory text Some explanatory textSome explanatory text{{&lt; cite “f
 <pre><code class="python-code">[&#39;Groucho&#39;, &#39;Marx&#39;, &#39;Xavier&#39;]
 0
 </code></pre>
-<p>The slope of the regression is 3.9324088. This is gamma $$. <span class="math inline">\(\frac{1}{2}\)</span> This is (see Equation <span class="math inline">\(\ref{eq:multiline}\)</span>; another comment) {{&lt; inline-src python &gt;}}print(‘NULL’){{&lt; /inline-src &gt;}}</p>
+<p>The slope of the regression is 3.9324088. This is gamma $$. <span class="math inline">\(\frac{1}{2}\)</span> This is (see Equation <span class="math inline">\(\ref{eq:multiline}\)</span>; another comment)</p>
 <p><span class="math display">\[
 \begin{alignat}{2}
 I &amp; = \int \rho R^{2} dV &amp; + P \nonumber \\\\
@@ -650,7 +655,7 @@ Y &amp; = 1 + x
 <h3><span class="header-section-number">0.0.1</span> Why the EM algorithm is needed?</h3>
 <p>see <a href="#section">section</a></p>
 <p>Table <span class="math inline">\(\ref{tab:parameterValues}\)</span> Table <span class="math inline">\(\ref{tab:parameterValues}\)</span>
-Another paragraph begins and the spacing should not be too small from table above. {{&lt; inline-src bash &gt;}}cd ~/Desktop/Home/blog_posts{{&lt; /inline-src &gt;}}</p>
+Another paragraph begins and the spacing should not be too small from table above.</p>
 <p>Table <span class="math inline">\(\ref{tab:parameterValues1}\)</span>
 Table <span class="math inline">\(\ref{tab:parameterValues}\)</span>
 Table <span class="math inline">\(\ref{tab:parameterValues1}\)</span></p>

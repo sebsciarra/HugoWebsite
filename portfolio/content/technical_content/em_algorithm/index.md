@@ -15,14 +15,6 @@ tags: []
 
 
 
-```r 
-1 + "a"
-```
-
-```
-Error in 1 + "a": non-numeric argument to binary operator
-```
-
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
@@ -49,6 +41,7 @@ var <- function(x1, x2){
   else {print (x2)}
 }
 ```
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}} 
 
 ```r {hl_lines=[2,3,4],language=python}
 tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
@@ -61,9 +54,10 @@ list_ex2 = list([1 + 2, "a" * 5, 3])
 del(list_ex2)
 list_ex.count(2)  
 ```
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}} 
 
 
-```r {language=java}
+```r {hl_lines=[2,3,4],language=java}
 let codeTable = document.createElement("table");
 codeTable.setAttribute('id', "codeTable");
 
@@ -81,26 +75,33 @@ for (let t = 0; t < lines.length; t++) {
   newCell3.innerHTML = "";
 }
 ```
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}} 
 
-```r {language=css}
-div[language ='java'] code[data-lang='r'] table td:nth-child(2) {width: 85%;position: relative;
+```r {hl_lines=[2,3,4],language=css}
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;position: relative;
   background-color:  rgba(255,105,130, 0.20);
-  border-left: 2pt solid rgba(255,105,130, 0.50);;
+  border-left: 2pt solid rgba(255,105,130, 0.50);
   padding: 0;
 }
 ```
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}} 
 
-```r {language=html}
+
+```r {hl_lines=[2,3],language=html}
 <script src="{{ "js/external_links.js" | relURL }}"></script>
 <script src="{{ "js/number_tables.js" | relURL }}"></script>
 <script src="{{ "js/number_figures.js" | relURL }}"></script>
 ```
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}} 
 
 ```r {hl_lines=[1],language=bash}
 ls
  
 cd ~/Desktop/Home/blog_posts
 ```
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}} 
+
 
 <pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
 [1] 3
@@ -133,10 +134,7 @@ If you liked how these _"generics"_ work in SystemVerilog and how the looks, che
 
 
 
-
-
-
-The slope of the regression is 3.9324088. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) {{< inline-src python >}}print('NULL'){{< /inline-src >}} 
+The slope of the regression is 3.9324088. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) 
 
 $$
 \begin{alignat}{2}
@@ -153,7 +151,7 @@ $$
 see [section](#section)
 
  Table \ref{tab:parameterValues}  Table \ref{tab:parameterValues}
-Another paragraph begins and the spacing should not be too small from table above. {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}} 
+Another paragraph begins and the spacing should not be too small from table above. 
 
  Table \ref{tab:parameterValues1}
  Table \ref{tab:parameterValues}

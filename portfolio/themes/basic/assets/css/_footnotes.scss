@@ -1,0 +1,26 @@
+.footnotes{
+  text-decoration: none;
+}
+
+.footnote-backref, .footnote-ref{
+  text-decoration: none;
+  color: blue;
+}
+
+.footnote-backref:visited, .footnote-ref:visited{
+  color: gray;
+}
+
+.footnote-backref:hover, .footnote-ref:hover{
+    color: blue;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.footnote-backref:link, .footnote-ref:link{
+  color: blue;
+}
+
+hr{
+ border-top: 3px double #333;
+}

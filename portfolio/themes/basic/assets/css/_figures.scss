@@ -1,0 +1,67 @@
+/*FIGURE FORMATTING*/
+.figure {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Helvetica;
+  font-size: 9pt;
+  position: relative; /*needed to enable corner borders */
+  display: block;
+
+  max-width: 85%;
+}
+
+img{
+  display: block;
+  max-width: 90%;
+  margin: 0 auto;  /*centers images */
+}
+
+
+.figTop{
+  display: block;
+}
+
+.figLabel{
+   margin-left: 0.5rem;
+  color: var(--navbar-color);
+  font-weight: bold;
+}
+
+.figTitle{
+   margin-left: 0.5rem;
+  color: var(--navbar-color);
+  font-weight: none;
+}
+
+.figNote{
+  border-top: -5rem;
+  font-size: 9pt;
+  margin: 0 auto;
+}
+
+/*bottom-rightcorner border*/
+.figure:before {
+    display: block;
+    content: "";
+    width: 7rem;
+    height: 2.25rem;
+    position: absolute;
+    bottom: -0.5rem;
+    right: 1rem;
+    border-bottom: 1.5px solid var(--hover-color);
+    border-right: 1.5px solid var(--hover-color);
+}
+
+.figure:after {
+    display: block;
+    content: "";
+    width: 7rem;
+    height: 2.25rem;
+    position: absolute;
+    top: -0.5rem;
+    left: 0rem;
+    border-top: 1.5px solid var(--hover-color);
+    border-left: 1.5px solid var(--hover-color);
+}

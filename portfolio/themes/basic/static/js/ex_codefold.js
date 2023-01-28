@@ -224,31 +224,3 @@ document.querySelectorAll('.highlight')
   .forEach(highlightDiv => createCopyButton(highlightDiv));
 
 
-
-// Access the iframe element
-//console.log(document.getElementsByClassName("utterances-frame"));
-
-let myFrame = document.getElementsByClassName("giscus-frame");
-console.log(myFrame);
-
-
-
-//myFrame.onload = function() {
-//  let iframeDoc = myFrame.contentDocument;
-//
-//  let body = iframeDoc.getElementsByTagName("body")[0];
-//
-//   let headers = iframeDoc.getElementsByClassName("timeline-header");
-//
-//}
-
-
-//document.addEventListener("DOMContentLoaded", function() {
-//   let myFrame = document.getElementsByClassName("utterances-frame");
-//   let iframeDoc = myFrame.contentDocument;
-//   console.log(myFrame);
-//});
-
-
-
-

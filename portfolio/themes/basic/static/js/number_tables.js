@@ -51,15 +51,4 @@ for (let i = 0; i < Object.keys(table_nums).length; i++) {
 }
 
 
-const accord_buttons = document.querySelectorAll('.accordion-header')
-const accord_body = document.querySelectorAll('.accordion-bodyr')
-
-accord_buttons.forEach((btn) => {
-  btn.addEventListener('click', ()=> {
-
-    const panel = btn.nextElementSibling; // selects element that followers the button (in this case, the body)
-    panel.classList.toggle('active');
-    btn.classList.toggle('active');
-    });
-});
 
