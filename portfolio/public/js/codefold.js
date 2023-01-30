@@ -1,6 +1,6 @@
 
 codeBlocks = document.querySelectorAll('.highlight, pre:has(code[class*="-code"])');
-
+console.log(codeBlocks);
 var cumulative_length = 0;
 var starting_indices = [0];
 
@@ -14,7 +14,7 @@ for (block = 0; block < codeBlocks.length; block++){
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
 
    ////remove preamble code from first element of lines and add copy button to the endof this element
-   lines[0] = lines[0].replace(preamble, '') //+ '<button class="copy-button" data-button="Copy"></button>';
+   lines[0] = lines[0].replace(preamble, ''); //+ '<button class="copy-button" data-button="Copy"></button>';
    table_end = lines[lines.length - 1]; //save last element
    lines.splice(lines.length - 1, 1); //delete last element
   } else {
@@ -26,7 +26,7 @@ for (block = 0; block < codeBlocks.length; block++){
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
 
     //remove preamble code from first element of lines and add copy button to the endof this element
-    lines[0] = lines[0].replace(preamble, '') //+ '<button class="copy-button" data-button="Copy"></button>';
+    lines[0] = lines[0].replace(preamble, ''); //+ '<button class="copy-button" data-button="Copy"></button>';
     table_end = lines[lines.length - 1]; //save last element
     lines.splice(lines.length - 1, 1); //delete last element
   }
@@ -67,12 +67,12 @@ for (block = 0; block < codeBlocks.length; block++){
 
   //compile complete table
 
-  complete_codeTable = preamble + codeTable.outerHTML + table_end
+  complete_codeTable = preamble + codeTable.outerHTML + table_end;
 
    if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
-      codeBlocks[block].outerHTML = complete_codeTable
+      codeBlocks[block].outerHTML = complete_codeTable;
    } else{
-       codeBlocks[block].innerHTML = complete_codeTable
+       codeBlocks[block].innerHTML = complete_codeTable;
    }
 
 }
@@ -151,76 +151,5 @@ codeTables.forEach(function(codeTable){
 });
 
 
-
-//COPY BUTTON
-// https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/
-function createCopyButton(highlightDiv) {
-  const button = document.createElement("button");
-  button.className = "copy-code-button";
-  button.type = "button";
-  button.innerText = "Copy";
-  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
-  addCopyButtonToDom(button, highlightDiv);
-}
-
-
-
-async function copyCodeToClipboard(button, highlightDiv) {
-
-  // make sure non-breakble characters are not copied
-  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
-
-  try {
-    result = await navigator.permissions.query({ name: "clipboard-write" });
-    if (result.state == "granted" || result.state == "prompt") {
-      await navigator.clipboard.writeText(codeToCopy);
-    } else {
-      copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-    }
-  } catch (_) {
-    copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-  }
-  finally {
-    codeWasCopied(button);
-  }
-}
-
-
-function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
-  const textArea = document.createElement("textArea");
-  textArea.contentEditable = 'true'
-  textArea.readOnly = 'false'
-  textArea.className = "copyable-text-area";
-  textArea.value = codeToCopy;
-  highlightDiv.insertBefore(textArea, highlightDiv.firstChild);
-  const range = document.createRange()
-  range.selectNodeContents(textArea)
-  const sel = window.getSelection()
-  sel.removeAllRanges()
-  sel.addRange(range)
-  textArea.setSelectionRange(0, 999999)
-  document.execCommand("copy");
-  highlightDiv.removeChild(textArea);
-}
-
-function codeWasCopied(button) {
-  button.blur();
-  button.innerText = "Copied!";
-  setTimeout(function() {
-    button.innerText = "Copy";
-  }, 2000);
-}
-
-function addCopyButtonToDom(button, highlightDiv) {
-  highlightDiv.insertBefore(button, highlightDiv.firstChild);
-  const wrapper = document.createElement("div");
-  wrapper.className = "highlight-wrapper";
-  highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
-  wrapper.appendChild(highlightDiv);
-}
-
-
-document.querySelectorAll('.highlight')
-  .forEach(highlightDiv => createCopyButton(highlightDiv));
 
 

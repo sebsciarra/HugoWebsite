@@ -12,30 +12,15 @@
   </p>
   {{ end }}
 
-  <!-- Init code folding -->
-  {{ partial "article_footer_js.html" . }}
-
-
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-  <script src="{{ "js/external_links.js" | relURL }}"></script>
+   <script src="{{ "js/external_links.js" | relURL }}"></script>
    <script src="{{ "js/number_tables.js" | relURL }}"></script>
-  <script src="{{ "js/number_figures.js" | relURL }}"></script>
-  <!-- <script src="{{ "js/copy_code.js" | relURL }}"></script>
-
-  <script src="{{ "js/collapse.js" | relURL }}"></script>
-  <script src="{{ "js/transition.js" | relURL }}"></script>
-  <script src="{{ "js/dropdown.js" | relURL }}"></script> -->
-  <script src="{{ "js/ex_codefold.js" | relURL }}"></script>
-
-
-<!-- <script src="{{ "js/transition.js" | relURL }}"></script>
-<script src="{{ "js/dropdown.js" | relURL }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="{{ "js/jquery_load.js" | relURL }}"></script>  -->
-
+   <script src="{{ "js/number_figures.js" | relURL }}"></script>
+   <script src="{{ "js/codefold.js" | relURL }}"></script>. <!-- important! make sure codefold comes before copy_code -->
+  <script src="{{ "js/copy_code.js" | relURL }}"></script>
 
 
 

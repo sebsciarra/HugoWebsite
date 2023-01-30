@@ -41,7 +41,7 @@ var <- function(x1, x2){
   else {print (x2)}
 }
 ```
-This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}} 
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
 
 ```r {hl_lines=[2,3,4],language=python}
 tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
@@ -54,7 +54,7 @@ list_ex2 = list([1 + 2, "a" * 5, 3])
 del(list_ex2)
 list_ex.count(2)  
 ```
-This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}} 
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
 
 
 ```r {hl_lines=[2,3,4],language=java}
@@ -75,7 +75,7 @@ for (let t = 0; t < lines.length; t++) {
   newCell3.innerHTML = "";
 }
 ```
-This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}} 
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
 
 ```r {hl_lines=[2,3,4],language=css}
 div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
@@ -85,7 +85,7 @@ div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
   padding: 0;
 }
 ```
-This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}} 
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
 
 
 ```r {hl_lines=[2,3],language=html}
@@ -93,14 +93,14 @@ This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,
 <script src="{{ "js/number_tables.js" | relURL }}"></script>
 <script src="{{ "js/number_figures.js" | relURL }}"></script>
 ```
-This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}} 
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
 
 ```r {hl_lines=[1],language=bash}
 ls
  
 cd ~/Desktop/Home/blog_posts
 ```
-This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}} 
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
 
 
 <pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
@@ -144,9 +144,7 @@ Y & = 1 + x
 \end{alignat}
 $$
 
-### Why the EM algorithm is needed?{#section}
-
-
+### Tables
 
 see [section](#section)
 
@@ -238,11 +236,93 @@ Another paragraph begins and the spacing should not be too small from table abov
 </tfoot>
 </table>
 
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>(\#tab:parameterValues1)Values Used for Multilevel Logistic Function Parameters (see Table \ref{tab:parameterValues})</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Parameter Means </th>
+   <th style="text-align:center;"> Value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Baseline, $\theta$ </td>
+   <td style="text-align:center;"> 3.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Maximal elevation, $\alpha$ </td>
+   <td style="text-align:center;"> 3.32 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Days-to-halfway elevation, $\upbeta$ </td>
+   <td style="text-align:center;"> 180.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;padding-bottom: 1rem; border-bottom: 1.5px solid" indentlevel="1"> Triquarter-halfway delta, $\upgamma$ </td>
+   <td style="text-align:center;padding-bottom: 1rem; border-bottom: 1.5px solid"> 20.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold; border-bottom: 1.5px solid"> Variability and Covariability Parameters (in Standard Deviations) </td>
+   <td style="text-align:center;font-weight: bold; border-bottom: 1.5px solid">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Baseline standard deviation, $\uppsi_{\uptheta}$ </td>
+   <td style="text-align:center;"> 0.05 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Maximal elevation standard deviation, $\uppsi_{\upalpha}$ </td>
+   <td style="text-align:center;"> 0.05 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Days-to-halfway elevation standard deviation, $\uppsi_{\upbeta}$ </td>
+   <td style="text-align:center;"> 10.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Triquarter-halfway delta standard deviation, $\uppsi_{\upgamma}$ </td>
+   <td style="text-align:center;"> 4.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Baseline-maximal elevation covariability, $\uppsi_{\uptheta\upalpha}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Baseline-days-to-halfway elevation covariability, $\uppsi_{\uptheta\upbeta}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Baseline-triquarter-halfway delta covariability, $\uppsi_{\uptheta\upgamma}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Maximal elevation-days-to-halfway elevation covariability, $\uppsi_{\upalpha\upbeta}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Maximal elevation-triquarter-halfway delta covariability, $\uppsi_{\upalpha\upgamma}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Days-to-halfway elevation-triquarter-halfway delta covariability, $\uppsi_{\upbeta\upgamma}$ </td>
+   <td style="text-align:center;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="1"> Residual standard deviation, $\uppsi_{\upepsilon}$ </td>
+   <td style="text-align:center;"> 0.05 </td>
+  </tr>
+</tbody>
+<tfoot>
+<tr><td style="padding: 0; " colspan="100%"><span style="font-style: italic;"> </span></td></tr>
+<tr><td style="padding: 0; " colspan="100%">
+<sup></sup> <em>Note</em>. The difference between $\alpha$ and $\theta$ corresponds to the 50$\mathrm{^{th}}$ percentile Cohen's $d$ value of 0.32 in organizational psychology (Bosco et al., 2015). see Table \ref{tab:parameterValues} and Figure \ref{fig:gg-oz-plot1}.</td></tr>
+</tfoot>
+</table>
+
+
+## Figures
 
 
 
-
-<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=index_files/figure-html/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
+<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=images/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
  
 
 

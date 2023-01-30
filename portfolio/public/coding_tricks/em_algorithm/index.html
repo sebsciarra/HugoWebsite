@@ -11,10 +11,8 @@
   <meta name="author" content="Sebastian Sciarra">
 
    
-     <link rel="stylesheet" href="/css/style.css"/>
-    
-        <link rel="stylesheet" href="/css/_syntax.css"/>
-        <link rel="stylesheet" href="/css/_syntax.min.835579d6ab521516844e59f80bee41b13f0f6618f15f75350a2f7e817370e86f.css">
+        <link rel="stylesheet" href="/css/_webStyling.css"/>
+        <link rel="stylesheet" href="/css/_webStyling.min.45ca4ee0ecc89c09c0fb02888661d0e92e4d114fa9f1d9621333d68c66ef0cf9.css">
 
   <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
   <meta name="description" content="Seb&#39;s portfolio site">
@@ -22,8 +20,8 @@
  
   
 
-</head>
 
+</head>
 
 
 <body>
@@ -47,7 +45,7 @@
   
   
       <link rel="stylesheet" href="/css/_navbar.css"/>
-      <link rel="stylesheet" href="/css/_navbar.min.8a3bb72e8be497c6ab8b4bf091af2f0ddce3eac22aff40af31db3ce3dfa1c7fa.css">
+      <link rel="stylesheet" href="/css/_navbar.min.0fa8f4321d2827646ce511c4711e459b397b8f1f02f823fa81ce6935823aae3c.css">
 
     <div class = 'navbar'>
        <h1>Blog Contents </h1>
@@ -92,7 +90,7 @@
          <br>
 
         <time> <b> Published </b> <br>
-        14 January 2023
+        30 January 2023
         </time>
 
     </div>
@@ -105,7 +103,6 @@
 
 
 </div>
-
 
 <script type="text/javascript"
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -123,201 +120,22 @@
      });
 </script>
 
-
-
-<script type="text/javascript">
-
-
-
-function createCopyButton(highlightDiv) {
-  const button = document.createElement("button");
-  button.className = "copy-code-button";
-  button.type = "button";
-  button.innerText = "Copy";
-  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
-  addCopyButtonToDom(button, highlightDiv);
-}
-
-
-async function copyCodeToClipboard(button, highlightDiv) {
-
-  
-  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
-
-  try {
-    result = await navigator.permissions.query({ name: "clipboard-write" });
-    if (result.state == "granted" || result.state == "prompt") {
-      await navigator.clipboard.writeText(codeToCopy);
-    } else {
-      copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-    }
-  } catch (_) {
-    copyCodeBlockExecCommand(codeToCopy, highlightDiv);
-  }
-  finally {
-    codeWasCopied(button);
-  }
-}
-
-
-function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
-  const textArea = document.createElement("textArea");
-  textArea.contentEditable = 'true'
-  textArea.readOnly = 'false'
-  textArea.className = "copyable-text-area";
-  textArea.value = codeToCopy;
-  highlightDiv.insertBefore(textArea, highlightDiv.firstChild);
-  const range = document.createRange()
-  range.selectNodeContents(textArea)
-  const sel = window.getSelection()
-  sel.removeAllRanges()
-  sel.addRange(range)
-  textArea.setSelectionRange(0, 999999)
-  document.execCommand("copy");
-  highlightDiv.removeChild(textArea);
-}
-
-function codeWasCopied(button) {
-  button.blur();
-  button.innerText = "Copied!";
-  setTimeout(function() {
-    button.innerText = "Copy";
-  }, 2000);
-}
-
-function addCopyButtonToDom(button, highlightDiv) {
-  highlightDiv.insertBefore(button, highlightDiv.firstChild);
-  const wrapper = document.createElement("div");
-  wrapper.className = "highlight-wrapper";
-  highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
-  wrapper.appendChild(highlightDiv);
-}
-
-
-document.querySelectorAll(".highlight")
-  .forEach(highlightDiv =>  createCopyButton(highlightDiv));
-
-
-
-function createFoldButton(highlightDiv) {
-  const button = document.createElement("button");
-  button.className = "fold-code-button";
-  button.type = "button";
-  button.innerText = "Hide";
-  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
-  addCopyButtonToDom(button, highlightDiv);
-}
-
-
-
-
-const caption_tags = document.querySelectorAll('table caption');
-
-
-const table_nums = {};
-
-
-for (let i = 0; i < caption_tags.length; i++) {
-
-  
-  const match = caption_tags[i].innerHTML.match(/\(\\#tab:([^)]+)\)/);
-
-  
-  
-  table_nums[match[1]] = i+ 1;
-
-  
-  caption_tags[i].innerHTML = caption_tags[i].innerHTML.replace(match[0], '<span id="tab:'+ match[1] + '">Table ' + (i+1) + '<br></span>');
-}
-
-
-const p_elements = document.querySelectorAll('p, tfoot, caption, .figNote');
-const table_refs = [];
-
-for (const element of p_elements) {
-  if (element.innerHTML.includes('Table \\ref\{tab:')) {
-    table_refs.push(element);
-  }
-}
-
-  
-for (let i = 0; i < Object.keys(table_nums).length; i++) {
-
-  
-  table_label = Object.keys(table_nums)[i];
-  table_number = Object.values(table_nums)[i];
-
- for (let j = 0; j < table_refs.length; j++){
-
-    
-    label_to_match = new RegExp('\\\\ref\\{tab:' + table_label + '\\}', 'g');
-
-   
-   text = table_refs[j].innerHTML.replace(label_to_match, '<a href="#tab:' + table_label + '">' + table_number + '</a>');
-
-
-   table_refs[j].innerHTML = text;
-  }
-}
-
-
-
-
-const fig_caption_tags = document.querySelectorAll('div.figure span.figLabel');
-
-
-const potential_fig_references = document.querySelectorAll('p, tfoot, caption, .figNote');
-const figure_refs = [];
-
-for (const ref of potential_fig_references) {
-  if (ref.innerHTML.includes('Figure \\ref\{fig:')) {
-    figure_refs.push(ref);
-  }
-}
-
-const figure_nums_list = {};
-
-
-for (let i = 0; i < fig_caption_tags.length; i++) {
-
-  
-  const match = fig_caption_tags[i].innerHTML.match(/\\ref{fig:[^}]+}/g);
-  const fig_label = fig_caption_tags[i].innerHTML.match(/fig:(.*?)}/);
-
-  
-  
-  figure_nums_list[fig_label[1]]= i+ 1;
-
-  
-  fig_caption_tags[i].innerHTML = fig_caption_tags[i].innerHTML.replace(match, '<span id="fig:'+ fig_label[1] + '">' + (i+1) + '</span>');
-
-}
-
-
-
-  
-for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
-
-  
-  figure_label = Object.keys(figure_nums_list)[i];
-  figure_number = Object.values(figure_nums_list)[i];
-
-
- for (let j = 0; j < figure_refs.length; j++){
-
-    
-    label_to_match = new RegExp('\\\\ref\\{fig:' + figure_label + '\\}', 'g')
-
-   
-   text = figure_refs[j].innerHTML.replace(label_to_match, '<a href="#fig:' + figure_label + '">' + figure_number + '</a>');
-
-   figure_refs[j].innerHTML = text;
-  }
-
-}
-
-
+ <script src="https://giscus.app/client.js"
+        data-repo="sciarraseb/giscus"
+        data-repo-id="R_kgDOIwrh4A"
+        data-category="Comments"
+        data-category-id="DIC_kwDOIwrh4M4CT1kX"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="dark"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
 </script>
+
 
 
         </main>
@@ -330,18 +148,18 @@ for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
 
 
 
-
-
- <script type = 'text/javascript'>
-
-
-</script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <script src="/js/external_links.js"></script>
+   <script src="/js/number_tables.js"></script>
+  <script src="/js/number_figures.js"></script>
+  <script src="/js/copy_code.js"></script>
+  <script src="/js/codefold.js"></script>
 
 
 
 </footer>
+
 
 
 

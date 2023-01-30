@@ -227,9 +227,7 @@ Y & = 1 + x
 \end{alignat}
 $$
 
-### Why the EM algorithm is needed?{#section}
-
-
+### Tables
 
 see [section](#section)
 
@@ -302,7 +300,7 @@ kbl(parameterValues_df, booktabs = TRUE, format = 'html',
  row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
 ```
 
-```{r parameterValues1, echo=F, eval=F}
+```{r parameterValues1, echo=F, eval=T}
 
 #specify parameters for parameter table 
 theta <- 3
@@ -364,6 +362,9 @@ kbl(parameterValues_df, booktabs = TRUE, format = 'html',
  row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
 ```
 
+
+## Figures
+
 ```{r gg-oz-plot, eval=F, echo=F}
 generate_apa7_figure <- function(fig_label, fig_title, fig_path, fig_note=NA){
   
@@ -390,7 +391,7 @@ x <- generate_apa7_figure(fig_label = '\ref{fig:gg-oz-plot}', fig_title = 'Title
 
 ```
 
-<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=index_files/figure-html/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
+<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=images/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
  
 
 
