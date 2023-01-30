@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "sebastiansciarra.com"
 languageCode = "en-us"
 title = "Sebastian Sciarra" #title of website
 theme = ["basic", "hugo-cite"]#use basic theme

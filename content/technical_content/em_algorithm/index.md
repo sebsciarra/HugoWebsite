@@ -8,7 +8,7 @@ output:
      keep_md: true
 always_allow_html: true
 bibFile: content/technical_content/em_algorithm/biblio.json    
-tags: []
+tags: ['EM']
 ---   
 
 

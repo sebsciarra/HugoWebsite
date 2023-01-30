@@ -1,0 +1,409 @@
+---
+title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems" 
+draft: false
+summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
+article_type: technical
+output:
+  bookdown::html_document2:
+     keep_md: true
+always_allow_html: true
+bibFile: content/technical_content/em_algorithm/biblio.json    
+tags: []
+---   
+
+
+```{r package_loading_1, include=F}
+#load packages   
+library(easypackages) 
+packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'papaja', 'shiny',
+              'ggbrace', 'cowplot', 'knitr', 'RefManageR', 'reticulate', 'gluedown', 'formatR')
+libraries(packages)  
+
+#use_python(python = "/usr/local/bin/python3.9")
+
+knitr::opts_chunk$set(comment = NA)
+# knitr hook to use Hugo highlighting options
+knitr::knit_hooks$set(
+  source = function(x, options) {
+  hlopts <- options$hlopts
+    paste0(
+      "```", "r ",
+      if (!is.null(hlopts)) {
+      paste0("{",
+        glue::glue_collapse(
+          glue::glue('{names(hlopts)}={hlopts}'),
+          sep = ","
+        ), "}"
+        )
+      },
+      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
+    )
+  }
+)
+
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
+
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
+       
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
+
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
+
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
+
+```
+
+
+That's some text with a footnote.[^1]$^{,}$ 
+[^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
+
+```{r r-code,   echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
+#this is a comment  more comment my website m , . , y website my website my website
+#my website my website my website my website my website my website my website my   
+#my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website
+      website my website my   website my website my website my website my website my website')  
+
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),
+     'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+
+
+``` 
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
+
+```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3', tidy=F}
+tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
+list_ex = list(["food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
+
+
+```{r java-code, engine = 'js', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'java')}
+let codeTable = document.createElement("table");
+codeTable.setAttribute('id', "codeTable");
+
+//add rows to table by adding each element of lines
+for (let t = 0; t < lines.length; t++) {
+  let row = codeTable.insertRow(-1);
+
+  let newCell1 = row.insertCell(0); //insert line number
+  let newCell2 = row.insertCell(1);
+  let newCell3 = row.insertCell(2);
+
+  newCell1.innerHTML = "<span class= 'line-number' data-number='" + (t+1)  + "'" + "id = '" + 
+    (t+1) + "'></span>";
+  newCell2.innerHTML = lines[t];
+  newCell3.innerHTML = "";
+}
+```
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
+
+```{r css-code, engine =  'css', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'css')}
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;position: relative;
+  background-color:  rgba(255,105,130, 0.20);
+  border-left: 2pt solid rgba(255,105,130, 0.50);
+  padding: 0;
+}
+```
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
+
+
+```{r html-code, echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3,']'),language = 'html')}
+<script src="{{ "js/external_links.js" | relURL }}"></script>
+<script src="{{ "js/number_tables.js" | relURL }}"></script>
+<script src="{{ "js/number_figures.js" | relURL }}"></script>
+```
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
+
+```{bash, engine = 'bash',  eval=F, hlopts=list(hl_lines= paste0('[', 1,']'), language = 'bash')}
+ls
+ 
+cd ~/Desktop/Home/blog_posts
+```
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
+
+
+```{r show-results,  class_name = 'r-code', results = 'hold', echo=F, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
+#this is a comment  more comment my website m , . , y website my website my website
+#my website my website my website my website my website my website my website 
+#my website my website my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+shiny::HTML("&nbsp;")
+
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+
+``` 
+
+
+Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
+Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2019;liu2022" >}}
+[link](https://github.com/gohugoio/hugo/issues/9442)
+
+If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
+
+
+```{python, echo=F, eval=T,  class_name = 'python-code', results = 'hold', hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
+
+tup = ['Groucho', 'Marx', 'Xavier']
+list_ex = list(["food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+
+
+```{r echo=F}
+fit = lm(dist ~ speed, data = cars)
+b = coef(summary(fit))
+```
+
+
+The slope of the regression is `r b[2, 1]`. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) 
+
+$$
+\begin{alignat}{2}
+I & = \int \rho R^{2} dV & + P \nonumber \\\\
+Y & = 1 + x
+\label{eq:multiline}
+\end{alignat}
+$$
+
+### Tables
+
+see [section](#section)
+
+ Table \ref{tab:parameterValues}  Table \ref{tab:parameterValues}
+Another paragraph begins and the spacing should not be too small from table above. 
+
+ Table \ref{tab:parameterValues1}
+ Table \ref{tab:parameterValues}
+ Table \ref{tab:parameterValues1}
+ 
+```{r parameterValues, echo=F, eval=T}
+
+#specify parameters for parameter table 
+theta <- 3
+alpha <- 3 + .32*1
+beta <- 180
+gamma <- 20
+
+sd_alpha <- 0.05
+sd_theta <- 0.05
+sd_beta <- 10
+sd_gamma <- 4
+
+sd_error <- 0.05
+
+
+#table of parameter values
+parameterValues_df <- data.frame('Parameter Means' = c(
+                                         'Baseline, $\\theta$',
+                                         'Maximal elevation, $\\alpha$', 
+                                         'Days-to-halfway elevation, $\\upbeta$', 
+                                         'Triquarter-halfway delta, $\\upgamma$', 
+                                         
+                         'Variability and Covariability Parameters (in Standard Deviations)', 
+                              'Baseline standard deviation, $\\uppsi_{\\uptheta}$',
+                              'Maximal elevation standard deviation, $\\uppsi_{\\upalpha}$', 
+                              'Days-to-halfway elevation standard deviation, $\\uppsi_{\\upbeta}$',
+                              'Triquarter-halfway delta standard deviation, $\\uppsi_{\\upgamma}$',
+                         
+                              'Baseline-maximal elevation covariability, $\\uppsi_{\\uptheta\\upalpha}$',
+                              'Baseline-days-to-halfway elevation covariability, $\\uppsi_{\\uptheta\\upbeta}$',
+                              'Baseline-triquarter-halfway delta covariability, $\\uppsi_{\\uptheta\\upgamma}$',
+                         
+                              'Maximal elevation-days-to-halfway elevation covariability, $\\uppsi_{\\upalpha\\upbeta}$',
+                              'Maximal elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upalpha\\upgamma}$',
+                         
+                              'Days-to-halfway elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upbeta\\upgamma}$',
+                          
+                              'Residual standard deviation, $\\uppsi_{\\upepsilon}$'), 
+                         'Value' = c( theta, alpha, beta, gamma, 
+                                     '', sd_theta, sd_alpha, sd_beta, sd_gamma, 
+                                     0, 0, 0, 0, 0,0,  sd_error), check.names = F)
+
+#round numbers to that they print with two significant numbers
+parameterValues_df$Value <- round(as.numeric(as.character(parameterValues_df$Value)), 3)
+parameterValues_df$Value <- formatC(round(parameterValues_df$Value, 3), format='f', digits=2)
+
+#replace '  NA' with empty string 
+parameterValues_df$Value[parameterValues_df$Value ==" NA"] <- ''
+
+
+kbl(parameterValues_df, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c'),
+    caption = 'Values Used for Multilevel Logistic Function Parameters',    
+    escape = F) %>%
+    add_indent(positions = c(1:4, 6:16), level_of_indent = 2) %>%
+  kable_styling(position = 'center') %>%
+  footnote(general =  "<em>Note</em>. The difference between $\\alpha$ and $\\theta$ corresponds to the 50$\\mathrm{^{th}}$ percentile Cohen's $d$ value of 0.32 in organizational psychology (Bosco et al., 2015). Additional text to see what happens",  threeparttable = T,  escape = F, general_title = ' ') %>% 
+  row_spec(row = 4, extra_css = 'padding-bottom: 1rem; border-bottom: 1.5px solid') %>%
+ row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
+```
+
+```{r parameterValues1, echo=F, eval=T}
+
+#specify parameters for parameter table 
+theta <- 3
+alpha <- 3 + .32*1
+beta <- 180
+gamma <- 20
+
+sd_alpha <- 0.05
+sd_theta <- 0.05
+sd_beta <- 10
+sd_gamma <- 4
+
+sd_error <- 0.05
+
+
+#table of parameter values
+parameterValues_df <- data.frame('Parameter Means' = c(
+                                         'Baseline, $\\theta$',
+                                         'Maximal elevation, $\\alpha$', 
+                                         'Days-to-halfway elevation, $\\upbeta$', 
+                                         'Triquarter-halfway delta, $\\upgamma$', 
+                                         
+                         'Variability and Covariability Parameters (in Standard Deviations)', 
+                              'Baseline standard deviation, $\\uppsi_{\\uptheta}$',
+                              'Maximal elevation standard deviation, $\\uppsi_{\\upalpha}$', 
+                              'Days-to-halfway elevation standard deviation, $\\uppsi_{\\upbeta}$',
+                              'Triquarter-halfway delta standard deviation, $\\uppsi_{\\upgamma}$',
+                         
+                              'Baseline-maximal elevation covariability, $\\uppsi_{\\uptheta\\upalpha}$',
+                              'Baseline-days-to-halfway elevation covariability, $\\uppsi_{\\uptheta\\upbeta}$',
+                              'Baseline-triquarter-halfway delta covariability, $\\uppsi_{\\uptheta\\upgamma}$',
+                         
+                              'Maximal elevation-days-to-halfway elevation covariability, $\\uppsi_{\\upalpha\\upbeta}$',
+                              'Maximal elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upalpha\\upgamma}$',
+                         
+                              'Days-to-halfway elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upbeta\\upgamma}$',
+                          
+                              'Residual standard deviation, $\\uppsi_{\\upepsilon}$'), 
+                         'Value' = c( theta, alpha, beta, gamma, 
+                                     '', sd_theta, sd_alpha, sd_beta, sd_gamma, 
+                                     0, 0, 0, 0, 0,0,  sd_error), check.names = F)
+
+#round numbers to that they print with two significant numbers
+parameterValues_df$Value <- round(as.numeric(as.character(parameterValues_df$Value)), 3)
+parameterValues_df$Value <- formatC(round(parameterValues_df$Value, 3), format='f', digits=2)
+
+#replace '  NA' with empty string 
+parameterValues_df$Value[parameterValues_df$Value ==" NA"] <- ''
+
+
+kbl(parameterValues_df, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c'),
+    caption = 'Values Used for Multilevel Logistic Function Parameters (see Table \\ref{tab:parameterValues})',    
+    escape = F) %>%
+    add_indent(positions = c(1:4, 6:16), level_of_indent = 2) %>%
+  kable_styling(position = 'center') %>%
+  footnote(general =  "<em>Note</em>. The difference between $\\alpha$ and $\\theta$ corresponds to the 50$\\mathrm{^{th}}$ percentile Cohen's $d$ value of 0.32 in organizational psychology (Bosco et al., 2015). see Table \\ref{tab:parameterValues} and Figure \\ref{fig:gg-oz-plot1}.",  threeparttable = T,  escape = F, general_title = ' ') %>% 
+  row_spec(row = 4, extra_css = 'padding-bottom: 1rem; border-bottom: 1.5px solid') %>%
+ row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
+```
+
+
+## Figures
+
+```{r gg-oz-plot, eval=F, echo=F}
+generate_apa7_figure <- function(fig_label, fig_title, fig_path, fig_note=NA){
+  
+    html_figure <- paste('<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure ', fig_label,  
+                         '</span> <br> <span class = "figTitle"> <em>', fig_title, 
+                         '</em></span> </caption> <img src=', fig_path, '/>', sep = '')
+
+  if(!is.na(fig_note)) { 
+    html_fig_note <- paste('<span class="figNote"><em>Note. </em>', fig_note, '</span> </div>', sep = '')
+  }
+    
+  else{ 
+     html_fig_note <- paste('</div>', sep = '')
+    }
+  
+    
+  html_complete_figure <- paste(html_figure, html_fig_note)
+  
+  return(noquote(html_complete_figure))
+}
+
+x <- generate_apa7_figure(fig_label = '\ref{fig:gg-oz-plot}', fig_title = 'Title of Figure', fig_path = 'index_files/figure-html/gg-oz-plot-1.png', fig_note = 'Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!')
+
+
+```
+
+<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=images/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
+ 
+
+
+Figure \ref{fig:gg-oz-plot} 
+
+
+### References
+
+{{< bibliography cited >}}
+
+
+
+
+
+
