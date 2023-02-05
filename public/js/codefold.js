@@ -1,8 +1,9 @@
 
 codeBlocks = document.querySelectorAll('.highlight, pre:has(code[class*="-code"])');
-console.log(codeBlocks);
+
 var cumulative_length = 0;
 var starting_indices = [0];
+
 
 for (block = 0; block < codeBlocks.length; block++){
 
@@ -26,10 +27,12 @@ for (block = 0; block < codeBlocks.length; block++){
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
 
     //remove preamble code from first element of lines and add copy button to the endof this element
-    lines[0] = lines[0].replace(preamble, ''); //+ '<button class="copy-button" data-button="Copy"></button>';
+    lines[0] = lines[0].replace(preamble, '') ;//+ '<button class="copy-code-button" type="button">Copy</button>';
     table_end = lines[lines.length - 1]; //save last element
     lines.splice(lines.length - 1, 1); //delete last element
   }
+
+
 
 
   //make sure empty lines have <br> element so that empty lines are included whenever code is copied
@@ -65,8 +68,11 @@ for (block = 0; block < codeBlocks.length; block++){
   //add hide/Expand button
   codeTable.rows[0].cells[2].innerHTML = '<button id ="collapseButton" data-button = "Hide"></button>';
 
-  //compile complete table
+  //add copy button
+  // only add button if browser supports Clipboard API
+   codeTable.rows[0].cells[1].innerHTML +=  '<button class ="copy-code-button" data-button = "Copy"></button>';
 
+  //compile complete table
   complete_codeTable = preamble + codeTable.outerHTML + table_end;
 
    if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
@@ -76,6 +82,8 @@ for (block = 0; block < codeBlocks.length; block++){
    }
 
 }
+
+
 
 
 codeTables = document.querySelectorAll('#codeTable');
@@ -148,6 +156,45 @@ codeTables.forEach(function(codeTable){
 
 
 
+});
+
+   // Defining a custom filter function
+//function myFilter(elm){
+//    return ( elm !== "");
+//}
+
+
+const cope_buttons = document.querySelectorAll(".copy-code-button");
+cope_buttons.forEach(function(copyBtn) {
+  copyBtn.addEventListener("click", function(event) {
+
+    navigator.clipboard.writeText('');  //refresh clipboard to eliminate overwriting from cache or local storage
+
+    //copy lines of code line by line so that unnecesary \t and "" elements are not added in output (occurs in Google Chrome)
+    const codeTable = copyBtn.closest('table');
+
+    let table_code = '';
+
+    for (let row = 0; row < codeTable.rows.length; row++) {
+
+        table_code += codeTable.rows[row].cells[1].textContent + '\n';
+      }
+
+
+    //let cleanCode = table_text.replace(/(\r\n|\n|\r)/gm, "");
+
+    var originalText = copyBtn.dataset.button;
+    copyBtn.dataset.button = "Copied!";
+
+    setTimeout(function() {
+    copyBtn.dataset.button = originalText;
+  }, 750);
+
+   navigator.clipboard.writeText(table_code).then(function() {
+     console.log("Copied to clipboard");
+   });
+
+  });
 });
 
 

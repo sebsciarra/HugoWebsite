@@ -1,14 +1,33 @@
 
-codeBlocks = document.querySelectorAll('.highlight, pre:has(code[class*="-code"])');
+const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
+code_blocks = document.querySelectorAll('.highlight, code[class*="-code"]');
+
+var target_code_blocks = [];
+
+
+for (code_block = 0; code_block < code_blocks.length; code_block++) {
+
+
+  if (code_blocks[code_block].className.includes("-code")) {
+    const parent = code_blocks[code_block].parentNode;
+    target_code_blocks.push(parent);
+  }
+
+  else{
+       target_code_blocks.push(code_blocks[code_block]);
+  }
+}
+
 
 var cumulative_length = 0;
 var starting_indices = [0];
 
-for (block = 0; block < codeBlocks.length; block++){
+for (block = 0; block < target_code_blocks.length; block++){
 
-  if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
+  if(target_code_blocks[block].outerHTML.startsWith('<pre><code class=')){
 
-    var code = codeBlocks[block].outerHTML;
+    var code = target_code_blocks[block].outerHTML;
     var lines = code.split("\n");
     //extract preamble code that will wrap table (<pre><code> elements)
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
@@ -19,19 +38,17 @@ for (block = 0; block < codeBlocks.length; block++){
    lines.splice(lines.length - 1, 1); //delete last element
   } else {
 
-     var code = codeBlocks[block].innerHTML;
+     var code = target_code_blocks[block].innerHTML;
      var lines = code.split("\n");
 
     //extract preamble code that will wrap table (<pre><code> elements)
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
-console.log(preamble);
+
     //remove preamble code from first element of lines and add copy button to the endof this element
-    lines[0] = lines[0].replace(preamble, ''); //+ '<button class="copy-button" data-button="Copy"></button>';
+    lines[0] = lines[0].replace(preamble, '') ;//+ '<button class="copy-code-button" type="button">Copy</button>';
     table_end = lines[lines.length - 1]; //save last element
     lines.splice(lines.length - 1, 1); //delete last element
   }
-
-
 
 
   //make sure empty lines have <br> element so that empty lines are included whenever code is copied
@@ -67,17 +84,45 @@ console.log(preamble);
   //add hide/Expand button
   codeTable.rows[0].cells[2].innerHTML = '<button id ="collapseButton" data-button = "Hide"></button>';
 
-  //compile complete table
+  //add language to the code table
+  var attributeValue = target_code_blocks[block].attributes.language;
+  const language = attributeValue ? attributeValue.value : "R";
 
+  //add copy button along with coding language tag
+   codeTable.rows[0].cells[1].innerHTML +=  '<div class="language-box" data-language = "' + language +  '"></div>' + '<button class ="copy-code-button" data-button = "Copy"></button>';
+
+
+  //compile complete table
   complete_codeTable = preamble + codeTable.outerHTML + table_end;
 
-   if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
-      codeBlocks[block].outerHTML = complete_codeTable;
+   if(target_code_blocks[block].outerHTML.startsWith('<pre><code class=')){
+      target_code_blocks[block].outerHTML = complete_codeTable;
    } else{
-       codeBlocks[block].innerHTML = complete_codeTable;
+       target_code_blocks[block].innerHTML = complete_codeTable;
    }
 
 }
+
+
+tags = document.querySelectorAll('.language-box');
+
+tags.forEach(function(tag){
+
+  //get width of language tag element
+  var afterElement = document.createElement("div");
+  afterElement.innerHTML = tag.dataset.language;
+  afterElement.style.display = "inline-block";
+  afterElement.style.visibility = "hidden";
+  tag.appendChild(afterElement);
+  var tag_language_width = afterElement.offsetWidth;
+  tag.removeChild(afterElement);   //remove child
+
+
+  //set padding right of first row in second column
+  if (tag.previousSibling && tag.previousSibling.style) {
+  tag.previousSibling.style.paddingRight = 60 + tag_language_width + "px";
+}
+});
 
 
 codeTables = document.querySelectorAll('#codeTable');
@@ -99,6 +144,18 @@ codeTables.forEach(function(codeTable){
 
 
   var button = codeTable.querySelector("#collapseButton");
+
+  //get seventh parent node to so that the data-language attribute can be extracted
+
+  let parent = button.parentNode;
+  for (let i = 0; i < 6; i++) {
+  parent = parent.parentNode;
+  }
+
+  //add language to the code table
+  attributeValue = parent.attributes.language;
+  const coding_language = attributeValue ? attributeValue.value : "R";
+
 
   // Add event listener to the button
   button.addEventListener("click", function() {
@@ -124,8 +181,14 @@ codeTables.forEach(function(codeTable){
         codeTable.rows[j].style.display = "none";
     }
 
+  //add language to the code table
+ // var attributeValue = codeTable[block].attributes.language;
+  const language =  "R";
+
     //for the first row of the second column, replace contents with empty line
-    codeTable.rows[0].cells[1].innerHTML = '</span></span><span class="line"><span class="cl"><br>';
+    codeTable.rows[0].cells[1].innerHTML = '</span></span><span class="line" style ="padding-right: -60px;"><span class="cl"><div class="language-box-collapsed" data-language = "'+ coding_language + '"></div><br>';
+
+
     codeTable.rows[0].style.height = '20px';
 
          button.setAttribute("data-button",  'Expand');
@@ -133,6 +196,7 @@ codeTables.forEach(function(codeTable){
     }
 
         else {
+
          codeTable.rows[0].style.height = '14px';
         codeTable.rows[0].cells[0].innerHTML = '';
 
@@ -151,6 +215,46 @@ codeTables.forEach(function(codeTable){
 
 
 });
+
+   // Defining a custom filter function
+//function myFilter(elm){
+//    return ( elm !== "");
+//}
+
+
+const copy_buttons = document.querySelectorAll(".copy-code-button");
+copy_buttons.forEach(function(copyBtn) {
+  copyBtn.addEventListener("click", function(event) {
+
+    navigator.clipboard.writeText('');  //refresh clipboard to eliminate overwriting from cache or local storage
+
+    //copy lines of code line by line so that unnecesary \t and "" elements are not added in output (occurs in Google Chrome)
+    const codeTable = copyBtn.closest('table');
+
+    let table_code = '';
+
+    for (let row = 0; row < codeTable.rows.length; row++) {
+
+        table_code += codeTable.rows[row].cells[1].textContent + '\n';
+      }
+
+
+    //let cleanCode = table_text.replace(/(\r\n|\n|\r)/gm, "");
+
+    var originalText = copyBtn.dataset.button;
+    copyBtn.dataset.button = "Copied!";
+
+    setTimeout(function() {
+    copyBtn.dataset.button = originalText;
+  }, 750);
+
+   navigator.clipboard.writeText(table_code).then(function() {
+     console.log("Copied to clipboard");
+   });
+
+  });
+});
+
 
 
 

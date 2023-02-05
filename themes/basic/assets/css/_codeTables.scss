@@ -32,32 +32,32 @@ div[language="bash"] .chroma .line.hl {
 
 /*IN-LINE CODE */
 /* code chunk color for Python (inherits all other features from .chroma defined above) */
-.inline-src {color: var(--hover-color); /*color of parentheses*/
+.content  .inline-src {color: var(--hover-color); /*color of parentheses*/
          background-color: rgba(116, 170, 219, 0.30);
          padding: 0rem;
          max-width: 90%;
          margin: 0 auto; /*centers block of text*/
          white-space: normal;
-  font-size: 12;
+         font-size: 12px;
 }
 
-.inline-src:has(.language-python) {
+.content .inline-src:has(.language-python) {
     background-color: rgba(105, 255, 155, 0.2);
 }
 
-.inline-src:has(.language-js) {
+.content .inline-src:has(.language-js) {
      background-color: rgba(255,105,130, 0.20);
 }
 
-.inline-src:has(.language-css) {
+.content .inline-src:has(.language-css) {
    background-color: rgba(245,216,102, 0.20);
 }
 
-.inline-src:has(.language-html) {
+.content .inline-src:has(.language-html) {
      background-color: rgba(252, 132, 3, 0.20);
 }
 
-.inline-src:has(.language-bash) {
+.content .inline-src:has(.language-bash) {
     background-color:black;
 }
 
@@ -80,6 +80,7 @@ table[id = 'codeTable'] td {
   font-family: monospace;
   font-size: 12px;
   position: relative;
+  white-space: break-spaces;
 }
 
 /*removes white space between columns */
@@ -113,13 +114,9 @@ code[data-lang='r'] table td:nth-child(2) {
   padding: 0;
 }
 
-code[data-lang='r'] table tr:nth-child(1) td:nth-child(2) {
-  padding-right: 60px; /* adjust this value to the width you want */
-}
 
-code[class='r-code'] table tr:nth-child(1) td:nth-child(2) {
-  padding-right: 60px; /* adjust this value to the width you want */
-}
+
+
 
 
 
@@ -127,6 +124,7 @@ pre {
   border-right: 0;
   padding-right: 0;
   margin-right: 0;
+  white-space: pre;
 }
 
 
@@ -142,6 +140,15 @@ code[data-lang='r'] [data-number]::after, code[class *='-code'] [data-number]::a
 
 
 /*COLUMN FORMATTING */
+div[language ='java'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child(2) {
+  width: 85%;
+  position: relative;
+  background-color:  rgba(255,105,130, 0.20);
+  border-left: 2pt solid rgba(255,105,130, 0.50);
+  padding: 0;
+}
+
+
 div[language ='python'] code[data-lang='r'] table td:nth-child(2) {
   width: 85%;
   position: relative;
@@ -150,14 +157,6 @@ div[language ='python'] code[data-lang='r'] table td:nth-child(2) {
   padding: 0;
 }
 
-
-div[language ='java'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
-  position: relative;
-  background-color:  rgba(255,105,130, 0.20);
-  border-left: 2pt solid rgba(255,105,130, 0.50);
-  padding: 0;
-}
 
 
 div[language ='css'] code[data-lang='r'] table td:nth-child(2) {
@@ -191,7 +190,7 @@ code[class = "r-code"] table td:nth-child(2)  {
   display: block;
   color: var(--hover-color); /*color of parentheses*/
   background-color: rgba(116, 170, 219, 0.30);
-  border-left: 2pt solid rgba(116, 170, 219, 0.30);
+  border-left: 2pt solid rgba(116, 170, 219, 0.50);
   margin: 0 auto; /*centers block of text*/
   max-width: 100%;
   white-space: pre-line;
@@ -212,20 +211,17 @@ code[class = "python-code"]  table td:nth-child(2)   {
 }
 
 
-
-
-
-
 /*BUTTON FORMATTING */
 .copy-code-button {
   position: absolute;
   z-index: 1;
-  right: 60px;
+  right: 0px;
   top: 0;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
   width: 60px;
+  min-width: 60px;
   color: white;
   opacity: .95;
   background-color: var(--navbar-color);
@@ -234,11 +230,13 @@ code[class = "python-code"]  table td:nth-child(2)   {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 4px;
-  white-space: normal;
   margin: 0;
-  line-height: 15px;
+  height: 20px;
   cursor: pointer;
 }
+
+
+
 
 .copy-code-button:hover{
   font-weight: bold;
@@ -253,10 +251,13 @@ code[class = "python-code"]  table td:nth-child(2)   {
 }
 
 
+
+
 button[id = "collapseButton"] {
   position: absolute;
   top: 0;
   left: 0;
+    min-width: 60px;
   width: 100%;
   height: 20px;
   color: white;
@@ -299,22 +300,39 @@ button[id = "collapseButton"]:hover{
 }
 
 
-.highlight {
-  position: relative;
-  z-index: 0;
-  padding: 0;
+.language-box::after {
+  box-sizing: content-box;
+  content: attr(data-language);
+   background-color: black;
+  font-family: Helvetica;
+  font-weight: bold;
+  color: white;
+  font-size: 9px;
+  position: absolute;
+  width: fit-content;
+  right: 60px;
+  top: 0;
+  height: fit-content;
+  text-align: right;
+  z-index: 1;
+  padding-left: 0;
 }
 
-
-.chroma .lntd:first-child {
-  padding: 7px 7px 7px 10px;
-  margin: 0;
-
+.language-box-collapsed::after {
+  box-sizing: content-box;
+  content: attr(data-language);
+   background-color: black;
+  font-family: Helvetica;
+  font-weight: bold;
+  color: white;
+  font-size: 9px;
+  position: absolute;
+  width: fit-content;
+  right: 0px;
+  top: 0;
+  height: fit-content;
+  text-align: right;
+  z-index: 1;
+  padding-left: 0;
 }
-
-.chroma .lntd:last-child {
-  padding: 7px 100px 7px 7px;
-  margin: 0;
-}
-
 

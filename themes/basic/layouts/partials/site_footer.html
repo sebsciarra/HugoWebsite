@@ -1,4 +1,3 @@
-
 <footer class="site-footer">
   {{ if or (site.GetPage "terms.md") (site.GetPage "privacy.md") }}
   <p class="powered-by">
@@ -12,17 +11,13 @@
   </p>
   {{ end }}
 
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
    <script src="{{ "js/external_links.js" | relURL }}"></script>
    <script src="{{ "js/number_tables.js" | relURL }}"></script>
    <script src="{{ "js/number_figures.js" | relURL }}"></script>
-   <script src="{{ "js/codefold.js" | relURL }}"></script>. <!-- important! make sure codefold comes before copy_code -->
-  <script src="{{ "js/copy_code.js" | relURL }}"></script>
-
-
+   <script src="{{ "js/codefold.js" | relURL }}"></script> <!-- important! make sure codefold comes before copy_code -->
 
 
 </footer>

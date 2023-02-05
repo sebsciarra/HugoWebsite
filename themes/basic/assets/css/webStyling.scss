@@ -1,0 +1,37 @@
+
+:root {
+  --navbar-color: #002241;
+  --navbar-width: 18rem;
+  --home-color: #d170c7;
+  --technical-color: #33c304;
+  --coding-color:  #e38f01;
+  --simulation-color: #cc7c99;
+  --resources-color: #0678e1;
+  --about-color: #d4bd04;
+  --hover-color: #00182d;
+}
+
+
+@import 'tables';
+@import 'figures';
+@import 'codeTables';
+@import 'footnotes';
+@import 'hyperlinks';
+@import 'content';
+@import 'sectionContents';
+@import 'navbar';
+@import 'chroma';
+@import 'responsive';
+
+
+  /* set default font size; useful for browsers like Firefox that use different reference font sizes */
+
+.toggle-button:hover{
+  cursor: pointer;
+}
+.giscus{
+  position: relative;
+   margin: 0 auto;
+    max-width: 800px;
+}
+

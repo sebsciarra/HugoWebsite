@@ -1,5 +1,5 @@
 ---
-title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems" 
+title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems and Other Latent Variable Problems" 
 draft: false
 summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
 article_type: technical
@@ -8,7 +8,7 @@ output:
      keep_md: true
 always_allow_html: true
 bibFile: content/technical_content/em_algorithm/biblio.json    
-tags: ['EM']
+tags: []
 ---   
 
 
@@ -18,12 +18,15 @@ tags: ['EM']
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
+R code chunk below (see lines <a href="#1">1--22</a>). 
+
 ```r {hl_lines=[1,2,5]}
 #this is a comment  more comment my website m , . , y website my website my website
 #my website my website my website my website my website my website my website my   
 #my website my website my website
 print('my website my website my, , , ,. `  website my website my website my website my website
-      website my website my   website my website my website my website my website my website')  
+      website my website my   website my website my website my website my website my 
+      website')  
 
 print(1 + 2)
 mean(x = c(1, 2))
@@ -43,7 +46,8 @@ var <- function(x1, x2){
 ```
 This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
 
-```r {hl_lines=[2,3,4],language=python}
+Python code chunk below (see lines <a href="#23">23--31</a>). 
+```r {hl_lines=[1,3,4],language=python}
 tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
 list_ex = list(["food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454])
 sorted(tup)
@@ -56,7 +60,7 @@ list_ex.count(2)
 ```
 This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
 
-
+Javascript code chunk below (see lines <a href="#32">32--47</a>). 
 ```r {hl_lines=[2,3,4],language=java}
 let codeTable = document.createElement("table");
 codeTable.setAttribute('id', "codeTable");
@@ -77,9 +81,10 @@ for (let t = 0; t < lines.length; t++) {
 ```
 This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
 
+CSS code chunk below (see lines <a href="#48">48--53</a>). 
 ```r {hl_lines=[2,3,4],language=css}
-div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;position: relative;
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) { width: 85%;position: relative;
+
   background-color:  rgba(255,105,130, 0.20);
   border-left: 2pt solid rgba(255,105,130, 0.50);
   padding: 0;
@@ -87,6 +92,7 @@ div[language ='java'] code[data-lang='r'] table td:nth-child(2) {
 ```
 This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
 
+HTML code chunk below (see lines <a href="#54">54--56</a>). 
 
 ```r {hl_lines=[2,3],language=html}
 <script src="{{ "js/external_links.js" | relURL }}"></script>
@@ -94,6 +100,8 @@ This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,
 <script src="{{ "js/number_figures.js" | relURL }}"></script>
 ```
 This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
+
+Bash code chunk below (see lines <a href="#57">57--59</a>). 
 
 ```r {hl_lines=[1],language=bash}
 ls
@@ -318,7 +326,7 @@ Another paragraph begins and the spacing should not be too small from table abov
 </table>
 
 
-## Figures
+### Figures
 
 
 

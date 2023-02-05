@@ -2,29 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/categories/</loc>
   </url><url>
-    <loc>http://example.org/technical_content/structured_lgc/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/coding_tricks/</loc>
   </url><url>
-    <loc>http://example.org/technical_content/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/tags/em/</loc>
   </url><url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://example.com/coding_tricks/em_algorithm/</loc>
   </url><url>
-    <loc>http://example.org/coding_tricks/</loc>
+    <loc>https://example.com/technical_content/em_algorithm/</loc>
   </url><url>
-    <loc>http://example.org/coding_tricks/em_algorithm/</loc>
+    <loc>https://example.com/technical_content/structured_latent_growth/</loc>
   </url><url>
-    <loc>http://example.org/technical_content/em_algorithm/</loc>
+    <loc>https://example.com/home/</loc>
   </url><url>
-    <loc>http://example.org/home/</loc>
+    <loc>https://example.com/</loc>
   </url><url>
-    <loc>http://example.org/simulation_exps/</loc>
+    <loc>https://example.com/simulation_exps/</loc>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://example.com/tags/</loc>
   </url><url>
-    <loc>http://example.org/simulation_exps/phacking/p_hacking/</loc>
+    <loc>https://example.com/technical_content/</loc>
+  </url><url>
+    <loc>https://example.com/simulation_exps/phacking/p_hacking/</loc>
   </url>
 </urlset>

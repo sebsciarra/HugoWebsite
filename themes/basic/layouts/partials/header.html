@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 
 <!-- adds navigation bar on all pages except home page-->
 {{ if ne .IsHome true }}
@@ -15,12 +16,12 @@
     </script>
 
   <!-- styling for navbar -->
-  {{ $css := resources.Get "css/_navbar.scss" | toCSS | minify | fingerprint }}
-      <link rel="stylesheet" href="{{ "css/_navbar.css" | relURL }}"/>
+  {{ $css := resources.Get "css/webStyling.scss" | toCSS | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ "css/webStyling.css" | relURL }}"/>
       <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
     <div class = 'navbar'>
-       <h1>Blog Contents </h1>
+       <h1 class = 'blog_name'>Blog Directory</h1>
 
        <ul class = 'navbar-links'>
         <li><a class = 'home', href = "/home"><i class="fa-solid fa-house"></i> Home</a></li>
@@ -30,7 +31,6 @@
         <li><a class = 'resources', href = "/mlresources"><i class="fa-solid fa-key"></i> ML Resources</a></li>
         <li><a class = 'about', href = "/about"><i class="fa-solid fa-question"></i> About</a></li>
         <li><a class = 'portal', href = "/"><i class="fa-solid fa-circle-chevron-left"></i> back to portal</a></li>
-
        </ul>
 
       <button hef = '#', class = "toggle-button",  onclick="active()">

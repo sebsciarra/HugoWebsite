@@ -1,22 +1,29 @@
+const cope_buttons = document.querySelectorAll(".copy-code-button");
+cope_buttons.forEach(function(copyBtn) {
+  copyBtn.addEventListener("click", function(event) {
 
-//COPY BUTTON
-// https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/
-function createCopyButton(highlightDiv) {
-  const button = document.createElement("button");
-  button.className = "copy-code-button";
-  button.type = "button";
-  button.innerText = "Copy";
-  button.addEventListener("click", () => copyCodeToClipboard(button, highlightDiv));
-  addCopyButtonToDom(button, highlightDiv);
-}
+    const table_lines = copyBtn.closest('table').innerText.split('\n');
 
+    //remove second line because it is an empty line character that takes place of the button
+    table_lines.splice(1, 1);
+    table_text = table_lines.join('\n');
 
+    var originalText = copyBtn.dataset.button;
 
+    copyBtn.dataset.button = "Copied!";
+
+    setTimeout(function() {
+    copyBtn.dataset.button = originalText;
+  }, 750);
+
+    navigator.clipboard.writeText(table_text).then(function() {
+      console.log("Copied to clipboard");
+
+    });
+  });
+});
 async function copyCodeToClipboard(button, highlightDiv) {
-
-  // make sure non-breakble characters are not copied
-  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText.replace(/\u00A0/g,' ');
-
+  const codeToCopy = highlightDiv.querySelector(":last-child > .chroma > code").innerText;
   try {
     result = await navigator.permissions.query({ name: "clipboard-write" });
     if (result.state == "granted" || result.state == "prompt") {
@@ -31,7 +38,6 @@ async function copyCodeToClipboard(button, highlightDiv) {
     codeWasCopied(button);
   }
 }
-
 
 function copyCodeBlockExecCommand(codeToCopy, highlightDiv) {
   const textArea = document.createElement("textArea");
@@ -64,8 +70,9 @@ function addCopyButtonToDom(button, highlightDiv) {
   wrapper.className = "highlight-wrapper";
   highlightDiv.parentNode.insertBefore(wrapper, highlightDiv);
   wrapper.appendChild(highlightDiv);
+//  highlightDiv.querySelector('table').rows[0].cells[1].innerHTML += '<div class = "highlight-wrapper"><button class="copy-code-button" type="button">Copy//</button> </div>';
 }
 
-
-document.querySelectorAll('.highlight')
+document.querySelectorAll(".highlight")
   .forEach(highlightDiv => createCopyButton(highlightDiv));
+

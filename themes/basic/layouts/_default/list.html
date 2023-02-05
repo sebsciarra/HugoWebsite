@@ -1,20 +1,20 @@
 {{ define "main" }}
 
-<div class = 'page_holder'> 
+<div class = 'page_holder'>
 
-  <div class = '{{ .Params.pageClass }}'> 
+  <div class = '{{ .Params.pageClass }}'>
 
 
     <!-- use js code to remove spaces from class name -->
       <h2> {{ .Title }} </h2>
       <ul class = 'posts'>
-        {{ range ( .Pages) }} 
+        {{ range ( .Pages) }}
         <li class = 'items'><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
         {{ end }}
       </ul>
-      
+
    </div>
- 
+
  </div>
 
 

@@ -1,17 +1,5 @@
 /* BLOG POST SUMMARY PAGE*/
 /* bottom right corner border */
-.technical_summ:before {
-    display: block;
-    content: "";
-    width: 3rem;
-    height: 3rem;
-    position: absolute;
-    top: 97%;
-    left: 95%;
-    border-bottom: 3px solid var(--navbar-color);
-    border-right: 3px solid var(--navbar-color);
-}
-
 
 .page_holder, {
   box-sizing: border-box;
@@ -30,46 +18,41 @@
     background: white;
 }
 
-
-/* top corner border */
-.technical_summ:after, {
-    display: block;
-    content: "";
-    width: 1.75rem;
-    height: 1.75rem;
-    position: absolute;
-    top: 0%;
-    right: 0;
-    left: -2rem;
-    border-right: 5px solid var(--technical-color);
+.technical_summ:after, .simulation_summ:after, .coding_summ:after{
+  display: block;
+  content: "";
+  width: 2.5rem;
+  height: 2.5rem;
+  position: absolute;
+  top: -5%;
+  right: 0;
+  left: -1rem;
+  border-left: 4px solid var(--technical-color);
+  border-top: 4px solid var(--navbar-color);
 }
 
-/* top corner border */
-.coding_summ:after, {
-    display: block;
-    content: "";
-    width: 1.75rem;
-    height: 1.75rem;
-    position: absolute;
-    top: 0%;
-    right: 0;
-    left: -2rem;
-    border-right: 5px solid var(--coding-color);
-}
-
-
-/* top corner border */
 .simulation_summ:after {
+  border-left: 4px solid var(--simulation-color);
+}
+
+.coding_summ:after {
+    border-left: 4px solid var(--coding-color);
+}
+
+
+/*bottom right corner border*/
+.technical_summ:before, .simulation_summ:before, .coding_summ:before {
     display: block;
     content: "";
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
     position: absolute;
-    top: 0%;
-    right: 0;
-    left: -2rem;
-    border-right: 5px solid var(--simulation-color);
+    top: 97%;
+    left: 95%;
+    border-bottom: 3px solid var(--navbar-color);
+    border-right: 3px solid var(--navbar-color);
 }
+
 
 
 /*css for unordered list*/

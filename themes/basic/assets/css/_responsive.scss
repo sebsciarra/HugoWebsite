@@ -1,0 +1,89 @@
+
+
+
+@media (max-width: 1130px) {
+
+  .page_holder, .blog_post{
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  .page_holder .page_content {
+    width: 100%;
+    height: 100%;
+  }
+
+
+  body{
+    padding: 0;
+    margin: 0;
+  }
+
+
+     /*change sidebar to a topbar*/
+  .navbar {
+    position: relative;
+    height: fit-content;
+    width: 98%;
+   }
+
+
+
+    /*toggle button appears as three vertically oriented lines
+    /*h1 title is vertically oriented */
+   .blog_name {
+     width: 100%;
+     text-align: left;
+     padding-left: 1rem;
+     padding-bottom: 1rem;
+   }
+
+    .navbar-links {
+    display: none;
+    position: absolute;
+    width: 25%;
+    text-align: right;
+    background-color: var(--navbar-color);
+    min-width: 250px;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+  }
+
+    /*if actve, then display = flex and list items are shown in their vertical orientation  */
+    .navbar-links.active {
+        display: block;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: -22px;
+    }
+
+    .navbar-links.active li a{
+      padding-right: 2rem;
+
+    }
+
+      /*toggle button appears as three vertically oriented lines  */
+   .toggle-button {
+     position: absolute;
+     display: flex;
+     min-width: 60px; /*needed so that padding does not compress horizontal bars */
+     min-height: 50px;/*needed so that padding does not compress horizontal bars */
+     padding: 15px;
+     top: 15px;
+     right: 0px;
+   }
+
+    .toggle-button:hover {
+     background-color: var(--hover-color);
+   }
+   .portal {
+   position: initial;
+   }
+
+
+}
