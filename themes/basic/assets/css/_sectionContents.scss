@@ -26,7 +26,7 @@
   position: absolute;
   top: -5%;
   right: 0;
-  left: -1rem;
+  left: -0.65rem;
   border-left: 4px solid var(--technical-color);
   border-top: 4px solid var(--navbar-color);
 }
@@ -62,6 +62,11 @@
 
 .posts a{
   text-decoration: none;
+  color: var(--navbar-color);
+}
+
+.posts a:hover{
+  color: blue;
 }
 
 .items {

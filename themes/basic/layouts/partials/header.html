@@ -15,10 +15,6 @@
 
     </script>
 
-  <!-- styling for navbar -->
-  {{ $css := resources.Get "css/webStyling.scss" | toCSS | minify | fingerprint }}
-      <link rel="stylesheet" href="{{ "css/webStyling.css" | relURL }}"/>
-      <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
     <div class = 'navbar'>
        <h1 class = 'blog_name'>Blog Directory</h1>

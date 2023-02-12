@@ -6,6 +6,8 @@
   .page_holder, .blog_post{
     box-sizing: border-box;
     padding: 0;
+    padding-right: 1rem;
+    padding-left: 1rem;
     border: 0;
     margin: 0 auto;
     max-width: 800px;
@@ -27,7 +29,7 @@
   .navbar {
     position: relative;
     height: fit-content;
-    width: 98%;
+    width: 97.4%;
    }
 
 

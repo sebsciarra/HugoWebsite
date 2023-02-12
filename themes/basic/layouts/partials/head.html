@@ -4,8 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Uses homepage title (i.e., Seb's portfolio website) on homepage if the page has no title content explicitly listed.
   Otherwise, it uses the Site's parameter desription in the source documentation-->
-
-
   <title>
   {{- if .Page.IsHome -}}
     {{ .Site.Title }}
@@ -16,16 +14,26 @@
 
   <meta name="author" content="{{ .Site.Params.author }}">
 
-   <!--  resources.Get function uses the assets directory (in theme folder where head.html is loated) as its base path. toCSS allows Sass preprocessor to be used  -->
-   {{- if .Page.IsHome -}}
 
+   {{- if .Page.IsHome -}}
+      <!--  resources.Get function uses the assets directory (in theme folder where head.html is loated) as its base path. toCSS allows Sass preprocessor to be used  -->
      <!-- minify .css files so whitespace is deleted and loading is faster. Fingerprint .css files so that style changes are always updated.
      Enable SaSS preprocessor with toCSS so that more capabilities can be activated (e.g., smaller CSS files, using import, math calculations). -->
-
     {{ $css := resources.Get "css/homepage.scss" | toCSS | minify | fingerprint }}
         <link rel="stylesheet" href="{{ "css/homepage.css" | relURL }}"/>
         <link rel="stylesheet" href="{{ $css.RelPermalink }}">
-    <!-- write file to public/css directory and place correct relative URL into HTML document -->
+
+  {{ else if eq .Title "About" }}
+    {{ $css := resources.Get "css/about.scss"  | toCSS | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ "css/about.css" | relURL }}"/>
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+  {{ else if eq .Title "ML Resources" }}
+    {{ $css := resources.Get "css/mlResources.scss"  | toCSS | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ "css/mlResources.css" | relURL }}"/>
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+
 
   {{- else -}}
     {{ $css := resources.Get "css/webStyling.scss"  | toCSS | minify | fingerprint }}

@@ -597,7 +597,10 @@ list_ex2 = list([1 + 2, &quot;a&quot; * 5, 3])
 del(list_ex2)
 list_ex.count(2)  </code></pre>
 <p>This is inline Python code: {{&lt; inline-src python &gt;}}print(‘NULL’){{&lt; /inline-src &gt;}}.</p>
-<p>Javascript code chunk below (see lines <a href="#32">32–47</a>).
+<p>SQL code chunk below (see lines <a href="#32">32–43</a>).
+<code>r {hl_lines=[1,3,4],language=sql} CREATE TABLE person    (person_id SMALLINT UNSIGNED,   fname VARCHAR(20),   lname VARCHAR(20),   eye_color ENUM(&#39;BR&#39;,&#39;BL&#39;,&#39;GR&#39;),   birth_date DATE,   street VARCHAR(30),   city VARCHAR(20),   state VARCHAR(20),   country VARCHAR(20),   postal_code VARCHAR(20), CONSTRAINT pk_person PRIMARY KEY (person_id)</code>
+This is inline SQL code: {{&lt; inline-src sql &gt;}} CREATE TABLE person {{&lt; /inline-src &gt;}}.</p>
+<p>Javascript code chunk below (see lines <a href="#44">44–59</a>).
 ```r {hl_lines=[2,3,4],language=java}
 let codeTable = document.createElement(“table”);
 codeTable.setAttribute(‘id’, “codeTable”);</p>
@@ -614,7 +617,7 @@ newCell3.innerHTML = ““;
 }</p>
 <pre><code>This is inline Javascript code: {{&lt; inline-src js &gt;}}let codeTable = document.createElement(&quot;table&quot;);{{&lt; /inline-src &gt;}}. 
 
-CSS code chunk below (see lines &lt;a href=&quot;#48&quot;&gt;48--53&lt;/a&gt;). 
+CSS code chunk below (see lines &lt;a href=&quot;#60&quot;&gt;60--65&lt;/a&gt;). 
 ```r {hl_lines=[2,3,4],language=css}
 div[language =&#39;java&#39;] code[data-lang=&#39;r&#39;] table td:nth-child(2) { width: 85%;position: relative;
 
@@ -623,10 +626,10 @@ div[language =&#39;java&#39;] code[data-lang=&#39;r&#39;] table td:nth-child(2) 
   padding: 0;
 }</code></pre>
 <p>This is inline CSS code: {{&lt; inline-src css &gt;}} background-color: rgba(255,105,130, 0.20);{{&lt; /inline-src &gt;}}.</p>
-<p>HTML code chunk below (see lines <a href="#54">54–56</a>).</p>
+<p>HTML code chunk below (see lines <a href="#66">66–68</a>).</p>
 <p><code>r {hl_lines=[2,3],language=html} &lt;script src=&quot;{{ &quot;js/external_links.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_tables.js&quot; | relURL }}&quot;&gt;&lt;/script&gt; &lt;script src=&quot;{{ &quot;js/number_figures.js&quot; | relURL }}&quot;&gt;&lt;/script&gt;</code>
 This is inline HTML code: {{&lt; inline-src html &gt;}} &lt;script src=“{{”js/external_links.js” | relURL }}“&gt;</script>{{&lt; /inline-src &gt;}}.</p>
-<p>Bash code chunk below (see lines <a href="#57">57–59</a>).</p>
+<p>Bash code chunk below (see lines <a href="#57">69–71</a>).</p>
 <p><code>r {hl_lines=[1],language=bash} ls   cd ~/Desktop/Home/blog_posts</code>
 This is inline bash code: {{&lt; inline-src bash &gt;}}cd ~/Desktop/Home/blog_posts{{&lt; /inline-src &gt;}}.</p>
 <pre><code class="r-code">[1] &quot;my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website&quot;

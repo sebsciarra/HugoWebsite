@@ -60,7 +60,25 @@ list_ex.count(2)
 ```
 This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
 
-Javascript code chunk below (see lines <a href="#32">32--47</a>). 
+SQL code chunk below (see lines <a href="#32">32--43</a>). 
+```r {hl_lines=[1,3,4],language=sql}
+CREATE TABLE person 
+  (person_id SMALLINT UNSIGNED,
+  fname VARCHAR(20),
+  lname VARCHAR(20),
+  eye_color ENUM('BR','BL','GR'),
+  birth_date DATE,
+  street VARCHAR(30),
+  city VARCHAR(20),
+  state VARCHAR(20),
+  country VARCHAR(20),
+  postal_code VARCHAR(20),
+CONSTRAINT pk_person PRIMARY KEY (person_id)
+```
+This is inline SQL code: {{< inline-src sql >}} CREATE TABLE person {{< /inline-src >}}.
+
+
+Javascript code chunk below (see lines <a href="#44">44--59</a>). 
 ```r {hl_lines=[2,3,4],language=java}
 let codeTable = document.createElement("table");
 codeTable.setAttribute('id', "codeTable");
@@ -81,7 +99,7 @@ for (let t = 0; t < lines.length; t++) {
 ```
 This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
 
-CSS code chunk below (see lines <a href="#48">48--53</a>). 
+CSS code chunk below (see lines <a href="#60">60--65</a>). 
 ```r {hl_lines=[2,3,4],language=css}
 div[language ='java'] code[data-lang='r'] table td:nth-child(2) { width: 85%;position: relative;
 
@@ -92,7 +110,7 @@ div[language ='java'] code[data-lang='r'] table td:nth-child(2) { width: 85%;pos
 ```
 This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
 
-HTML code chunk below (see lines <a href="#54">54--56</a>). 
+HTML code chunk below (see lines <a href="#66">66--68</a>). 
 
 ```r {hl_lines=[2,3],language=html}
 <script src="{{ "js/external_links.js" | relURL }}"></script>
@@ -101,7 +119,7 @@ HTML code chunk below (see lines <a href="#54">54--56</a>).
 ```
 This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
 
-Bash code chunk below (see lines <a href="#57">57--59</a>). 
+Bash code chunk below (see lines <a href="#57">69--71</a>). 
 
 ```r {hl_lines=[1],language=bash}
 ls
