@@ -40,6 +40,11 @@
 }
 
 
+img {
+  padding-bottom: 0.5rem;
+}
+
+
 time{
   color: var(--navbar-color);
   font-size: 0.6em;
@@ -55,6 +60,7 @@ time{
     color: var(--hover-color);
     font-size: 14px;
     font-family: palatino;
+    padding-bottom: 5rem;
 }
 
 

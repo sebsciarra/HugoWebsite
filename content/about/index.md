@@ -10,7 +10,7 @@ tags: []
 ---   
 
 
-<div class= "figure"> <caption class = "figTop">   </caption> <img src=images/about_picture.jpg> <span class="figNote"><em>Note. </em>Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <br>
+<div class= "figure"> <img src=images/about_picture.jpg> <span class="figNote"><em>Note. </em>Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <br>
 <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator</a>).</span> </div>   
 
 
