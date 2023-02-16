@@ -1,7 +1,7 @@
 ---
-title: "Expectation-Maximization Algorithm: A Method for Estimating Parameter Values When Variables are Latent" 
+title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
 draft: false
-summary: 'Probabilities ' 
+summary: 'Explanation of post ' 
 article_type: technical
 output:
   bookdown::html_document2:
