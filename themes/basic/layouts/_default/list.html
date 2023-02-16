@@ -6,7 +6,7 @@
 
 
     <!-- use js code to remove spaces from class name -->
-      <h2> {{ .Title }} </h2>
+      <h2 class = 'section_title'> {{ .Title }} </h2>
       <ul class = 'posts'>
         {{ range ( .Pages) }}
         <li class = 'items'><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>

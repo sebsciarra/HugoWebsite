@@ -1,7 +1,7 @@
 ---
-title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems and Other Latent Variable Problems" 
+title: "Example post" 
 draft: false
-summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
+summary: 'This is a summary of the post that briefly explains the main points of the post to provide an anchor for the reader.' 
 article_type: technical
 output:
   bookdown::html_document2:
@@ -18,6 +18,7 @@ tags: []
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
+# Code Chunks
 R code chunk below (see lines <a href="#1">1--22</a>). 
 
 ```r {hl_lines=[1,2,5]}
@@ -170,7 +171,7 @@ Y & = 1 + x
 \end{alignat}
 $$
 
-### Tables
+# Tables
 
 see [section](#section)
 
@@ -344,7 +345,7 @@ Another paragraph begins and the spacing should not be too small from table abov
 </table>
 
 
-### Figures
+# Figures
 
 
 
@@ -355,7 +356,7 @@ Another paragraph begins and the spacing should not be too small from table abov
 Figure \ref{fig:gg-oz-plot} 
 
 
-### References
+# References
 
 {{< bibliography cited >}}
 

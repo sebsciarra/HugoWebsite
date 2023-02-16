@@ -1,10 +1,10 @@
 ---
-title: "Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems and Other Latent Variable Problems" 
+title: "Example post" 
 draft: false
-summary: 'This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.' 
+summary: 'This is a summary of the post that briefly explains the main points of the post to provide an anchor for the reader.' 
 article_type: technical
 output:
-  bookdown::html_document2:
+  bookdown::html_document2: 
      keep_md: true
 always_allow_html: true
 bibFile: content/technical_content/em_algorithm/biblio.json    
@@ -79,6 +79,7 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 That's some text with a footnote.[^1]$^{,}$ 
 [^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
 
+# Code Chunks
 R code chunk below (see lines <a href="#1">1--22</a>). 
 
 ```{r r-code, echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
@@ -253,7 +254,7 @@ Y & = 1 + x
 \end{alignat}
 $$
 
-### Tables
+# Tables
 
 see [section](#section)
 
@@ -389,7 +390,7 @@ kbl(parameterValues_df, booktabs = TRUE, format = 'html',
 ```
 
 
-### Figures
+# Figures
 
 ```{r gg-oz-plot, eval=F, echo=F}
 generate_apa7_figure <- function(fig_label, fig_title, fig_path, fig_note=NA){
@@ -424,7 +425,7 @@ x <- generate_apa7_figure(fig_label = '\ref{fig:gg-oz-plot}', fig_title = 'Title
 Figure \ref{fig:gg-oz-plot} 
 
 
-### References
+# References
 
 {{< bibliography cited >}}
 

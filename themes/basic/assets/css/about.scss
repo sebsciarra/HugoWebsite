@@ -40,9 +40,7 @@
 }
 
 
-img {
-  padding-bottom: 0.5rem;
-}
+
 
 
 time{
@@ -132,18 +130,27 @@ a[href*="/coding"]:hover, a[href*="/simulation"]:hover, a[href*="/technical"]:ho
     background-color: var(--hover-color);
 }
 
-/*top-left corner border*/
-.figure:after {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 2.25rem;
-    position: absolute;
-    top: -1rem;
-    left: 1rem;
-    border-top: 1.5px solid var(--hover-color);
-    border-left: 1.5px solid var(--hover-color);
+a[href*="/home"]:hover {
+   color: var(--home-color);
 }
+
+/*top-left corner border*/
+
+
+img {
+  padding-bottom: 0.5rem;
+}
+
+.figure:before {
+    bottom: -1.5rem;
+    right: -0.5rem;
+}
+
+.figure:after {
+    top: -1.5rem;
+    left: -0.5rem;
+}
+
 
 a[href*="/about"] {
    color: var(--about-color);
