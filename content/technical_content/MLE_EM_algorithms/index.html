@@ -366,7 +366,7 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 
 compute_binom_mass_density &lt;- function(num_trials, prob_success, num_successes){
   
-  #computation of binomial term (i.e., )
+  #computation of binomial term (i.e., number of ways of obtaining)
   num_success_patterns &lt;- (factorial(num_trials)/(factorial(num_successes)*factorial(num_trials-num_successes)))
   
   #computation of the number of possible ways of obtaining a given number of successes (i.e., heads)

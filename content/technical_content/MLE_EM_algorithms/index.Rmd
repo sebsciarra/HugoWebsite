@@ -110,7 +110,7 @@ In order to calculate the probability of obtaining each possible number of heads
 
 compute_binom_mass_density <- function(num_trials, prob_success, num_successes){
   
-  #computation of binomial term (i.e., )
+  #computation of binomial term (i.e., number of ways of obtaining)
   num_success_patterns <- (factorial(num_trials)/(factorial(num_successes)*factorial(num_trials-num_successes)))
   
   #computation of the number of possible ways of obtaining a given number of successes (i.e., heads)
