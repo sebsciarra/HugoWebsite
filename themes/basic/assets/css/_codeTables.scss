@@ -92,10 +92,7 @@ table[id = 'codeTable'] td {
   word-break: break-all;
 }
 
-.Mathjax-Display{
-    word-break: break-all;
-    overflow-x: auto;
-}
+
 /*removes white space between columns */
 table[id = "codeTable"] td:nth-child(3){
   padding: 0;

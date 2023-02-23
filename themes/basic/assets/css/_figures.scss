@@ -1,94 +1,62 @@
+
 .figure {
-  margin-top: 3rem;
-  margin-bottom: 5rem;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: Helvetica;
-  font-size: 9pt;
-  position: relative; /*needed to enable corner borders */
-  display: block;
-
-  max-width: 85%;
-}
-
-img{
-  margin: 0 auto;
-  display: block;
-  max-width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 
-.figTop{
-  margin: 0 auto;
-  display: block;
-}
-
-.figLabel{
+.figDivLabel{
+  position: relative;
+   display: flex;
   color: var(--navbar-color);
   font-weight: bold;
-   margin: 0 auto;
+}
+
+.figLabel::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  top: -0.5rem;
+  left: -1rem;
+  border-top: 1.5px solid var(--hover-color);
+  border-left: 1.5px solid var(--hover-color);
 }
 
 .figTitle{
+
   color: var(--navbar-color);
-  font-weight: none;
+  padding-bottom: 0.5rem;
+  font-style: italic;
 }
 
 .figNote{
-  border-top: -5rem;
-  font-size: 9pt;
-}
-
-/*bottom-rightcorner border*/
-.figure:before {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 2.25rem;
-    position: absolute;
-    bottom: -0.5rem;
-    right: 1rem;
-    border-bottom: 1.5px solid var(--hover-color);
-    border-right: 1.5px solid var(--hover-color);
-}
-
-.figure:after {
-    display: block;
-    content: "";
-    width: 7rem;
-    height: 2.25rem;
-    position: absolute;
-    top: -0.5rem;
-    left: 0rem;
-    border-top: 1.5px solid var(--hover-color);
-    border-left: 1.5px solid var(--hover-color);
-}
-
-//.img:after {
-//    display: block;
-//    content: "";
-//    width: 6.75rem;
-//    height: 2.25rem;
-//    position: absolute;
-//    top: -0.5rem;
-//    left: -0.5rem;
-//    border-top: 1.5px solid var(--hover-color);
-//    border-left: 1.5px solid var(--hover-color);
-//}
-
-
-.img-container {
   position: relative;
-  text-align: center;
-    max-width: 80%;
+  font-size: 9pt;
+  display: flex;
 }
 
-.img-title {
+.figNote::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  color: black;
-  padding: 10px;
+  bottom: -0.5rem;
+  right: -1rem;
+  border-bottom: 1.5px solid var(--hover-color);
+  border-right: 1.5px solid var(--hover-color);
 }
+
+
+
+.theta {
+			font-style: normal; /* or font-style: initial; */
+	}
+
 
