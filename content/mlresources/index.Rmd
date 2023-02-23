@@ -36,7 +36,7 @@ This is a list of useful resources I have stumbled upon while completing my diss
 * [The Elements of Statistical Learning: Data Mining, Inference, and Prediction](https://hastie.su.domains/Papers/ESLII.pdf): advanced textbook for machine learning.
 * [Pattern Recognition and Machine Learning](https://info.usherbrooke.ca/pmjodoin/cours/ift603/BishopBook.pdf): advanced textbook for machine learning.
 * [Understanding Machine Learning: From Theory to Algorithms](https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/understanding-machine-learning-theory-algorithms.pdf): textbook used for CS 485/685
-*[Applied Predictive Modeling](https://vuquangnguyen2016.files.wordpress.com/2018/03/applied-predictive-modeling-max-kuhn-kjell-johnson_1518.pdf)
+* [Applied Predictive Modeling](https://vuquangnguyen2016.files.wordpress.com/2018/03/applied-predictive-modeling-max-kuhn-kjell-johnson_1518.pdf)
 
 
 
