@@ -44,6 +44,7 @@ This is a list of useful resources I have stumbled upon while completing my diss
 ## YouTube Channels 
 
 * [3blue1brown](https://www.youtube.com/@3blue1brown/playlists):  Essentials of Calculus and Essence of Linear Algebra are particularly useful 
+* [Dr. Trevor Bazett](https://www.youtube.com/@DrTrefor): Great channel for more advanced mathematical concepts. 
 * [Ahmad Bazzi](https://www.youtube.com/@AhmadBazzi/featured): great playlists for Linear Algebra and Convex Optimization 
 * [ritvikmath](https://www.youtube.com/@ritvikmath): great videos that help kick-start initial learning for a variety of machine learning topics. 
 * [Jordan Boyd-Graber](https://www.youtube.com/@JordanBoydGraber/playlists): channel has great series for more advanced topics 
