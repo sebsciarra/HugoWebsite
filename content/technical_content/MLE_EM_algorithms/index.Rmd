@@ -516,47 +516,31 @@ https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 
 To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
 
-For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \\[0,1\\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasy nonnegative. 
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \\[0,1\\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
 
-For the second condition, th 
+For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
 
-The binomial function is defined as:
+$$1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  $$
 
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k}$$
+Importantly, it can be proven that all probabilities sum to one by using the binomial theorem, which states below in Equation \ref{eq:binomial} that 
 
-where $\binom{n}{k}$ is the binomial coefficient, $p$ is the probability of success, and $n$ is the number of trials.
+$$(a + b)^n =  \sum^n_{k=0} {n \choose k} a^k(b)^{n-k}. $$
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
 
+$$
+\begin{aligned}
 
-To show that all values of the binomial function sum to 1, we need to consider the sum of the function over all possible values of $k$ from 0 to $n$. That is, we need to show that:
+(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\ \nonumber
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}
 
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = 1$$
-
-The binomial function gives the probability of getting $k$ successes in $n$ trials, where the probability of success in each trial is $p$. The sum on the left-hand side of the equation is the probability of getting 0 successes, 1 success, 2 successes, and so on, up to $n$ successes in $n$ trials.
-
-The proof relies on the fact that the sum of probabilities of all possible outcomes of a random experiment is always equal to 1. In this case, the random experiment is the binomial experiment with $n$ trials and probability of success $p$.
-
-To prove the equation, we use the binomial theorem, which states that:
-
-$$(x+y)^n = \sum_{k=0}^{n} \binom{n}{k} x^k y^{n-k}$$
-
-Setting $x=p$ and $y=1-p$, we can rewrite the binomial function as:
-
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k} = \binom{n}{k} (p(1-p))^k (1-p)^n$$
-
-Using the binomial theorem with $x=p$ and $y=1-p$, we get:
-
-$$(p+(1-p))^n = \sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k}$$
-
-Substituting this expression for the sum on the left-hand side of the equation, we get:
-
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p+(1-p))^n = 1^n = 1$$
-
-Therefore, we have shown that the sum of the binomial function over all possible values of $k$ is always equal to 1, which means that the total probability of all possible outcomes in a binomial experiment is always equal to 1, as expected.
+\end{aligned}
+$$
+For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
 
 
 # Appendix B: Proof That Likelihoods are not Probabilities  {#proof-likelihood}
 
-To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
 
 
 Sure, let me try to simplify the proof.
@@ -597,5 +581,8 @@ Therefore, we have shown that the sum of the binomial function over all possible
 
 # Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-likelihood}
 # Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-likelihood}
+
+# Appendix E: Proof of Binomial Theorem  {#proof-binomial}
+
 
 
