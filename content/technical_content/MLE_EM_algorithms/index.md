@@ -37,12 +37,13 @@ P(h = 4|\theta = 0.50, n = 10) &= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \n
 &= 0.205 \nonumber
 \end{alignat}
 $$
-Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of $(0.5)^{10}$ of occurring.
+Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of $(0.5)^{10}$ of occurring. Altogether, four heads have a probability of .205 of occurring given a probability of heads of .50 and 10 coin flips. 
 
 In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation \ref{eq:prob-mass-function}) can be computed for each number. The resulting probabilities of obtaining each number of heads can then be plotted to produce a *probability mass function*: A distribution that gives the probability of obtaining each possible value of a discrete random variable[^1] (see Figure \ref{fig:prob-mass-binom}). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is zero. The R code block below (lines <a href="#1">1--68</a>) produces a probability mass function for the binomial situation.
 
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
+
 ```r 
 #create function that computes probability mass function with following arguments:
   ##num_trials = number of trials (10  [coin flips] in the current example)
@@ -152,71 +153,225 @@ sum(prob_distribution$probability)  #1
 [1] 1
 </code></pre>
 
-Although the binomial distribution the number of heads that is most likely to occur with an unbiased coin, it gives little insight on the coin's probability of heads ($\theta$) after data have been obtained. If the researcher flips the coin 10 times and obtains 7 heads, the researcher may then want to know the likelihood of each probability value of heads ($\theta$ ) given the 
+With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea of what outcomes to expect after flipping the coin 10 times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's probability of heads after data have been collected; in computing the probability mass function, the probability of heads ($\theta$) is fixed. Thus, the researcher must use a different type of distribution to estimate the coin's probability of heads. 
 
-<pre><code class=''>[1] 0.2460938
-</code></pre><pre><code class=''>0.004921845 with absolute error < 5.5e-17
-</code></pre><pre><code class=''>[1] 0.004921845
-</code></pre>
 
 # Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome
- $\forall  \theta \in \[0, 1\], P(\theta|h = 7, n = 10)$. 
+
+Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With this data, the researcher wants to determine the probability value of heads that most likely produced the data. In other words, the researcher wants to find the value of $\theta$ that maximizes the possibility of observing the data, $\max_{\theta \in \Theta} P(h = 7, n = 10|\theta)$. Before continuing, it is vital to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.  
+
+
+## Likelihoods are not Probabilities
+
+
+
+
+![](index_files/figure-html/likelihood-dist-1.png)<!-- -->
+
+
+Although probability density functions compute the probability that a set of data values have been observed given a fixed set of parameter valuess, we are seldom interested in this probability. Practitioners and researchers
+are more interested in the probability that a certain set of parameter values characterize the larger population (i.e, $p(\theta|y)$). When trying to determine the most likely set of
+parameter values, we use likelihood functions. Thus, the likelihood of a set of parameters given the observed data is represented as $L(\theta|y)$. Importantly, likelihoods do not 
+represent the probability that a given set of parameter values defines the population (i.e., $P(\theta)$); we sample data and want to infer parameter values at the population level. With
+probabilities, we assume knowledge of the population parameter values and calculate the probability of observing any given set of data. Using perhaps more relatable terms, the 
+hypothesis is assumed to be true when calculating conditional probabilities and the data are varied. For likelihoods, the data is fixed and the hypothesis is varied. Note that Bayes
+theorem can be used to convert likelihoods ($L(\theta|y)$) to probabilities ($P(\theta)$). 
+
+To compute likelihoods, the function used to compute the above probabilities is used. Although confusing, the parameter values (the probability of success in this example [$\theta_1$])
+are now being manipulated and not the data (see Figure \@ref(fig:likelihood-dist). Importantly, the sum of all the likelihoods does not sum to 1 ($\int^n_0 f(y|n, \theta) \neq 1$), 
+which explains why likelihoods are sometimes called *unnormalized probabilities*. Although it seems unintuitive that the sum of the likelihoods is not 1, remember that likelihoods do not
+describe the probability of a set of parameter being true (i.e., $p(\theta)$); if they did, then the integral would sum to 1. Given that we have two parameters, we can also produce 
+another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
+both parameters simultaneously. 
+
+![](index_files/figure-html/likelihood-dist2-1.png)<!-- --><pre><code class=''>   probability num_successes prob_success num_trials
+51  0.01332457            21          0.5         30
+</code></pre><pre><code class=''> [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250
+ [6] 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250
+[11] 0.0009765625
+</code></pre><pre><code class=''>[1] 0.1717859
+</code></pre>
+
+## Resources 
+Myung (2003); Etz(2018); https://www.youtube.com/watch?v=IhoEwC9R8pA; https://www.youtube.com/watch?v=w3drLH-DFpE; 
+
+
 # Maximum Likelihood Estimation: Estimating the Set of Parameter Values That Most Likely Produce a Specific Outcome
+
+With a formula to compute likelihood distributions, a common goal is to find the set of parameter values that have the highest likelihood. That is, we want to find the set of parameter
+values that maximize the probability of producing the observed data ($\theta_{MLE}$). To find $\theta_{MLE}$, we must find the vector $\theta$ that produces the highest likelihood
+value. Mathematically, this means that we find the value on the likelihood curve where the change with respect to $\theta$ is zero ($\frac{\delta L(\theta|y)}{\delta \theta} = 0$). 
+Revisiting our likelihood function, it becomes apparent that computing the partial derivative of the likelihood function with respect to $\theta$ becomes computationally unfeasible when the
+number of observations reaches even that of a small sample size (e.g.,$n=100$). With the derivative of the Bernoulli equation involving a length combination of the quotient, product, and chain rules, the derivative of a multi-iteration likelihood function would be completely intractable. 
+
+$$  
+\begin{aligned}
+
+L(\theta|y = y_1, y_2, ... , y_{100}) &= f_1(y_1|\theta)f_2(y_2|\theta)...f_{100}(y_{100}|\theta) \\
+ &= \Bigg({\theta_1 \choose y_1}(\theta_2)^{y_1}(1-\theta_2)^{(\theta_1-y_1)}\Bigg)\Bigg({\theta_1 \choose y_2}(\theta_2)^{y_2}(1-\theta_2)^{(\theta_1-y_2)}\Bigg)...\Bigg({\theta_1 \choose y_n}(\theta_2)^{y_n}(1-\theta_2)^{(\theta_1-y_n)}\Bigg) \\ 
+ L(\theta|y) &= \prod^{100}_{i=1}f_i(y_i|\theta)
+
+\end{aligned}
+$$
+\noindent
+To enable an efficient computation of the derivative, we apply a log transformation to the equation to drastically simplify the equation 
+
+$$
+\log[ L(\theta|y)] = \log \Big[{\theta_1 \choose y_1}\Big] + y\log[(\theta_2)] + (\theta_1-y)\log(1-\theta_2)
+$$
+\noindent
+Taking the partial derivative with respect to $\theta$, we get 
+
+$$  
+\begin{aligned}
+\frac{\delta L}{\delta \theta_2} &= \frac{\delta}{\delta \theta_2}  \Bigg(\log \Big[{\theta_1 \choose y_1}\Big] + y\log[(\theta_2)] + (\theta_1-y)\log(1-\theta_2) \Bigg) \\ 
+&= 0 + y(\frac{1}{\theta_2}) + (\theta_1-y)(-1)(\frac{1}{1-\theta_2}) \\ 
+0 &= \frac{y}{\theta_2}- \frac{\theta_1-y}{1-\theta_2} \\ 
+\frac{\theta_1-y}{1-\theta_2} &= \frac{y}{\theta_2} \\ 
+\theta_2\theta_1 - \theta_2y &= y - \theta_2y \\ 
+\theta_2\theta_1 &=y \\
+\theta_2 &= \frac{y}{\theta_1}
+
+\end{aligned}
+$$
+\noindent
+Therefore, the maximum of the likelihood function is found by dividing the observed number of successes ($y$) by the number of trials ($\theta_1$). Returning to the previous example where 7 successes ($y_1 = 7$) occurred across 10 coin flips ($\theta_1 = 10$), the value of success probability that maximizes the probability of observing the data is 
+$\theta_2 = \theta_{MLE} \frac{7}{10} = .70$. To make this example more realistic, consider that, across 10 $k$ iterations where 10 coin flips occur in each iteration, the number of 
+successes is $y = [1, 6, 4, 7, 3, 4 ,5, 10, 5, 3]$. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to $\theta_2$
+because the equation will contain $n=10$ product terms. Thankfully, we can derive a more general equation for calculating the value of $\theta_2$ where the likelihood function is maximized. Consider a simple example where there are only two coin flips ($y = [y_1, y_2]$). 
+
+$$  
+\begin{aligned}
+&= 0 + y_1(\frac{1}{\theta_2}) + (\theta_1-y_1)(-1)(\frac{1}{1-\theta_2}) + y_2(\frac{1}{\theta_2}) + (\theta_1-y_2)(-1)(\frac{1}{1-\theta_2}) \\ 
+0 &= \frac{y_1}{\theta_2}- \frac{\theta_1-y_1}{1-\theta_2} + \frac{y_2}{\theta_2}- \frac{\theta_1-y_2}{1-\theta_2} \\ 
+\frac{2\theta_1-y_1-y_2}{1-\theta_2} &= \frac{y_1 + y_2}{\theta_2} \\ 
+2\theta_1\theta_2 - \theta_2y_1 -\theta_2y_2  &= y_1 + y_2 - \theta_2y_1 -\theta_2y_2 \\ 
+2\theta_1\theta_2  &=y \\
+\theta_2 &= \frac{y_1 + y_2}{2\theta_1} = \frac{\sum^{n}_{i=1} y_i}{k\theta_1}
+
+\end{aligned}
+$$
+\noindent
+Therefore, the value of $\theta_2$ where the likelihood function is maximized is `r `theta_2`. 
+
+
+
+### Maximum likelihood estimation with a continuous variable (closed-form solution)
+
+Let's now consider a situation where we collect a series of 100 data points defined by a mean and variance. Given that the data are continuous, the Gaussian distribution function can be
+used to model the data such that the probability of observing a given data point ($Y_i$) given a specific mean($\mu$) and variance ($\sigma$) is 
+
+$$ P(Y_i|\sigma, \mu) = \frac{1}{\sqrt{2\pi\sigma^2}}e\Big(\frac{-Y_i - \mu Y_i}{2\sigma^2})    $$
+\noindent 
+and the likelihood of observing a given set of parameters can be computed using 
+
+$$
+\begin{aligned}
+L(\sigma^2, \mu) &= \prod^n_{i=1} f(Y_i|\sigma^2, \mu) = \prod^n_{i=1}\frac{1}{\sqrt{2\pi\sigma^2}}e^{\Big(-\frac{(Y_i - \mu)^2}{2\sigma^2}\Big)} \\ 
+\end{aligned}
+$$
+\noindent
+Note that, in addition to taking the log likelihood to reduce computation time, the log likelihood of the Gaussian density function is used to avoid dealing with excessively small values. Computers lose accuracy with very small values(known as *underflow*) and so using log likelihoods prevents computations from incurring numerical error. The log likelihood Gaussian equation is obtained
+by applying the product and power rules of logarithms. Given that the equation contains Euler's number, we will use log of base $e$ or the natural log ($\ln$). Before apply the log 
+transformation, some simplifying is necessary. Let's begin with the first part of the Gaussian likelihood function. Given that it is independent of the observations, it is a constant. 
+The product of a constant is the constant raised to the number of times it is computed ($n$ times)
+
+$$ 
+\begin{aligned}
+\prod^n_{i=1}\frac{1}{\sqrt{2\pi\sigma^2}} &= \Big(\frac{1}{\sqrt{2\pi\sigma^2}} \Big)^n \\ 
+ &= (2\pi\sigma^2)^{-\frac{n}{2}}
+\end{aligned} 
+
+$$
+\noindent
+Moving on to the second part. 
+
+$$ 
+\begin{aligned}
+\prod^n_{i=1}e^{\Big(-\frac{(Y_i - \mu Y_i)^2}{2\sigma^2}\Big)} &= \prod^n_{i=1}e^{\Big(-\frac{1}{2\sigma^2}(Y_i - \mu)^2\Big)} \\ 
+ &= e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}
+\end{aligned} 
+
+$$
+\noindent
+Combining the simplifications for the first and second portions, we get 
+
+$$ 
+\begin{aligned}
+L(\sigma^2, \mu) &= \prod^n_{i=1}(2\pi\sigma^2)^{-\frac{1}{2}}e^{\Big(-\frac{1}{2\sigma^2}(Y_i - \mu)^2\Big)} \\ 
+&= (2\pi\sigma^2)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}
+
+\end{aligned} 
+
+$$
+
+
+$$ 
+\begin{aligned}
+\text{Apply product rule } &= \ln \Big((\sqrt{2\pi\sigma^2})^{-\frac{n}{2}}\Big) + \ln \Bigg(e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}\Bigg) \\ 
+\text{Apply power rule } &=-\frac{n}{2}\ln \Big((\sqrt{2\pi\sigma^2}) + -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu Y_i)^2 \ln(e) \\ 
+\ln L(\sigma^2, \mu)  &= -\frac{n}{2}\ln (\sqrt{2\pi\sigma^2}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2  \\ 
+
+\end{aligned}
+
+$$
+
+Each parameter can be solved for by taking the derivative with respect to that parameter. To solve for $\mu$, 
+$$\begin{aligned}
+\frac{\delta \ln L}{\delta \mu} &= \frac{\delta}{\delta \mu} \Bigg(-\frac{n}{2}\ln (\sqrt{2\pi\sigma^2}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Bigg) \\ 
+&= 0 - \frac{\delta}{\delta \mu} \underbrace{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2 \Big)}_{\text{product rule}} \\ 
+&= \sum_{i=1}^n\frac{\delta}{\delta \mu}(-\frac{1}{2\sigma^2}) \cdot(Y_i - \mu)^2  + -\frac{1}{2\sigma^2} \cdot \frac{\delta}{\delta \mu}(Y_i - \mu)^2 \\
+&= \sum_{i=1}^n \Bigg( 0 -\frac{1}{2\sigma^2} \cdot \frac{\delta}{\delta \mu}(Y_i - \mu)^2 \Bigg) \\ 
+&= -\frac{1}{2\sigma^2}  \sum_{i=1}^n (\frac{\delta}{\delta \mu}(Y_i - \mu)^2) \\ 
+&=-\frac{1}{2\sigma^2}  \sum_{i=1}^n 2(Y_i - \mu) \cdot -1 \\ 
+&= \frac{1}{\sigma^2}  \sum_{i=1}^n (Y_i - \mu) \\ 
+\text {Set  } \frac{\delta \ln L}{\delta \mu} = 0 \\ 
+0 &= \frac{1}{\sigma^2}  \sum_{i=1}^n (Y_i - \mu) \\ 
+0 &= \sum_{i=1}^n y_i - \sum_{i=1}^n \mu \\ 
+0 &= \sum_{i=1}^n y_i - n\mu \\ 
+\mu &= \frac{1}{n}\sum_{i=1}^n y_i
+
+\end{aligned}$$
+\noindent
+If $\sigma^2$ is solved for, we get 
+
+$$
+\begin{aligned}
+
+\frac{\delta \ln L}{\delta \sigma^2} &= \frac{1}{2\sigma^2} \Big(-n + \frac{1}{\sigma^2} \sum_{i=1}^n(y_i - \mu)^2 \Big) \\ 
+\text {Setting } \frac{\delta \ln L}{\delta \sigma^2} = 0 \\
+0 &= \frac{1}{2\sigma^2} \Big(-n + \frac{1}{\sigma^2} \sum_{i=1}^n(y_i - \mu)^2 \Big) \\ 
+n\sigma^2 &=  \sum_{i=1}^n(y_i - \mu)^2  \\ 
+\sigma^2 &= \frac{1}{n}  \sum_{i=1}^n(y_i - \mu)^2  \\ 
+
+
+\end{aligned}
+$$
+
+
+|param | estimates|        sd|
+|:-----|---------:|---------:|
+|mu    |  5.001337| 0.2363008|
+|sd    |  5.283846| 0.1670900|
+
+<pre><code class=''>[1] 1545.864
+</code></pre>
+
+Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 5.0013329 and 
+$\sigma^2_{MLE} = $ 27.9749567. 
+
+## Resources 
+http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
+https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 
 # References
 
 
 {{< bibliography cited >}}
 
-# Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proofs}
+# Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
 
-To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
-
-
-
-
-
-The incomplete beta function is defined as:
-
-$$B(x;a,b) = \int_0^x t^{a-1}(1-t)^{b-1} dt$$
-
-The binomial function is defined as:
-
-$$f(k;n,p) = {n\choose k}p^k(1-p)^{n-k}$$
-
-where ${n\choose k}$ is the binomial coefficient, which represents the number of ways to choose k items from a set of n items.
-
-To derive the incomplete beta function from the binomial function, we can make use of the following relationship:
-
-$${n \choose k} = \frac{n!}{k!(n-k)!} = \frac{\Gamma(n+1)}{\Gamma(k+1)\Gamma(n-k+1)}$$
-
-where $\Gamma(x)$ is the gamma function. Using this relationship, we can write the binomial function as:
-
-$$f(k;n,p) = \frac{\Gamma(n+1)}{\Gamma(k+1)\Gamma(n-k+1)}p^k(1-p)^{n-k}$$
-
-Now, let's make the substitution $t = x$ and $u = 1-x$. Then, we have:
-
-$$\begin{aligned} B(x;a,b) &= \int_0^x t^{a-1}(1-t)^{b-1} dt \ &= \int_0^1 (xt)^{a-1}[(1-x)u]^{b-1} dx \quad \text{(using the substitution } t=x \text{ and } u=1-x \text{)}\ &= x^{a-1}(1-x)^{b-1} \int_0^1 t^{a-1}u^{b-1} dt \ &= x^{a-1}(1-x)^{b-1} B(a,b) \end{aligned}$$
-
-where the last step follows from the definition of the complete beta function:
-
-$$B(a,b) = \int_0^1 t^{a-1}(1-t)^{b-1} dt$$
-
-Now, let's write the binomial function in terms of the incomplete beta function. Using the relationship between the gamma function and the binomial coefficient, we can write:
-
-$$\begin{aligned} f(k;n,p) &= \frac{\Gamma(n+1)}{\Gamma(k+1)\Gamma(n-k+1)}p^k(1-p)^{n-k} \ &= \frac{1}{B(k+1,n-k+1)}p^k(1-p)^{n-k} \end{aligned}$$
-
-Substituting this expression for $f(k;n,p)$ into the expression we derived earlier for $B(x;a,b)$, we get:
-
-$$\begin{aligned} B(x;a,b) &= x^{a-1}(1-x)^{b-1} B(a,b) \ &= \frac{x^{a-1}(1-x)^{b-1}}{B(a,b)}\sum_{k=0}^n \frac{1}{B(k+1,n-k+1)}p^k(1-p)^{n-k} \end{aligned}$$
-
-This expression relates the incomplete beta function to the binomial function. However, it should be noted that this is not a closed-form solution for the incomplete beta function, since it still involves a summation over the values of k. The incomplete beta function is usually evaluated numerically using software such as R or MATLAB.
-
-
-
-
-
-
+To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
 
 
 Sure, let me try to simplify the proof.
@@ -226,6 +381,7 @@ The binomial function is defined as:
 $$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k}$$
 
 where $\binom{n}{k}$ is the binomial coefficient, $p$ is the probability of success, and $n$ is the number of trials.
+
 
 To show that all values of the binomial function sum to 1, we need to consider the sum of the function over all possible values of $k$ from 0 to $n$. That is, we need to show that:
 
@@ -252,4 +408,50 @@ Substituting this expression for the sum on the left-hand side of the equation, 
 $$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p+(1-p))^n = 1^n = 1$$
 
 Therefore, we have shown that the sum of the binomial function over all possible values of $k$ is always equal to 1, which means that the total probability of all possible outcomes in a binomial experiment is always equal to 1, as expected.
+
+
+# Appendix B: Proof That Likelihoods are not Probabilities  {#proof-likelihood}
+
+To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
+
+
+Sure, let me try to simplify the proof.
+
+The binomial function is defined as:
+
+$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k}$$
+
+where $\binom{n}{k}$ is the binomial coefficient, $p$ is the probability of success, and $n$ is the number of trials.
+
+
+To show that all values of the binomial function sum to 1, we need to consider the sum of the function over all possible values of $k$ from 0 to $n$. That is, we need to show that:
+
+$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = 1$$
+
+The binomial function gives the probability of getting $k$ successes in $n$ trials, where the probability of success in each trial is $p$. The sum on the left-hand side of the equation is the probability of getting 0 successes, 1 success, 2 successes, and so on, up to $n$ successes in $n$ trials.
+
+The proof relies on the fact that the sum of probabilities of all possible outcomes of a random experiment is always equal to 1. In this case, the random experiment is the binomial experiment with $n$ trials and probability of success $p$.
+
+To prove the equation, we use the binomial theorem, which states that:
+
+$$(x+y)^n = \sum_{k=0}^{n} \binom{n}{k} x^k y^{n-k}$$
+
+Setting $x=p$ and $y=1-p$, we can rewrite the binomial function as:
+
+$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k} = \binom{n}{k} (p(1-p))^k (1-p)^n$$
+
+Using the binomial theorem with $x=p$ and $y=1-p$, we get:
+
+$$(p+(1-p))^n = \sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k}$$
+
+Substituting this expression for the sum on the left-hand side of the equation, we get:
+
+$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p+(1-p))^n = 1^n = 1$$
+
+Therefore, we have shown that the sum of the binomial function over all possible values of $k$ is always equal to 1, which means that the total probability of all possible outcomes in a binomial experiment is always equal to 1, as expected.
+
+
+# Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-likelihood}
+# Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-likelihood}
+
 

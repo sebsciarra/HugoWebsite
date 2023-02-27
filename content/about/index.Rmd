@@ -9,8 +9,37 @@ tags: []
 ---   
 
 
-<div class= "figure"> <caption class = "figTop">   </caption> <img src=images/about_picture.jpg> <span class="figNote"><em>Note. </em>Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator</a>).</span> </div>   
 
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'><span> 
+    </caption>
+    </div>
+   <div class="figTitle"></div>
+  <img src=images/about_picture.jpg width="65%" height="65%"> >
+  
+  <div class="figNote">
+      <span><em>Note. </em>Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator</a>).</span> 
+  </div>
+</div>
+
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabelAbout'><span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+  </div>
+    <img src="images/about_picture.jpg" width="60%" height="60%"> 
+  
+  <div class="figNote">
+      <span><em>Note. </em> Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator</span> 
+  </div>
+</div>
 
 I'm Sebastian Sciarra and I am currently a PhD candidate in the Industrial-Organizational Psychology program at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation. 
 

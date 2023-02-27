@@ -104,6 +104,7 @@ In order to calculate the probability of obtaining each possible number of heads
 
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
+
 ```{r prob-mass-binom, echo=T, eval=T, results='hide', warning = F}
 #create function that computes probability mass function with following arguments:
   ##num_trials = number of trials (10  [coin flips] in the current example)
@@ -266,7 +267,7 @@ describe the probability of a set of parameter being true (i.e., $p(\theta)$); i
 another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
 both parameters simultaneously. 
 
-```{r likelihood-dist, echo=F}
+```{r likelihood-dist2, echo=F}
 num_trials <- 30
 num_successes <- 21
 prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
@@ -513,10 +514,11 @@ https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 
 # Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
 
-To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
 
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \\[0,1\\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasy nonnegative. 
 
-Sure, let me try to simplify the proof.
+For the second condition, th 
 
 The binomial function is defined as:
 
