@@ -184,13 +184,7 @@ describe the probability of a set of parameter being true (i.e., $p(\theta)$); i
 another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
 both parameters simultaneously. 
 
-![](index_files/figure-html/likelihood-dist2-1.png)<!-- --><pre><code class=''>   probability num_successes prob_success num_trials
-51  0.01332457            21          0.5         30
-</code></pre><pre><code class=''> [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250
- [6] 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250
-[11] 0.0009765625
-</code></pre><pre><code class=''>[1] 0.1717859
-</code></pre>
+![](index_files/figure-html/likelihood-dist2-1.png)<!-- -->
 
 ## Resources 
 Myung (2003); Etz(2018); https://www.youtube.com/watch?v=IhoEwC9R8pA; https://www.youtube.com/watch?v=w3drLH-DFpE; 
@@ -349,16 +343,9 @@ n\sigma^2 &=  \sum_{i=1}^n(y_i - \mu)^2  \\
 $$
 
 
-|param | estimates|        sd|
-|:-----|---------:|---------:|
-|mu    |  5.001337| 0.2363008|
-|sd    |  5.283846| 0.1670900|
 
-<pre><code class=''>[1] 1545.864
-</code></pre>
-
-Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 5.0013329 and 
-$\sigma^2_{MLE} = $ 27.9749567. 
+Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 4.9459459 and 
+$\sigma^2_{MLE} = $ 28.037711. 
 
 ## Resources 
 http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
@@ -371,87 +358,184 @@ https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 
 # Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
 
-To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
+
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
+
+For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
+
+\begin{align}
+1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  
+\label{eq:binomial-sum-one}
+\end{align}
+
+Importantly, it can be proven that all probabilities sum to one by using the binomial theorem, which states below in Equation \ref{eq:binomial} that 
+
+\begin{align}
+(a + b)^n =  \sum^n_{k=0} {n \choose k} a^k(b)^{n-k}. 
+\label{eq:binomial}
+\end{align}
+
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
 
 
-Sure, let me try to simplify the proof.
-
-The binomial function is defined as:
-
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k}$$
-
-where $\binom{n}{k}$ is the binomial coefficient, $p$ is the probability of success, and $n$ is the number of trials.
+\begin{align*}
+(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
+\end{align*}
 
 
-To show that all values of the binomial function sum to 1, we need to consider the sum of the function over all possible values of $k$ from 0 to $n$. That is, we need to show that:
-
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = 1$$
-
-The binomial function gives the probability of getting $k$ successes in $n$ trials, where the probability of success in each trial is $p$. The sum on the left-hand side of the equation is the probability of getting 0 successes, 1 success, 2 successes, and so on, up to $n$ successes in $n$ trials.
-
-The proof relies on the fact that the sum of probabilities of all possible outcomes of a random experiment is always equal to 1. In this case, the random experiment is the binomial experiment with $n$ trials and probability of success $p$.
-
-To prove the equation, we use the binomial theorem, which states that:
-
-$$(x+y)^n = \sum_{k=0}^{n} \binom{n}{k} x^k y^{n-k}$$
-
-Setting $x=p$ and $y=1-p$, we can rewrite the binomial function as:
-
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k} = \binom{n}{k} (p(1-p))^k (1-p)^n$$
-
-Using the binomial theorem with $x=p$ and $y=1-p$, we get:
-
-$$(p+(1-p))^n = \sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k}$$
-
-Substituting this expression for the sum on the left-hand side of the equation, we get:
-
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p+(1-p))^n = 1^n = 1$$
-
-Therefore, we have shown that the sum of the binomial function over all possible values of $k$ is always equal to 1, which means that the total probability of all possible outcomes in a binomial experiment is always equal to 1, as expected.
+For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
 
 
 # Appendix B: Proof That Likelihoods are not Probabilities  {#proof-likelihood}
 
-To proove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.
+As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those set to be fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed ($\theta$, $n$) and the data are varied ($h$; notice how, in Appendix A, probabilities were summed across all possible values of $h$). With likelihoods, however, the data are fixed ($h$) and the parameters are varied ($\theta$, $n$). For the current proof, it is sufficient to only allow $\theta$ to vary. To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see [Appendix A](#proof-pmf)), likelihoods likewise can never ne negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to 1. Thus, the following proposition must be proven: 
+
+$$
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
+$$
+In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
+$$
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
+\label{eq:int-sum-likelihood}\\\\
+&= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
+\label{eq:int-sum-likelihood-binomial}
+\end{align}
+$$
+At this point, it is important to realize that $ \int_0^1 \theta^h(1-\theta)^{n-h}$ can be restated in terms of the beta function, $\mathrm{B}(x, y)$, which is shown below. 
+$$
+\begin{align*}
+\mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt \\\\
+\text{Let }&t = \theta \\\\
+\mathrm{B}(x, y) &= \int_0^1 \theta^{x-1}(1-\theta){^{y-1}} \phantom{c} d\theta \\\\
+\text{Let }&x = h +1 \text{ and } y = n -h +1 \\\\
+\mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \\\\
+&= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
+\end{align*}
+$$
+Therefore, the function in Equation \ref{eq:int-sum-likelihood-binomial} can be restated below in Equation \ref{eq:beta-restate} as 
+$$
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta = {n \choose h} \mathrm{B}(h+1, n-h+1).
+\label{eq:beta-restate}
+\end{align}
+$$
+At this point, another proof becomes important because it allows us to express the beta function in terms of another function that will, ultimately, allow us to simplify Equation \ref{eq:beta-restate} and prove that likelihoods do not sum to one and are, therefore, not probabilities.  Specifically, the beta function, $\mathrm{B}(x, y)$ can be stated in terms of the gamma function $\Gamma$ such that 
+
+$$
+\begin{align}
+\mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
+\label{eq:beta-gamma-relation}
+\end{align}
+$$
+For a proof of the beta-gamma relation, see [Appendix C](#proof-beta-gamma). Thus, Equation \ref{eq:beta-restate} can be stated in terms of the gamma function such that 
+
+$$
+\begin{align}
+\int_0^1 L(\theta|h, n) \phantom{c} d\theta  = {n \choose h} \frac{\Gamma(h+1)\Gamma(n-h+1)}{\Gamma(n+2)}.
+\label{eq:binomial-gamma}
+\end{align}
+$$
+One nice feature of the gamma function is that it can be stated as a factorial (for a proof, see [Appendix D](#proof-gamma-factorial)) such that 
+
+$$
+\begin{align}
+\Gamma(x) = (x - 1)!.
+\end{align}
+$$
+Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
+
+$$
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
+&= \frac{n!}{(n + 1)!} \nonumber \\\\ 
+&= \frac{1}{n + 1}. 
+\label{eq:likelihood-proof}
+\end{align} 
+$$
+
+Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
+
+```r 
+num_trials <- 10 #n
+num_successes <- 7 #h
+prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.e., there are 100 dtheta values)
+
+likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
+sum(likelihood_distribution$probability) #compute integral
+```
+<pre><code class='r-code'>[1] 9.09091
+</code></pre>
+# Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-beta-gamma}
+
+Equation \ref{eq:beta-gamma-proof} below will be proven 
+
+$$
+\begin{align}
+\mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
+\label{eq:beta-gamma-proof}
+\end{align}
+$$
+To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and the numerator of Equation \ref{eq:beta-gamma-proof}, \Gamma(x)\Gamma(y), where 
+$$
+\begin{align}
+\Gamma(x) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt 
+\label{eq:gamma} \\\\ 
+\Gamma(x)\Gamma(y) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
+\label{eq:gamma-numerator}
+\end{align}
+$$
+Equation \ref{eq:gamma-function} shows the gamma function which will be useful as a reference and Equation \ref{eq:gamma-numerator} shows the expansion of the numerator in Equation \ref{eq:beta-gamma-proof}. To prove Equation \ref{eq:beta-gamma-proof}, we will begin by changing the variables of $s$ and $t$ in Equation \ref{eq:gamma-numerator} by reexpressing them in terms of $u$ and $v$. Importantly,  when changing variables in a double integral, the formula below in Equation \ref{eq:double-integral} must be followed: 
+
+$$
+\begin{align}
+\underset{R}{\int\int} f(x, y) \text{ }dx \text{ }dy = \underset{G}{\int\int} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv, 
+\label{eq:double-integral}
+\end{align}
+$$
+where $|\mathbf{J}(u, v)|$ is the Jacobian of $u$ and $v$ (for a great explanation, see [Jacobian](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix) and [change of variables](https://www.youtube.com/watch?v=wUF-lyyWpUc)). To apply Equation \ref{eq:double-integral}, we will first determine the expressions of $s$ and $t$ in terms of $u$ and $v$ to obtain $g(u,v)$ and $h(u,v)$, which are, respectively, provided below in Equation \ref{s-rexp} and Equation \ref{t-rexp}. 
+
+$$
+\begin{align}
+\text{Let } u &= s + t, \text{  } v = \frac{t}{s+t} \nonumber \\\\
+\text{then }  \text{ }s &= u - t = u - uv = g(u, v)
+\label{eq:s-rexp} \\\\
+t &= u - s = u - (u - uv) = uv = h(u, v).
+\label{eq:t-rexp}
+\end{align}
+$$
+With the expression for $g(u,v)$ and $h(u,v)$, the determinant of the Jacobian of $u$ and $v$ can now be computed, as shown below and provided in Equation \ref{eq:det-Jac}. 
+$$
+\begin{align}
+\det\mathbf{J}(u, v) &= 
+\det\begin{bmatrix}
+\frac{\partial g}{\partial u} & \frac{\partial g}{\partial v} \\
+\frac{\partial h}{\partial u} & \frac{\partial h}{\partial v}
+\end{bmatrix} \nonumber \\\\
+&= \det\begin{bmatrix}
+1-v & -u \\
+v & u 
+\end{bmatrix} \nonumber \\\\ 
+&= (1 - v)u - (-uv) = u - uv + uv = u
+\label{eq:det-Jac}
+\end{align}
+$$
+With the $\det\mathbf{J}(u, v)$ computed, we can no express the new function with the changed variables, as shown below in Equation \ref{eq:gamma-reexp}. 
+
+$$
+\begin{align}
+\underset{G}{\int\int} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv &= \Gamma(g(u, v))\Gamma(h(u,v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv \nonumber \\\\
+&=
+\end{align}
+$$
 
 
-Sure, let me try to simplify the proof.
 
-The binomial function is defined as:
+# Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}
 
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k}$$
+# Appendix E: Proof of Binomial Theorem  {#proof-binomial}
 
-where $\binom{n}{k}$ is the binomial coefficient, $p$ is the probability of success, and $n$ is the number of trials.
-
-
-To show that all values of the binomial function sum to 1, we need to consider the sum of the function over all possible values of $k$ from 0 to $n$. That is, we need to show that:
-
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = 1$$
-
-The binomial function gives the probability of getting $k$ successes in $n$ trials, where the probability of success in each trial is $p$. The sum on the left-hand side of the equation is the probability of getting 0 successes, 1 success, 2 successes, and so on, up to $n$ successes in $n$ trials.
-
-The proof relies on the fact that the sum of probabilities of all possible outcomes of a random experiment is always equal to 1. In this case, the random experiment is the binomial experiment with $n$ trials and probability of success $p$.
-
-To prove the equation, we use the binomial theorem, which states that:
-
-$$(x+y)^n = \sum_{k=0}^{n} \binom{n}{k} x^k y^{n-k}$$
-
-Setting $x=p$ and $y=1-p$, we can rewrite the binomial function as:
-
-$$f(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k} = \binom{n}{k} (p(1-p))^k (1-p)^n$$
-
-Using the binomial theorem with $x=p$ and $y=1-p$, we get:
-
-$$(p+(1-p))^n = \sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k}$$
-
-Substituting this expression for the sum on the left-hand side of the equation, we get:
-
-$$\sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p+(1-p))^n = 1^n = 1$$
-
-Therefore, we have shown that the sum of the binomial function over all possible values of $k$ is always equal to 1, which means that the total probability of all possible outcomes in a binomial experiment is always equal to 1, as expected.
-
-
-# Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-likelihood}
-# Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-likelihood}
 
 
