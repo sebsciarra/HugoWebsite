@@ -21,10 +21,9 @@ tags: []
     <img src="images/about_picture.jpg" width="70%" height="70%"> 
   
   <div class="figNote">
-      <span><em>Note. </em> Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator</span> 
+      <span><em>Note. </em> Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, <a href="https://www.fotor.com">fotor</a>, <a href="https://openai.com/dall-e-2/">DALL-E2</a>, and <a href="https://deepdreamgenerator.com">Deep Dream Generator)</a></span> 
   </div>
 </div>
-
 
 I'm Sebastian Sciarra and I am currently a PhD candidate in the Industrial-Organizational Psychology program at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation. 
 

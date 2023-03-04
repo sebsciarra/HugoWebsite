@@ -7,6 +7,8 @@ output:
   bookdown::html_document2:
      keep_md: true
 always_allow_html: true
+header-includes: 
+  - \usepackage{amsmath}
 bibFile: content/technical_content/em_algorithm/biblio.json    
 tags: []
 ---   
@@ -76,18 +78,17 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 ```
 
 
-
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
-
+$$
 \begin{align}
 P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 \label{eq:prob-mass-function}
 \end{align}
-
+$$
 where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a given number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips ${n \choose h}$.
-
+<div style="display:none">\(\nextSection\)</div>
 As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
 
 $$
@@ -193,14 +194,14 @@ ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
    <div class="figTitle">
     Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
   </div>
-    <img src="images/pmf_plot.png" width="60%" height="60%"> 
+    <img src="images/pmf_plot.png" width="70%" height="70%"> 
   
   <div class="figNote">
       <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
   </div>
 </div>
 
-Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proofs)). 
+Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
 ```{r pmf-checks-code, echo=T, eval=T, results='hide', warning = F}
 #Condition 1: All probability values have nonnegative values. 
@@ -507,7 +508,7 @@ $\sigma^2_{MLE} = $ `r sigma_mle`.
 http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
 https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 
-# References
+# References{#.unnumbered}
 
 
 {{< bibliography cited >}}
@@ -562,14 +563,15 @@ $$
 $$
 At this point, it is important to realize that $ \int_0^1 \theta^h(1-\theta)^{n-h}$ can be restated in terms of the beta function, $\mathrm{B}(x, y)$, which is shown below. 
 $$
-\begin{align*}
-\mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt \\\\
-\text{Let }&t = \theta \\\\
-\mathrm{B}(x, y) &= \int_0^1 \theta^{x-1}(1-\theta){^{y-1}} \phantom{c} d\theta \\\\
-\text{Let }&x = h +1 \text{ and } y = n -h +1 \\\\
-\mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \\\\
+\begin{align}
+\mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt 
+\label{eq:beta-function} \\\\ 
+\text{Let }&t = \theta \nonumber \\\\
+\mathrm{B}(x, y) &= \int_0^1 \theta^{x-1}(1-\theta){^{y-1}} \phantom{c} d\theta \nonumber \\\\
+\text{Let }&x = h +1 \text{ and } y = n -h +1 \nonumber \\\\
+\mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \nonumber \\\\
 &= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
-\end{align*}
+\end{align}
 $$
 Therefore, the function in Equation \ref{eq:int-sum-likelihood-binomial} can be restated below in Equation \ref{eq:beta-restate} as 
 $$
@@ -639,7 +641,7 @@ To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and
 $$
 \begin{align}
 \Gamma(x) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt 
-\label{eq:gamma} \\\\ 
+\label{eq:gamma-function} \\\\ 
 \Gamma(x)\Gamma(y) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
 \label{eq:gamma-numerator}
 \end{align}
@@ -648,11 +650,11 @@ Equation \ref{eq:gamma-function} shows the gamma function which will be useful a
 
 $$
 \begin{align}
-\underset{R}{\int\int} f(x, y) \text{ }dx \text{ }dy = \underset{G}{\int\int} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv, 
+ \underset{G}{\iint} f(x, y) \text{ }dx \text{ }dy =  \underset{}{\iint}f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv, 
 \label{eq:double-integral}
 \end{align}
 $$
-where $|\mathbf{J}(u, v)|$ is the Jacobian of $u$ and $v$ (for a great explanation, see [Jacobian](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix) and [change of variables](https://www.youtube.com/watch?v=wUF-lyyWpUc)). To apply Equation \ref{eq:double-integral}, we will first determine the expressions of $s$ and $t$ in terms of $u$ and $v$ to obtain $g(u,v)$ and $h(u,v)$, which are, respectively, provided below in Equation \ref{s-rexp} and Equation \ref{t-rexp}. 
+where $|\mathbf{J}(u, v)|$ is the Jacobian of $u$ and $v$ (for a great explanation, see [Jacobian](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix) and [change of variables](https://www.youtube.com/watch?v=wUF-lyyWpUc)). To apply Equation \ref{eq:double-integral}, we will first determine the expressions of $s$ and $t$ in terms of $u$ and $v$ to obtain $g(u,v)$ and $h(u,v)$, which are, respectively, provided below in Equation \ref{eq:s-rexp} and Equation \ref{eq:t-rexp}. 
 
 $$
 \begin{align}
@@ -683,11 +685,33 @@ With the $\det\mathbf{J}(u, v)$ computed, we can no express the new function wit
 
 $$
 \begin{align}
-\underset{G}{\int\int} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv &= \Gamma(g(u, v))\Gamma(h(u,v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv \nonumber \\\\
-&=
+\underset{G}{\iint} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv &= \underset{R}{\iint} \Gamma(g(u, v))\Gamma(h(u,v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv \nonumber \\\\
+&= \underset{R}{\iint}  uv^{x-1}e^{-uv}  (u - uv)^{y-1}e^{-(u - uv)}u d\text{ } u \text{ }dv \nonumber \\\\
+&= \underset{R}{\iint}  u^{x-1}v^{x-1} e^{-uv} (u(1 - v)^{y-1})e^{-(u - uv)}u \text{ } du\text{ }dv \nonumber \\\\
+&= \underset{R}{\iint}  u^{x-1}u^{y-1}u e^{-uv}e^{-u + uv}  v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv \nonumber \\\\
+&= \underset{R}{\iint}  u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv 
+\label{eq:gamma-reexp}
 \end{align}
 $$
-
+At this point, we need to determine the integration limits of $u$ and $v$ by evaluating them at the limits of $s$ and $t$, which is shown below. 
+$$
+\begin{align}
+&\text{Recall } u = s + t, v = \frac{t}{s+t}, \text{ and } s,y \in\[0, \infty\] \nonumber \\\\
+&\text{If } s = 0 \Rightarrow u = t, v = 1 \nonumber \\\\
+&\phantom{If } s = \infty \Rightarrow u = \infty, v = 0 \nonumber \\\\
+&\phantom{If } t = 0 \Rightarrow u = s, v = 0 \nonumber \\\\
+&\phantom{If } t = \infty \Rightarrow u = \infty, v = 1 \nonumber
+\end{align}
+$$
+Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produce integration limits 0 to $\infty$ for $u$ and 0 to 1 for $v$.  Recalling the gamma function (Equation \ref{eq:gamma-function} and the beta function (Equation \ref{eq:beta-function}, the beta function can now be expressed in terms of the gamma function, proving Equation \ref{eq:beta-gamma-proof}. 
+$$
+\begin{align}
+\Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty  u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv \nonumber \\\\
+&=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \text{ }dv \nonumber \\\\
+&=  \Gamma(x + y)\mathrm{B}(x,y) \nonumber \\\\ 
+\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}   \nonumber \\\\
+\end{align}
+$$
 
 
 # Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}

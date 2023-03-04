@@ -1,7 +1,7 @@
 
 .blog_post {
   padding: 0;
-  margin-left: var(--navbar-width);
+  margin-left: 4rem;
   font-family: Helvetica;
   background: white;
 }
@@ -12,7 +12,7 @@
   border-bottom: 0.5px solid var(--navbar-color);
   border-right: 0.5px solid var(--navbar-color);
   position: relative;
-  max-width: 50rem;
+  max-width: 48rem;
   margin: 0 auto;
   margin-top: 5rem;
   text-align: left;
@@ -31,7 +31,6 @@
 }
 
 
-
 .blog_summary{
   font-weight: bold;
   padding-top: 1rem;
@@ -44,9 +43,11 @@ time{
   font-size: 0.6em;
 }
 
+
+
 .content {
     position: relative;
-    max-width: 50rem;
+    max-width: 48rem;
     height: fit-content;
     margin: 0 auto;
     margin-top: 5rem;
@@ -94,8 +95,77 @@ h4 {
 }
 
 h5 {
-  font-size: 17px;
+  font-size: 14px;
+   font-style: italic;
 }
+
+h6 {
+  font-size: 14px;
+}
+
+
+.content {
+  counter-reset: section;
+}
+
+
+.content h1 {
+  counter-reset: subsection;
+  counter-increment: section;
+}
+
+.content h2 {
+  counter-reset: subsubsection;
+  counter-increment: subsection;
+}
+
+.content h3 {
+  counter-reset: paragraph;
+   counter-increment: subsubsection;
+}
+
+.content h4 {
+  counter-reset: subparagraph;
+   counter-increment: paragraph;
+}
+
+.content h5 {
+  counter-reset: subsubparagraph;
+   counter-increment: subparagraph;
+}
+
+.content h6 {
+  counter-reset: lowest;
+   counter-increment: subsubparagraph;
+}
+
+
+.content h1:not(.blog_name):not(.appendix):not(.references):nth-of-type(n)::before {
+  content: counter(section) " ";
+}
+
+
+.content h2:not(.blog_title):nth-of-type(n)::before {
+  content: counter(section) "."  counter(subsection) "  " ;
+}
+
+.content h3::before {
+  content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
+}
+
+.content h4::before {
+  content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) " ";
+}
+
+
+.content h5::before {
+  content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) " ";
+}
+
+.content h6::before {
+  content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) "." counter(subsubparagraph)" ";
+}
+
 
 p {
   line-height: 2;

@@ -96,15 +96,20 @@ table[id = 'codeTable'] td {
 /*removes white space between columns */
 table[id = "codeTable"] td:nth-child(3){
   padding: 0;
+  width: 7.5%;
 }
 
 /*slightly increase spacing between borders and number */
 table[id = "codeTable"] td:nth-child(1){
-  padding-right: 0.25rem;
+   padding-right: 0.25rem;
    text-align: right;
+   width: 2.5%;
+   -webkit-user-select: none; /* Safari */
+   -ms-user-select: none; /* IE 10 and IE 11 */
+   user-select: none; /* Standard syntax */
 }
 
-table[id = "codeTable"] td:nth-child(1), table td:nth-child(3) {
+table[id = "codeTable"]  table td:nth-child(3) {
     width: 7.5%;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
@@ -113,9 +118,10 @@ table[id = "codeTable"] td:nth-child(1), table td:nth-child(3) {
 
 
 
+
 /*color of second column of tables containing R code*/
 code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color: rgba(116, 170, 219, 0.30);
   border-left: 2pt solid rgba(116, 170, 219, 0.50);
@@ -143,7 +149,7 @@ code[data-lang='r'] [data-number]::after, code[class *='-code'] [data-number]::a
 
 /*COLUMN FORMATTING */
 div[language ='sql'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color:  rgba(196, 107, 255, 0.2);
   border-left: 2pt solid rgba(196, 107, 255, 0.5);
@@ -151,7 +157,7 @@ div[language ='sql'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child
 }
 
 div[language ='java'] pre[class ='chroma'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color:  rgba(255,105,130, 0.20);
   border-left: 2pt solid rgba(255,105,130, 0.50);
@@ -160,7 +166,7 @@ div[language ='java'] pre[class ='chroma'] code[data-lang='r'] table td:nth-chil
 
 
 div[language ='python'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color: rgba(105, 255, 155, 0.2);
   border-left: 2pt solid rgba(105, 255, 155, 0.50);
@@ -170,7 +176,7 @@ div[language ='python'] code[data-lang='r'] table td:nth-child(2) {
 
 
 div[language ='css'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color:  rgba(245,216,102, 0.2);
   border-left: 2pt solid  rgba(245,216,102, 0.50);
@@ -178,7 +184,7 @@ div[language ='css'] code[data-lang='r'] table td:nth-child(2) {
 }
 
 div[language ='html'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color:  rgba(252, 132, 3, 0.2);
   border-left: 2pt solid  rgba(252, 132, 3, 0.50);
@@ -186,7 +192,7 @@ div[language ='html'] code[data-lang='r'] table td:nth-child(2) {
 }
 
 div[language ='bash'] code[data-lang='r'] table td:nth-child(2) {
-  width: 85%;
+  width: 90%;
   position: relative;
   background-color:  black;
   border-left: 2pt solid  gray;

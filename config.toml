@@ -51,5 +51,3 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.h
       strikethrough = true
       table = true
 
-
-

@@ -1,0 +1,99 @@
+
+aside {
+   position: fixed;
+  top: 0;
+  right: 0;
+  align-self: start;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 100%; /* make it the same height as the viewport */
+  overflow-y: auto;
+}
+
+.tableContents{
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: 18rem;
+  margin-top: 5rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+
+
+.tableContents a {
+  text-decoration: none;
+  display: block;
+  padding: .125rem 0;
+  transition: all 50ms ease-in-out; /* 💡 This small transition makes setting of the active state smooth */
+}
+
+
+
+//title of table of contents
+.tableContents span {
+  display: inline-block;
+   padding-left: 2.5rem;
+  margin-bottom: 10px;
+  font-size: .80rem;
+  text-decoration: underline;
+}
+
+/*indenting in ToC */
+.tableContents ul li a[header-level= "h2"]{
+  padding-left: 0.30rem;
+}
+
+/*indenting in ToC */
+.tableContents ul li a[header-level= "h3"]{
+  padding-left: 0.60rem;
+}
+
+/*indenting in ToC */
+.tableContents ul li a[header-level= "h4"]{
+  padding-left: 0.90rem;
+}
+
+/*indenting in ToC */
+.tableContents ul li a[header-level= "h5"]{
+  padding-left: 1.2rem;
+}
+
+/*indenting in ToC */
+.tableContents ul li a[header-level= "h6"]{
+  padding-left: 1.50rem;
+}
+
+
+/*remove bullet points*/
+.tableContents li{
+  list-style-type: none;
+}
+
+
+/*list item colors in ToC*/
+.tableContents .active {
+  color: var(--navbar-color) !important;
+}
+
+.tableContents ul li a[href*="#"]{
+   color: gray;
+   text-decoration: none;
+}
+
+.tableContents ul li a[href*="#"]:visited{
+   color: gray;
+}
+
+.tableContents ul li a[href*="#"]:hover{
+   color: var(--navbar-color);
+   text-decoration: none;
+}
+
+
+
+
+

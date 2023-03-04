@@ -42,7 +42,6 @@
 }
 
 .figTitle{
-
   color: var(--navbar-color);
   padding-bottom: 0.5rem;
   font-style: italic;
@@ -66,7 +65,9 @@
   border-right: 1.5px solid var(--hover-color);
 }
 
-
+img{
+  max-width: 42.5rem;
+}
 
 .theta {
 			font-style: normal; /* or font-style: initial; */
