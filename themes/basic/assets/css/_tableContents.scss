@@ -1,70 +1,97 @@
 
-aside {
-   position: fixed;
-  top: 0;
-  right: 0;
-  align-self: start;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  height: 100%; /* make it the same height as the viewport */
+
+.toc_scroll{
+  padding: 0;
+  margin: 0;
+  text-align: left;
+
+}
+
+.toc_container {
+   position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 2rem;
+  height: inherit;
+  max-width: 15rem;
+   min-width: 12rem;
   overflow-y: auto;
+  margin-right: 20px;
 }
 
 .tableContents{
+   position: -webkit-sticky; /* Safari */
+   position: sticky;
+  max-width: 15rem;
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: bold;
-  width: 18rem;
-  margin-top: 5rem;
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  margin-top: 4rem;
+  padding-left: 0;
+  top: 2rem; /* adjust this value based on your needs */
+  bottom: 10rem;
+  height: 550px; /* subtract the top value to prevent overlap with toc_container */
+  background-color: white;
+  z-index: 2; /* set a higher z-index to make it appear on top of other elements */
   overflow-y: auto;
 }
 
 
 
-.tableContents a {
+.tableContentsList a {
   text-decoration: none;
   display: block;
-  padding: .125rem 0;
+  padding: 0;
   transition: all 50ms ease-in-out; /* 💡 This small transition makes setting of the active state smooth */
 }
 
+ul.tableOfContentsList li {
+  margin-bottom: 5px; /* adjust the value to increase/decrease spacing */
+}
+
+.tableOfContentsList {
+  list-style: none;
+  padding: 0;
+   padding-left: 1.5rem;
+  margin: 0;
+}
 
 
 //title of table of contents
 .tableContents span {
   display: inline-block;
-   padding-left: 2.5rem;
+   padding-left: 1.5rem;
   margin-bottom: 10px;
   font-size: .80rem;
   text-decoration: underline;
 }
 
+.tableContents ul li a{
+ display: inline-block;
+}
+
 /*indenting in ToC */
 .tableContents ul li a[header-level= "h2"]{
-  padding-left: 0.30rem;
+  padding-left: 0.40rem;
 }
 
 /*indenting in ToC */
 .tableContents ul li a[header-level= "h3"]{
-  padding-left: 0.60rem;
+  padding-left: 0.80rem;
 }
 
 /*indenting in ToC */
 .tableContents ul li a[header-level= "h4"]{
-  padding-left: 0.90rem;
-}
-
-/*indenting in ToC */
-.tableContents ul li a[header-level= "h5"]{
   padding-left: 1.2rem;
 }
 
 /*indenting in ToC */
+.tableContents ul li a[header-level= "h5"]{
+  padding-left: 1.6rem;
+}
+
+/*indenting in ToC */
 .tableContents ul li a[header-level= "h6"]{
-  padding-left: 1.50rem;
+  padding-left: 2.0rem;
 }
 
 
@@ -93,7 +120,29 @@ aside {
    text-decoration: none;
 }
 
+#toc_button {
+   position: -webkit-sticky; /* Safari */
+  position: fixed;
+  top: 6rem;
+  right: 0.60rem; //precent overlap with scroll bar
+  height: 550px;
+  width: 20px;
+  background-color: var(--navbar-color);
+  cursor: pointer;
+  color: white;
+  border:none;
+}
 
+#toc_button:hover {
+  background-color: #393939;
 
+}
+
+#toc_button i {
+    position: absolute;
+  left: 4px;
+  vertical-align: middle; /* align the tag vertically in the middle of the button */
+  background-color: var(--navbar-color);
+}
 
 

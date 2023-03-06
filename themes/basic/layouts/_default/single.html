@@ -1,6 +1,10 @@
 
 {{ define "main" }}
 <div class = 'blog_post'>
+
+
+  <div class = 'post'>
+
      <div class = 'header'>
 
         <h2 class = 'blog_title'> {{ .Title }} </h2>
@@ -16,19 +20,29 @@
     </div>
 
 
-  <div class = 'content'>
-    {{ .Content}}
+    <div class = 'content'>
+      {{ .Content}}
+    </div>
+
+
+    <div class = 'comments'>
+    {{ partial "comments.html" . }}
+    </div>
+
   </div>
 
-
-  <div class = 'comments'>
-  {{ partial "comments.html" . }}
+  <div class = 'toc_scroll'>
+    <div class = 'toc_container'>
+      <nav class="tableContents">
+        <span>Table of Contents</span>
+      </nav>
+    </div>
   </div>
 
-   <aside>
-      <nav class="tableContents"><span>Table of Contents</span></nav>
-   </aside>
+<button id="toc_button"><i class="fas fa-circle-left"></i></button>
+
 </div>
+
 
 
 

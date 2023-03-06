@@ -1,46 +1,37 @@
 
 
 
-@media (max-width: 1130px) {
+@media (max-width: 1200px) {
 
-  .page_holder, .blog_post{
+
+    body{
+      padding: 0;
+      margin: 0;
+    }
+
+    .page_holder, .blog_post{
     box-sizing: border-box;
     padding: 0;
     padding-right: 1rem;
     padding-left: 1rem;
     border: 0;
-    margin: 0 auto;
-    max-width: 800px;
+      margin: 0 auto;
   }
-
-  .page_holder .page_content {
-    width: 100%;
-    height: 100%;
-  }
-
-
-  body{
-    padding: 0;
-    margin: 0;
-  }
-
-
-     /*change sidebar to a topbar*/
-  .navbar {
-    position: relative;
-    height: fit-content;
-    width: 97.4%;
-   }
-
-
 
     /*toggle button appears as three vertically oriented lines
     /*h1 title is vertically oriented */
    .blog_name {
-     width: 100%;
      text-align: left;
      padding-left: 1rem;
      padding-bottom: 1rem;
+   }
+
+    /*change sidebar to a topbar*/
+  .navbar {
+    position: sticky;
+    height: fit-content;
+    width: 100%;
+    z-index: 5;
    }
 
     .navbar-links {
@@ -61,7 +52,7 @@
         padding: 0;
         margin: 0;
         position: absolute;
-        right: -22px;
+        right: 0px;
     }
 
     .navbar-links.active li a{
@@ -83,9 +74,42 @@
     .toggle-button:hover {
      background-color: var(--hover-color);
    }
+
+
+
+  /*TOC button  */
+
+   .toc-toggle-button {
+     position: absolute;
+     display: flex;
+     min-width: 60px; /*needed so that padding does not compress horizontal bars */
+     min-height: 50px;/*needed so that padding does not compress horizontal bars */
+     padding: 15px;
+     top: 25px;
+     right: 120px;
+   }
+
+    .toc-toggle-button:hover {
+     background-color: var(--hover-color);
+   }
+
+
+    .tocButton:hover {
+     background-color: var(--hover-color);
+   }
+
+    #tableContentsList.active {
+         display: block;
+         background-color: var(--navbar-color);
+    }
+
+
+
    .portal {
    position: initial;
    }
+
+
 
 
 }

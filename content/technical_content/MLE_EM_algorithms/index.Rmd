@@ -514,6 +514,7 @@ https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 {{< bibliography cited >}}
 
 # Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
+<div style="display:none">\(\setSection{A}\)</div>
 
 To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
 

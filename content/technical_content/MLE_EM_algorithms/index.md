@@ -16,7 +16,6 @@ tags: []
 
 
 
-
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
@@ -133,7 +132,7 @@ ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
    <div class="figTitle">
     Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
   </div>
-    <img src="images/pmf_plot.png" width="100%" height="70%"> 
+    <img src="images/pmf_plot.png" width="70%" height="70%"> 
   
   <div class="figNote">
       <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
@@ -345,8 +344,8 @@ $$
 
 
 
-Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 5.1296415 and 
-$\sigma^2_{MLE} = $ 26.2029013. 
+Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 4.7805255 and 
+$\sigma^2_{MLE} = $ 24.9423125. 
 
 ## Resources 
 http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
@@ -358,6 +357,7 @@ https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
 {{< bibliography cited >}}
 
 # Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
+<div style="display:none">\(\setSection{A}\)</div>
 
 To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
 

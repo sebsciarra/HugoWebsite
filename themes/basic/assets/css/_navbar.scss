@@ -5,14 +5,16 @@ body {
 
 
 /*side panel of navigation bar  */
- .navbar {
+.navbar {
   position: fixed;
   left: 0;
   top: 0;
-  width: var(--navbar-width); /*keeps same width as window changes width */
+  width: 18rem; /*keeps same width as window changes width */
   height: 100vh; /*entire height of window  */
   background: var(--navbar-color);
 }
+
+
 
 /*font specification of sidebar title  */
 .blog_name {
@@ -101,6 +103,11 @@ body {
   border-radius: 10px;
 }
 
+
+mjx-mtext > mjx-c::before {
+  padding-top: .75em ! important;
+  padding-bottom: .25em ! important;
+}
 
 
 

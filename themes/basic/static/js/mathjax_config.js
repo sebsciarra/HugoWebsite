@@ -1,8 +1,12 @@
 
-
+//see https://github.com/mathjax/MathJax/issues/3013
 window.MathJax = {
-  section: -1,
-   loader: {load: ['[tex]/tagformat']},
+  section: {
+    n: -1,
+    useLetters: false,
+    letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  },
+  loader: {load: ['[tex]/tagformat']},
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']], //allow inline math
     displayMath: [['$$','$$']],
@@ -10,7 +14,10 @@ window.MathJax = {
     tags: 'all',
     packages: {'[+]': ['tagformat', 'sections', 'autoload-all']},
     tagformat: {
-      number: (n) => MathJax.config.section + '.' + n
+      number: (n) => {
+        const section = MathJax.config.section;
+        return (section.useLetters ? section.letters[section.n] : section.n) + '.' + n;
+      }
     }
   },
   startup: {
@@ -22,12 +29,20 @@ window.MathJax = {
         setSection: 'SetSection',
       }, {
         NextSection(parser, name) {
-          MathJax.config.section++;
+          MathJax.config.section.n++;
           parser.tags.counter = parser.tags.allCounter = 0;
         },
         SetSection(parser, name) {
-          const n = parser.GetArgument(name);
-          MathJax.config.section = parseInt(n);
+          const section = MathJax.config.section;
+          const c = parser.GetArgument(name);
+          const n = section.letters.indexOf(c);
+          if (n >= 0) {
+            section.n = n;
+            section.useLetters = true;
+          } else {
+            section.n = parseInt(c);
+            section.useLetters = false;
+          }
         }
       });
       Configuration.create(
@@ -37,5 +52,3 @@ window.MathJax = {
     }
   }
 };
-
-

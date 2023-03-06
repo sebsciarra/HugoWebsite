@@ -3,6 +3,7 @@ const contentDiv = document.querySelector('.content');
 const section_titles = contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
 const tocList = document.createElement('ul');
+tocList.setAttribute('class', 'tableOfContentsList');
 
 //create table of contents
 for (let i = 0; i < section_titles.length; i++) {
@@ -67,6 +68,22 @@ window.addEventListener('scroll', function () {
       link.classList.add('active');
     }
   });
+});
+
+const tocButton = document.getElementById("toc_button");
+const tocScroll = document.querySelector(".toc_scroll");
+
+
+let isTocExpanded = true; // flag variable to keep track of current state
+
+tocButton.addEventListener('click', function() {
+  if (isTocExpanded) {
+    tocScroll.style.display = 'none';
+    isTocExpanded = false;
+  } else {
+    tocScroll.style.display = 'block';
+    isTocExpanded = true;
+  }
 });
 
 
