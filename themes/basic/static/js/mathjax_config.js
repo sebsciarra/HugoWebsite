@@ -20,6 +20,7 @@ window.MathJax = {
       }
     }
   },
+
   startup: {
     ready() {
       const Configuration = MathJax._.input.tex.Configuration.Configuration;

@@ -9,11 +9,12 @@
    display: flex;
   justify-content: center;
    max-width: 100%;
+    min-width: 10rem;
+
 }
 
 .post{
-   max-width: 100%;
-   min-width: 20rem;
+
     margin: 0 1rem;
 }
 
