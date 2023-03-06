@@ -12,16 +12,16 @@
   position: sticky;
   top: 2rem;
   height: inherit;
-  max-width: 15rem;
-   min-width: 10rem;
+  width: 14rem;
+
   overflow-y: auto;
-  margin-right: 20px;
+  margin-right: 0px;
 }
 
 .tableContents{
    position: -webkit-sticky; /* Safari */
    position: sticky;
-  max-width: 15rem;
+
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: bold;
