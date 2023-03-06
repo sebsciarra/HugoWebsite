@@ -618,8 +618,8 @@ n\sigma^2 &amp;=  \sum_{i=1}^n(y_i - \mu)^2  \\
 
 \end{aligned}\]</span>
 <p>$$</p>
-<p>Returning to our example, we can then compute the maximum likelihood estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> using the above closed-form solutions. Therefore, $<em>{MLE}= $ 4.7805255 and
-$^2</em>{MLE} = $ 24.9423125.</p>
+<p>Returning to our example, we can then compute the maximum likelihood estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> using the above closed-form solutions. Therefore, $<em>{MLE}= $ 5.0224026 and
+$^2</em>{MLE} = $ 24.3066419.</p>
 </div>
 <div id="resources-1" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Resources</h2>
@@ -649,10 +649,6 @@ $^2</em>{MLE} = $ 24.9423125.</p>
 \label{eq:binomial}
 \end{align}\]</span></p>
 <p>Given the striking resemblance between the binomial function in Equation <span class="math inline">\(\ref{eq:binomial-sum-one}\)</span> and the binomial theorem in Equation <span class="math inline">\(\ref{eq:binomial-sum-one}\)</span>, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let <span class="math inline">\(a = p\)</span> and <span class="math inline">\(b = 1-p\)</span>, which returns the proof as shown below:</p>
-<p><span class="math display">\[\begin{align*}
-(p + 1 -p)^n &amp;= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
-1 &amp;= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber
-\end{align*}\]</span></p>
 <p>For a proof of the binomial theorem, see <a href="#proof-binomial">Appendix E</a>.</p>
 </div>
 <div id="proof-likelihood" class="section level1" number="6">
@@ -663,15 +659,18 @@ $^2</em>{MLE} = $ 24.9423125.</p>
 \]</span>
 In summing each likelihood for <span class="math inline">\(\theta \in \[0, 1\]\)</span>, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
 <span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
 \label{eq:int-sum-likelihood}\\\\
 &amp;= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
 \label{eq:int-sum-likelihood-binomial}
 \end{align}
+\end{spreadlines}
 \]</span>
 At this point, it is important to realize that $ _0^1 <sup>h(1-)</sup>{n-h}$ can be restated in terms of the beta function, <span class="math inline">\(\mathrm{B}(x, y)\)</span>, which is shown below.
 <span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 \mathrm{B}(x, y) &amp;= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt
 \label{eq:beta-function} \\\\
@@ -681,6 +680,7 @@ At this point, it is important to realize that $ _0^1 <sup>h(1-)</sup>{n-h}$ can
 \mathrm{B}(h+1, n-h+1) &amp;= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \nonumber \\\\
 &amp;= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
 \end{align}
+\end{spreadlines}
 \]</span>
 Therefore, the function in Equation <span class="math inline">\(\ref{eq:int-sum-likelihood-binomial}\)</span> can be restated below in Equation <span class="math inline">\(\ref{eq:beta-restate}\)</span> as
 <span class="math display">\[
@@ -711,12 +711,14 @@ One nice feature of the gamma function is that it can be stated as a factorial (
 \]</span>
 Given that the gamma function can be stated as a factorial, Equation <span class="math inline">\(\ref{eq:binomial-gamma}\)</span> can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one.</p>
 <p><span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\
 &amp;= \frac{n!}{(n + 1)!} \nonumber \\\\
 &amp;= \frac{1}{n + 1}.
 \label{eq:likelihood-proof}
 \end{align}
+\end{spreadlines}
 \]</span></p>
 <p>Therefore, binomial likelihoods sum to a multiple of <span class="math inline">\(\frac{1}{1+n}\)</span>, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation <span class="math inline">\(\ref{eq:likelihood-proof}\)</span>. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be <span class="math inline">\(100\frac{1}{1+n} = 9.09\)</span>, and this turns out to be true in the code below.</p>
 <pre class="r"><code>num_trials &lt;- 10 #n
@@ -731,21 +733,15 @@ sum(likelihood_distribution$probability) #compute integral</code></pre>
 <div id="proof-beta-gamma" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Appendix C: Proof of Relation Between Beta and Gamma Functions</h1>
 <p>Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span> below will be proven</p>
-<p><span class="math display">\[
+<span class="math display">\[
 \begin{align}
 \mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
 \label{eq:beta-gamma-proof}
 \end{align}
 \]</span>
 To begin, let’s write out the expansions of the gamma function, <span class="math inline">\(\Gamma(x)\)</span>, and the numerator of Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>, (x)(y), where
-<span class="math display">\[
-\begin{align}
-\Gamma(x) &amp;= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt
-\label{eq:gamma-function} \\\\
-\Gamma(x)\Gamma(y) &amp;= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
-\label{eq:gamma-numerator}
-\end{align}
-\]</span>
+$$
+<p>$$
 Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> shows the gamma function which will be useful as a reference and Equation <span class="math inline">\(\ref{eq:gamma-numerator}\)</span> shows the expansion of the numerator in Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>. To prove Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>, we will begin by changing the variables of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> in Equation <span class="math inline">\(\ref{eq:gamma-numerator}\)</span> by reexpressing them in terms of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>. Importantly, when changing variables in a double integral, the formula below in Equation <span class="math inline">\(\ref{eq:double-integral}\)</span> must be followed:</p>
 <p><span class="math display">\[
 \begin{align}
@@ -755,6 +751,7 @@ Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> shows the 
 \]</span>
 where <span class="math inline">\(|\mathbf{J}(u, v)|\)</span> is the Jacobian of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> (for a great explanation, see <a href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix">Jacobian</a> and <a href="https://www.youtube.com/watch?v=wUF-lyyWpUc">change of variables</a>). To apply Equation <span class="math inline">\(\ref{eq:double-integral}\)</span>, we will first determine the expressions of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> in terms of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> to obtain <span class="math inline">\(g(u,v)\)</span> and <span class="math inline">\(h(u,v)\)</span>, which are, respectively, provided below in Equation <span class="math inline">\(\ref{eq:s-rexp}\)</span> and Equation <span class="math inline">\(\ref{eq:t-rexp}\)</span>.</p>
 <p><span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 \text{Let } u &amp;= s + t, \text{  } v = \frac{t}{s+t} \nonumber \\\\
 \text{then }  \text{ }s &amp;= u - t = u - uv = g(u, v)
@@ -762,9 +759,11 @@ where <span class="math inline">\(|\mathbf{J}(u, v)|\)</span> is the Jacobian of
 t &amp;= u - s = u - (u - uv) = uv = h(u, v).
 \label{eq:t-rexp}
 \end{align}
+\end{spreadlines}
 \]</span>
 With the expression for <span class="math inline">\(g(u,v)\)</span> and <span class="math inline">\(h(u,v)\)</span>, the determinant of the Jacobian of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> can now be computed, as shown below and provided in Equation <span class="math inline">\(\ref{eq:det-Jac}\)</span>.
 <span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 \det\mathbf{J}(u, v) &amp;=
 \det\begin{bmatrix}
@@ -778,6 +777,7 @@ v &amp; u
 &amp;= (1 - v)u - (-uv) = u - uv + uv = u
 \label{eq:det-Jac}
 \end{align}
+\end{spreadlines}
 \]</span>
 With the <span class="math inline">\(\det\mathbf{J}(u, v)\)</span> computed, we can no express the new function with the changed variables, as shown below in Equation <span class="math inline">\(\ref{eq:gamma-reexp}\)</span>.</p>
 <p><span class="math display">\[
@@ -790,8 +790,9 @@ With the <span class="math inline">\(\det\mathbf{J}(u, v)\)</span> computed, we 
 \label{eq:gamma-reexp}
 \end{align}
 \]</span>
-At this point, we need to determine the integration limits of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> by evaluating them at the limits of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span>, which is shown below.
-<span class="math display">\[
+At this point, we need to determine the integration limits of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> by evaluating them at the limits of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span>, which is shown below.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 &amp;\text{Recall } u = s + t, v = \frac{t}{s+t}, \text{ and } s,y \in\[0, \infty\] \nonumber \\\\
 &amp;\text{If } s = 0 \Rightarrow u = t, v = 1 \nonumber \\\\
@@ -799,16 +800,9 @@ At this point, we need to determine the integration limits of <span class="math 
 &amp;\phantom{If } t = 0 \Rightarrow u = s, v = 0 \nonumber \\\\
 &amp;\phantom{If } t = \infty \Rightarrow u = \infty, v = 1 \nonumber
 \end{align}
-\]</span>
-Therefore, the original integration limits of 0 to <span class="math inline">\(\infty\)</span> of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> produce integration limits 0 to <span class="math inline">\(\infty\)</span> for <span class="math inline">\(u\)</span> and 0 to 1 for <span class="math inline">\(v\)</span>. Recalling the gamma function (Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> and the beta function (Equation <span class="math inline">\(\ref{eq:beta-function}\)</span>, the beta function can now be expressed in terms of the gamma function, proving Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>.
-<span class="math display">\[
-\begin{align}
-\Gamma(x)\Gamma(y) &amp;= \int_0^1 \int_0^\infty  u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv \nonumber \\\\
-&amp;=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \text{ }dv \nonumber \\\\
-&amp;=  \Gamma(x + y)\mathrm{B}(x,y) \nonumber \\\\
-\mathrm{B}(x,y) &amp;= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}   \nonumber \\\\
-\end{align}
+\end{spreadlines}
 \]</span></p>
+<p>Therefore, the original integration limits of 0 to <span class="math inline">\(\infty\)</span> of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> produce integration limits 0 to <span class="math inline">\(\infty\)</span> for <span class="math inline">\(u\)</span> and 0 to 1 for <span class="math inline">\(v\)</span>. Recalling the gamma function (Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> and the beta function (Equation <span class="math inline">\(\ref{eq:beta-function}\)</span>, the beta function can now be expressed in terms of the gamma function, proving Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>.</p>
 </div>
 <div id="proof-gamma-factorial" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Appendix D: Proof of Relation Between Gamma and Factorial Functions</h1>

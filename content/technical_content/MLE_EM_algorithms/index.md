@@ -16,6 +16,7 @@ tags: []
 
 
 
+
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
@@ -344,8 +345,8 @@ $$
 
 
 
-Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 4.7805255 and 
-$\sigma^2_{MLE} = $ 24.9423125. 
+Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ 5.0224026 and 
+$\sigma^2_{MLE} = $ 24.3066419. 
 
 ## Resources 
 http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
@@ -379,11 +380,12 @@ Importantly, it can be proven that all probabilities sum to one by using the bin
 
 Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
 
-
+\begin{spreadlines}{0.5em}
 \begin{align*}
 (p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
 1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
 \end{align*}
+\end{spreadlines}
 
 
 For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
@@ -398,15 +400,18 @@ $$
 $$
 In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
 \label{eq:int-sum-likelihood}\\\\
 &= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
 \label{eq:int-sum-likelihood-binomial}
 \end{align}
+\end{spreadlines}
 $$
 At this point, it is important to realize that $ \int_0^1 \theta^h(1-\theta)^{n-h}$ can be restated in terms of the beta function, $\mathrm{B}(x, y)$, which is shown below. 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 \mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt 
 \label{eq:beta-function} \\\\ 
@@ -416,6 +421,7 @@ $$
 \mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \nonumber \\\\
 &= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
 \end{align}
+\end{spreadlines}
 $$
 Therefore, the function in Equation \ref{eq:int-sum-likelihood-binomial} can be restated below in Equation \ref{eq:beta-restate} as 
 $$
@@ -450,12 +456,14 @@ $$
 Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
 &= \frac{n!}{(n + 1)!} \nonumber \\\\ 
 &= \frac{1}{n + 1}. 
 \label{eq:likelihood-proof}
 \end{align} 
+\end{spreadlines}
 $$
 
 Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
@@ -482,12 +490,15 @@ $$
 $$
 To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and the numerator of Equation \ref{eq:beta-gamma-proof}, \Gamma(x)\Gamma(y), where 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 \Gamma(x) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt 
 \label{eq:gamma-function} \\\\ 
 \Gamma(x)\Gamma(y) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
 \label{eq:gamma-numerator}
 \end{align}
+\end{spreadlines}
+
 $$
 Equation \ref{eq:gamma-function} shows the gamma function which will be useful as a reference and Equation \ref{eq:gamma-numerator} shows the expansion of the numerator in Equation \ref{eq:beta-gamma-proof}. To prove Equation \ref{eq:beta-gamma-proof}, we will begin by changing the variables of $s$ and $t$ in Equation \ref{eq:gamma-numerator} by reexpressing them in terms of $u$ and $v$. Importantly,  when changing variables in a double integral, the formula below in Equation \ref{eq:double-integral} must be followed: 
 
@@ -500,6 +511,7 @@ $$
 where $|\mathbf{J}(u, v)|$ is the Jacobian of $u$ and $v$ (for a great explanation, see [Jacobian](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix) and [change of variables](https://www.youtube.com/watch?v=wUF-lyyWpUc)). To apply Equation \ref{eq:double-integral}, we will first determine the expressions of $s$ and $t$ in terms of $u$ and $v$ to obtain $g(u,v)$ and $h(u,v)$, which are, respectively, provided below in Equation \ref{eq:s-rexp} and Equation \ref{eq:t-rexp}. 
 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 \text{Let } u &= s + t, \text{  } v = \frac{t}{s+t} \nonumber \\\\
 \text{then }  \text{ }s &= u - t = u - uv = g(u, v)
@@ -507,9 +519,11 @@ $$
 t &= u - s = u - (u - uv) = uv = h(u, v).
 \label{eq:t-rexp}
 \end{align}
+\end{spreadlines}
 $$
 With the expression for $g(u,v)$ and $h(u,v)$, the determinant of the Jacobian of $u$ and $v$ can now be computed, as shown below and provided in Equation \ref{eq:det-Jac}. 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 \det\mathbf{J}(u, v) &= 
 \det\begin{bmatrix}
@@ -523,6 +537,7 @@ v & u
 &= (1 - v)u - (-uv) = u - uv + uv = u
 \label{eq:det-Jac}
 \end{align}
+\end{spreadlines}
 $$
 With the $\det\mathbf{J}(u, v)$ computed, we can no express the new function with the changed variables, as shown below in Equation \ref{eq:gamma-reexp}. 
 
@@ -537,7 +552,9 @@ $$
 \end{align}
 $$
 At this point, we need to determine the integration limits of $u$ and $v$ by evaluating them at the limits of $s$ and $t$, which is shown below. 
+
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 &\text{Recall } u = s + t, v = \frac{t}{s+t}, \text{ and } s,y \in\[0, \infty\] \nonumber \\\\
 &\text{If } s = 0 \Rightarrow u = t, v = 1 \nonumber \\\\
@@ -545,16 +562,20 @@ $$
 &\phantom{If } t = 0 \Rightarrow u = s, v = 0 \nonumber \\\\
 &\phantom{If } t = \infty \Rightarrow u = \infty, v = 1 \nonumber
 \end{align}
+\end{spreadlines}
 $$
+
 Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produce integration limits 0 to $\infty$ for $u$ and 0 to 1 for $v$.  Recalling the gamma function (Equation \ref{eq:gamma-function} and the beta function (Equation \ref{eq:beta-function}, the beta function can now be expressed in terms of the gamma function, proving Equation \ref{eq:beta-gamma-proof}. 
-$$
-\begin{align}
-\Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty  u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv \nonumber \\\\
-&=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \text{ }dv \nonumber \\\\
-&=  \Gamma(x + y)\mathrm{B}(x,y) \nonumber \\\\ 
-\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}   \nonumber \\\\
-\end{align}
-$$
+
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \,du\,dv \\\\
+&=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \,dv \\\\
+&=  \Gamma(x + y)\mathrm{B}(x,y) \\\\
+\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}
+\end{align*}
+\end{spreadlines}
+
 
 
 # Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}

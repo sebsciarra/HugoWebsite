@@ -6,19 +6,30 @@ window.MathJax = {
     useLetters: false,
     letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
-  loader: {load: ['[tex]/tagformat']},
+  loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']], //allow inline math
     displayMath: [['$$','$$']],
     tagSide: 'right', //location of equation numbers
     tags: 'all',
-    packages: {'[+]': ['tagformat', 'sections', 'autoload-all']},
+    packages: {'[+]': ['tagformat', 'sections', 'autoload-all', 'mathtools']},
     tagformat: {
       number: (n) => {
         const section = MathJax.config.section;
         return (section.useLetters ? section.letters[section.n] : section.n) + '.' + n;
       }
     }
+  },
+  displayOverflow: 'linebreak',
+    linebreaks: {                  // options for when overflow is linebreak
+      inline: true,                   // true for browser-based breaking of inline equations
+      width: '100%',                  // a fixed size or a percentage of the container width
+      lineleading: .2,                // the default lineleading in em units
+      LinebreakVisitor: null,         // The LinebreakVisitor to use
+    },
+
+    chtml: {
+   mtextInheritFont: true         // font to use for mtext, if not inheriting (empty means use MathJax fonts)
   },
 
   startup: {
