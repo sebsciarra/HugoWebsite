@@ -76,7 +76,8 @@ div[language="bash"] .chroma .line.hl {
 table[id = "codeTable"]{
   border: none; /*width of columns is determined only by the predetermined widths below*/
   table-layout: fixed;
-  min-width: 100%;
+  max-width: 100%;
+  min-width: auto;
   border-collapse: collapse; /*no white space between rows*/
   margin-top: 2rem;/*white space above*/
   margin-bottom: 2rem; /*white space below*/
