@@ -12,11 +12,9 @@
     box-sizing: border-box;
     padding: 0;
     padding-right: 1rem;
-    padding-left: 1rem;
+        padding-left: 2rem;
     border: 0;
-    max-width: 100%;
-    min-width: auto;
-      margin: 0 auto;
+    margin: 0 auto;
   }
 
 
@@ -100,17 +98,17 @@
      background-color: var(--hover-color);
    }
 
-  .toc_container{
-     min-width: 10rem;
-  }
-
 
    .portal {
    position: initial;
    }
 
-
-
-
-
 }
+
+@media (max-width: 600px) {
+
+  .toc_container{
+     min-width: 5rem;
+  }
+}
+
