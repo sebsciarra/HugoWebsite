@@ -33,12 +33,12 @@ code {
 color: #00182d;
  position: relative;
  top: 20px;
- font-family: monospace; 
+ font-family: monospace;
  font-size: 15px;
 }
 
 /*modifies unordered list on homepage */
-ul { 
+ul {
   list-style:none;
   padding-left:0;
 }
@@ -52,4 +52,8 @@ a:visited, a:link {
 /* removes underline when cursor is on a link */
 a:hover {
   text-decoration: none;
+}
+
+.recent_posts{
+  padding-left: 18rem;
 }

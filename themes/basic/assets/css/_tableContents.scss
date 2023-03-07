@@ -12,8 +12,8 @@
   position: sticky;
   top: 2rem;
   height: inherit;
-  width: 14rem;
-
+  max-width: 14rem;
+  min-width: 4rem;
   overflow-y: auto;
   margin-right: 0px;
 }
@@ -21,7 +21,6 @@
 .tableContents{
    position: -webkit-sticky; /* Safari */
    position: sticky;
-
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: bold;
@@ -34,7 +33,6 @@
   z-index: 2; /* set a higher z-index to make it appear on top of other elements */
   overflow-y: auto;
 }
-
 
 
 .tableContentsList a {

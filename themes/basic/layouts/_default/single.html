@@ -31,17 +31,29 @@
 
   </div>
 
-{{ if not (or (eq .Title "About") (eq .Title "ML Resources") (eq .Title "Home")) }}
-  <div class = 'toc_scroll'>
-    <div class = 'toc_container'>
-      <nav class="tableContents">
-        <span>Table of Contents</span>
-      </nav>
+  {{ if not (or (eq .Title "About") (eq .Title "ML Resources") (eq .Title "Home")) }}
+    <div class = 'toc_scroll'>
+      <div class = 'toc_container'>
+        <nav class="tableContents">
+          <span>Table of Contents</span>
+        </nav>
+      </div>
     </div>
-  </div>
-  <button id="toc_button"><i class="fas fa-circle-left"></i></button>
+    <button id="toc_button"><i class="fas fa-circle-left"></i></button>
 
   {{end}}
+
+  {{- if eq .Title "Home"}}
+
+<div class = 'recent_posts'>
+  <h2>Most Recent Posts</h2>
+    <ul>
+    {{ range first 5 .Site.RegularPages.ByDate.Reverse }}
+      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+</div>
+{{end}}
 
 
 </div>
@@ -51,6 +63,8 @@
 
 
 =<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
 
 
 

@@ -1,4 +1,7 @@
 
+main{
+  max-width: 100%;
+}
 
 .blog_post {
   padding: 0;
@@ -9,13 +12,13 @@
    display: flex;
   justify-content: center;
    max-width: 90%;
-    min-width: 10rem;
     padding-right: 2rem;
     margin-left: 1rem;
 }
 
-.post{
 
+
+.post{
     margin: 0 1rem;
 }
 
@@ -69,7 +72,6 @@ time{
 
 .content {
     position: relative;
-
     height: fit-content;
     margin: 0 auto;
     margin-top: 5rem;
