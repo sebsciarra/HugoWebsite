@@ -6,14 +6,31 @@
   flex-direction: column;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  max-width: 42.5rem;
+  margin: 0 auto;
 }
 
+img{
+  max-width: 42.5rem;
+}
 
 .figDivLabel{
   position: relative;
    display: flex;
   color: var(--navbar-color);
   font-weight: bold;
+}
+
+.figTitle{
+  color: var(--navbar-color);
+  padding-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.figNote{
+  position: relative;
+  font-size: 9pt;
+  display: flex;
 }
 
 .figLabel::before {
@@ -41,17 +58,6 @@
   border-left: 1.5px solid var(--hover-color);
 }
 
-.figTitle{
-  color: var(--navbar-color);
-  padding-bottom: 0.5rem;
-  font-style: italic;
-}
-
-.figNote{
-  position: relative;
-  font-size: 9pt;
-  display: flex;
-}
 
 .figNote::before {
   display: block;
@@ -65,11 +71,8 @@
   border-right: 1.5px solid var(--hover-color);
 }
 
-img{
-}
 
 .theta {
 			font-style: normal; /* or font-style: initial; */
-	}
-
+}
 

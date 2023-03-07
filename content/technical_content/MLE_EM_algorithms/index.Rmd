@@ -253,6 +253,141 @@ Y & = 1 + x
 $$
 
 
+# Tables
+
+see [section](#section)
+
+ Table \ref{tab:parameterValues}  Table \ref{tab:parameterValues}
+Another paragraph begins and the spacing should not be too small from table above. 
+
+ Table \ref{tab:parameterValues1}
+ Table \ref{tab:parameterValues}
+ Table \ref{tab:parameterValues1}
+ 
+```{r parameterValues, echo=F, eval=T}
+
+#specify parameters for parameter table 
+theta <- 3
+alpha <- 3 + .32*1
+beta <- 180
+gamma <- 20
+
+sd_alpha <- 0.05
+sd_theta <- 0.05
+sd_beta <- 10
+sd_gamma <- 4
+
+sd_error <- 0.05
+
+
+#table of parameter values
+parameterValues_df <- data.frame('Parameter Means' = c(
+                                         'Baseline, $\\theta$',
+                                         'Maximal elevation, $\\alpha$', 
+                                         'Days-to-halfway elevation, $\\upbeta$', 
+                                         'Triquarter-halfway delta, $\\upgamma$', 
+                                         
+                         'Variability and Covariability Parameters (in Standard Deviations)', 
+                              'Baseline standard deviation, $\\uppsi_{\\uptheta}$',
+                              'Maximal elevation standard deviation, $\\uppsi_{\\upalpha}$', 
+                              'Days-to-halfway elevation standard deviation, $\\uppsi_{\\upbeta}$',
+                              'Triquarter-halfway delta standard deviation, $\\uppsi_{\\upgamma}$',
+                         
+                              'Baseline-maximal elevation covariability, $\\uppsi_{\\uptheta\\upalpha}$',
+                              'Baseline-days-to-halfway elevation covariability, $\\uppsi_{\\uptheta\\upbeta}$',
+                              'Baseline-triquarter-halfway delta covariability, $\\uppsi_{\\uptheta\\upgamma}$',
+                         
+                              'Maximal elevation-days-to-halfway elevation covariability, $\\uppsi_{\\upalpha\\upbeta}$',
+                              'Maximal elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upalpha\\upgamma}$',
+                         
+                              'Days-to-halfway elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upbeta\\upgamma}$',
+                          
+                              'Residual standard deviation, $\\uppsi_{\\upepsilon}$'), 
+                         'Value' = c( theta, alpha, beta, gamma, 
+                                     '', sd_theta, sd_alpha, sd_beta, sd_gamma, 
+                                     0, 0, 0, 0, 0,0,  sd_error), check.names = F)
+
+#round numbers to that they print with two significant numbers
+parameterValues_df$Value <- round(as.numeric(as.character(parameterValues_df$Value)), 3)
+parameterValues_df$Value <- formatC(round(parameterValues_df$Value, 3), format='f', digits=2)
+
+#replace '  NA' with empty string 
+parameterValues_df$Value[parameterValues_df$Value ==" NA"] <- ''
+
+
+kbl(parameterValues_df, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c'),
+    caption = 'Values Used for Multilevel Logistic Function Parameters',    
+    escape = F) %>%
+    add_indent(positions = c(1:4, 6:16), level_of_indent = 2) %>%
+  kable_styling(position = 'center') %>%
+  footnote(general =  "<em>Note</em>. The difference between $\\alpha$ and $\\theta$ corresponds to the 50$\\mathrm{^{th}}$ percentile Cohen's $d$ value of 0.32 in organizational psychology (Bosco et al., 2015). Additional text to see what happens",  threeparttable = T,  escape = F, general_title = ' ') %>% 
+  row_spec(row = 4, extra_css = 'padding-bottom: 1rem; border-bottom: 1.5px solid') %>%
+ row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
+```
+
+```{r parameterValues1, echo=F, eval=T}
+
+#specify parameters for parameter table 
+theta <- 3
+alpha <- 3 + .32*1
+beta <- 180
+gamma <- 20
+
+sd_alpha <- 0.05
+sd_theta <- 0.05
+sd_beta <- 10
+sd_gamma <- 4
+
+sd_error <- 0.05
+
+
+#table of parameter values
+parameterValues_df <- data.frame('Parameter Means' = c(
+                                         'Baseline, $\\theta$',
+                                         'Maximal elevation, $\\alpha$', 
+                                         'Days-to-halfway elevation, $\\upbeta$', 
+                                         'Triquarter-halfway delta, $\\upgamma$', 
+                                         
+                         'Variability and Covariability Parameters (in Standard Deviations)', 
+                              'Baseline standard deviation, $\\uppsi_{\\uptheta}$',
+                              'Maximal elevation standard deviation, $\\uppsi_{\\upalpha}$', 
+                              'Days-to-halfway elevation standard deviation, $\\uppsi_{\\upbeta}$',
+                              'Triquarter-halfway delta standard deviation, $\\uppsi_{\\upgamma}$',
+                         
+                              'Baseline-maximal elevation covariability, $\\uppsi_{\\uptheta\\upalpha}$',
+                              'Baseline-days-to-halfway elevation covariability, $\\uppsi_{\\uptheta\\upbeta}$',
+                              'Baseline-triquarter-halfway delta covariability, $\\uppsi_{\\uptheta\\upgamma}$',
+                         
+                              'Maximal elevation-days-to-halfway elevation covariability, $\\uppsi_{\\upalpha\\upbeta}$',
+                              'Maximal elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upalpha\\upgamma}$',
+                         
+                              'Days-to-halfway elevation-triquarter-halfway delta covariability, $\\uppsi_{\\upbeta\\upgamma}$',
+                          
+                              'Residual standard deviation, $\\uppsi_{\\upepsilon}$'), 
+                         'Value' = c( theta, alpha, beta, gamma, 
+                                     '', sd_theta, sd_alpha, sd_beta, sd_gamma, 
+                                     0, 0, 0, 0, 0,0,  sd_error), check.names = F)
+
+#round numbers to that they print with two significant numbers
+parameterValues_df$Value <- round(as.numeric(as.character(parameterValues_df$Value)), 3)
+parameterValues_df$Value <- formatC(round(parameterValues_df$Value, 3), format='f', digits=2)
+
+#replace '  NA' with empty string 
+parameterValues_df$Value[parameterValues_df$Value ==" NA"] <- ''
+
+
+kbl(parameterValues_df, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c'),
+    caption = 'Values Used for Multilevel Logistic Function Parameters (see Table \\ref{tab:parameterValues})',    
+    escape = F) %>%
+    add_indent(positions = c(1:4, 6:16), level_of_indent = 2) %>%
+  kable_styling(position = 'center') %>%
+  footnote(general =  "<em>Note</em>. The difference between $\\alpha$ and $\\theta$ corresponds to the 50$\\mathrm{^{th}}$ percentile Cohen's $d$ value of 0.32 in organizational psychology (Bosco et al., 2015). see Table \\ref{tab:parameterValues} and Figure \\ref{fig:gg-oz-plot1}.",  threeparttable = T,  escape = F, general_title = ' ') %>% 
+  row_spec(row = 4, extra_css = 'padding-bottom: 1rem; border-bottom: 1.5px solid') %>%
+ row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
+```
+
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:

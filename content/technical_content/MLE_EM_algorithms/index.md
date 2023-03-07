@@ -16,6 +16,150 @@ tags: []
 
 
 
+# Code Chunks
+R code chunk below (see lines <a href="#1">1--22</a>). 
+
+```r {hl_lines=[1,2,5]}
+#this is a comment  more comment my website m , . , y 
+website my website my website
+#my website my website my website my website my website 
+my website my website my   
+#my website my website my website
+print('my website my website my, , , ,. `  website my 
+website my website my website my website
+      website my website my   website my website my 
+      website my website my website my 
+      website')  
+
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),
+     'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+```
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
+
+Python code chunk below (see lines <a href="#23">23--31</a>). 
+```r {hl_lines=[1,3,4],language=python}
+tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
+list_ex = list(["food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
+
+SQL code chunk below (see lines <a href="#32">32--43</a>). 
+```r {hl_lines=[1,3,4],language=sql}
+CREATE TABLE person 
+  (person_id SMALLINT UNSIGNED,
+  fname VARCHAR(20),
+  lname VARCHAR(20),
+  eye_color ENUM('BR','BL','GR'),
+  birth_date DATE,
+  street VARCHAR(30),
+  city VARCHAR(20),
+  state VARCHAR(20),
+  country VARCHAR(20),
+  postal_code VARCHAR(20),
+CONSTRAINT pk_person PRIMARY KEY (person_id)
+```
+This is inline SQL code: {{< inline-src sql >}} CREATE TABLE person {{< /inline-src >}}.
+
+
+Javascript code chunk below (see lines <a href="#44">44--59</a>). 
+```r {hl_lines=[2,3,4],language=java}
+let codeTable = document.createElement("table");
+codeTable.setAttribute('id', "codeTable");
+
+//add rows to table by adding each element of lines
+for (let t = 0; t < lines.length; t++) {
+  let row = codeTable.insertRow(-1);
+
+  let newCell1 = row.insertCell(0); //insert line number
+  let newCell2 = row.insertCell(1);
+  let newCell3 = row.insertCell(2);
+
+  newCell1.innerHTML = "<span class= 'line-number' data-number='" + (t+1)  + "'" + "id = '" + 
+    (t+1) + "'></span>";
+  newCell2.innerHTML = lines[t];
+  newCell3.innerHTML = "";
+}
+```
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
+
+CSS code chunk below (see lines <a href="#60">60--65</a>). 
+```r {hl_lines=[2,3,4],language=css}
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) { width: 85%;position: relative;
+
+  background-color:  rgba(255,105,130, 0.20);
+  border-left: 2pt solid rgba(255,105,130, 0.50);
+  padding: 0;
+}
+```
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
+
+HTML code chunk below (see lines <a href="#66">66--68</a>). 
+
+```r {hl_lines=[2,3],language=html}
+<script src="{{ "js/external_links.js" | relURL }}"></script>
+<script src="{{ "js/number_tables.js" | relURL }}"></script>
+<script src="{{ "js/number_figures.js" | relURL }}"></script>
+```
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
+
+Bash code chunk below (see lines <a href="#57">69--71</a>). 
+
+```r {hl_lines=[1],language=bash}
+ls
+ 
+cd ~/Desktop/Home/blog_posts
+```
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
+
+
+<pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
+[1] 3
+[1] 1.5
+[1] "another"
+NULL
+[1] NA
+[1] TRUE
+[1] "\n"
+$number_measurements
+[1]  5  7  9 11
+
+$spacing
+[1] "equal"    "time_inc"
+</code></pre>
+
+
+Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
+Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2019;liu2022" >}}
+[link](https://github.com/gohugoio/hugo/issues/9442)
+
+If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
+
+
+<pre><code class='python-code'>['Groucho', 'Marx', 'Xavier']
+0
+</code></pre>
+
+
 
 
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
@@ -46,7 +190,21 @@ In order to calculate the probability of obtaining each possible number of heads
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
 
-
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+  </div>
+    <img src="images/pmf_plot.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
+  </div>
+</div>
 
 Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
@@ -170,18 +328,18 @@ $$
 
 Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
 
-$$
+
 \begin{spreadlines}{0.5em}
 \begin{align}
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{n!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{1}{n+1} 
-\label{eq:likelihood-proof}  
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \\\\ 
+&= \frac{n!}{(n + 1)!}  \\\\ 
+&= \frac{1}{n+1}. \label{eq:likelihood-proof} 
 \end{align} 
 \end{spreadlines}
-$$
 
 
 Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
+
+
 
 
