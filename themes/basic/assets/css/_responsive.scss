@@ -108,8 +108,12 @@
 @media (max-width: 600px) {
 
   .toc_container{
-     max-width: 5rem;
+     max-width: 7rem;
      overflow-x: auto;
+  }
+
+  .blog_post{
+    min-width: 25%;
   }
 }
 
