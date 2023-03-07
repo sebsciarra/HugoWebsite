@@ -1,14 +1,7 @@
 
 //see https://github.com/mathjax/MathJax/issues/3013
 window.MathJax = {
-   options: {
-    enableMenu: true,          // set to false to disable the menu
-    menuOptions: {
-      settings: {
-        displayOverflow: 'linebreak'
-        }
-      }
-   },
+
   section: {
     n: -1,
     useLetters: false,
@@ -35,7 +28,7 @@ window.MathJax = {
    displayOverflow: 'linebreak'
   },
 
-  linebreaks: {                  // options for when overflow is linebreak
+  linebreak: {                  // options for when overflow is linebreak
       inline: true,                   // true for browser-based breaking of inline equations
       width: '100%',                  // a fixed size or a percentage of the container width
       lineleading: .2,                // the default lineleading in em units

@@ -79,24 +79,6 @@
 
   /*TOC button  */
 
-   .toc-toggle-button {
-     position: absolute;
-     display: flex;
-     min-width: 60px; /*needed so that padding does not compress horizontal bars */
-     min-height: 50px;/*needed so that padding does not compress horizontal bars */
-     padding: 15px;
-     top: 25px;
-     right: 120px;
-   }
-
-    .toc-toggle-button:hover {
-     background-color: var(--hover-color);
-   }
-
-
-    .tocButton:hover {
-     background-color: var(--hover-color);
-   }
 
 
    .portal {
@@ -111,6 +93,10 @@
      max-width: 7rem;
      overflow-x: auto;
   }
+
+.blog_post{
+  padding-right: 2rem;
+}
 
   .blog_post{
     min-width: 10%;

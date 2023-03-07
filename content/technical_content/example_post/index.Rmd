@@ -7,7 +7,7 @@ output:
   bookdown::html_document2: 
      keep_md: true
 always_allow_html: true
-bibFile: content/technical_content/em_algorithm/biblio.json    
+bibFile: content/technical_content/example_post/biblio.json    
 tags: []
 ---   
 
@@ -15,13 +15,13 @@ tags: []
 ```{r package_loading_1, include=F}
 #load packages   
 library(easypackages) 
-packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'papaja', 'shiny',
-              'ggbrace', 'cowplot', 'knitr', 'RefManageR', 'reticulate', 'gluedown', 'formatR')
+packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'shiny',
+               'knitr', 'RefManageR', 'gluedown', 'formatR')
 libraries(packages)  
 
 #use_python(python = "/usr/local/bin/python3.9")
 
-knitr::opts_chunk$set(comment = NA)
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, results = 'hide', warning = FALSE)
 # knitr hook to use Hugo highlighting options
 knitr::knit_hooks$set(
   source = function(x, options) {
@@ -418,11 +418,7 @@ x <- generate_apa7_figure(fig_label = '\ref{fig:gg-oz-plot}', fig_title = 'Title
 
 ```
 
-<div class= "figure"> <caption class = "figTop"> <span class="figLabel">Figure \ref{fig:gg-oz-plot}</span> <br> <span class = "figTitle"> <em>Title of Figure</em></span> </caption> <img src=images/gg-oz-plot-1.png> <span class="figNote"><em>Note. </em>Life expectancy from 1952 - 2007 for Australia. Life expentancy increases steadily except from 1962 to 1969. We can safely say that our life expectancy is higher than it has ever been!</span> </div>   
- 
 
-
-Figure \ref{fig:gg-oz-plot} 
 
 
 # References

@@ -9,9 +9,10 @@ output:
 always_allow_html: true
 header-includes: 
   - \usepackage{amsmath}
-bibFile: content/technical_content/em_algorithm/biblio.json    
+bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
 tags: []
 ---   
+
 
 
 
@@ -45,89 +46,142 @@ In order to calculate the probability of obtaining each possible number of heads
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
 
-```r 
-#create function that computes probability mass function with following arguments:
-  ##num_trials = number of trials (10  [coin flips] in the current example)
-  ##prob_success = probability of success (or heads; 0.50 in the current example)
-  ##num_successes = number of successes (or heads; [1-10] in the current example)
 
-compute_binom_mass_density <- function(num_trials, prob_success, num_successes){
+
+Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
+
+With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea of what outcomes to expect after flipping the coin 10 times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's probability of heads after data have been collected; in computing the probability mass function, the probability of heads ($\theta$) is fixed. Thus, the researcher must use a different type of distribution to estimate the coin's probability of heads. 
+
+
+# Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome
+
+Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With this data, the researcher wants to determine the probability value of heads that most likely produced the data. In other words, the researcher wants to find the value of $\theta$ that maximizes the possibility of observing the data, $\max_{\theta \in \Theta} P(h = 7, n = 10|\theta)$. Before continuing, it is vital to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.  
+
+
+## Likelihoods are not Probabilities
+
+
+
+
+Although probability density functions compute the probability that a set of data values have been observed given a fixed set of parameter valuess, we are seldom interested in this probability. Practitioners and researchers
+are more interested in the probability that a certain set of parameter values characterize the larger population (i.e, $p(\theta|y)$). When trying to determine the most likely set of
+parameter values, we use likelihood functions. Thus, the likelihood of a set of parameters given the observed data is represented as $L(\theta|y)$. Importantly, likelihoods do not 
+represent the probability that a given set of parameter values defines the population (i.e., $P(\theta)$); we sample data and want to infer parameter values at the population level. With
+probabilities, we assume knowledge of the population parameter values and calculate the probability of observing any given set of data. Using perhaps more relatable terms, the 
+hypothesis is assumed to be true when calculating conditional probabilities and the data are varied. For likelihoods, the data is fixed and the hypothesis is varied. Note that Bayes
+theorem can be used to convert likelihoods ($L(\theta|y)$) to probabilities ($P(\theta)$). 
+
+To compute likelihoods, the function used to compute the above probabilities is used. Although confusing, the parameter values (the probability of success in this example [$\theta_1$])
+are now being manipulated and not the data (see Figure \@ref(fig:likelihood-dist). Importantly, the sum of all the likelihoods does not sum to 1 ($\int^n_0 f(y|n, \theta) \neq 1$), 
+which explains why likelihoods are sometimes called *unnormalized probabilities*. Although it seems unintuitive that the sum of the likelihoods is not 1, remember that likelihoods do not
+describe the probability of a set of parameter being true (i.e., $p(\theta)$); if they did, then the integral would sum to 1. Given that we have two parameters, we can also produce 
+another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
+both parameters simultaneously. 
+
+
+## Resources 
+# References{#.unnumbered}
+
+
+{{< bibliography cited >}}
+
+# Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
+<div style="display:none">\(\setSection{A}\)</div>
+
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
+
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
+
+For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
+
+\begin{align}
+1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  
+\label{eq:binomial-sum-one}
+\end{align}
+
+Importantly, it can be proven that all probabilities sum to one by using the binomial theorem, which states below in Equation \ref{eq:binomial} that 
+
+\begin{align}
+(a + b)^n =  \sum^n_{k=0} {n \choose k} a^k(b)^{n-k}. 
+\label{eq:binomial}
+\end{align}
+
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
+
+\begin{spreadlines}{0.5em}
+\begin{align*}
+(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
+\end{align*}
+\end{spreadlines}
+
+
+For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
+
+
   
-  #computation of binomial term (i.e., number of ways of obtaining a given number of successes)
-  num_success_patterns <- (factorial(num_trials)/(factorial(num_successes)*factorial(num_trials-num_successes)))
-  
-  #computation of the number of possible ways of obtaining a given number of successes (i.e., heads)
-  prob_single_pattern <- (prob_success)^num_successes*(1-prob_success)^(num_trials-num_successes)
-  
-  
-  probability <- num_success_patterns*prob_single_pattern
-  
-  pmf_df <- data.frame('probability' = probability, 
-                   'num_successes' = num_successes, 
-                   'prob_success' = prob_success, 
-                   'num_trials' = num_trials)
-  
-  return(pmf_df)
-}
+$$
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
+$$
 
 
+In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
+\label{eq:int-sum-likelihood}\\\\
+&= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
+\label{eq:int-sum-likelihood-binomial}
+\end{align}
+\end{spreadlines}
+$$
 
-num_trials <- 10
-prob_success <- 0.5
-num_successes <- 0:10  #manipulated variable 
-
-prob_distribution <- compute_binom_mass_density(num_trials, prob_success, num_successes)
-
-library (tidyverse) 
-library(grDevices) #needed for italic()
-
-#create data set for shaded rectangle that indicates the most likely value 
-##index of highest probability 
-highest_number_ind <- which.max(prob_distribution$probability) 
-##most likely number of successes
-most_likely_number <- prob_distribution$num_successes[highest_number_ind] 
-##probability value of most likely number of successes
-highest_prob <- max(prob_distribution$probability) 
-
-rectangle_data <-data.frame(
-  'xmin' = most_likely_number - 0.10, 
-  'xmax' = most_likely_number + 0.10,
-  'ymin' = 0,
-  'ymax' = highest_prob)
-
-
-#create pmf plot 
-pmf_plot <- ggplot(data = prob_distribution, aes(x = num_successes, y = probability)) + 
-  geom_bar(stat = 'identity', 
-           fill =  ifelse(test = prob_distribution$num_successes == most_likely_number, 
-                                no =  "#002241", 
-                                yes = "#00182d")) +  #calculate sum of probability for each num_successes
- ## geom_rect(inherit.aes = F, 
- ##           data = rectangle_data, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
- ##           fill = 'grey50', color = NA, alpha = 0.2) +
-  scale_y_continuous(name = bquote(italic("P(h")*"|"*italic(theta == .(prob_success)*","~n == .(num_trials)*")"))) + 
-  scale_x_continuous(name = bquote("Number of Heads (i.e., "*italic("h")~")"), 
-                     breaks = seq(from = 0, to = 10, by = 1)) +
-  theme_classic(base_family = "Helvetica", base_size = 18) +
-  theme(axis.title.y = element_text(face = 'italic'), 
-        
-        #embolden the most likely number of heads 
-        axis.text.x = 
-          element_text(face = 
-                         ifelse(test = prob_distribution$num_successes == most_likely_number, 
-                                no =  "plain", 
-                                yes = "bold")), 
-        text = element_text(color = "#002241"),
-        line = element_line(color = "#002241"), 
-        axis.text = element_text(color = "#002241"))
-
-ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
-```
+At this point, it is important to realize that $ \int_0^1 \theta^h(1-\theta)^{n-h}$ can be restated in terms of the beta function, $\mathrm{B}(x, y)$, which is shown below. 
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt 
+\label{eq:beta-function} \\\\ 
+\text{Let }&t = \theta \nonumber \\\\
+\mathrm{B}(x, y) &= \int_0^1 \theta^{x-1}(1-\theta){^{y-1}} \phantom{c} d\theta \nonumber \\\\
+\text{Let }&x = h +1 \text{ and } y = n -h +1 \nonumber \\\\
+\mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \nonumber \\\\
+&= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
+\end{align}
+\end{spreadlines}
+$$
 
 
-# Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}
+Therefore, the function in Equation \ref{eq:int-sum-likelihood-binomial} can be restated below in Equation \ref{eq:beta-restate} as 
+$$
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta = {n \choose h} \mathrm{B}(h+1, n-h+1).
+\label{eq:beta-restate}
+\end{align}
+$$
+At this point, another proof becomes important because it allows us to express the beta function in terms of another function that will, ultimately, allow us to simplify Equation \ref{eq:beta-restate} and prove that likelihoods do not sum to one and are, therefore, not probabilities.  Specifically, the beta function, $\mathrm{B}(x, y)$ can be stated in terms of the gamma function $\Gamma$ such that 
 
-# Appendix E: Proof of Binomial Theorem  {#proof-binomial}
+$$
+\begin{align}
+\Gamma(x) = (x - 1)!.
+\end{align}
+$$
 
+Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+ \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
+&= \frac{n!}{(n + 1)!} \nonumber \\\\ 
+&= \frac{1}{n+1} 
+\label{eq:likelihood-proof}  
+\end{align} 
+\end{spreadlines}
+$$
+
+
+Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
 
 

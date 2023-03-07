@@ -76,9 +76,9 @@ div[language="bash"] .chroma .line.hl {
 table[id = "codeTable"]{
   border: none; /*width of columns is determined only by the predetermined widths below*/
   table-layout: fixed;
-  max-width: 100%;
-  min-width: auto;
+  max-width: 2000px;
   border-collapse: collapse; /*no white space between rows*/
+  margin: 0 auto;
   margin-top: 2rem;/*white space above*/
   margin-bottom: 2rem; /*white space below*/
 }
@@ -97,29 +97,22 @@ table[id = 'codeTable'] td {
 /*removes white space between columns */
 table[id = "codeTable"] td:nth-child(3){
   padding: 0;
-  width: 7.5%;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+      min-width: 55px;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
 }
 
 /*slightly increase spacing between borders and number */
 table[id = "codeTable"] td:nth-child(1){
    padding-right: 0.25rem;
    text-align: right;
-   width: 7.5%;
+   min-width: 40px;
    -webkit-user-select: none; /* Safari */
    -ms-user-select: none; /* IE 10 and IE 11 */
    user-select: none; /* Standard syntax */
 }
-
-//table[id = "codeTable"]  table td:nth-child(3) {
-//    width: 7.5%;
-//    -webkit-user-select: none; /* Safari */
-//    -ms-user-select: none; /* IE 10 and IE 11 */
-//    user-select: none; /* Standard syntax */
-//}
-
 
 
 
@@ -131,6 +124,8 @@ code[data-lang='r'] table td:nth-child(2) {
   border-left: 2pt solid rgba(116, 170, 219, 0.50);
   padding: 0;
 }
+
+
 
 
 pre {
@@ -206,16 +201,15 @@ div[language ='bash'] code[data-lang='r'] table td:nth-child(2) {
 
 /*OUTPUT CODE TABLES */
 /* change text color of bash code*/
-code[class = "r-code"] table td:nth-child(2)  {
+code table td:nth-child(2)  {
   display: block;
   color: var(--hover-color); /*color of parentheses*/
   background-color: rgba(116, 170, 219, 0.30);
   border-left: 2pt solid rgba(116, 170, 219, 0.50);
   margin: 0 auto; /*centers block of text*/
-  max-width: 100%;
+  min-width: 100%;
   white-space: pre-line;
   font-size: 12;
-  height: inherit;
 }
 
 
@@ -229,8 +223,8 @@ code[class = "python-code"]  table td:nth-child(2)   {
   max-width: 100%;
   white-space: pre-line;
   font-size: 12;
-   height: inherit;
 }
+
 
 
 /*BUTTON FORMATTING */
@@ -239,11 +233,10 @@ code[class = "python-code"]  table td:nth-child(2)   {
   z-index: 1;
   right: 0px;
   top: 0;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  width: 55px;
-  min-width: 40px;
+   min-width: 55px;
   color: white;
   opacity: .95;
   background-color: var(--navbar-color);
@@ -279,13 +272,12 @@ button[id = "collapseButton"] {
   position: absolute;
   top: 0;
   left: 0;
-  min-width: 40px;
-  width: 100%;
+  min-width: 55px;
   height: 20px;
   color: white;
   font-family: Helvetica;
+  font-size: 13px;
   letter-spacing: 0.5px;
-  font-size: 15px;
   background-color: rgba(57, 57, 57, 1);
   border: 1pt solid rgba(57, 57, 57, 1);
   border-top-left-radius: 0;
@@ -310,7 +302,7 @@ button[id = "collapseButton"]:hover{
 
 [data-button]::after {
   content: attr(data-button);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
   font-family: Helvetica;
@@ -357,4 +349,5 @@ button[id = "collapseButton"]:hover{
   z-index: 1;
   padding-left: 0;
 }
+
 

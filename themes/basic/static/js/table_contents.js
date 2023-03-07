@@ -79,9 +79,11 @@ let isTocExpanded = true; // flag variable to keep track of current state
 tocButton.addEventListener('click', function() {
   if (isTocExpanded) {
     tocScroll.style.display = 'none';
+    tocButton.innerHTML = '<i class="fa-solid fa-circle-arrow-left"></i>';
     isTocExpanded = false;
   } else {
     tocScroll.style.display = 'block';
+    tocButton.innerHTML = '<i class="fas fa-circle-right"></i>';
     isTocExpanded = true;
   }
 });

@@ -9,7 +9,7 @@ output:
 always_allow_html: true
 header-includes: 
   - \usepackage{amsmath}
-bibFile: content/technical_content/em_algorithm/biblio.json    
+bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
 tags: []
 ---   
 
@@ -76,6 +76,181 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 #})
 
 ```
+
+# Code Chunks
+R code chunk below (see lines <a href="#1">1--22</a>). 
+
+```{r r-code, echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 1,',', "2", ",", "5", ']'))}
+#this is a comment  more comment my website m , . , y website my website my website
+#my website my website my website my website my website my website my website my   
+#my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website
+      website my website my   website my website my website my website my website my 
+      website')  
+
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),
+     'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+
+
+``` 
+This is inline R code:{{< inline-src r >}}print(NULL){{< /inline-src >}}.
+
+Python code chunk below (see lines <a href="#23">23--31</a>). 
+```{python, echo=T,  eval=F, hlopts=list(hl_lines= paste0('[', 1,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3', tidy=F}
+tup = ['Groucho', 'Marx', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier', 'Xavier']
+list_ex = list(["food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454, "food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+This is inline Python code: {{< inline-src python >}}print('NULL'){{< /inline-src >}}.
+
+SQL code chunk below (see lines <a href="#32">32--43</a>). 
+```{r echo=T, engine = 'sql', eval=F, hlopts=list(hl_lines= paste0('[', 1,',',3, ',', 4,']'), language = 'sql'), tidy=F}
+CREATE TABLE person 
+  (person_id SMALLINT UNSIGNED,
+  fname VARCHAR(20),
+  lname VARCHAR(20),
+  eye_color ENUM('BR','BL','GR'),
+  birth_date DATE,
+  street VARCHAR(30),
+  city VARCHAR(20),
+  state VARCHAR(20),
+  country VARCHAR(20),
+  postal_code VARCHAR(20),
+CONSTRAINT pk_person PRIMARY KEY (person_id)
+```
+This is inline SQL code: {{< inline-src sql >}} CREATE TABLE person {{< /inline-src >}}.
+
+
+Javascript code chunk below (see lines <a href="#44">44--59</a>). 
+```{r java-code, engine = 'js', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'java')}
+let codeTable = document.createElement("table");
+codeTable.setAttribute('id', "codeTable");
+
+//add rows to table by adding each element of lines
+for (let t = 0; t < lines.length; t++) {
+  let row = codeTable.insertRow(-1);
+
+  let newCell1 = row.insertCell(0); //insert line number
+  let newCell2 = row.insertCell(1);
+  let newCell3 = row.insertCell(2);
+
+  newCell1.innerHTML = "<span class= 'line-number' data-number='" + (t+1)  + "'" + "id = '" + 
+    (t+1) + "'></span>";
+  newCell2.innerHTML = lines[t];
+  newCell3.innerHTML = "";
+}
+```
+This is inline Javascript code: {{< inline-src js >}}let codeTable = document.createElement("table");{{< /inline-src >}}. 
+
+CSS code chunk below (see lines <a href="#60">60--65</a>). 
+```{r css-code, engine =  'css', echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'css')}
+div[language ='java'] code[data-lang='r'] table td:nth-child(2) { width: 85%;position: relative;
+
+  background-color:  rgba(255,105,130, 0.20);
+  border-left: 2pt solid rgba(255,105,130, 0.50);
+  padding: 0;
+}
+```
+This is inline CSS code: {{< inline-src css >}} background-color:  rgba(255,105,130, 0.20);{{< /inline-src >}}.
+
+HTML code chunk below (see lines <a href="#66">66--68</a>). 
+
+```{r html-code, echo=T, eval=F, hlopts=list(hl_lines= paste0('[', 2,',',3,']'),language = 'html')}
+<script src="{{ "js/external_links.js" | relURL }}"></script>
+<script src="{{ "js/number_tables.js" | relURL }}"></script>
+<script src="{{ "js/number_figures.js" | relURL }}"></script>
+```
+This is inline HTML code: {{< inline-src html >}} <script src="{{ "js/external_links.js" | relURL }}"></script>{{< /inline-src >}}.
+
+Bash code chunk below (see lines <a href="#57">69--71</a>). 
+
+```{bash, engine = 'bash',  eval=F, hlopts=list(hl_lines= paste0('[', 1,']'), language = 'bash')}
+ls
+ 
+cd ~/Desktop/Home/blog_posts
+```
+This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
+
+
+```{r show-results,  class_name = 'r-code', results = 'hold', echo=F, eval=T, hlopts=list(hl_lines= paste0('[', 2,',', "3-5", ']'))}
+#this is a comment  more comment my website m , . , y website my website my website
+#my website my website my website my website my website my website my website 
+#my website my website my website my website my website
+print('my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website')  
+print(1 + 2)
+mean(x = c(1, 2))
+print('another')
+print(NULL)
+print(NA)
+print(TRUE)
+"\n"
+list('number_measurements' = c(5, 7, 9, 11),'spacing' = c('equal', 'time_inc'))
+
+var <- function(x1, x2){
+shiny::HTML("&nbsp;")
+
+  if (x1 > 2) {print(x1)} 
+  else {print (x2)}
+}
+
+``` 
+
+
+Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
+Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2019;liu2022" >}}
+[link](https://github.com/gohugoio/hugo/issues/9442)
+
+If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
+
+
+```{python, echo=F, eval=T,  class_name = 'python-code', results = 'hold', hlopts=list(hl_lines= paste0('[', 2,',',3, ',', 4,']'), language = 'python'), engine.path = '/usr/bin/python3'}
+
+tup = ['Groucho', 'Marx', 'Xavier']
+list_ex = list(["food", 538, True, 1.454])
+sorted(tup)
+
+list_ex2 = list([1 + 2, "a" * 5, 3])  
+
+#deleting variables 
+del(list_ex2)
+list_ex.count(2)  
+```
+
+
+```{r echo=F}
+fit = lm(dist ~ speed, data = cars)
+b = coef(summary(fit))
+```
+
+
+The slope of the regression is `r b[2, 1]`. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) 
+
+$$
+\begin{alignat}{2}
+I & = \int \rho R^{2} dV & + P \nonumber \\\\
+Y & = 1 + x
+\label{eq:multiline}
+\end{alignat}
+$$
 
 
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
@@ -232,7 +407,7 @@ Continuing with the coin flipping example, the researcher flips the coin 10 time
 
 
 
-```{r likelihood-dist, echo=F}
+```{r likelihood-dist, echo=F, eval=F}
 num_trials <- 10
 num_successes <- 7
 prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
@@ -268,241 +443,6 @@ describe the probability of a set of parameter being true (i.e., $p(\theta)$); i
 another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
 both parameters simultaneously. 
 
-```{r likelihood-dist2, echo=F}
-num_trials <- 30
-num_successes <- 21
-prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
-
-likelihood_distribution <- compute_binom_mass_density(num_trials, prob_success, num_successes)
-
-ggplot(data = likelihood_distribution, aes(x = prob_success, y = probability)) + 
-  geom_line() + 
-  scale_y_continuous(name = bquote(paste(L, "(", theta[1], " | ", theta[2] == .(num_trials), ", ", y, ")"))) + 
-  scale_x_continuous(name = bquote(paste("Probability of success (", theta, ")")), breaks = seq(0, 1, 0.1)) +
-  theme_classic()
-
-likelihood_distribution[ 51,] 
-prob_distribution$probability
-
-p <- seq(from = 0, to = 1.00, by = 0.00001)
-
-likelihood <- p^6 * (1-p)^4
-sum(likelihood)*0.003968254
-
-```
-
-## Resources 
-Myung (2003); Etz(2018); https://www.youtube.com/watch?v=IhoEwC9R8pA; https://www.youtube.com/watch?v=w3drLH-DFpE; 
-
-
-# Maximum Likelihood Estimation: Estimating the Set of Parameter Values That Most Likely Produce a Specific Outcome
-
-With a formula to compute likelihood distributions, a common goal is to find the set of parameter values that have the highest likelihood. That is, we want to find the set of parameter
-values that maximize the probability of producing the observed data ($\theta_{MLE}$). To find $\theta_{MLE}$, we must find the vector $\theta$ that produces the highest likelihood
-value. Mathematically, this means that we find the value on the likelihood curve where the change with respect to $\theta$ is zero ($\frac{\delta L(\theta|y)}{\delta \theta} = 0$). 
-Revisiting our likelihood function, it becomes apparent that computing the partial derivative of the likelihood function with respect to $\theta$ becomes computationally unfeasible when the
-number of observations reaches even that of a small sample size (e.g.,$n=100$). With the derivative of the Bernoulli equation involving a length combination of the quotient, product, and chain rules, the derivative of a multi-iteration likelihood function would be completely intractable. 
-
-$$  
-\begin{aligned}
-
-L(\theta|y = y_1, y_2, ... , y_{100}) &= f_1(y_1|\theta)f_2(y_2|\theta)...f_{100}(y_{100}|\theta) \\
- &= \Bigg({\theta_1 \choose y_1}(\theta_2)^{y_1}(1-\theta_2)^{(\theta_1-y_1)}\Bigg)\Bigg({\theta_1 \choose y_2}(\theta_2)^{y_2}(1-\theta_2)^{(\theta_1-y_2)}\Bigg)...\Bigg({\theta_1 \choose y_n}(\theta_2)^{y_n}(1-\theta_2)^{(\theta_1-y_n)}\Bigg) \\ 
- L(\theta|y) &= \prod^{100}_{i=1}f_i(y_i|\theta)
-
-\end{aligned}
-$$
-\noindent
-To enable an efficient computation of the derivative, we apply a log transformation to the equation to drastically simplify the equation 
-
-$$
-\log[ L(\theta|y)] = \log \Big[{\theta_1 \choose y_1}\Big] + y\log[(\theta_2)] + (\theta_1-y)\log(1-\theta_2)
-$$
-\noindent
-Taking the partial derivative with respect to $\theta$, we get 
-
-$$  
-\begin{aligned}
-\frac{\delta L}{\delta \theta_2} &= \frac{\delta}{\delta \theta_2}  \Bigg(\log \Big[{\theta_1 \choose y_1}\Big] + y\log[(\theta_2)] + (\theta_1-y)\log(1-\theta_2) \Bigg) \\ 
-&= 0 + y(\frac{1}{\theta_2}) + (\theta_1-y)(-1)(\frac{1}{1-\theta_2}) \\ 
-0 &= \frac{y}{\theta_2}- \frac{\theta_1-y}{1-\theta_2} \\ 
-\frac{\theta_1-y}{1-\theta_2} &= \frac{y}{\theta_2} \\ 
-\theta_2\theta_1 - \theta_2y &= y - \theta_2y \\ 
-\theta_2\theta_1 &=y \\
-\theta_2 &= \frac{y}{\theta_1}
-
-\end{aligned}
-$$
-\noindent
-Therefore, the maximum of the likelihood function is found by dividing the observed number of successes ($y$) by the number of trials ($\theta_1$). Returning to the previous example where 7 successes ($y_1 = 7$) occurred across 10 coin flips ($\theta_1 = 10$), the value of success probability that maximizes the probability of observing the data is 
-$\theta_2 = \theta_{MLE} \frac{7}{10} = .70$. To make this example more realistic, consider that, across 10 $k$ iterations where 10 coin flips occur in each iteration, the number of 
-successes is $y = [1, 6, 4, 7, 3, 4 ,5, 10, 5, 3]$. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to $\theta_2$
-because the equation will contain $n=10$ product terms. Thankfully, we can derive a more general equation for calculating the value of $\theta_2$ where the likelihood function is maximized. Consider a simple example where there are only two coin flips ($y = [y_1, y_2]$). 
-
-$$  
-\begin{aligned}
-&= 0 + y_1(\frac{1}{\theta_2}) + (\theta_1-y_1)(-1)(\frac{1}{1-\theta_2}) + y_2(\frac{1}{\theta_2}) + (\theta_1-y_2)(-1)(\frac{1}{1-\theta_2}) \\ 
-0 &= \frac{y_1}{\theta_2}- \frac{\theta_1-y_1}{1-\theta_2} + \frac{y_2}{\theta_2}- \frac{\theta_1-y_2}{1-\theta_2} \\ 
-\frac{2\theta_1-y_1-y_2}{1-\theta_2} &= \frac{y_1 + y_2}{\theta_2} \\ 
-2\theta_1\theta_2 - \theta_2y_1 -\theta_2y_2  &= y_1 + y_2 - \theta_2y_1 -\theta_2y_2 \\ 
-2\theta_1\theta_2  &=y \\
-\theta_2 &= \frac{y_1 + y_2}{2\theta_1} = \frac{\sum^{n}_{i=1} y_i}{k\theta_1}
-
-\end{aligned}
-$$
-\noindent
-Therefore, the value of $\theta_2$ where the likelihood function is maximized is `r `theta_2`. 
-
-```{r multitrial-likelihood, echo=F}
-y <-c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
-theta_1 <- 10
-k <- 10
-
-theta_2 <- sum(y)/(k*theta_1)
-
-```
-
-### Maximum likelihood estimation with a continuous variable (closed-form solution)
-
-Let's now consider a situation where we collect a series of 100 data points defined by a mean and variance. Given that the data are continuous, the Gaussian distribution function can be
-used to model the data such that the probability of observing a given data point ($Y_i$) given a specific mean($\mu$) and variance ($\sigma$) is 
-
-$$ P(Y_i|\sigma, \mu) = \frac{1}{\sqrt{2\pi\sigma^2}}e\Big(\frac{-Y_i - \mu Y_i}{2\sigma^2})    $$
-\noindent 
-and the likelihood of observing a given set of parameters can be computed using 
-
-$$
-\begin{aligned}
-L(\sigma^2, \mu) &= \prod^n_{i=1} f(Y_i|\sigma^2, \mu) = \prod^n_{i=1}\frac{1}{\sqrt{2\pi\sigma^2}}e^{\Big(-\frac{(Y_i - \mu)^2}{2\sigma^2}\Big)} \\ 
-\end{aligned}
-$$
-\noindent
-Note that, in addition to taking the log likelihood to reduce computation time, the log likelihood of the Gaussian density function is used to avoid dealing with excessively small values. Computers lose accuracy with very small values(known as *underflow*) and so using log likelihoods prevents computations from incurring numerical error. The log likelihood Gaussian equation is obtained
-by applying the product and power rules of logarithms. Given that the equation contains Euler's number, we will use log of base $e$ or the natural log ($\ln$). Before apply the log 
-transformation, some simplifying is necessary. Let's begin with the first part of the Gaussian likelihood function. Given that it is independent of the observations, it is a constant. 
-The product of a constant is the constant raised to the number of times it is computed ($n$ times)
-
-$$ 
-\begin{aligned}
-\prod^n_{i=1}\frac{1}{\sqrt{2\pi\sigma^2}} &= \Big(\frac{1}{\sqrt{2\pi\sigma^2}} \Big)^n \\ 
- &= (2\pi\sigma^2)^{-\frac{n}{2}}
-\end{aligned} 
-
-$$
-\noindent
-Moving on to the second part. 
-
-$$ 
-\begin{aligned}
-\prod^n_{i=1}e^{\Big(-\frac{(Y_i - \mu Y_i)^2}{2\sigma^2}\Big)} &= \prod^n_{i=1}e^{\Big(-\frac{1}{2\sigma^2}(Y_i - \mu)^2\Big)} \\ 
- &= e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}
-\end{aligned} 
-
-$$
-\noindent
-Combining the simplifications for the first and second portions, we get 
-
-$$ 
-\begin{aligned}
-L(\sigma^2, \mu) &= \prod^n_{i=1}(2\pi\sigma^2)^{-\frac{1}{2}}e^{\Big(-\frac{1}{2\sigma^2}(Y_i - \mu)^2\Big)} \\ 
-&= (2\pi\sigma^2)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}
-
-\end{aligned} 
-
-$$
-
-
-$$ 
-\begin{aligned}
-\text{Apply product rule } &= \ln \Big((\sqrt{2\pi\sigma^2})^{-\frac{n}{2}}\Big) + \ln \Bigg(e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Big)}\Bigg) \\ 
-\text{Apply power rule } &=-\frac{n}{2}\ln \Big((\sqrt{2\pi\sigma^2}) + -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu Y_i)^2 \ln(e) \\ 
-\ln L(\sigma^2, \mu)  &= -\frac{n}{2}\ln (\sqrt{2\pi\sigma^2}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2  \\ 
-
-\end{aligned}
-
-$$
-
-Each parameter can be solved for by taking the derivative with respect to that parameter. To solve for $\mu$, 
-$$\begin{aligned}
-\frac{\delta \ln L}{\delta \mu} &= \frac{\delta}{\delta \mu} \Bigg(-\frac{n}{2}\ln (\sqrt{2\pi\sigma^2}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2\Bigg) \\ 
-&= 0 - \frac{\delta}{\delta \mu} \underbrace{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(Y_i - \mu)^2 \Big)}_{\text{product rule}} \\ 
-&= \sum_{i=1}^n\frac{\delta}{\delta \mu}(-\frac{1}{2\sigma^2}) \cdot(Y_i - \mu)^2  + -\frac{1}{2\sigma^2} \cdot \frac{\delta}{\delta \mu}(Y_i - \mu)^2 \\
-&= \sum_{i=1}^n \Bigg( 0 -\frac{1}{2\sigma^2} \cdot \frac{\delta}{\delta \mu}(Y_i - \mu)^2 \Bigg) \\ 
-&= -\frac{1}{2\sigma^2}  \sum_{i=1}^n (\frac{\delta}{\delta \mu}(Y_i - \mu)^2) \\ 
-&=-\frac{1}{2\sigma^2}  \sum_{i=1}^n 2(Y_i - \mu) \cdot -1 \\ 
-&= \frac{1}{\sigma^2}  \sum_{i=1}^n (Y_i - \mu) \\ 
-\text {Set  } \frac{\delta \ln L}{\delta \mu} = 0 \\ 
-0 &= \frac{1}{\sigma^2}  \sum_{i=1}^n (Y_i - \mu) \\ 
-0 &= \sum_{i=1}^n y_i - \sum_{i=1}^n \mu \\ 
-0 &= \sum_{i=1}^n y_i - n\mu \\ 
-\mu &= \frac{1}{n}\sum_{i=1}^n y_i
-
-\end{aligned}$$
-\noindent
-If $\sigma^2$ is solved for, we get 
-
-$$
-\begin{aligned}
-
-\frac{\delta \ln L}{\delta \sigma^2} &= \frac{1}{2\sigma^2} \Big(-n + \frac{1}{\sigma^2} \sum_{i=1}^n(y_i - \mu)^2 \Big) \\ 
-\text {Setting } \frac{\delta \ln L}{\delta \sigma^2} = 0 \\
-0 &= \frac{1}{2\sigma^2} \Big(-n + \frac{1}{\sigma^2} \sum_{i=1}^n(y_i - \mu)^2 \Big) \\ 
-n\sigma^2 &=  \sum_{i=1}^n(y_i - \mu)^2  \\ 
-\sigma^2 &= \frac{1}{n}  \sum_{i=1}^n(y_i - \mu)^2  \\ 
-
-
-\end{aligned}
-$$
-
-```{r gaussian_dist, echo=F}
-#generate scores from Gaussian distribution 
-mu <- 5
-sd <- 5
-n <- 500
-
-ind_scores <- rnorm(n = n, mean = mu, sd = sd)
-
-mu_mle <- mean(ind_scores)
-sigma_mle <- var(ind_scores)
-
-compute_log_like <- function(ind_scores, parameters){
-  
-  mu_value <- parameters[1]
-  sd_value <- parameters[2]
-
-  n <- length(ind_scores)
-  
-  log_like <- -.5*n*log(2*pi) -.5*n*log(sd_value^2) - (1/(2*sd_value^2))*sum((ind_scores-mu_value)^2)
-  return(-log_like)
-}
-
-sd_values <- seq(from = 1, to = 10, by=1)
-mu_values <- seq(from = 1, to = 10, by=1)
-
-#find maximum likelihood estimates 
-MLE_estimates <- optim(par=c(1,1), compute_log_like, 
-      ind_scores = ind_scores, 
-      method = "L-BFGS-B",  
-      hessian=TRUE, 
-      lower = c(0, 0),   
-      upper = c(10, 10))
-                    
-# Examine estimates
-MLE_par <- MLE_estimates$par
-MLE_SE <- sqrt(diag(solve(MLE_estimates$hessian)))
-MLE <- data.table(param = c("mu", "sd"),
-                  estimates = MLE_par,
-                  sd = MLE_SE)
-
-kable(MLE)
-compute_log_like(ind_scores, parameters = c(4.959401, 4.841803)) #returns same value of 1498.113
-
-
-
-```
-
-Returning to our example, we can then compute the maximum likelihood estimates for $\mu$ and $\sigma^2$ using the above closed-form solutions. Therefore, $\mu_{MLE}= $ `r mu_mle` and 
-$\sigma^2_{MLE} = $ `r sigma_mle`. 
 
 ## Resources 
 http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
@@ -616,8 +556,8 @@ $$
 \begin{align}
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
 &= \frac{n!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{1}{n + 1}. 
-\label{eq:likelihood-proof}
+&= \frac{1}{n+1} 
+\label{eq:likelihood-proof}  
 \end{align} 
 \end{spreadlines}
 $$
