@@ -43,6 +43,8 @@ div[language="bash"] .chroma .line.hl {
          margin: 0 auto; /*centers block of text*/
          white-space: normal;
          font-size: 12px;
+          white-space: break-spaces;
+  word-break: break-all;
 }
 
 .content .inline-src:has(.language-python) {
@@ -201,6 +203,8 @@ div[language ='bash'] code[data-lang='r'] table td:nth-child(2) {
 
 /*OUTPUT CODE TABLES */
 /* change text color of bash code*/
+
+
 code[class = "r-code"] table td:nth-child(2)  {
   display: block;
   color: var(--hover-color); /*color of parentheses*/

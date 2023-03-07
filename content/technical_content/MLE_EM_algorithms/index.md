@@ -132,32 +132,8 @@ cd ~/Desktop/Home/blog_posts
 This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
 
 
-<pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
-[1] 3
-[1] 1.5
-[1] "another"
-NULL
-[1] NA
-[1] TRUE
-[1] "\n"
-$number_measurements
-[1]  5  7  9 11
-
-$spacing
-[1] "equal"    "time_inc"
-</code></pre>
 
 
-Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
-Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2019;liu2022" >}}
-[link](https://github.com/gohugoio/hugo/issues/9442)
-
-If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
-
-
-<pre><code class='python-code'>['Groucho', 'Marx', 'Xavier']
-0
-</code></pre>
 
 
 
@@ -189,22 +165,6 @@ In order to calculate the probability of obtaining each possible number of heads
 
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
-
-<div class="figure">
-  <div class="figDivLabel">
-    <caption>
-      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
-    </caption>
-  </div>
-   <div class="figTitle">
-    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
-  </div>
-    <img src="images/pmf_plot.png" width="80%" height="80%"> 
-  
-  <div class="figNote">
-      <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
-  </div>
-</div>
 
 Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
