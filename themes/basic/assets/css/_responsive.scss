@@ -113,7 +113,17 @@
   }
 
   .blog_post{
-    min-width: 25%;
+    min-width: 10%;
   }
 }
+
+@media (max-width: 330px) {
+
+  .toc_container{
+     max-width: 5rem;
+  }
+
+}
+
+
 
