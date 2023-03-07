@@ -618,8 +618,8 @@ n\sigma^2 &amp;=  \sum_{i=1}^n(y_i - \mu)^2  \\
 
 \end{aligned}\]</span>
 <p>$$</p>
-<p>Returning to our example, we can then compute the maximum likelihood estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> using the above closed-form solutions. Therefore, $<em>{MLE}= $ 5.0224026 and
-$^2</em>{MLE} = $ 24.3066419.</p>
+<p>Returning to our example, we can then compute the maximum likelihood estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> using the above closed-form solutions. Therefore, $<em>{MLE}= $ 5.2078498 and
+$^2</em>{MLE} = $ 24.2569688.</p>
 </div>
 <div id="resources-1" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Resources</h2>
@@ -733,15 +733,23 @@ sum(likelihood_distribution$probability) #compute integral</code></pre>
 <div id="proof-beta-gamma" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Appendix C: Proof of Relation Between Beta and Gamma Functions</h1>
 <p>Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span> below will be proven</p>
-<span class="math display">\[
+<p><span class="math display">\[
 \begin{align}
 \mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
 \label{eq:beta-gamma-proof}
 \end{align}
 \]</span>
 To begin, let’s write out the expansions of the gamma function, <span class="math inline">\(\Gamma(x)\)</span>, and the numerator of Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>, (x)(y), where
-$$
-<p>$$
+<span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\Gamma(x) &amp;= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt
+\label{eq:gamma-function} \\\\
+\Gamma(x)\Gamma(y) &amp;= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
+\label{eq:gamma-numerator}
+\end{align}
+\end{spreadlines}
+\]</span>
 Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> shows the gamma function which will be useful as a reference and Equation <span class="math inline">\(\ref{eq:gamma-numerator}\)</span> shows the expansion of the numerator in Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>. To prove Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>, we will begin by changing the variables of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> in Equation <span class="math inline">\(\ref{eq:gamma-numerator}\)</span> by reexpressing them in terms of <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>. Importantly, when changing variables in a double integral, the formula below in Equation <span class="math inline">\(\ref{eq:double-integral}\)</span> must be followed:</p>
 <p><span class="math display">\[
 \begin{align}

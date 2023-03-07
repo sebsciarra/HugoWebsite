@@ -9,7 +9,7 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  width: 18rem; /*keeps same width as window changes width */
+  width: 20rem; /*keeps same width as window changes width */
   height: 100vh; /*entire height of window  */
   background: var(--navbar-color);
 }
