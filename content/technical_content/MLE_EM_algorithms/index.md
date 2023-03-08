@@ -13,6 +13,21 @@ bibFile: content/technical_content/MLE_EM_algorithms/biblio.json
 tags: []
 ---   
 
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+  </div>
+    <img src="images/pmf_plot.png" width="100%" height="100%"> 
+  
+  <div class="figNote">
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
+  </div>
+</div>
 
 
 # Code Chunks
