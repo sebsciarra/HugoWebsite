@@ -5,7 +5,7 @@ window.MathJax = {
   section: {
     n: -1,
     useLetters: false,
-    letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},

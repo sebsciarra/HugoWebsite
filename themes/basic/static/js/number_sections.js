@@ -24,8 +24,17 @@ for (let i = 0; i < h1Elements.length; i++) {
 
 
 
-const appendixAHeader = document.querySelector('h1[id^="appendix-a"]');
-const div = document.createElement("div");
-div.style.display = "none";
-div.innerHTML = "\\(\\setSection{A}\\)";
-appendixAHeader.after(div);
+// Get the <h1> element with innerText that starts with 'Appendix A'
+const appendixHeader = document.querySelector("h1.appendix");
+ console.log(appendixHeader);
+if (appendixHeader && appendixHeader.innerText.startsWith("Appendix A")) {
+
+  const div = document.createElement("div");
+  div.style.display = "none";
+  div.innerHTML = "\\(\\setSection{A}\\)";
+  appendixHeader.after(div);
+
+}
+
+
+

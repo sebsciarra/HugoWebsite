@@ -124,7 +124,9 @@ dd{
 
   .hugo-cite-bibliography {
      word-break: break-all;
+       max-width: 80%;
   }
+
 }
 
 
@@ -132,6 +134,7 @@ dd{
 .hugo-cite-citation{
   height: 100px;
 }
+
 
 
 

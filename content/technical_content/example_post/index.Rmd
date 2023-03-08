@@ -1,6 +1,6 @@
 ---
-title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
-draft: false
+title: "Example Post" 
+draft: true
 summary: 'Explanation of post' 
 article_type: technical
 output:
@@ -397,15 +397,18 @@ kbl(parameterValues_df, booktabs = TRUE, format = 'html',
  row_spec(row = 5, extra_css = 'font-weight: bold; border-bottom: 1.5px solid')
 ```
 
-# Text Excerpt With Equations 
+
+# Excerpt Section Example
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
+
 $$
 \begin{align}
 P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 \label{eq:prob-mass-function}
 \end{align}
 $$
+
 where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a given number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips ${n \choose h}$.
 <div style="display:none">\(\nextSection\)</div>
 As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
@@ -424,9 +427,7 @@ $$
 
 {{< bibliography cited >}}
 
-# Appendix A: Example of an Appendix   {#proof-pmf}
-
-<div style="display:none">\(\setSection{A}\)</div>
+# Appendix A: Example of an Appendix With Equations   {#proof-pmf}
 
 To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
 
@@ -459,195 +460,6 @@ Given the striking resemblance between the binomial function in Equation \ref{eq
 For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
 
 
-# Appendix B: Proof That Likelihoods are not Probabilities  {#proof-likelihood}
-
-As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those set to be fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed ($\theta$, $n$) and the data are varied ($h$; notice how, in Appendix A, probabilities were summed across all possible values of $h$). With likelihoods, however, the data are fixed ($h$) and the parameters are varied ($\theta$, $n$). For the current proof, it is sufficient to only allow $\theta$ to vary. To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see [Appendix A](#proof-pmf)), likelihoods likewise can never ne negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to 1. Thus, the following proposition must be proven: 
- 
-$$
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
-$$
-In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
-\label{eq:int-sum-likelihood}\\\\
-&= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
-\label{eq:int-sum-likelihood-binomial}
-\end{align}
-\end{spreadlines}
-$$
-At this point, it is important to realize that $ \int_0^1 \theta^h(1-\theta)^{n-h}$ can be restated in terms of the beta function, $\mathrm{B}(x, y)$, which is shown below. 
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathrm{B}(x, y) &= \int_0^1 t^{x-1}(1-t){^{y-1}} \phantom{c} dt 
-\label{eq:beta-function} \\\\ 
-\text{Let }&t = \theta \nonumber \\\\
-\mathrm{B}(x, y) &= \int_0^1 \theta^{x-1}(1-\theta){^{y-1}} \phantom{c} d\theta \nonumber \\\\
-\text{Let }&x = h +1 \text{ and } y = n -h +1 \nonumber \\\\
-\mathrm{B}(h+1, n-h+1) &= \int_0^1 \theta^{h+1-1}(1-\theta){^{n-h+1-1}} \phantom{c} d\theta \nonumber \\\\
-&= \int_0^1 \theta^{h}(1-\theta){^{n-h}} \phantom{c} d\theta
-\end{align}
-\end{spreadlines}
-$$
-Therefore, the function in Equation \ref{eq:int-sum-likelihood-binomial} can be restated below in Equation \ref{eq:beta-restate} as 
-$$
-\begin{align}
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta = {n \choose h} \mathrm{B}(h+1, n-h+1).
-\label{eq:beta-restate}
-\end{align}
-$$
-At this point, another proof becomes important because it allows us to express the beta function in terms of another function that will, ultimately, allow us to simplify Equation \ref{eq:beta-restate} and prove that likelihoods do not sum to one and are, therefore, not probabilities.  Specifically, the beta function, $\mathrm{B}(x, y)$ can be stated in terms of the gamma function $\Gamma$ such that 
-
-$$
-\begin{align}
-\mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
-\label{eq:beta-gamma-relation}
-\end{align}
-$$
-For a proof of the beta-gamma relation, see [Appendix C](#proof-beta-gamma). Thus, Equation \ref{eq:beta-restate} can be stated in terms of the gamma function such that 
-
-$$
-\begin{align}
-\int_0^1 L(\theta|h, n) \phantom{c} d\theta  = {n \choose h} \frac{\Gamma(h+1)\Gamma(n-h+1)}{\Gamma(n+2)}.
-\label{eq:binomial-gamma}
-\end{align}
-$$
-One nice feature of the gamma function is that it can be stated as a factorial (for a proof, see [Appendix D](#proof-gamma-factorial)) such that 
-
-$$
-\begin{align}
-\Gamma(x) = (x - 1)!.
-\end{align}
-$$
-Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{n!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{1}{n+1} 
-\label{eq:likelihood-proof}  
-\end{align} 
-\end{spreadlines}
-$$
-
-Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
-
-```r 
-num_trials <- 10 #n
-num_successes <- 7 #h
-prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.e., there are 100 dtheta values)
-
-likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
-sum(likelihood_distribution$probability) #compute integral
-```
-<pre><code class='r-code'>[1] 9.09091
-</code></pre>
-# Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-beta-gamma}
-
-Equation \ref{eq:beta-gamma-proof} below will be proven 
-
-$$
-\begin{align}
-\mathrm{B}(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
-\label{eq:beta-gamma-proof}
-\end{align}
-$$
-To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and the numerator of Equation \ref{eq:beta-gamma-proof}, \Gamma(x)\Gamma(y), where 
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\Gamma(x) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt 
-\label{eq:gamma-function} \\\\ 
-\Gamma(x)\Gamma(y) &= \int^\infty_0 t^{x-1}e^{-t} \phantom{c} dt \int^\infty_0 s^{y-1}e^{-s} \phantom{c} ds.
-\label{eq:gamma-numerator}
-\end{align}
-\end{spreadlines}
-$$
-Equation \ref{eq:gamma-function} shows the gamma function which will be useful as a reference and Equation \ref{eq:gamma-numerator} shows the expansion of the numerator in Equation \ref{eq:beta-gamma-proof}. To prove Equation \ref{eq:beta-gamma-proof}, we will begin by changing the variables of $s$ and $t$ in Equation \ref{eq:gamma-numerator} by reexpressing them in terms of $u$ and $v$. Importantly,  when changing variables in a double integral, the formula below in Equation \ref{eq:double-integral} must be followed: 
-
-$$
-\begin{align}
- \underset{G}{\iint} f(x, y) \text{ }dx \text{ }dy =  \underset{}{\iint}f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv, 
-\label{eq:double-integral}
-\end{align}
-$$
-where $|\mathbf{J}(u, v)|$ is the Jacobian of $u$ and $v$ (for a great explanation, see [Jacobian](https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives/jacobian/v/the-jacobian-matrix) and [change of variables](https://www.youtube.com/watch?v=wUF-lyyWpUc)). To apply Equation \ref{eq:double-integral}, we will first determine the expressions of $s$ and $t$ in terms of $u$ and $v$ to obtain $g(u,v)$ and $h(u,v)$, which are, respectively, provided below in Equation \ref{eq:s-rexp} and Equation \ref{eq:t-rexp}. 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\text{Let } u &= s + t, \text{  } v = \frac{t}{s+t} \nonumber \\\\
-\text{then }  \text{ }s &= u - t = u - uv = g(u, v)
-\label{eq:s-rexp} \\\\
-t &= u - s = u - (u - uv) = uv = h(u, v).
-\label{eq:t-rexp}
-\end{align}
-\end{spreadlines}
-$$
-With the expression for $g(u,v)$ and $h(u,v)$, the determinant of the Jacobian of $u$ and $v$ can now be computed, as shown below and provided in Equation \ref{eq:det-Jac}. 
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\det\mathbf{J}(u, v) &= 
-\det\begin{bmatrix}
-\frac{\partial g}{\partial u} & \frac{\partial g}{\partial v} \\
-\frac{\partial h}{\partial u} & \frac{\partial h}{\partial v}
-\end{bmatrix} \nonumber \\\\
-&= \det\begin{bmatrix}
-1-v & -u \\
-v & u 
-\end{bmatrix} \nonumber \\\\ 
-&= (1 - v)u - (-uv) = u - uv + uv = u
-\label{eq:det-Jac}
-\end{align}
-\end{spreadlines}
-$$
-With the $\det\mathbf{J}(u, v)$ computed, we can no express the new function with the changed variables, as shown below in Equation \ref{eq:gamma-reexp}. 
-
-$$
-\begin{align}
-\underset{G}{\iint} f(g(u, v), h(u, v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv &= \underset{R}{\iint} \Gamma(g(u, v))\Gamma(h(u,v))\det(\mathbf{J}(u, v)) \text{ }du \text{ }dv \nonumber \\\\
-&= \underset{R}{\iint}  uv^{x-1}e^{-uv}  (u - uv)^{y-1}e^{-(u - uv)}u d\text{ } u \text{ }dv \nonumber \\\\
-&= \underset{R}{\iint}  u^{x-1}v^{x-1} e^{-uv} (u(1 - v)^{y-1})e^{-(u - uv)}u \text{ } du\text{ }dv \nonumber \\\\
-&= \underset{R}{\iint}  u^{x-1}u^{y-1}u e^{-uv}e^{-u + uv}  v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv \nonumber \\\\
-&= \underset{R}{\iint}  u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \text{ } du\text{ }dv 
-\label{eq:gamma-reexp}
-\end{align}
-$$
-At this point, we need to determine the integration limits of $u$ and $v$ by evaluating them at the limits of $s$ and $t$, which is shown below. 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-&\text{Recall } u = s + t, v = \frac{t}{s+t}, \text{ and } s,y \in\[0, \infty\] \nonumber \\\\
-&\text{If } s = 0 \Rightarrow u = t, v = 1 \nonumber \\\\
-&\phantom{If } s = \infty \Rightarrow u = \infty, v = 0 \nonumber \\\\
-&\phantom{If } t = 0 \Rightarrow u = s, v = 0 \nonumber \\\\
-&\phantom{If } t = \infty \Rightarrow u = \infty, v = 1 \nonumber
-\end{align}
-\end{spreadlines}
-$$
-
-Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produce integration limits 0 to $\infty$ for $u$ and 0 to 1 for $v$.  Recalling the gamma function (Equation \ref{eq:gamma-function} and the beta function (Equation \ref{eq:beta-function}, the beta function can now be expressed in terms of the gamma function, proving Equation \ref{eq:beta-gamma-proof}. 
-
-\begin{spreadlines}{0.5em}
-\begin{align*}
-\Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \,du\,dv \\\\
-&=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \,dv \\\\
-&=  \Gamma(x + y)\mathrm{B}(x,y) \\\\
-\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}
-\end{align*}
-\end{spreadlines}
-
-
-
-# Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}
-
-# Appendix E: Proof of Binomial Theorem  {#proof-binomial}
 
 
 

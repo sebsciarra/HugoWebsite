@@ -144,7 +144,7 @@ tags.forEach(function(tag){
  var tag_language_width = afterElement.offsetWidth;
  tag.removeChild(afterElement);   //remove child
 
-  console.log(tag_language_width);
+
 
  //set padding right of first row in second column for code blocks
  if (tag.previousSibling && tag.previousSibling.style && tag.parentNode.innerHTML.startsWith('<span')) {
@@ -234,7 +234,7 @@ codeTables_2.forEach(function(table){
       //for the first row of the second column, replace contents with empty line
           child_table.rows[0].cells[1].innerHTML = '</span></span><span class="line"><span class="cl"><div class="language-box-collapsed" data-language = "'+ coding_language + '"></div><br>';
       child_table.rows[0].style.height = '20px'; //set height of button
-      console.log(child_table.rows[0].style.height);
+
    button.setAttribute("data-button",  'Expand');
    isCollapsed = false;
 

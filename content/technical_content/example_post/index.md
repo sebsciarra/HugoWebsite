@@ -1,12 +1,14 @@
 ---
-title: "Example post" 
-draft: false
-summary: 'This is a summary of the post that briefly explains the main points of the post to provide an anchor for the reader.' 
+title: "Example Post" 
+draft: true
+summary: 'Explanation of post' 
 article_type: technical
 output:
-  bookdown::html_document2: 
+  bookdown::html_document2:
      keep_md: true
 always_allow_html: true
+header-includes: 
+  - \usepackage{amsmath}
 bibFile: content/technical_content/example_post/biblio.json    
 tags: []
 ---   
@@ -15,8 +17,7 @@ tags: []
 
 
 
-That's some text with a footnote.[^1]$^{,}$ 
-[^1]: And that's the footnote (see Table \ref{tab:parameterValues}).
+
 
 # Code Chunks
 R code chunk below (see lines <a href="#1">1--22</a>). 
@@ -146,30 +147,40 @@ $spacing
 </code></pre>
 
 
-Some explanatory text Some explanatory tex {{< cite "fine2019;george2000" >}} Some explanatory text Some explanatory textSome explanatory text{{< cite "fine2019;cole2003" >}}
-Some explanatory text Some explanatory textSome explanatory  text{{< cite "fine2019;liu2022" >}}
-[link](https://github.com/gohugoio/hugo/issues/9442)
-
-If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
-
 
 <pre><code class='python-code'>['Groucho', 'Marx', 'Xavier']
 0
 </code></pre>
 
 
+# In-Text Citations 
+Some explanatory text {{< cite "fine2019;george2000" >}}. More text. {{< cite "fine2019;cole2003" >}}
+*italic text*
+[link](https://github.com/gohugoio/hugo/issues/9442)
+
+If you liked how these _"generics"_ work in SystemVerilog and how the looks, check out the
 
 
+# Figures 
 
-The slope of the regression is 3.9324088. This is gamma $\gamma\$. $\frac{1}{2}$ This is (see Equation \ref{eq:multiline}; another comment) 
+Figure \ref{fig:prob-mass-binom} is below. 
 
-$$
-\begin{alignat}{2}
-I & = \int \rho R^{2} dV & + P \nonumber \\\\
-Y & = 1 + x
-\label{eq:multiline}
-\end{alignat}
-$$
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+  </div>
+    <img src="images/pmf_plot.png" width="100%" height="100%"> 
+  
+  <div class="figNote">
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the number of heads that is most likely to occur with an unbiased coin and 10 coin flips, with the corresponding bar in darker blue  indicating the corresponding probability.</span> 
+  </div>
+</div>
 
 # Tables
 
@@ -345,17 +356,66 @@ Another paragraph begins and the spacing should not be too small from table abov
 </table>
 
 
-# Figures
+# Excerpt Section Example
 
+Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
 
+$$
+\begin{align}
+P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
+\label{eq:prob-mass-function}
+\end{align}
+$$
 
+where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a given number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips ${n \choose h}$.
+<div style="display:none">\(\nextSection\)</div>
+As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
 
-
+$$
+\begin{align}
+P(h = 4|\theta = 0.50, n = 10) &= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \nonumber \\\\
+&= \frac{10!}{4! (10 - 4)!}(0.50)^{4}(1-0.50)^{(10-4)} \nonumber \\\\
+&= 210(0.5)^{10}\nonumber \\\\
+&= 0.205 \nonumber
+\end{align}
+$$
 
 # References
 
+
 {{< bibliography cited >}}
 
+# Appendix A: Example of an Appendix With Equations   {#proof-pmf}
+
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
+
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
+
+For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
+
+\begin{align}
+1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  
+\label{eq:binomial-sum-one}
+\end{align}
+
+Importantly, it can be proven that all probabilities sum to one by using the binomial theorem, which states below in Equation \ref{eq:binomial} that 
+
+\begin{align}
+(a + b)^n =  \sum^n_{k=0} {n \choose k} a^k(b)^{n-k}. 
+\label{eq:binomial}
+\end{align}
+
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
+
+\begin{spreadlines}{0.5em}
+\begin{align*}
+(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
+\end{align*}
+\end{spreadlines}
+
+
+For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
 
 
 
