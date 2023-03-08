@@ -21,7 +21,7 @@ libraries(packages)
 
 #use_python(python = "/usr/local/bin/python3.9")
 
-knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, results = 'hide', warning = FALSE)
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE,  warning = FALSE)
 # knitr hook to use Hugo highlighting options
 knitr::knit_hooks$set(
   source = function(x, options) {

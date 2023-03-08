@@ -203,12 +203,7 @@ div[language ='bash'] code[data-lang='r'] table td:nth-child(2) {
 }
 
 
-/*OUTPUT CODE TABLES */
-.highlight{
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-}
+
 
 /*color of second column of tables containing R code*/
 code[data-lang='r'] table td:nth-child(2) {

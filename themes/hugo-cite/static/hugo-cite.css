@@ -29,8 +29,6 @@ dd{
 }
 
 .hugo-cite-group {
-
-  display: inline-block;
   position: relative; /* needed to reference box to pop up and for parentheses to wrap reference  */
   font-size: 12px; /* reduce to avoid some breaks */
   color: var(--navbar-color);
@@ -48,7 +46,7 @@ dd{
     border: 1px solid var(--navbar-color);
     padding: 1rem;
     position: absolute;
-    width: 350px;
+
     z-index: 1;
     bottom: 140%;
     left: 0;
@@ -61,6 +59,15 @@ dd{
       opacity .3s ease 0s;
     opacity: 1;
     transform: translateY(-8px);
+
+     word-break: break-all;
+  position: absolute;
+  top: 0;
+  width: 150px;
+  overflow-x: auto;
+  height: 100px
+  left: 0;
+  z-index: 4;
 }
 
 .hugo-cite-group:hover
@@ -118,12 +125,14 @@ dd{
   .hugo-cite-bibliography {
      word-break: break-all;
   }
-
-  .hugo-cite-citation {
-    display: none;
-  }
-
-
 }
+
+
+
+.hugo-cite-citation{
+  height: 100px;
+}
+
+
 
 
