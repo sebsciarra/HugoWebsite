@@ -12,13 +12,16 @@
 }
 
 .figDivLabel{
+  width: 45rem;
   position: relative;
    display: flex;
   color: var(--navbar-color);
   font-weight: bold;
 }
 
+
 .figTitle{
+   max-width: inherit;
   color: var(--navbar-color);
   padding-bottom: 0.5rem;
   font-style: italic;
@@ -31,6 +34,8 @@
   font-size: 9pt;
   display: flex;
 }
+
+
 
 .figLabel::before {
   display: block;
@@ -74,56 +79,36 @@
 .theta {
 			font-style: normal; /* or font-style: initial; */
 }
-.figure {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  margin: 0 auto;
-  max-width: 40rem;
-  height: auto;
-}
-
-.figDivLabel {
-  position: relative;
-  display: flex;
-  color: var(--navbar-color);
-  font-weight: bold;
-}
-
-.figTitle {
-  color: var(--navbar-color);
-  padding-bottom: 0.5rem;
-  font-style: italic;
-  max-width: inherit;
-}
-
-.figNote {
-  max-width: inherit;
-  position: relative;
-  font-size: 9pt;
-  display: flex;
-}
-
-/* Media Queries */
-@media screen and (max-width: 768px) {
-  .figure {
-    max-width: 20rem;
-  }
 
 
 .figDivLabel{
-   max-width: inherit;
+  width: 45rem;
+}
+
+/* Media Queries */
+/* Media Queries */
+@media (max-width: 1350px) {
+
+  .figure {
+    max-width: 25rem;
+    min-width: 25rem;
+  }
+
+  .figDivLabel {
+    width: 25rem;
+    max-width: 100%;
+  }
+
 }
 
 
-}
 
-@media screen and (max-width: 480px) {
+
+@media (max-width: 450px){
+
  .figure {
-    max-width: 20rem;
+    min-width: 15rem;
+    max-width: 15rem;
   }
 
 
