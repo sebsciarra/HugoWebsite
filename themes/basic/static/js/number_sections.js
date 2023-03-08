@@ -21,3 +21,11 @@ for (let i = 0; i < h1Elements.length; i++) {
   h1Element.insertAdjacentElement('afterend', spanElement);
 }
 
+
+
+
+const appendixAHeader = document.querySelector('h1[id^="appendix-a"]');
+const div = document.createElement("div");
+div.style.display = "none";
+div.innerHTML = "\\(\\setSection{A}\\)";
+appendixAHeader.after(div);
