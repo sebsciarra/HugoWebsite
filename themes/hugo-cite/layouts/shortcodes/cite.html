@@ -51,7 +51,7 @@
     {{- end -}}
   {{- end -}}
 {{- else -}}
- 
+
   {{/* -------------------- b) Positional -------------------- */}}
   {{- if lt (len .Params) 1 -}}
     {{- errorf $errorMissingValue (len .Params) -}}
@@ -101,7 +101,7 @@
 {{- $bibliography := getJSON $bibliographyPath -}}
 {{- /* -------------------- END Bibliography path -------------------- */ -}}
 
- 
+
   <span class="hugo-cite-intext"
         itemprop="citation">(
 
@@ -123,8 +123,8 @@
             {{- $reference := . -}}
 
             {{- /* -------------------- BEGIN Display authors (In-text author display[i.e., last names')] -------------------- */ -}}
-            
-          
+
+
             {{- $authors := .author }}
             {{- $totalAuthors := len $authors -}}
 
@@ -134,42 +134,42 @@
               {{- if not $reference.author -}}
                 {{- $displayAuthors = $reference.editor -}}
               {{- end -}}
-              
+
               {{- if not $displayAuthors -}}
                 <span rel="noauthor">
                   {{- i18n "apa_no_author_abbr" | default "n.a." | upper -}}
                 </span>
-                
+
               {{- else -}}
                 {{- range $authorIndex, $author := $displayAuthors | first 1 -}}
                   <span itemprop="author" itemscope itemtype="https://schema.org/Person">
                     {{- with $author.given -}}
                       <meta itemprop="givenName" content="{{ . }}">
                     {{- end -}}
-                    
-                    
-                    
+
+
+
                     {{- with $author.family -}}
                       <span itemprop="familyName">{{ . | markdownify }}</span>
                     {{- end -}}
                   </span>
-                  {{- if and (eq $authorIndex 0) (gt (len $displayAuthors) 1) -}} <!--comma after first name --> 
+                  {{- if and (eq $authorIndex 0) (gt (len $displayAuthors) 1) -}} <!--comma after first name -->
                   {{- end -}}
-                  
+
                   {{- if and (eq (len $displayAuthors) 1) (eq $authorIndex 2) -}},&amp;&#32;
                   {{- end -}}
                 {{- end -}}
-                
-             
-                
+
+
+
               {{- end -}}
-              
-            
+
+
             {{- end -}}
 
             {{- /* -------------------- END Display authors -------------------- */ -}}
 
-       
+
             {{- $currentPages := index $pages $keyIndex -}}
             {{- with $currentPages -}},&#32;
             {{- $formatedPages := (printf "p.&nbsp;%s" $currentPages) | safeHTML -}}
@@ -202,58 +202,58 @@
     {{- /* END loop over keys*/ -}}
     )</span>
 
-<script type="text/javascript">  
-              
+<script type="text/javascript">
+
 
    document.addEventListener("DOMContentLoaded", function(e) {
-     
-     
-      // find all in-text citations 
+
+
+      // find all in-text citations
      //text_citations = document.querySelectorAll("a[href ^='#']");
       //extract entire bibligraphy (HTMLcollection) and extract just references (i..e, div tags)  //
       biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
-      references = biblio.getElementsByTagName('div'); 
-      
-      // for each reference in the bibliography, find the corresponding in-text reference and modify it 
+      references = biblio.getElementsByTagName('div');
+
+      // for each reference in the bibliography, find the corresponding in-text reference and modify it
       for (let i = 0; i < references.length; i++) {
-        
-        // get href name of current text_citation and remove hashtag 
-        //id_name = text_citations[i].getAttribute('href').replace('#', ''); 
-        
-        // get id name of bibliography  entry 
+
+        // get href name of current text_citation and remove hashtag
+        //id_name = text_citations[i].getAttribute('href').replace('#', '');
+
+        // get id name of bibliography  entry
         biblio_entry_id = references[i].getAttribute('id');
 
        // find reference div in bibliography using the above indexes id_name
-       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id)); 
-      
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
         in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
-        
-        // because there may be more than one instance where a reference is cited in the paper, we start a new for loop 
-            for (let i = 0; i < in_text_ref.length; i++) { 
-              
-              // extract family names and publish date from reference 
-              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  // extract family names names 
-              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; // publish date 
-              
+
+        // because there may be more than one instance where a reference is cited in the paper, we start a new for loop
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              // extract family names and publish date from reference
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  // extract family names names
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; // publish date
+
               // extract text content of family_names_raw (it is a NodeList)
-              var family_names = []; 
-  
+              var family_names = [];
+
               for (let i = 0; i < family_names_raw.length; i++) {
                 family_names.push(family_names_raw[i].textContent);
               }
-              
+
                // format in-text citation according to apa7
               if(family_names.length > 2) {
-              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates; 
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
                 }   else if (family_names.length == 2) {
-                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates; 
-                }  else { 
-                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates; 
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
                 }
             }
           } // for loop close
     });// function close
-              
+
 </script>
-          
-  
+
+

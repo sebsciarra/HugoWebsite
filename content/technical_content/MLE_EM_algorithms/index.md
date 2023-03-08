@@ -132,8 +132,38 @@ cd ~/Desktop/Home/blog_posts
 This is inline bash code: {{< inline-src bash >}}cd ~/Desktop/Home/blog_posts{{< /inline-src >}}.
 
 
+<pre><code class='r-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
+[1] 3
+[1] 1.5
+[1] "another"
+NULL
+[1] NA
+[1] TRUE
+[1] "\n"
+$number_measurements
+[1]  5  7  9 11
+
+$spacing
+[1] "equal"    "time_inc"
+</code></pre>
+
+<pre><code class='python-code'>[1] "my website my website my, , , ,. `  website my website my website my website my website my website my website my website my website my website my website my website my website"
+[1] 3
+[1] 1.5
+[1] "another"
+NULL
+[1] NA
+[1] TRUE
+[1] "\n"
+$number_measurements
+[1]  5  7  9 11
+
+$spacing
+[1] "equal"    "time_inc"
+</code></pre>
 
 
+Some explanatory {{< cite "fine2019" >}} 
 
 
 
@@ -198,7 +228,7 @@ both parameters simultaneously.
 
 
 ## Resources 
-# References{#.unnumbered}
+# References
 
 
 {{< bibliography cited >}}
