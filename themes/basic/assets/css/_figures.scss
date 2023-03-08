@@ -12,7 +12,7 @@
 }
 
 .figDivLabel{
-  width: 45rem;
+  max-width: 45rem;
   position: relative;
    display: flex;
   color: var(--navbar-color);
@@ -25,7 +25,6 @@
   color: var(--navbar-color);
   padding-bottom: 0.5rem;
   font-style: italic;
-  max-width: inherit;
 }
 
 .figNote{
@@ -81,10 +80,6 @@
 }
 
 
-.figDivLabel{
-  width: 45rem;
-}
-
 /* Media Queries */
 /* Media Queries */
 @media (max-width: 1350px) {
@@ -95,13 +90,10 @@
   }
 
   .figDivLabel {
-    width: 25rem;
-    max-width: 100%;
+    max-width: 25rem;
   }
 
 }
-
-
 
 
 @media (max-width: 450px){
