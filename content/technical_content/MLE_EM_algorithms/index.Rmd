@@ -77,6 +77,9 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 
 ```
 
+
+
+
 # Code Chunks
 R code chunk below (see lines <a href="#1">1--22</a>). 
 
