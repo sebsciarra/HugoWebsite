@@ -29,6 +29,7 @@ dd{
 }
 
 .hugo-cite-group {
+
   display: inline-block;
   position: relative; /* needed to reference box to pop up and for parentheses to wrap reference  */
   font-size: 12px; /* reduce to avoid some breaks */
@@ -36,10 +37,7 @@ dd{
   line-height: 1.25;
 
 }
-.cite-container {
-  white-space: nowrap;
-  overflow-x: auto;
-}
+
 
 /* specification for popup */
 .hugo-cite-group
@@ -50,7 +48,7 @@ dd{
     border: 1px solid var(--navbar-color);
     padding: 1rem;
     position: absolute;
-    max-width: 350px;
+    width: 350px;
     z-index: 1;
     bottom: 140%;
     left: 0;
@@ -115,19 +113,17 @@ dd{
 }
 
 
-@media (max-width: 414px) {
-
+@media (max-width: 550px) {
 
   .hugo-cite-bibliography {
      word-break: break-all;
   }
 
   .hugo-cite-citation {
-
+    display: none;
   }
 
 
 }
-
 
 

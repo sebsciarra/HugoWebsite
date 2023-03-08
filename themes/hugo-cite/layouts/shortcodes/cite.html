@@ -102,8 +102,7 @@
 {{- /* -------------------- END Bibliography path -------------------- */ -}}
 
 
-  <span class="hugo-cite-intext"
-        itemprop="citation">(
+  <span class="hugo-cite-intext"itemprop="citation">(
 
     {{- /* Range over citation keys */ -}}
 
@@ -200,13 +199,12 @@
 
     {{- end -}}
     {{- /* END loop over keys*/ -}}
-    )</span>
+    )
+</span>
 
 <script type="text/javascript">
 
-
    document.addEventListener("DOMContentLoaded", function(e) {
-
 
       // find all in-text citations
      //text_citations = document.querySelectorAll("a[href ^='#']");
@@ -255,5 +253,4 @@
     });// function close
 
 </script>
-
 
