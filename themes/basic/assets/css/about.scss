@@ -13,7 +13,81 @@
 
 
 @import 'navbar';
-@import 'figures';
+
+.figure {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin: 0 auto;
+   max-width: 45rem;
+  height: auto;
+}
+
+.figDivLabel{
+  max-width: 45rem;
+  position: relative;
+   display: flex;
+  color: var(--navbar-color);
+  font-weight: bold;
+}
+
+
+.figTitle{
+   max-width: inherit;
+  color: var(--navbar-color);
+  padding-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.figNote{
+   max-width: inherit;
+  position: relative;
+  font-size: 9pt;
+  display: flex;
+}
+
+
+
+.figLabel::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  top: -0.5rem;
+  left: -1rem;
+  border-top: 1.5px solid var(--hover-color);
+  border-left: 1.5px solid var(--hover-color);
+}
+
+
+.figLabelAbout::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  top: -0.5rem;
+  left: -1rem;
+  border-top: 1.5px solid var(--hover-color);
+  border-left: 1.5px solid var(--hover-color);
+}
+
+
+.figNote::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  bottom: -0.5rem;
+  right: -1rem;
+  border-bottom: 1.5px solid var(--hover-color);
+  border-right: 1.5px solid var(--hover-color);
+}
 
 
 
@@ -38,8 +112,6 @@
   padding-top: 1rem;
   font-size: 0.85rem;
 }
-
-
 
 
 
@@ -135,8 +207,6 @@ a[href*="/home"]:hover {
 }
 
 /*top-left corner border*/
-
-
 img {
   padding-bottom: 0.5rem;
 }
