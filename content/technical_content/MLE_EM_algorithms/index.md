@@ -190,9 +190,6 @@ both parameters simultaneously.
 
 
 ## Resources 
-http://jrmeyer.github.io/machinelearning/2017/08/18/mle.html
-https://machinelearningmastery.com/a-gentle-introduction-to-jensens-inequality/
-
 # References
 
 
