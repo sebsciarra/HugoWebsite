@@ -1,11 +1,18 @@
 
 //see https://github.com/mathjax/MathJax/issues/3013
 window.MathJax = {
-
+   options: {
+    enableMenu: true,          // set to false to disable the menu
+    menuOptions: {
+      settings: {
+        displayOverflow: 'linebreak'
+        }
+      }
+   },
   section: {
     n: -1,
     useLetters: false,
-    letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},

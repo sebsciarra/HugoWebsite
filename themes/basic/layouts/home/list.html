@@ -1,5 +1,11 @@
-{{ define "main" }}
 
 
+<div class = 'recent_posts'>
+  <h2>Most Recent Posts</h2>
+    <ul>
+    {{ range first 5 .Site.RegularPages.ByDate.Reverse }}
+      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+</div>
 
-{{ end }}
