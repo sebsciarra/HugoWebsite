@@ -90,15 +90,18 @@ tocButton.addEventListener('click', function() {
   }
 });
 
+
+let isTocExpanded_bottom = true; // flag variable to keep track of current state
+
 tocButton_bottom.addEventListener('click', function() {
-  if (isTocExpanded) {
-    tocScroll.style.display = 'block';
-    tocButton_bottom.innerHTML = '<i class="fa-solid fa-circle-arrow-down"></i>';
-    isTocExpanded = false;
-  } else {
+  if (isTocExpanded_bottom) {
     tocScroll.style.display = 'none';
-    tocButton_bottom.innerHTML = '<i class="fas fa-circle-up"></i>';
-    isTocExpanded = true;
+    tocButton_bottom.innerHTML = '<i class="fa-solid fa-circle-arrow-up"></i>';
+    isTocExpanded_bottom = false;
+  } else {
+    tocScroll.style.display = 'block';
+    tocButton_bottom.innerHTML = '<i class="fas fa-circle-down"></i>';
+    isTocExpanded_bottom = true;
   }
 });
 
