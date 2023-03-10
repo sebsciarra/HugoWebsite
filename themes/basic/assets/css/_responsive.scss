@@ -88,9 +88,6 @@
 .tableContents, #toc_button{
   height: 300px;
 }
- #toc_button{
-   top: 9rem;
- }
 
 
 .toc_container {
@@ -100,6 +97,16 @@
 }
 
 
+@media screen and (max-height: 400px) {
+
+
+  .tableContents, #toc_button{
+    height: 200px;
+  }
+
+
+
+}
 
 
 @media (max-width: 600px) {
