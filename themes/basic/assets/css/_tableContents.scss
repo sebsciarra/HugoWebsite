@@ -17,6 +17,7 @@
 }
 
 .tableContents{
+   position: -webkit-sticky; /* Safari */
   font-family: Helvetica !important;
   font-size: 0.75rem;
   font-weight: bold;
