@@ -21,6 +21,7 @@
     margin: 0 auto;
      margin-bottom: 7rem;
      padding-left: 18rem;
+
 }
 
 .page_holder {
@@ -63,10 +64,14 @@ div[class =""] {
     max-width: 800px;
 }
 
-@media (max-width: 1200px) {
-  .container{
-    padding-left: 0rem;
-  }
+
+
+
+@media (max-width: 450px) {
+
+ .container{
+
+     padding-left: 0rem;
 }
 
-
+}
