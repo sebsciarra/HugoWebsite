@@ -217,7 +217,16 @@ $$
 
 Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
 
+```r 
+num_trials <- 10 #n
+num_successes <- 7 #h
+prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.e., there are 100 dtheta values)
 
+likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
+sum(likelihood_distribution$probability) #compute integral
+```
+<pre><code class='r-code'>[1] 9.09091
+</code></pre>
 # Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-beta-gamma}
 
 Equation \ref{eq:beta-gamma-proof} below will be proven 
