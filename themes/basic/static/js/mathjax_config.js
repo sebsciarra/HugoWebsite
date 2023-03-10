@@ -1,18 +1,10 @@
 
 //see https://github.com/mathjax/MathJax/issues/3013
 window.MathJax = {
-   options: {
-    enableMenu: true,          // set to false to disable the menu
-    menuOptions: {
-      settings: {
-        displayOverflow: 'linebreak'
-        }
-      }
-   },
   section: {
     n: -1,
     useLetters: false,
-    letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},
@@ -46,6 +38,7 @@ window.MathJax = {
 
   startup: {
     ready() {
+
       const Configuration = MathJax._.input.tex.Configuration.Configuration;
       const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
       new CommandMap('sections', {
