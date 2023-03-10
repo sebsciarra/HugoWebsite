@@ -38,7 +38,6 @@ window.MathJax = {
 
   startup: {
     ready() {
-
       const Configuration = MathJax._.input.tex.Configuration.Configuration;
       const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
       new CommandMap('sections', {
@@ -60,8 +59,9 @@ window.MathJax = {
             section.n = parseInt(c);
             section.useLetters = false;
           }
-        }
+        },
       });
+
       Configuration.create(
         'sections', {handler: {macro: ['sections']}}
       );
