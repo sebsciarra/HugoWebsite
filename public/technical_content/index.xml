@@ -7,21 +7,12 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://example.com/technical_content/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems</title>
-      <link>https://example.com/technical_content/em_algorithm/</link>
+      <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
+      <link>https://example.com/technical_content/mle_em_algorithms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/technical_content/em_algorithm/</guid>
-      <description>This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.</description>
-    </item>
-    
-    <item>
-      <title>Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems</title>
-      <link>https://example.com/technical_content/structured_latent_growth/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://example.com/technical_content/structured_latent_growth/</guid>
-      <description>This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.</description>
+      <guid>https://example.com/technical_content/mle_em_algorithms/</guid>
+      <description>Explanation of post</description>
     </item>
     
   </channel>

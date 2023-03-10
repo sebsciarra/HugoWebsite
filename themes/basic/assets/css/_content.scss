@@ -55,11 +55,24 @@ main{
     border-left: 3px solid var(--hover-color);
 }
 
+.technical::after{
+   border-left: 3px solid var(--technical-color);
+}
+
+.coding::after{
+   border-left: 3px solid var(--coding-color);
+}
+
+.simulation::after{
+   border-left: 3px solid var(--simulation-color);
+}
+
 
 .blog_summary{
   font-weight: bold;
   padding-top: 1rem;
   font-size: 0.85rem;
+  color: var(--navbar-color);
 }
 
 

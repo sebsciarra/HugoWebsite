@@ -1,15 +1,33 @@
 
-codeBlocks = document.querySelectorAll('.highlight, pre:has(code[class*="-code"])');
+
+
+code_blocks = document.querySelectorAll('.highlight, code[class*="-code"]');
+
+var target_code_blocks = [];
+
+
+for (code_block = 0; code_block < code_blocks.length; code_block++) {
+
+
+  if (code_blocks[code_block].className.includes("-code")) {
+    const parent = code_blocks[code_block].parentNode;
+    target_code_blocks.push(parent);
+  }
+
+  else{
+       target_code_blocks.push(code_blocks[code_block]);
+  }
+}
+
 
 var cumulative_length = 0;
 var starting_indices = [0];
 
+for (block = 0; block < target_code_blocks.length; block++){
 
-for (block = 0; block < codeBlocks.length; block++){
+  if(target_code_blocks[block].outerHTML.startsWith('<pre><code class=')){
 
-  if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
-
-    var code = codeBlocks[block].outerHTML;
+    var code = target_code_blocks[block].outerHTML;
     var lines = code.split("\n");
     //extract preamble code that will wrap table (<pre><code> elements)
     var preamble = lines[0].match(/^[^>]*>([^>]*>)/)[0];
@@ -20,7 +38,7 @@ for (block = 0; block < codeBlocks.length; block++){
    lines.splice(lines.length - 1, 1); //delete last element
   } else {
 
-     var code = codeBlocks[block].innerHTML;
+     var code = target_code_blocks[block].innerHTML;
      var lines = code.split("\n");
 
     //extract preamble code that will wrap table (<pre><code> elements)
@@ -31,8 +49,6 @@ for (block = 0; block < codeBlocks.length; block++){
     table_end = lines[lines.length - 1]; //save last element
     lines.splice(lines.length - 1, 1); //delete last element
   }
-
-
 
 
   //make sure empty lines have <br> element so that empty lines are included whenever code is copied
@@ -65,107 +81,190 @@ for (block = 0; block < codeBlocks.length; block++){
     newCell3.innerHTML = "";
   }
 
+
   //add hide/Expand button
   codeTable.rows[0].cells[2].innerHTML = '<button id ="collapseButton" data-button = "Hide"></button>';
 
-  //add copy button
-  // only add button if browser supports Clipboard API
-   codeTable.rows[0].cells[1].innerHTML +=  '<button class ="copy-code-button" data-button = "Copy"></button>';
+
+   let pattern = /<pre><code class="(.*?)">/;
+   let result = pattern.exec(target_code_blocks[block].outerHTML);
+  //const classAttribute = result[1];
+  if (result) {
+    var language = result[1].split('-')[0];
+
+    if(language == 'r'){
+      language = "R";
+    }
+
+  } else {
+       var attributeValue = target_code_blocks[block].attributes.language;
+       var language = attributeValue ? attributeValue.value : "R";
+    }
+
+  //add copy button along with coding language tag
+   codeTable.rows[0].cells[1].innerHTML +=  '<div class="language-box" data-language = "' + language +  '"></div>' + '<button class ="copy-code-button" data-button = "Copy"></button>';
+
+
+      //add appropriate padding-right
+      //tag = child_table.querySelector('.language-box');
+
+      // var afterElement = document.createElement("div");
+      //afterElement.innerHTML = tag.dataset.language;
+      //afterElement.style.display = "inline-block";
+      //afterElement.style.visibility = "hidden";
+      //tag.appendChild(afterElement);
+      //var tag_language_width = afterElement.offsetWidth;
+      //tag.removeChild(afterElement);   //remove child
+
+
+
 
   //compile complete table
   complete_codeTable = preamble + codeTable.outerHTML + table_end;
 
-   if(codeBlocks[block].outerHTML.startsWith('<pre><code class=')){
-      codeBlocks[block].outerHTML = complete_codeTable;
+   if(target_code_blocks[block].outerHTML.startsWith('<pre><code class=')){
+      target_code_blocks[block].outerHTML = complete_codeTable;
    } else{
-       codeBlocks[block].innerHTML = complete_codeTable;
+       target_code_blocks[block].innerHTML = complete_codeTable;
    }
 
 }
 
 
+tags = document.querySelectorAll('.language-box');
+
+tags.forEach(function(tag){
+
+ //get width of language tag element
+ var afterElement = document.createElement("div");
+ afterElement.innerHTML = tag.dataset.language;
+ afterElement.style.display = "inline-block";
+ afterElement.style.visibility = "hidden";
+ tag.appendChild(afterElement);
+ var tag_language_width = afterElement.offsetWidth;
+ tag.removeChild(afterElement);   //remove child
 
 
-codeTables = document.querySelectorAll('#codeTable');
 
-codeTables.forEach(function(codeTable){
+ //set padding right of first row in second column for code blocks
+ if (tag.previousSibling && tag.previousSibling.style && tag.parentNode.innerHTML.startsWith('<span')) {
+ tag.previousSibling.style.paddingRight = 60 + tag_language_width + "px";
+ }
+ //set padding right for code output blocks
+ else{
+  tag.parentNode.style.paddingRight = 60 + tag_language_width + "px";
+ }
 
-  // Get the button by its id
-  var isCollapsed = true;
+});
 
-  // Save the contents of first and second columns before collapsing the table
+
+codeTables_2 = document.querySelectorAll('.highlight, pre code[class*="-code"]');
+
+codeTables_2.forEach(function(table){
+
+  //extract parent
+  if(table.outerHTML.startsWith('<code class=')) {
+     code_table = table.parentNode;
+  }
+  else{
+     code_table = table;
+  }
+
+  //extract table
+  var child_table = table.querySelector('#codeTable');
+
+
+  //Save the contents of first and second columns before collapsing the table
   var firstColContent = [];
   var secondColContent = [];
 
-  for (var i = 0; i < codeTable.rows.length; i++) {
-    firstColContent.push(codeTable.rows[i].cells[0].innerHTML);
-    secondColContent.push(codeTable.rows[i].cells[1].innerHTML);
-}
+  for (var i = 0; i < child_table.rows.length; i++) {
+    firstColContent.push(child_table.rows[i].cells[0].innerHTML);
+    secondColContent.push(child_table.rows[i].cells[1].innerHTML);
+  }
+
+  //extract coding language for tag
+  let pattern = /<pre><code class="(.*?)">/;
+  let result = pattern.exec(code_table.outerHTML);
 
 
+  if (result) {
+    var coding_language = result[1].split('-')[0];
 
-  var button = codeTable.querySelector("#collapseButton");
+    //capitalize 'r'
+    if(coding_language == 'r'){
+     coding_language = "R";
+    }
 
-  // Add event listener to the button
+  }
+  else {
+  //add language to the code table
+  attributeValue = code_table.attributes.language;
+   coding_language = attributeValue ? attributeValue.value : "R";
+  }
+
+
+  // Get the button by its id
+  var button = child_table.querySelector("#collapseButton");
+  var isCollapsed = true;
+
+
   button.addEventListener("click", function() {
 
     if (isCollapsed) {
 
-    //collapse first column such that line number range is shown
-    var first_row_num = codeTable.rows[0].cells[0].innerHTML;
-    var last_row_num = codeTable.rows[codeTable.rows.length-1].cells[0].innerHTML;
+      //collapse first column such that line number range is shown
+      var first_row_num = child_table.rows[0].cells[0].innerHTML;
+      var last_row_num = child_table.rows[child_table.rows.length-1].cells[0].innerHTML;
 
-    codeTable.rows[0].cells[0].innerHTML = first_row_num + "–" + last_row_num;
+      child_table.rows[0].cells[0].innerHTML = first_row_num + "–" + last_row_num;
 
-      for (var x = 0; x < codeTable.length; x++) {
+        //for (var x = 0; x < child_table.length; x++) {
+//
+        //  child_table.rows[x].cells[1].innerHTML = ""; //replace all values of second column with an empty tring
+        //  child_table.rows[x].cells[1].style.width = secondColWidth + "px"; //set width of second column to original width
+        //}
 
-        //codeTable.rows[0].cells[0].innerHTML = firstRow + "–" + last_row_num;
-        codeTable.rows[x].cells[1].innerHTML = ""; //replace all values of second column with an emptys tring
-        codeTable.rows[x].cells[1].style.width = secondColWidth + "px"; //set width of second column to original width
+      // replace contents of entire table beggining at the second second row with nothing
+      for (var j = 1; j < child_table.rows.length; j++) {
+          child_table.rows[j].style.display = "none";
       }
 
 
-    // replace contents of entire table begging at the second second row with nothing
-    for (var j = 1; j < codeTable.rows.length; j++) {
-        codeTable.rows[j].style.display = "none";
-    }
+      //for the first row of the second column, replace contents with empty line
+          child_table.rows[0].cells[1].innerHTML = '</span></span><span class="line"><span class="cl"><div class="language-box-collapsed" data-language = "'+ coding_language + '"></div><br>';
+      child_table.rows[0].style.height = '20px'; //set height of button
 
-    //for the first row of the second column, replace contents with empty line
-    codeTable.rows[0].cells[1].innerHTML = '</span></span><span class="line"><span class="cl"><br>';
-    codeTable.rows[0].style.height = '20px';
+   button.setAttribute("data-button",  'Expand');
+   isCollapsed = false;
 
-         button.setAttribute("data-button",  'Expand');
-        isCollapsed = false;
-    }
-
-        else {
-         codeTable.rows[0].style.height = '14px';
-        codeTable.rows[0].cells[0].innerHTML = '';
+  //set padding right of first row in second column
+  if (tag.previousSibling && tag.previousSibling.style) {
+  tag.previousSibling.style.paddingRight = 60 + tag_language_width + "px";
+  }
+  }
+    else {
+        child_table.rows[0].style.height = '14px';
+        child_table.rows[0].cells[0].innerHTML = '';
 
     // Expand the table and show the contents of the second column again
-        for (var t = 0; t < codeTable.rows.length; t++) {
-            codeTable.rows[t].cells[1].innerHTML = secondColContent[t];
-            codeTable.rows[t].cells[0].innerHTML = firstColContent[t];
-            codeTable.rows[t].style.display = "";
-        }
-
+       for (var t = 0; t < child_table.rows.length; t++) {
+           child_table.rows[t].cells[1].innerHTML = secondColContent[t];
+           child_table.rows[t].cells[0].innerHTML = firstColContent[t];
+           child_table.rows[t].style.display = "";
+       }
+//
         button.setAttribute("data-button",  'Hide');
         isCollapsed = true;
     }
+
+
+  });
 });
 
 
-
-});
-
-   // Defining a custom filter function
-//function myFilter(elm){
-//    return ( elm !== "");
-//}
-
-
-const cope_buttons = document.querySelectorAll(".copy-code-button");
-cope_buttons.forEach(function(copyBtn) {
+const copy_buttons = document.querySelectorAll(".copy-code-button");
+copy_buttons.forEach(function(copyBtn) {
   copyBtn.addEventListener("click", function(event) {
 
     navigator.clipboard.writeText('');  //refresh clipboard to eliminate overwriting from cache or local storage
@@ -180,9 +279,6 @@ cope_buttons.forEach(function(copyBtn) {
         table_code += codeTable.rows[row].cells[1].textContent + '\n';
       }
 
-
-    //let cleanCode = table_text.replace(/(\r\n|\n|\r)/gm, "");
-
     var originalText = copyBtn.dataset.button;
     copyBtn.dataset.button = "Copied!";
 
@@ -196,7 +292,5 @@ cope_buttons.forEach(function(copyBtn) {
 
   });
 });
-
-
 
 

@@ -2,21 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/about/</loc>
+  </url><url>
     <loc>https://example.com/categories/</loc>
   </url><url>
     <loc>https://example.com/coding_tricks/</loc>
   </url><url>
-    <loc>https://example.com/tags/em/</loc>
-  </url><url>
-    <loc>https://example.com/coding_tricks/em_algorithm/</loc>
-  </url><url>
-    <loc>https://example.com/technical_content/em_algorithm/</loc>
-  </url><url>
-    <loc>https://example.com/technical_content/structured_latent_growth/</loc>
-  </url><url>
     <loc>https://example.com/home/</loc>
   </url><url>
     <loc>https://example.com/</loc>
+  </url><url>
+    <loc>https://example.com/mlresources/</loc>
+  </url><url>
+    <loc>https://example.com/technical_content/mle_em_algorithms/</loc>
   </url><url>
     <loc>https://example.com/simulation_exps/</loc>
   </url><url>

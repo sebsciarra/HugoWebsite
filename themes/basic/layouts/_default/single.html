@@ -5,7 +5,7 @@
 
   <div class = 'post'>
 
-     <div class = 'header'>
+     <div class = 'header {{ .Params.article_type }}'>
 
         <h2 class = 'blog_title'> {{ .Title }} </h2>
 
@@ -14,7 +14,7 @@
          <br>
 
         <time> <b> Published </b> <br>
-        {{ time.Format "2 January 2006" now }}
+        {{ .Date.Format "2 January 2006" }}
         </time>
 
     </div>
@@ -43,17 +43,7 @@
 
   {{end}}
 
-  {{- if eq .Title "Home"}}
 
-<div class = 'recent_posts'>
-  <h2>Most Recent Posts</h2>
-    <ul>
-    {{ range first 5 .Site.RegularPages.ByDate.Reverse }}
-      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-    {{ end }}
-    </ul>
-</div>
-{{end}}
 
 
 </div>

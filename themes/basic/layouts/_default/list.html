@@ -5,13 +5,43 @@
   <div class = '{{ .Params.pageClass }}'>
 
 
-    <!-- use js code to remove spaces from class name -->
-      <h2 class = 'section_title'> {{ .Title }} </h2>
-      <ul class = 'posts'>
-        {{ range ( .Pages) }}
-        <li class = 'items'><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{- if eq .Title "Home"}}
+
+          {{ $css := resources.Get "css/home.scss"  | toCSS | minify | fingerprint }}
+          <link rel="stylesheet" href="{{ "css/home.css" | relURL }}"/>
+          <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+
+
+          {{ range first 10 .Site.RegularPages.ByDate }}
+    {{ if and (ne .Title "ML Resources") (ne .Title "About") }}
+        <a href="{{ .Permalink }}" class="blog_link">
+            <div class="header {{ .Params.article_type }}">
+                <h2 class="blog_title">{{ .Title }}</h2>
+                <div class="blog_summary">{{ .Params.summary }}</div>
+                <br>
+                <time><b> Published </b><br>  {{ .Date.Format "2 January 2006"   }}</time>
+            </div>
+        </a>
+    {{ end }}
+{{ end }}
+
+
+        {{ else }}
+         <h2 class = 'section_title'> {{ .Title }} </h2>
+            <ul class = 'posts'>
+              {{ range ( .Pages) }}
+              <li class = 'items'><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+              {{ end }}
+          </ul>
+
+
+
         {{ end }}
-      </ul>
+
+
+
+
 
    </div>
 

@@ -7,30 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Expectancy-Maximization Algorithm</title>
-      <link>https://example.com/coding_tricks/em_algorithm/</link>
+      <title>About</title>
+      <link>https://example.com/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/coding_tricks/em_algorithm/</guid>
-      <description></description>
+      <guid>https://example.com/about/</guid>
+      <description>Note. Generated using a variety of artificial intelligence tools for image processing and image generation (specifically, fotor, DALL-E2, and Deep Dream Generator) I&amp;rsquo;m Sebastian Sciarra and I am currently a PhD candidate in the Industrial-Organizational Psychology program at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation.</description>
     </item>
     
     <item>
-      <title>Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems</title>
-      <link>https://example.com/technical_content/em_algorithm/</link>
+      <title>ML Resources</title>
+      <link>https://example.com/mlresources/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/technical_content/em_algorithm/</guid>
-      <description>This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.</description>
+      <guid>https://example.com/mlresources/</guid>
+      <description>This is a list of useful resources I have stumbled upon while completing my dissertation and learning about machine learning, statistics, and programming.
+Courses and Lecture Series&#39; CS 47980 - Machine Learning for Intelligent Systems Bloomberg - Foundations of Machine Learning Computer Science 25300 / 35300 &amp;amp; Statistics 27700 - Mathematical Foundations of Machine Learning CS 156 - Learning Systems CS 485/685 - Machine Learning Theory: this is a more advanced course that I personally would only encourage taking after taking at least two of the above courses.</description>
     </item>
     
     <item>
-      <title>Expectation-Maximization Algorithm: A Method to Solve Latent Variable Problems</title>
-      <link>https://example.com/technical_content/structured_latent_growth/</link>
+      <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
+      <link>https://example.com/technical_content/mle_em_algorithms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/technical_content/structured_latent_growth/</guid>
-      <description>This is a summary of the post that brielfy explains the main points of the post to provide an anchor for the reader.</description>
+      <guid>https://example.com/technical_content/mle_em_algorithms/</guid>
+      <description>Explanation of post</description>
     </item>
     
     <item>

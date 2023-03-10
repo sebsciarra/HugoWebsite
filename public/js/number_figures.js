@@ -3,11 +3,11 @@
 // FIGURE MODIFICATIONS
 // figure labels to modify
 const fig_caption_tags = document.querySelectorAll('div.figure span.figLabel');
-
 // identify all p element that referece a table (i.e., contain Table \\ref\{tab:)
 const potential_fig_references = document.querySelectorAll('p, tfoot, caption, .figNote');
 const figure_refs = [];
-//
+
+
 for (const ref of potential_fig_references) {
   if (ref.innerHTML.includes('Figure \\ref\{fig:')) {
     figure_refs.push(ref);
@@ -54,3 +54,20 @@ for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
   }
 
 }
+
+//set width of figLabel, figTitle, and figNote to width of <img> element
+const figures = document.querySelectorAll('div.figure');
+for (let f = 0; f < figures.length; f++) {
+
+  const img = figures[f].querySelector('.figure img');
+
+  figures[f].querySelector('.figDivLabel').style.width = img.clientWidth + 'px';
+
+  figures[f].querySelector('.figTitle').style.width =  img.clientWidth + 'px';
+  figures[f].querySelector('.figNote').style.width =  img.clientWidth + 'px';
+
+}
+
+
+
+

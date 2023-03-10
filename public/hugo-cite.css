@@ -13,12 +13,14 @@
   --about-color: #d4bd04;
   --hover-color: #00182d;
 }
+
+
 .hugo-cite-bibliography{
+    word-wrap: break-all;
    padding-left: 2rem ;
   text-indent: -2rem ;
   line-height: 1.2rem;
-
-  width: 100%;
+  max-width: 90%;
 }
 
 dd{
@@ -27,11 +29,13 @@ dd{
 }
 
 .hugo-cite-group {
-  display: inline-block;
   position: relative; /* needed to reference box to pop up and for parentheses to wrap reference  */
   font-size: 12px; /* reduce to avoid some breaks */
   color: var(--navbar-color);
+  line-height: 1.25;
+
 }
+
 
 /* specification for popup */
 .hugo-cite-group
@@ -42,8 +46,7 @@ dd{
     border: 1px solid var(--navbar-color);
     padding: 1rem;
     position: absolute;
-    width: 350px;
-    max-width: 100vw;
+
     z-index: 1;
     bottom: 140%;
     left: 0;
@@ -56,6 +59,15 @@ dd{
       opacity .3s ease 0s;
     opacity: 1;
     transform: translateY(-8px);
+
+     word-break: break-all;
+  position: absolute;
+  top: 0;
+  width: 150px;
+  overflow-x: auto;
+  height: 100px
+  left: 0;
+  z-index: 4;
 }
 
 .hugo-cite-group:hover
@@ -106,3 +118,24 @@ dd{
   position: absolute;
   width: 1px;
 }
+
+
+@media (max-width: 550px) {
+
+  .hugo-cite-bibliography {
+     word-break: break-all;
+       max-width: 80%;
+  }
+
+}
+
+
+
+.hugo-cite-citation{
+  height: 100px;
+}
+
+
+
+
+

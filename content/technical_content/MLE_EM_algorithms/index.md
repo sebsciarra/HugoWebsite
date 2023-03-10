@@ -2,6 +2,7 @@
 title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
 draft: false
 summary: 'Explanation of post' 
+date: "2023-03-09"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -190,6 +191,7 @@ both parameters simultaneously.
 
 
 ## Resources 
+
 # References
 
 

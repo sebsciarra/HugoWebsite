@@ -6,7 +6,7 @@
   --technical-color: #33c304;
   --coding-color:  #e38f01;
  --simulation-color: #C7547D;
-  --resources-color: #52aafa;
+  --resources-color: #9DFFFF;
   --about-color: #d4bd04;
   --hover-color: #00182d;
 }
@@ -18,10 +18,10 @@
 @import 'footnotes';
 @import 'hyperlinks';
 @import 'content';
-@import 'sectionContents';
 @import 'navbar';
 @import 'tableContents';
 @import 'chroma';
+@import 'sectionContents';
 @import 'responsive';
 
 
