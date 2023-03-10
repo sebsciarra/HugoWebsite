@@ -9,7 +9,6 @@
 
 .toc_container {
    position: -webkit-sticky; /* Safari */
-  position: sticky;
   top: 2rem;
   height: inherit;
   width: 14rem;
@@ -19,7 +18,6 @@
 
 .tableContents{
    position: -webkit-sticky; /* Safari */
-   position: sticky;
   font-family: Helvetica !important;
   font-size: 0.75rem;
   font-weight: bold;
@@ -128,7 +126,7 @@ ul.tableOfContentsList li {
 
 
 #toc_button {
-  position: -webkit-sticky;
+      display: block;
   position: fixed;
   top: 6rem;
   right: 0.60rem;
@@ -140,12 +138,15 @@ ul.tableOfContentsList li {
   border: none;
 }
 
-#toc_button:hover {
+#toc_button_bottom{
+  display: none;
+}
+#toc_button:hover, #toc_button_bottom:hover {
   background-color: #393939;
 }
 
 
-#toc_button i {
+#toc_button i, #toc_button_bottom i{
     position: absolute;
   left: 4.5px;
   border: none;
@@ -153,8 +154,9 @@ ul.tableOfContentsList li {
   background-color: var(--navbar-color);
 }
 
-#toc_button:hover i {
+#toc_button:hover i #toc_button_bottom i{
    background-color: #393939;
 }
+
 
 

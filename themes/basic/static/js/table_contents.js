@@ -71,6 +71,8 @@ window.addEventListener('scroll', function () {
 });
 
 const tocButton = document.getElementById("toc_button");
+const tocButton_bottom = document.getElementById("toc_button_bottom");
+
 const tocScroll = document.querySelector(".toc_scroll");
 
 
@@ -88,6 +90,17 @@ tocButton.addEventListener('click', function() {
   }
 });
 
+tocButton_bottom.addEventListener('click', function() {
+  if (isTocExpanded) {
+    tocScroll.style.display = 'none';
+    tocButton_bottom.innerHTML = '<i class="fa-solid fa-circle-arrow-left"></i>';
+    isTocExpanded = false;
+  } else {
+    tocScroll.style.display = 'block';
+    tocButton_bottom.innerHTML = '<i class="fas fa-circle-right"></i>';
+    isTocExpanded = true;
+  }
+});
 
 
 
