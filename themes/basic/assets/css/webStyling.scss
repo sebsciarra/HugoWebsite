@@ -47,7 +47,7 @@
 
 /*prevent white dot from appearing at top*/
 .MJX_LiveRegion{
-  background-color: var(--navbar-color);
+ display: none;
 }
 
 .MathJax {
