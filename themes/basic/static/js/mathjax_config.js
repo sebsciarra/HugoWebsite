@@ -38,6 +38,9 @@ window.MathJax = {
 
   startup: {
     ready() {
+                  const {CommonWrapper} = MathJax._.output.common.Wrapper;
+      const {LineBBox} = MathJax._.output.common.LineBBox;
+
       const Configuration = MathJax._.input.tex.Configuration.Configuration;
       const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
       new CommandMap('sections', {
@@ -60,6 +63,26 @@ window.MathJax = {
             section.useLetters = false;
           }
         },
+      });
+      Object.assign(CommonWrapper.prototype, {
+        invalidateBBox(bubble = true) {
+          if (this.bboxComputed || this._breakCount >= 0) {
+            this.bboxComputed = false;
+            this.lineBBox = [];
+            this._breakCount = -1;
+            if (this.parent && bubble) {
+              this.parent.invalidateBBox();
+            }
+          }
+        },
+        _getLineBBox: CommonWrapper.prototype.getLineBBox,
+        getLineBBox(i) {
+          if (!this.lineBBox[i] && !this.breakCount) {
+            const obox = this.getOuterBBox();
+            this.lineBBox[i] = LineBBox.from(obox, this.linebreakOptions.lineleading);
+          }
+          return this._getLineBBox(i);
+        }
       });
 
       Configuration.create(
