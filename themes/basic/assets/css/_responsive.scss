@@ -75,29 +75,34 @@
    }
 
 
-
-  /*TOC button  */
-
-
-
    .portal {
    position: initial;
    }
 
 }
 
-@media (max-width: 765px) {
+
+@media (max-width: 865px) {
+
+
+.tableContents, #toc_button{
+  height: 300px;
+}
+ #toc_button{
+   top: 9rem;
+ }
+
 
 .toc_container {
   width: 10rem;
+  overflow-y: auto;
+  }
 }
 
 
 
 
-}
-
-@media (max-width: 500px) {
+@media (max-width: 600px) {
 
 .toc_scroll{
   position: fixed;

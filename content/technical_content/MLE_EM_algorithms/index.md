@@ -17,6 +17,11 @@ tags: []
 
 
 
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
 
 
 
