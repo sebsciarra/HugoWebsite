@@ -49,6 +49,85 @@ In order to calculate the probability of obtaining each possible number of heads
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
 
+```r 
+#create function that computes probability mass function with following arguments:
+  ##num_trials = number of trials (10  [coin flips] in the current example)
+  ##prob_success = probability of success (or heads; 0.50 in the current example)
+  ##num_successes = number of successes (or heads; [1-10] in the current example)
+
+compute_binom_mass_density <- function(num_trials, prob_success, num_successes){
+  
+  #computation of binomial term (i.e., number of ways of obtaining a given number of successes)
+  num_success_patterns <- (factorial(num_trials)/(factorial(num_successes)*factorial(num_trials-num_successes)))
+  
+  #computation of the number of possible ways of obtaining a given number of successes (i.e., heads)
+  prob_single_pattern <- (prob_success)^num_successes*(1-prob_success)^(num_trials-num_successes)
+  
+  
+  probability <- num_success_patterns*prob_single_pattern
+  
+  pmf_df <- data.frame('probability' = probability, 
+                   'num_successes' = num_successes, 
+                   'prob_success' = prob_success, 
+                   'num_trials' = num_trials)
+  
+  return(pmf_df)
+}
+
+
+
+num_trials <- 10
+prob_success <- 0.5
+num_successes <- 0:10  #manipulated variable 
+
+prob_distribution <- compute_binom_mass_density(num_trials, prob_success, num_successes)
+
+library (tidyverse) 
+library(grDevices) #needed for italic()
+
+#create data set for shaded rectangle that indicates the most likely value 
+##index of highest probability 
+highest_number_ind <- which.max(prob_distribution$probability) 
+##most likely number of successes
+most_likely_number <- prob_distribution$num_successes[highest_number_ind] 
+##probability value of most likely number of successes
+highest_prob <- max(prob_distribution$probability) 
+
+rectangle_data <-data.frame(
+  'xmin' = most_likely_number - 0.10, 
+  'xmax' = most_likely_number + 0.10,
+  'ymin' = 0,
+  'ymax' = highest_prob)
+
+
+#create pmf plot 
+pmf_plot <- ggplot(data = prob_distribution, aes(x = num_successes, y = probability)) + 
+  geom_bar(stat = 'identity', 
+           fill =  ifelse(test = prob_distribution$num_successes == most_likely_number, 
+                                no =  "#002241", 
+                                yes = "#00182d")) +  #calculate sum of probability for each num_successes
+ ## geom_rect(inherit.aes = F, 
+ ##           data = rectangle_data, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
+ ##           fill = 'grey50', color = NA, alpha = 0.2) +
+  scale_y_continuous(name = bquote(italic("P(h")*"|"*italic(theta == .(prob_success)*","~n == .(num_trials)*")"))) + 
+  scale_x_continuous(name = bquote("Number of Heads (i.e., "*italic("h")~")"), 
+                     breaks = seq(from = 0, to = 10, by = 1)) +
+  theme_classic(base_family = "Helvetica", base_size = 18) +
+  theme(axis.title.y = element_text(face = 'italic'), 
+        
+        #embolden the most likely number of heads 
+        axis.text.x = 
+          element_text(face = 
+                         ifelse(test = prob_distribution$num_successes == most_likely_number, 
+                                no =  "plain", 
+                                yes = "bold")), 
+        text = element_text(color = "#002241"),
+        line = element_line(color = "#002241"), 
+        axis.text = element_text(color = "#002241"))
+
+ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
+```
+
 <div class="figure">
   <div class="figDivLabel">
     <caption>
@@ -67,6 +146,17 @@ In order to calculate the probability of obtaining each possible number of heads
 
 Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
+```r 
+#Condition 1: All probability values have nonnegative values. 
+sum(prob_distribution$probability >= 0) #11 nonnegative values 
+
+#Condition 2: Sum of all probability values is 1. 
+sum(prob_distribution$probability)  #1
+```
+
+<pre><code class='r-code'>[1] 11
+[1] 1
+</code></pre>
 
 With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea of what outcomes to expect after flipping the coin 10 times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's probability of heads after data have been collected; in computing the probability mass function, the probability of heads ($\theta$) is fixed. Thus, the researcher must use a different type of distribution to estimate the coin's probability of heads. 
 
