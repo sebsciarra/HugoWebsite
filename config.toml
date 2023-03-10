@@ -1,4 +1,4 @@
-baseURL = "https://example.com"
+
 languageCode = "en-us"
 title = "Sebastian Sciarra" #title of website
 theme = ["basic", "hugo-cite"]#use basic theme

@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on Sebastian Sciarra</title>
-    <link>https://example.com/home/</link>
+    <link>/home/</link>
     <description>Recent content in Home on Sebastian Sciarra</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://example.com/home/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="/home/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

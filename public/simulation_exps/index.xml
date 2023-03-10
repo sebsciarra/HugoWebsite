@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Simulation Experiments on Sebastian Sciarra</title>
-    <link>https://example.com/simulation_exps/</link>
+    <link>/simulation_exps/</link>
     <description>Recent content in Simulation Experiments on Sebastian Sciarra</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://example.com/simulation_exps/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/simulation_exps/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>The effect of p-hacking on false positive rates</title>
-      <link>https://example.com/simulation_exps/phacking/p_hacking/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
+      <link>/simulation_exps/sim_post_ex/</link>
+      <pubDate>Wed, 08 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/simulation_exps/phacking/p_hacking/</guid>
-      <description>$$ \gamma $$
-#this is a comment more comment print(&amp;#39;my website my website my website my website my website my website my website my website my website my website my website my website my website my website my website&amp;#39;) print(1 + 2) print(&amp;#39;another&amp;#39;) </description>
+      <guid>/simulation_exps/sim_post_ex/</guid>
+      <description>Explanation of post</description>
     </item>
     
   </channel>
