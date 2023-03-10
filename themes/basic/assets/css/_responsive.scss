@@ -93,31 +93,22 @@
      overflow-x: auto;
   }
 
-
+.blog_post{
+  padding-right: 3rem;
+}
 
 
 }
 
 @media (max-width: 450px) {
 
-
   .toc_container{
-     max-width: 7rem;
-     padding-left: 1rem;
-     margin-left: 0;
+     max-width: 5rem;
+     padding-left: 0;
      padding-top: 6rem;
   }
 
 
-   .blog_post {
-   padding-left: 1rem;
-   padding-right: 1rem;
-
-   }
-
-    .post {
-   padding: 0;
-   }
 
 .tableContents {
     height: 350px;
