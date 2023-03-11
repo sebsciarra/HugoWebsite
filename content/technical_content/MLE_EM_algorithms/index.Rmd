@@ -248,29 +248,7 @@ sum(likelihood_distribution$probability)
 ```
 
 The sum of all these values is 9.09, and so these values cannot be probabilities. Therefore, when fixing the data and varying the parameter values, the resulting values do not sum to 1 and are, consequently, not probability values: they are likelihoods. Therefore, when trying to determine the value of $\theta$ that most likely produced the observed data, likelihoods are computed, and this fundamental difference is conveyed with a different notation and terminalogy. Instead of computing the probability of the data given a parameter value (e.g., $P(h = 7, n = 10|\theta)$), we compute the likelihood of the parameter given the data, $L(\theta|h = 7, n = 10)$. 
-```{r likelihood}
-#remotes::install_github("tylermorganwall/rayshader")
-library(rayshader)
-library(ggplot2)
-library(tidyverse)
 
-
-death = read_csv("https://www.tylermw.com/data/death.csv", skip = 1)
-meltdeath = reshape2::melt(death, id.vars = "Year")
-
-meltdeath$age = as.numeric(meltdeath$variable)
-
-deathgg = ggplot(meltdeath) +
-  geom_raster(aes(x=Year,y=age,fill=value)) +
-  scale_x_continuous("Year",expand=c(0,0),breaks=seq(1900,2010,10)) +
-  scale_y_continuous("Age",expand=c(0,0),breaks=seq(0,100,10),limits=c(0,100)) +
-  scale_fill_viridis("Death\nProbability\nPer Year",trans = "log10",breaks=c(1,0.1,0.01,0.001,0.0001), labels = c("1","1/10","1/100","1/1000","1/10000")) +
-  ggtitle("Death Probability vs Age and Year for the USA") +
-  labs(caption = "Data Source: US Dept. of Social Security")
-
-plot_gg(deathgg, multicore=TRUE,height=5,width=6,scale=500)
-
-```
 
 ```{r likelihood-dist, echo=F, eval=F}
 num_trials <- 10
