@@ -89,30 +89,39 @@
 @media (max-width: 865px) {
 
 
-.tableContents, #toc_button{
-  height: 300px;
+.tableContents{
+  height: 550px;
 }
 
 
 .toc_container {
-  width: 10rem;
-  }
+  width: 9rem;
 }
 
-
-@media screen and (max-height: 400px) {
-
-
-  .tableContents, #toc_button{
-    height: 200px;
-  }
-
-
+.blog_post {
+  padding-left: 2rem;
+  margin: 0;
+}
 
 }
 
 
-@media (max-width: 600px) {
+
+//@media (max-height: 865px) {
+
+//
+//  .tableContents, #toc_button{
+//    height: 200px;
+//  }
+//
+//
+//
+//}
+//
+
+@media (max-width: 700px) {
+
+.blog_post, .post{ max-width: 100%}
 
 .toc_scroll{
   position: fixed;
