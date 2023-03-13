@@ -48,7 +48,8 @@ dd{
     position: absolute;
 
     z-index: 1;
-    bottom: 140%;
+    top: 2rem;
+    bottom: 10%;
     left: 0;
     margin-left: 0%;
 
@@ -58,24 +59,26 @@ dd{
       transform .3s ease 0s,
       opacity .3s ease 0s;
     opacity: 1;
-    transform: translateY(-8px);
+     transform: translateY(-140px);
 
      word-break: break-all;
   position: absolute;
   top: 0;
-  width: 150px;
+  width: 200px;
   overflow-x: auto;
   height: 100px
   left: 0;
   z-index: 4;
 }
 
+
+
 .hugo-cite-group:hover
   .hugo-cite-citation {
     visibility: visible;
     transition: visibility 0s 0s, transform 0s, opacity 0s;
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-150px);
 }
 
 /* remove underlining from in-text citations*/
@@ -135,6 +138,10 @@ dd{
   height: 100px;
 }
 
+.hugo-cite-citation{
+  position: absolute;
+  left: 100%;
+}
 
 
 

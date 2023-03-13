@@ -1,6 +1,6 @@
 ---
 title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
-draft: false
+draft: true
 summary: 'Explanation of post' 
 date: "2023-03-08"
 article_type: simulation

@@ -1,6 +1,6 @@
 ---
 title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
-draft: false
+draft: true
 summary: 'Explanation of post' 
 date: "2023-03-09"
 article_type: coding 
@@ -13,7 +13,6 @@ header-includes:
 bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
 tags: []
 ---   
-
 
 
 

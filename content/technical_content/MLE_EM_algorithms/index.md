@@ -9,12 +9,11 @@ output:
      keep_md: true
 always_allow_html: true
 header-includes: 
-  - \usepackage{amsmath}
 bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
 tags: []
 ---   
 
-
+{{< cite "fine2019" >}}
 
 
 
@@ -73,7 +72,6 @@ compute_binom_mass_density <- function(num_trials, prob_success, num_successes){
   
   return(pmf_df)
 }
-
 
 
 num_trials <- 10
@@ -163,10 +161,31 @@ With a probability mass function that shows the probability of obtaining each po
 
 # Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome
 
-Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With this data, the researcher wants to determine the probability value of heads that most likely produced the data. In other words, the researcher wants to find the value of $\theta$ that maximizes the possibility of observing the data, $\max_{\theta \in \Theta} P(h = 7, n = 10|\theta)$. Before continuing, it is vital to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.  
+Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, $\theta$, that most likely produced the data, $P(h, n|\theta)$[^2].  Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods. 
 
+[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "fine2019" >}}). 
 
 ## Likelihoods are not Probabilities
+
+Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to 1, and this can be verified by summing these values using the code below (for a mathematical proof, see [Appendix B](#proof-likelihood)). 
+  
+```r 
+num_trials <- 10
+num_successes <- 7
+prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
+
+#compute P(h, n|theta) for each theta in [0, 1].
+likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
+
+sum(likelihood_distribution$probability)
+```
+
+<pre><code class='r-code'>[1] 9.09091
+</code></pre>
+
+The sum of all these values is greater than 1---specifically, 9.09---and so these values are not probabilities. To provide an explanation, when determining the value of $\theta$ that most likely produced the data, we fix the data and vary the parameter values (i.e., $\theta$).  the data and varying the parameter values, the resulting values do not sum to 1 and are, consequently, not probability values: they are likelihoods. Therefore, when trying to determine the value of $\theta$ that most likely produced the observed data, likelihoods are computed, and this fundamental difference is conveyed with a different notation. Instead of computing the probability of the data given a parameter value (e.g., $P(h = 7, n = 10|\theta)$), we compute the likelihood of the parameter given the data, $L(\theta|h = 7, n = 10)$. 
+
+## Using Likelihoods to Determine the Parameter Value that Most Likely Produced the Observed Data
 
 
 
@@ -188,6 +207,7 @@ which explains why likelihoods are sometimes called *unnormalized probabilities*
 describe the probability of a set of parameter being true (i.e., $p(\theta)$); if they did, then the integral would sum to 1. Given that we have two parameters, we can also produce 
 another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
 both parameters simultaneously. 
+
 
 
 ## Resources 

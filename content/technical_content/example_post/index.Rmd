@@ -2,6 +2,7 @@
 title: "Example Post" 
 draft: true
 summary: 'Explanation of post' 
+date: "2023-03-12"
 article_type: technical
 output:
   bookdown::html_document2:

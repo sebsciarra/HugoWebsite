@@ -388,7 +388,6 @@ compute_binom_mass_density &lt;- function(num_trials, prob_success, num_successe
 }
 
 
-
 num_trials &lt;- 10
 prob_success &lt;- 0.5
 num_successes &lt;- 0:10  #manipulated variable 
@@ -466,9 +465,24 @@ sum(prob_distribution$probability)  #1</code></pre>
 </div>
 <div id="likelihood-distributions-the-probability-of-observing-each-possible-set-of-parameter-values-given-a-specific-outcome" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome</h1>
-<p>Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With this data, the researcher wants to determine the probability value of heads that most likely produced the data. In other words, the researcher wants to find the value of <span class="math inline">\(\theta\)</span> that maximizes the possibility of observing the data, <span class="math inline">\(\max_{\theta \in \Theta} P(h = 7, n = 10|\theta)\)</span>. Before continuing, it is vital to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.</p>
+<p>Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, <span class="math inline">\(\theta\)</span>, that most likely produced the data, <span class="math inline">\(P(h, n|\theta)\)</span><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.</p>
 <div id="likelihoods-are-not-probabilities" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Likelihoods are not Probabilities</h2>
+<p>Because we are interested in determining which value of <span class="math inline">\(\theta \in \[0, 1\]\)</span> most likely produced the data, the probability of observing the data must be computed for each of these values, <span class="math inline">\(P(h = 7, n = 10|\theta)\)</span>. Although we also use the binomial function to compute <span class="math inline">\(P(h = 7, n = 10|\theta)\)</span> for each <span class="math inline">\(\theta \in \[0, 1\]\)</span>, the resulting values are not probabilities because they do not sum to 1, and this can be verified by summing these values using the code below (for a mathematical proof, see <a href="#proof-likelihood">Appendix B</a>).</p>
+<pre class="r"><code>num_trials &lt;- 10
+num_successes &lt;- 7
+prob_success &lt;- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
+
+#compute P(h, n|theta) for each theta in [0, 1].
+likelihood_distribution &lt;- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
+
+sum(likelihood_distribution$probability)</code></pre>
+<pre><code class="r-code">[1] 9.09091
+</code></pre>
+<p>The sum of all these values is greater than 1—specifically, 9.09—and so these values are not probabilities. To provide an explanation, when determining the value of <span class="math inline">\(\theta\)</span> that most likely produced the data, we fix the data and vary the parameter values (i.e., <span class="math inline">\(\theta\)</span>). the data and varying the parameter values, the resulting values do not sum to 1 and are, consequently, not probability values: they are likelihoods. Therefore, when trying to determine the value of <span class="math inline">\(\theta\)</span> that most likely produced the observed data, likelihoods are computed, and this fundamental difference is conveyed with a different notation. Instead of computing the probability of the data given a parameter value (e.g., <span class="math inline">\(P(h = 7, n = 10|\theta)\)</span>), we compute the likelihood of the parameter given the data, <span class="math inline">\(L(\theta|h = 7, n = 10)\)</span>.</p>
+</div>
+<div id="using-likelihoods-to-determine-the-parameter-value-that-most-likely-produced-the-observed-data" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Using Likelihoods to Determine the Parameter Value that Most Likely Produced the Observed Data</h2>
 <p>Although probability density functions compute the probability that a set of data values have been observed given a fixed set of parameter valuess, we are seldom interested in this probability. Practitioners and researchers
 are more interested in the probability that a certain set of parameter values characterize the larger population (i.e, <span class="math inline">\(p(\theta|y)\)</span>). When trying to determine the most likely set of
 parameter values, we use likelihood functions. Thus, the likelihood of a set of parameters given the observed data is represented as <span class="math inline">\(L(\theta|y)\)</span>. Importantly, likelihoods do not
@@ -483,8 +497,8 @@ describe the probability of a set of parameter being true (i.e., <span class="ma
 another likelihood function by changing the values of the number of trials <span class="math inline">\(\theta_1\)</span> (see Figure <a href="#likelihood-dist2"><strong>??</strong></a>). A joint likelihood function can be produced by varying
 both parameters simultaneously.</p>
 </div>
-<div id="resources" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Resources</h2>
+<div id="resources" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Resources</h2>
 </div>
 </div>
 <div id="references" class="section level1" number="3">
@@ -679,6 +693,7 @@ At this point, we need to determine the integration limits of <span class="math 
 <hr />
 <ol>
 <li id="fn1"><p>Discrete variables have a countable number of discrete values. In the current example with ten coin flips (<span class="math inline">\(n = 10\)</span>), the number of heads is a discrete variable because the number of heads, <span class="math inline">\(h\)</span>, has a countable number of outcomes, <span class="math inline">\(h \in \\{0, 1, 2, ..., n\\}\)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>It should be noted that Bayes’ formula can also be used to determine the value of <span class="math inline">\(\theta\)</span> that most likely produced the data. Instead of calculating, <span class="math inline">\(P(h, n|\theta)\)</span>, however, Bayes’ formula uses prior information about an hypothesis to calculate the probability of <span class="math inline">\(\theta\)</span> given the data, <span class="math inline">\(P(\theta|h, n)\)</span> (for a review, see {{&lt; cite “fine2019” &gt;}}).<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

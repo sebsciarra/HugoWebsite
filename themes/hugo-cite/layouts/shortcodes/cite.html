@@ -97,6 +97,7 @@
 {{- $bibliographyPath = $.Page.Params.bibFile -}}
 {{- end }}
 
+
 {{- if gt (len $bibliographyPath) 0 -}}{{/* Begin Bibliography Loop */}}
 {{- $bibliography := getJSON $bibliographyPath -}}
 {{- /* -------------------- END Bibliography path -------------------- */ -}}
