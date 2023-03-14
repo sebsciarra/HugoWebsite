@@ -9,6 +9,7 @@
 
 .toc_container {
    position: -webkit-sticky; /* Safari */
+   position: sticky;
   top: 2rem;
   height: inherit;
   width: 14rem;
@@ -18,6 +19,7 @@
 
 .tableContents{
    position: -webkit-sticky; /* Safari */
+    position: sticky;
   font-family: Helvetica !important;
   font-size: 0.75rem;
   font-weight: bold;

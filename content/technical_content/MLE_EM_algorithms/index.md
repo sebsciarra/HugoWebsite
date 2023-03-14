@@ -13,14 +13,14 @@ bibFile: content/technical_content/MLE_EM_algorithms/biblio.json
 tags: []
 ---   
 
-{{< cite "fine2019" >}}
 
 
 
 
 
 
-# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values
+
+# Probability Mass Functions: The Probability of Observing Each Possible Outcome Given One Set of Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
 $$
@@ -88,15 +88,6 @@ library(grDevices) #needed for italic()
 highest_number_ind <- which.max(prob_distribution$probability) 
 ##most likely number of successes
 most_likely_number <- prob_distribution$num_successes[highest_number_ind] 
-##probability value of most likely number of successes
-highest_prob <- max(prob_distribution$probability) 
-
-rectangle_data <-data.frame(
-  'xmin' = most_likely_number - 0.10, 
-  'xmax' = most_likely_number + 0.10,
-  'ymin' = 0,
-  'ymax' = highest_prob)
-
 
 #create pmf plot 
 pmf_plot <- ggplot(data = prob_distribution, aes(x = num_successes, y = probability)) + 
@@ -104,10 +95,8 @@ pmf_plot <- ggplot(data = prob_distribution, aes(x = num_successes, y = probabil
            fill =  ifelse(test = prob_distribution$num_successes == most_likely_number, 
                                 no =  "#002241", 
                                 yes = "#00182d")) +  #calculate sum of probability for each num_successes
- ## geom_rect(inherit.aes = F, 
- ##           data = rectangle_data, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
- ##           fill = 'grey50', color = NA, alpha = 0.2) +
-  scale_y_continuous(name = bquote(italic("P(h")*"|"*italic(theta == .(prob_success)*","~n == .(num_trials)*")"))) + 
+
+    scale_y_continuous(name = bquote(italic("P(h")*"|"*italic(theta == .(prob_success)*","~n == .(num_trials)*")"))) + 
   scale_x_continuous(name = bquote("Number of Heads (i.e., "*italic("h")~")"), 
                      breaks = seq(from = 0, to = 10, by = 1)) +
   theme_classic(base_family = "Helvetica", base_size = 18) +
@@ -120,7 +109,8 @@ pmf_plot <- ggplot(data = prob_distribution, aes(x = num_successes, y = probabil
                                 no =  "plain", 
                                 yes = "bold")), 
         text = element_text(color = "#002241"),
-        line = element_line(color = "#002241"), 
+        axis.line = element_line(color = "#002241"), 
+        axis.ticks = element_line(color =  "#002241"), 
         axis.text = element_text(color = "#002241"))
 
 ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
@@ -133,7 +123,7 @@ ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
     </caption>
   </div>
    <div class="figTitle">
-    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)
   </div>
     <img src="images/pmf_plot.png" width="70%" height="70%"> 
   
@@ -163,11 +153,11 @@ With a probability mass function that shows the probability of obtaining each po
 
 Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, $\theta$, that most likely produced the data, $P(h, n|\theta)$[^2].  Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods. 
 
-[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "fine2019" >}}). 
+[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "etz2018" >}}). 
 
 ## Likelihoods are not Probabilities
 
-Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to 1, and this can be verified by summing these values using the code below (for a mathematical proof, see [Appendix B](#proof-likelihood)). 
+Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to 1. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the fundamental difference between probabilities and likelihoods, we use different notations.  When fixing the data and varying the parameter values, we compute the likelihood of the parameter given the data, $L(\theta|h, n)$. 
   
 ```r 
 num_trials <- 10
@@ -183,32 +173,37 @@ sum(likelihood_distribution$probability)
 <pre><code class='r-code'>[1] 9.09091
 </code></pre>
 
-The sum of all these values is greater than 1---specifically, 9.09---and so these values are not probabilities. To provide an explanation, when determining the value of $\theta$ that most likely produced the data, we fix the data and vary the parameter values (i.e., $\theta$).  the data and varying the parameter values, the resulting values do not sum to 1 and are, consequently, not probability values: they are likelihoods. Therefore, when trying to determine the value of $\theta$ that most likely produced the observed data, likelihoods are computed, and this fundamental difference is conveyed with a different notation. Instead of computing the probability of the data given a parameter value (e.g., $P(h = 7, n = 10|\theta)$), we compute the likelihood of the parameter given the data, $L(\theta|h = 7, n = 10)$. 
-
-## Using Likelihoods to Determine the Parameter Value that Most Likely Produced the Observed Data
+In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.8% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. 
 
 
+## Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate
+
+
+Although likelihoods are fundamentally different from probabilities, they can still be plotted to find the most likely parameter value.  
 
 
 
 
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)
+  </div>
+    <img src="images/likelihood_plot.png" width="70%" height="70%"> 
+  
+  <div class="figNote">
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the value of <span class = "theta">&theta;</span> that is the maximum likelihood estimate, with the corresponding bar in dark blueindicating the corresponding value.</span> 
+  </div>
+</div>
 
-Although probability density functions compute the probability that a set of data values have been observed given a fixed set of parameter valuess, we are seldom interested in this probability. Practitioners and researchers
-are more interested in the probability that a certain set of parameter values characterize the larger population (i.e, $p(\theta|y)$). When trying to determine the most likely set of
-parameter values, we use likelihood functions. Thus, the likelihood of a set of parameters given the observed data is represented as $L(\theta|y)$. Importantly, likelihoods do not 
-represent the probability that a given set of parameter values defines the population (i.e., $P(\theta)$); we sample data and want to infer parameter values at the population level. With
-probabilities, we assume knowledge of the population parameter values and calculate the probability of observing any given set of data. Using perhaps more relatable terms, the 
-hypothesis is assumed to be true when calculating conditional probabilities and the data are varied. For likelihoods, the data is fixed and the hypothesis is varied. Note that Bayes
-theorem can be used to convert likelihoods ($L(\theta|y)$) to probabilities ($P(\theta)$). 
-
-To compute likelihoods, the function used to compute the above probabilities is used. Although confusing, the parameter values (the probability of success in this example [$\theta_1$])
-are now being manipulated and not the data (see Figure \@ref(fig:likelihood-dist). Importantly, the sum of all the likelihoods does not sum to 1 ($\int^n_0 f(y|n, \theta) \neq 1$), 
-which explains why likelihoods are sometimes called *unnormalized probabilities*. Although it seems unintuitive that the sum of the likelihoods is not 1, remember that likelihoods do not
-describe the probability of a set of parameter being true (i.e., $p(\theta)$); if they did, then the integral would sum to 1. Given that we have two parameters, we can also produce 
-another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure \@ref(likelihood-dist2)). A joint likelihood function can be produced by varying 
-both parameters simultaneously. 
 
 
+
+# Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values  
 
 ## Resources 
 
