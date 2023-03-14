@@ -1,5 +1,7 @@
 
 //see https://github.com/mathjax/MathJax/issues/3013
+
+
 window.MathJax = {
   section: {
     n: -1,
@@ -19,8 +21,7 @@ window.MathJax = {
         const section = MathJax.config.section;
         return (section.useLetters ? section.letters[section.n] : section.n) + '.' + n;
       }
-    }
-  },
+    }},
 
   chtml: {
    mtextInheritFont: true,         // font to use for mtext, if not inheriting (empty means use MathJax fonts)

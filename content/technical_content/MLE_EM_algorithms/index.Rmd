@@ -218,7 +218,7 @@ With a probability mass function that shows the probability of obtaining each po
 
 Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, $\theta$, that most likely produced the data, $P(h, n|\theta)$[^2].  Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods. 
 
-[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "etz2018" >}}). 
+[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "fine2019" >}}). 
 
 ## Likelihoods are not Probabilities
 
@@ -239,16 +239,14 @@ sum(likelihood_distribution$probability)
 sum(likelihood_distribution$probability)
 ```
 
-In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.8% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. 
-
+In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihoods for each value of $\theta$ can be computed. 
 
 ## Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate
 
+In Figure \ref{fig:likelihood-dist}, I have plotted the likelihood for each value of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ is the value of .70, which is emboldened on the x-axis and its likelihood indicated by the vertical bar. 
 
-Although likelihoods are fundamentally different from probabilities, they can still be plotted to find the most likely parameter value.  
 
-
-```{r likelihood-dist, echo=F, eval=F}
+```{r likelihood-dist}
 num_trials <- 10
 num_successes <- 7
 prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
@@ -299,25 +297,45 @@ ggsave(filename = 'images/likelihood_plot.png', plot = likelihood_plot, height =
 <div class="figure">
   <div class="figDivLabel">
     <caption>
-      <span class = 'figLabel'>Figure \ref{fig:prob-mass-binom}<span> 
+      <span class = 'figLabel'>Figure \ref{fig:likelihood-dist}<span> 
     </caption>
   </div>
    <div class="figTitle">
-    Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)
+    <span>Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)</span>
   </div>
     <img src="images/likelihood_plot.png" width="70%" height="70%"> 
   
   <div class="figNote">
-      <span><em>Note. </em> Number emboldened on the x-axis indicates the value of <span class = "theta">&theta;</span> that is the maximum likelihood estimate, with the corresponding bar in dark blueindicating the corresponding value.</span> 
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the value of <span class = "theta">&theta;</span> that is the maximum likelihood estimate, with the corresponding bar in dark blue indicating the corresponding value.</span> 
   </div>
 </div>
 
+Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, however, many situations arise where many parameter values are estimated, and plotting in an *n*-dimensional space becomes very difficult when $n > 3$, and virtually impossible when $n > 5$. Thus, a more efficient method is needed to find maximum likelihood estimates. 
 
 
+# Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values
 
-# Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values  
+Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, $\theta_{MLE}$, is the value of $\theta$ that maximizes the likelihood of the data such that 
 
-## Resources 
+$$ 
+\theta_{MLE} = \underset{\theta}{\arg\max}  L(\theta|D).
+\label{eq:MLE-general}
+$$
+In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases. 
+
+## Maximum Likelihood Estimation for the Binomial Case 
+
+In the binomial case, there is only one parameter value of interest: the probability of heads, $\theta$. Thus, maximum likelihood estimation will find the value $\theta$ that maximizes the likelihood function,
+
+$$\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. $$
+
+Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation so that the computation of the derivative is greatly simplified and does not involve a lengthy application of the quotient, product,
+and chain rules. In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} results: 
+
+$$
+\log[ L(\theta|h,n)] = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\label{eq:binom-log-likelihood}
+$$
 
 # References
 
@@ -349,7 +367,7 @@ Given the striking resemblance between the binomial function in Equation \ref{eq
 \begin{spreadlines}{0.5em}
 \begin{align*}
 (p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
-1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \qquad\qquad _\square   \nonumber 
 \end{align*}
 \end{spreadlines}
 
@@ -426,7 +444,7 @@ $$
 \begin{align}
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
 &= \frac{n!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{1}{n+1} 
+&= \frac{1}{n+1} \qquad\qquad _\square 
 \label{eq:likelihood-proof}  
 \end{align} 
 \end{spreadlines}
@@ -537,7 +555,7 @@ Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produ
 \Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \,du\,dv \\\\
 &=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \,dv \\\\
 &=  \Gamma(x + y)\mathrm{B}(x,y) \\\\
-\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}
+\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)} \qquad\qquad _\square 
 \end{align*}
 \end{spreadlines}
 
@@ -545,7 +563,156 @@ Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produ
 
 # Appendix D: Proof of Relation Between Gamma and Factorial Functions  {#proof-gamma-factorial}
 
+To prove the following proposition in Equation \ref{eq:gamma-factorial} that
+
+$$
+\begin{align}
+\Gamma(x) &= \int_0^\infty t^{x-1}e^{-t} dt =(x-1)!, 
+\label{eq:gamma-factorial}
+\end{align}
+$$
+it is first helpful to prove the proposition below in Equation \ref{eq:gamma-pre-fac} that 
+$$
+\begin{align}
+\Gamma(\alpha + 1) &= \alpha\Gamma(\alpha )
+\label{eq:gamma-pre-fac}
+\end{align}
+$$
+To prove Equation \ref{eq:gamma-pre-fac}, we first expand Equation \ref{eq:gamma-pre-fac} in Equation \ref{eq:gamma-expand} and then simplify Equation \ref{eq:gamma-expand} using integration by parts such that 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\Gamma(\alpha + 1) &= \int^\infty_0 t^\alpha e^{-t} \text{ } dt
+\label{eq:gamma-expand} \\\\ 
+\int u \text{ }dv &= uv - \int v \text{ } du.  
+\label{eq:int-parts} \\\\
+\text{Let } u &= t^\alpha \text{, } dv = e^{-t} \text{ } dt \text{, } \nonumber \\\\
+du &= \alpha t^{\alpha - 1}\text{, and } v = -e^{-t}. \nonumber\\\\
+\int u \text{ }dv &= -t^\alpha e^{-t}|^\infty_0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1} 
+\label{eq:gamma-int-parts}
+\end{align}
+\end{spreadlines}
+$$
+To simplify Equation \ref{eq:gamma-int-parts}, I will first focus on the evaluation of $-t^\alpha e^{-t}$ between $\infty$ and $0$ below. At $t = \infty$, 
+
+$$
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-\infty^{\alpha}}{e^\infty}, 
+\label{eq:inf-eval}
+\end{align*}
+$$
+and because $e^{\infty}$ approaches $\infty$ faster than $-\infty^\alpha$ approaches $-\infty$, Equation \ref{eq:inf-eval} becomes zero. At $t = 0$, 
+$$
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-0^{\alpha}}{e^0} = \frac{0}{1} = 0.
+\end{align*}
+$$
+Therefore, Equation \ref{eq:gamma-int-parts} simplifies to 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\int u \text{ }dv &= 0 - 0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}  \\\\
+&= \alpha  \int^\infty_0t^{\alpha - 1} e^{-t}  \\\\
+&= \alpha \Gamma(\alpha) \qquad\qquad _\square
+\end{align*} 
+\end{spreadlines}
+$$
+Having proven that $\Gamma(\alpha + 1) = \alpha\Gamma(\alpha)$, it becomes easy to prove Equation \ref{eq:gamma-factorial} which states that $\Gamma(x) = (x-1)!$. If I continue to expand the gamma function, $\Gamma(x-n)$, where $n = x -1$, I will obtain 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) &= (x-1)\Gamma(x-1) \\\\
+\Gamma(x-1) &= (x-2)\Gamma(x-2) \\\\
+&\vdots \\\\
+\Gamma(x-n) &= (1)\Gamma(1) 
+\end{align*}
+\end{spreadlines}
+$$
+To evaluate $\Gamma(1)$, I write out its expansion and show that 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(1) &= \int^\infty_0t^{1-1}e^{-t} \text{ } dt \\\\
+&= e^{-t}|^\infty_0 \\\\
+&= e^{-\infty} - e^{0} \\\\ 
+&= 0 + 1 = 1\\\\
+\end{align*}
+\end{spreadlines}
+$$
+Therefore,  $\Gamma(x)$ expands to $(x-1)!$ because the last term will inevitably be  $1\times\Gamma(1) = 1$. 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) = (x-1)(x-2)(x-3)...(x-n)\Gamma(x-n)  \\\\
+=(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
+=(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
+=(x-1)! \qquad\qquad _\square
+\end{align*}
+\end{spreadlines}
+$$
+
 # Appendix E: Proof of Binomial Theorem  {#proof-binomial}
 
+The binomial theorem provided below in Equation \ref{eq:binomial2} states that 
+$$
+(x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.
+\label{eq:binomial2}
+$$
+I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where $n=1$ so that I can later generalize the proof with a larger number of $n+1$.  In the base case, the binomial theorem is proven such that 
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+x + y &= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\\\
+&= x + y. 
+\end{align*}
+\end{spreadlines}
+$$
+Now, I will prove the binomial theorem with $n + 1$. Thus, 
+$$
+(x + y)^{n+1} = \sum^{n+1}_{k=0} {n+1 \choose k} x^{n+1-k}y^k.
+\label{eq:binomial-induction}
+$$
+I now expand the left-hand side of Equation \ref{eq:binomial-induction}, to obtain 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+&=(x + y)(x + y)^n \nonumber \\\\
+ &= (x+y) \sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber  \\\\
+&=x\sum^n_{k=0} {n \choose k} x^{n-k}y^k + y\sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber \\\\
+&=\sum^n_{k=0} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=0} {n \choose k} x^{n-k}y^{k+1} \nonumber \\\\
+&=\sum^n_{k=0} {n \choose k} x^{(n+1)-k}y^k + \sum^{n+1}_{k=1} {n \choose k-1} x^{n-(k-1)}y^{(k-1)+1}
+\label{eq:binom-sums}
+\end{align}
+\end{spreadlines}
+$$
+Now I, respectively, remove $k = 0$ and $k = n+1$ from the first and second terms of Equation \ref{eq:binom-sums} so that the sums iterate over the same range of $k=1$ to $k = n$. I then use Pascal's rule to combine the two summations into one summation. 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+&= \binom{n}{0} x^{n+1-0}y^0 + \binom{n}{n} x^{n-(n + 1 -1)}y^{(n+1-1)+1} + \sum^n_{k=1} \binom{n}{k} x^{(n+1)-k}y^k + \sum^n_{k=1} \binom{n}{k-1} x^{n-(k-1)}y^{(k-1)+1} \nonumber \\\\
+&=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=1} {n \choose k-1}  x^{n-k+1}y^{k}.
+\label{eq:add-sums}
+\end{align}
+\end{spreadlines}
+$$
+
+I then apply Pascal's rule to simplify the addition of summations in Equation \ref{eq:add-sums} to obtain 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+&=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
+&= {n+1 \choose 0} x^{n+1-0}y^0 + {n+1 \choose n+1} x^{n+1-(n+1)}y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
+&= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\square
+\end{align*}
+\end{spreadlines}
+$$
 
 

@@ -32,10 +32,10 @@ I'm Sebastian Sciarra and I am currently a PhD candidate in the Industrial-Organ
 
 I have set up this blog to contain the following three types of content: 
 
-1) <a href="/technical_content">Technical Content</a>: contains posts that dive into the fundamentals of an analysis and, therefore, delve into the necessary calculus and algebra.
-2) <a href="/coding_tricks">Coding Demonstrations & Tricks</a>: contains posts that explain useful pieces of code I have come across or constructed myself (whether in R, Python, SQL, Javascript, CSS, etc.). 
+1) <a href="/technical_content">Technical Content</a>: contains posts that dive into the fundamentals of an analysis and explain the necessary calculus and algebra.
+2) <a href="/coding_tricks">Coding Demonstrations & Tricks</a>: contains posts that explain useful pieces of code I have come across or constructed (whether in R, Python, SQL, Javascript, CSS, etc.). 
 3) <a href="/simulation_exps">Simulation Experiments</a>: contains posts that show how an analysis works by coding the underlying math and/or how an analysis performs under a variety of conditions. 
 
-I have also set up the <a href="/mlresources">ML Resources</a> page as a running list of useful resources I have come across over the years. 
+I have also set up the <a href="/mlresources">ML Resources</a> page as a running list of useful resources I have come across and continue to use.
 
 

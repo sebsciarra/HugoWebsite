@@ -57,16 +57,47 @@ for (let i = 0; i < Object.keys(fig_caption_tags).length; i++) {
 
 //set width of figLabel, figTitle, and figNote to width of <img> element
 const figures = document.querySelectorAll('div.figure');
-for (let f = 0; f < figures.length; f++) {
+ for (let f = 0; f < figures.length; f++) {
 
-  const img = figures[f].querySelector('.figure img');
+      const img = figures[f].querySelector('.figure img');
 
-  figures[f].querySelector('.figDivLabel').style.width = img.clientWidth + 'px';
+      figures[f].querySelector('.figDivLabel').style.width = img.clientWidth + 'px';
+        figures[f].querySelector('.figLabel').style.width = img.clientWidth + 'px';
 
-  figures[f].querySelector('.figTitle').style.width =  img.clientWidth + 'px';
-  figures[f].querySelector('.figNote').style.width =  img.clientWidth + 'px';
+      figures[f].querySelector('.figTitle').style.width =  img.clientWidth + 'px';
+      figures[f].querySelector('.figNote').style.width =  img.clientWidth + 'px';
+    }
 
+
+function myFunction() {
+  const screenWidth = window.innerWidth;
+  const figures = document.querySelectorAll('div.figure');
+
+  if (screenWidth < 1350) {
+    for (let f = 0; f < figures.length; f++) {
+
+      const img = figures[f].querySelector('.figure img');
+
+      figures[f].querySelector('.figDivLabel').style.width = img.clientWidth + 'px';
+        figures[f].querySelector('.figLabel').style.width = img.clientWidth + 'px';
+
+      figures[f].querySelector('.figTitle').style.width =  img.clientWidth + 'px';
+      figures[f].querySelector('.figNote').style.width =  img.clientWidth + 'px';
+    }
+  }
+  if (screenWidth < 750) {
+     for (let f = 0; f < figures.length; f++) {
+
+      const img = figures[f].querySelector('.figure img');
+
+      figures[f].querySelector('.figDivLabel').style.width = img.clientWidth + 'px';
+        figures[f].querySelector('.figLabel').style.width = img.clientWidth + 'px';
+
+      figures[f].querySelector('.figTitle').style.width =  img.clientWidth + 'px';
+      figures[f].querySelector('.figNote').style.width =  img.clientWidth + 'px';
+     }
+  }
 }
 
-
+window.addEventListener('resize', myFunction);
 

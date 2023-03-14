@@ -469,31 +469,91 @@ likelihood_distribution &lt;- compute_binom_mass_density(num_trials = num_trials
 sum(likelihood_distribution$probability)</code></pre>
 <pre><code class="r-code">[1] 9.09091
 </code></pre>
-<p>In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for <span class="math inline">\(L(\theta = .50|h=7, n=10)\)</span> does not mean that, given a probability of heads of .50, there is a 10.8% chance that seven heads will arise in 10 coin flips: The value of <span class="math inline">\(L(\theta = .50|h=7, n=10) = 0.108\)</span> provides a measure of how strongly the data are expected under the hypothesis that <span class="math inline">\(\theta = .50\)</span>.</p>
+<p>In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for <span class="math inline">\(L(\theta = .50|h=7, n=10)\)</span> does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of <span class="math inline">\(L(\theta = .50|h=7, n=10) = 0.108\)</span> provides a measure of how strongly the data are expected under the hypothesis that <span class="math inline">\(\theta = .50\)</span>. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihoods for each value of <span class="math inline">\(\theta\)</span> can be computed.</p>
 </div>
 <div id="creating-a-likelihood-distribution-to-find-the-maximum-likelihood-estimate" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate</h2>
-<p>Although likelihoods are fundamentally different from probabilities, they can still be plotted to find the most likely parameter value.</p>
+<p>In Figure <span class="math inline">\(\ref{fig:likelihood-dist}\)</span>, I have plotted the likelihood for each value of <span class="math inline">\(\theta \in \[0, 1\]\)</span>. By plotting the likelihoods, the parameter value that most likely produced the data or the <em>maximum likelihood estimate</em> can be identified. The maximum likelihood estimate of <span class="math inline">\(\theta\)</span> is the value of .70, which is emboldened on the x-axis and its likelihood indicated by the vertical bar.</p>
+<pre class="r"><code>num_trials &lt;- 10
+num_successes &lt;- 7
+prob_success &lt;- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
+
+likelihood_distribution &lt;- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
+
+#create data set for shaded rectangle that indicates the most likely value 
+##index of highest probability 
+highest_number_ind &lt;- which.max(likelihood_distribution$probability) 
+##most likely number of successes
+maximum_likelihood_estimate &lt;- likelihood_distribution$prob_success[highest_number_ind] 
+##probability value of most likely number of successes
+highest_prob &lt;- max(likelihood_distribution$probability) 
+
+rectangle_data &lt;- data.frame(
+  &#39;xmin&#39; = maximum_likelihood_estimate - .005, 
+  &#39;xmax&#39; = maximum_likelihood_estimate + .005,
+  &#39;ymin&#39; = -0.5,
+  &#39;ymax&#39; = highest_prob)
+
+
+likelihood_plot &lt;- ggplot(data = likelihood_distribution, aes(x = prob_success, y = probability)) + 
+  geom_line(color = &quot;#002241&quot;) + 
+  geom_rect(inherit.aes = F, 
+             fill = &quot;#002241&quot;,
+            data = rectangle_data, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax))+ 
+  
+    scale_x_continuous(name = bquote(paste(&quot;Probability of Heads (&quot;, theta, &quot;)&quot;)), 
+                       breaks = seq(0, 1, 0.10), 
+                       labels = scales::number_format(accuracy = 0.01)) +
+  
+    scale_y_continuous(name = bquote(italic(&quot;L(&quot;)*italic(theta)*&quot;| &quot;*italic(&quot;h&quot;)== .(num_successes)*&quot;,&quot;~italic(&quot;n&quot;) == .(num_trials)*&quot;)&quot;),  
+                       labels = scales::number_format(accuracy = 0.01), 
+                       breaks = seq(from = 0, to = .30, by = .10)) +
+  coord_cartesian(ylim = c(0, .30)) + 
+
+   theme_classic(base_family = &quot;Helvetica&quot;, base_size = 18) +
+
+  theme(axis.text.x = element_text(face = ifelse(seq(0, 1, 0.10) == maximum_likelihood_estimate, &quot;bold&quot;, &quot;plain&quot;)),
+        text = element_text(color = &quot;#002241&quot;),
+        axis.line = element_line(color = &quot;#002241&quot;), 
+        axis.ticks = element_line(color =  &quot;#002241&quot;), 
+        axis.text = element_text(color = &quot;#002241&quot;))
+
+ggsave(filename = &#39;images/likelihood_plot.png&#39;, plot = likelihood_plot, height = 6, width = 8)</code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:prob-mass-binom}&lt;span&gt; 
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:likelihood-dist}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
-<pre><code>Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)</code></pre>
+<pre><code>&lt;span&gt;Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)&lt;/span&gt;</code></pre>
 </div>
 <pre><code>&lt;img src=&quot;images/likelihood_plot.png&quot; width=&quot;70%&quot; height=&quot;70%&quot;&gt; </code></pre>
 <div class="figNote">
-<pre><code>  &lt;span&gt;&lt;em&gt;Note. &lt;/em&gt; Number emboldened on the x-axis indicates the value of &lt;span class = &quot;theta&quot;&gt;&amp;theta;&lt;/span&gt; that is the maximum likelihood estimate, with the corresponding bar in dark blueindicating the corresponding value.&lt;/span&gt; </code></pre>
+<pre><code>  &lt;span&gt;&lt;em&gt;Note. &lt;/em&gt; Number emboldened on the x-axis indicates the value of &lt;span class = &quot;theta&quot;&gt;&amp;theta;&lt;/span&gt; that is the maximum likelihood estimate, with the corresponding bar in dark blue indicating the corresponding value.&lt;/span&gt; </code></pre>
 </div>
 </div>
+<p>Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, however, many situations arise where many parameter values are estimated, and plotting in an <em>n</em>-dimensional space becomes very difficult when <span class="math inline">\(n &gt; 3\)</span>, and virtually impossible when <span class="math inline">\(n &gt; 5\)</span>. Thus, a more efficient method is needed to find maximum likelihood estimates.</p>
 </div>
 </div>
 <div id="using-maximum-likelihood-estimation-to-find-the-most-likely-set-of-parameter-values" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values</h1>
-<div id="resources" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Resources</h2>
+<p>Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, <span class="math inline">\(\theta_{MLE}\)</span>, is the value of <span class="math inline">\(\theta\)</span> that maximizes the likelihood of the data such that</p>
+<p><span class="math display">\[
+\theta_{MLE} = \underset{\theta}{\arg\max}  L(\theta|D).
+\label{eq:MLE-general}
+\]</span>
+In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases.</p>
+<div id="maximum-likelihood-estimation-for-the-binomial-case" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Maximum Likelihood Estimation for the Binomial Case</h2>
+<p>In the binomial case, there is only one parameter value of interest: the probability of heads, <span class="math inline">\(\theta\)</span>. Thus, maximum likelihood estimation will find the value <span class="math inline">\(\theta\)</span> that maximizes the likelihood function,</p>
+<p><span class="math display">\[\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. \]</span></p>
+<p>Before computing the maximum likelihood estimate, however, it is important to apply a <span class="math inline">\(\log\)</span> transformation so that the computation of the derivative is greatly simplified and does not involve a lengthy application of the quotient, product,
+and chain rules. In applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function, the log-likelihood function shown below in Equation <span class="math inline">\(\ref{eq:binom-log-likelihood}\)</span> results:</p>
+<p><span class="math display">\[
+\log[ L(\theta|h,n)] = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\label{eq:binom-log-likelihood}
+\]</span></p>
 </div>
 </div>
 <div id="references" class="section level1" number="4">
@@ -581,7 +641,7 @@ Given that the gamma function can be stated as a factorial, Equation <span class
 \begin{align}
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\
 &amp;= \frac{n!}{(n + 1)!} \nonumber \\\\
-&amp;= \frac{1}{n+1}
+&amp;= \frac{1}{n+1} \qquad\qquad _\square
 \label{eq:likelihood-proof}  
 \end{align}
 \end{spreadlines}
@@ -680,15 +740,152 @@ At this point, we need to determine the integration limits of <span class="math 
 </div>
 <div id="proof-gamma-factorial" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Appendix D: Proof of Relation Between Gamma and Factorial Functions</h1>
+<p>To prove the following proposition in Equation <span class="math inline">\(\ref{eq:gamma-factorial}\)</span> that</p>
+<p><span class="math display">\[
+\begin{align}
+\Gamma(x) &amp;= \int_0^\infty t^{x-1}e^{-t} dt =(x-1)!,
+\label{eq:gamma-factorial}
+\end{align}
+\]</span>
+it is first helpful to prove the proposition below in Equation <span class="math inline">\(\ref{eq:gamma-pre-fac}\)</span> that
+<span class="math display">\[
+\begin{align}
+\Gamma(\alpha + 1) &amp;= \alpha\Gamma(\alpha )
+\label{eq:gamma-pre-fac}
+\end{align}
+\]</span>
+To prove Equation <span class="math inline">\(\ref{eq:gamma-pre-fac}\)</span>, we first expand Equation <span class="math inline">\(\ref{eq:gamma-pre-fac}\)</span> in Equation <span class="math inline">\(\ref{eq:gamma-expand}\)</span> and then simplify Equation <span class="math inline">\(\ref{eq:gamma-expand}\)</span> using integration by parts such that</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\Gamma(\alpha + 1) &amp;= \int^\infty_0 t^\alpha e^{-t} \text{ } dt
+\label{eq:gamma-expand} \\\\
+\int u \text{ }dv &amp;= uv - \int v \text{ } du.  
+\label{eq:int-parts} \\\\
+\text{Let } u &amp;= t^\alpha \text{, } dv = e^{-t} \text{ } dt \text{, } \nonumber \\\\
+du &amp;= \alpha t^{\alpha - 1}\text{, and } v = -e^{-t}. \nonumber\\\\
+\int u \text{ }dv &amp;= -t^\alpha e^{-t}|^\infty_0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}
+\label{eq:gamma-int-parts}
+\end{align}
+\end{spreadlines}
+\]</span>
+To simplify Equation <span class="math inline">\(\ref{eq:gamma-int-parts}\)</span>, I will first focus on the evaluation of <span class="math inline">\(-t^\alpha e^{-t}\)</span> between <span class="math inline">\(\infty\)</span> and <span class="math inline">\(0\)</span> below. At <span class="math inline">\(t = \infty\)</span>,</p>
+<p><span class="math display">\[
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-\infty^{\alpha}}{e^\infty},
+\label{eq:inf-eval}
+\end{align*}
+\]</span>
+and because <span class="math inline">\(e^{\infty}\)</span> approaches <span class="math inline">\(\infty\)</span> faster than <span class="math inline">\(-\infty^\alpha\)</span> approaches <span class="math inline">\(-\infty\)</span>, Equation <span class="math inline">\(\ref{eq:inf-eval}\)</span> becomes zero. At <span class="math inline">\(t = 0\)</span>,
+<span class="math display">\[
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-0^{\alpha}}{e^0} = \frac{0}{1} = 0.
+\end{align*}
+\]</span>
+Therefore, Equation <span class="math inline">\(\ref{eq:gamma-int-parts}\)</span> simplifies to</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\int u \text{ }dv &amp;= 0 - 0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}  \\\\
+&amp;= \alpha  \int^\infty_0t^{\alpha - 1} e^{-t}  \\\\
+&amp;= \alpha \Gamma(\alpha) \qquad\qquad _\square
+\end{align*}
+\end{spreadlines}
+\]</span>
+Having proven that <span class="math inline">\(\Gamma(\alpha + 1) = \alpha\Gamma(\alpha)\)</span>, it becomes easy to prove Equation <span class="math inline">\(\ref{eq:gamma-factorial}\)</span> which states that <span class="math inline">\(\Gamma(x) = (x-1)!\)</span>. If I continue to expand the gamma function, <span class="math inline">\(\Gamma(x-n)\)</span>, where <span class="math inline">\(n = x -1\)</span>, I will obtain</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) &amp;= (x-1)\Gamma(x-1) \\\\
+\Gamma(x-1) &amp;= (x-2)\Gamma(x-2) \\\\
+&amp;\vdots \\\\
+\Gamma(x-n) &amp;= (1)\Gamma(1)
+\end{align*}
+\end{spreadlines}
+\]</span>
+To evaluate <span class="math inline">\(\Gamma(1)\)</span>, I write out its expansion and show that</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(1) &amp;= \int^\infty_0t^{1-1}e^{-t} \text{ } dt \\\\
+&amp;= e^{-t}|^\infty_0 \\\\
+&amp;= e^{-\infty} - e^{0} \\\\
+&amp;= 0 + 1 = 1\\\\
+\end{align*}
+\end{spreadlines}
+\]</span>
+Therefore, <span class="math inline">\(\Gamma(x)\)</span> expands to <span class="math inline">\((x-1)!\)</span> because the last term will inevitably be <span class="math inline">\(1\times\Gamma(1) = 1\)</span>.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) = (x-1)(x-2)(x-3)...(x-n)\Gamma(x-n)  \\\\
+=(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
+=(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
+=(x-1)! \qquad\qquad _\square
+\end{align*}
+\end{spreadlines}
+\]</span></p>
 </div>
 <div id="proof-binomial" class="section level1" number="9">
 <h1><span class="header-section-number">9</span> Appendix E: Proof of Binomial Theorem</h1>
+<p>The binomial theorem provided below in Equation <span class="math inline">\(\ref{eq:binomial2}\)</span> states that
+<span class="math display">\[
+(x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.
+\label{eq:binomial2}
+\]</span>
+I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where <span class="math inline">\(n=1\)</span> so that I can later generalize the proof with a larger number of <span class="math inline">\(n+1\)</span>. In the base case, the binomial theorem is proven such that
+<span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+x + y &amp;= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\\\
+&amp;= x + y.
+\end{align*}
+\end{spreadlines}
+\]</span>
+Now, I will prove the binomial theorem with <span class="math inline">\(n + 1\)</span>. Thus,
+<span class="math display">\[
+(x + y)^{n+1} = \sum^{n+1}_{k=0} {n+1 \choose k} x^{n+1-k}y^k.
+\label{eq:binomial-induction}
+\]</span>
+I now expand the left-hand side of Equation <span class="math inline">\(\ref{eq:binomial-induction}\)</span>, to obtain</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+&amp;=(x + y)(x + y)^n \nonumber \\\\
+&amp;= (x+y) \sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber  \\\\
+&amp;=x\sum^n_{k=0} {n \choose k} x^{n-k}y^k + y\sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber \\\\
+&amp;=\sum^n_{k=0} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=0} {n \choose k} x^{n-k}y^{k+1} \nonumber \\\\
+&amp;=\sum^n_{k=0} {n \choose k} x^{(n+1)-k}y^k + \sum^{n+1}_{k=1} {n \choose k-1} x^{n-(k-1)}y^{(k-1)+1}
+\label{eq:binom-sums}
+\end{align}
+\end{spreadlines}
+\]</span>
+Now I, respectively, remove <span class="math inline">\(k = 0\)</span> and <span class="math inline">\(k = n+1\)</span> from the first and second terms of Equation <span class="math inline">\(\ref{eq:binom-sums}\)</span> so that the sums iterate over the same range of <span class="math inline">\(k=1\)</span> to <span class="math inline">\(k = n\)</span>. I then use Pascal’s rule to combine the two summations into one summation.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+&amp;= \binom{n}{0} x^{n+1-0}y^0 + \binom{n}{n} x^{n-(n + 1 -1)}y^{(n+1-1)+1} + \sum^n_{k=1} \binom{n}{k} x^{(n+1)-k}y^k + \sum^n_{k=1} \binom{n}{k-1} x^{n-(k-1)}y^{(k-1)+1} \nonumber \\\\
+&amp;=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=1} {n \choose k-1}  x^{n-k+1}y^{k}.
+\label{eq:add-sums}
+\end{align}
+\end{spreadlines}
+\]</span></p>
+<p>I then apply Pascal’s rule to simplify the addition of summations in Equation <span class="math inline">\(\ref{eq:add-sums}\)</span> to obtain</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align*}
+&amp;=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
+&amp;= {n+1 \choose 0} x^{n+1-0}y^0 + {n+1 \choose n+1} x^{n+1-(n+1)}y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
+&amp;= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\square
+\end{align*}
+\end{spreadlines}
+\]</span></p>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
 <li id="fn1"><p>Discrete variables have a countable number of discrete values. In the current example with ten coin flips (<span class="math inline">\(n = 10\)</span>), the number of heads is a discrete variable because the number of heads, <span class="math inline">\(h\)</span>, has a countable number of outcomes, <span class="math inline">\(h \in \\{0, 1, 2, ..., n\\}\)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>It should be noted that Bayes’ formula can also be used to determine the value of <span class="math inline">\(\theta\)</span> that most likely produced the data. Instead of calculating, <span class="math inline">\(P(h, n|\theta)\)</span>, however, Bayes’ formula uses prior information about an hypothesis to calculate the probability of <span class="math inline">\(\theta\)</span> given the data, <span class="math inline">\(P(\theta|h, n)\)</span> (for a review, see {{&lt; cite “etz2018” &gt;}}).<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>It should be noted that Bayes’ formula can also be used to determine the value of <span class="math inline">\(\theta\)</span> that most likely produced the data. Instead of calculating, <span class="math inline">\(P(h, n|\theta)\)</span>, however, Bayes’ formula uses prior information about an hypothesis to calculate the probability of <span class="math inline">\(\theta\)</span> given the data, <span class="math inline">\(P(\theta|h, n)\)</span> (for a review, see {{&lt; cite “fine2019” &gt;}}).<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
