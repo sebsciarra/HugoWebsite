@@ -9,28 +9,10 @@
     <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
-      <link>/coding_tricks/example_coding_post/</link>
-      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/coding_tricks/example_coding_post/</guid>
-      <description>Explanation of post</description>
-    </item>
-    
-    <item>
-      <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
       <link>/technical_content/mle_em_algorithms/</link>
       <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>/technical_content/mle_em_algorithms/</guid>
-      <description>Explanation of post</description>
-    </item>
-    
-    <item>
-      <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
-      <link>/simulation_exps/sim_post_ex/</link>
-      <pubDate>Wed, 08 Mar 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/simulation_exps/sim_post_ex/</guid>
       <description>Explanation of post</description>
     </item>
     

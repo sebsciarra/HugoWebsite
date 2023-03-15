@@ -10,5 +10,5 @@ module:
   - source: static
     target: static
 theme:
-  - "basic"
+  - "cobalt"
   - "hugo-cite"

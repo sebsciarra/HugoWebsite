@@ -411,7 +411,7 @@ pmf_plot &lt;- ggplot(data = prob_distribution, aes(x = num_successes, y = proba
                                 yes = &quot;#00182d&quot;)) +  #calculate sum of probability for each num_successes
 
     scale_y_continuous(name = bquote(italic(&quot;P(h&quot;)*&quot;|&quot;*italic(theta == .(prob_success)*&quot;,&quot;~n == .(num_trials)*&quot;)&quot;))) + 
-  scale_x_continuous(name = bquote(&quot;Number of Heads (i.e., &quot;*italic(&quot;h&quot;)~&quot;)&quot;), 
+  scale_x_continuous(name = bquote(&quot;Number of Heads (&quot;*italic(&quot;h&quot;)~&quot;)&quot;), 
                      breaks = seq(from = 0, to = 10, by = 1)) +
   theme_classic(base_family = &quot;Helvetica&quot;, base_size = 18) +
   theme(axis.title.y = element_text(face = &#39;italic&#39;), 
@@ -548,12 +548,56 @@ In the two sections that follow, I will apply maximum likelihood estimation for 
 <h2><span class="header-section-number">3.1</span> Maximum Likelihood Estimation for the Binomial Case</h2>
 <p>In the binomial case, there is only one parameter value of interest: the probability of heads, <span class="math inline">\(\theta\)</span>. Thus, maximum likelihood estimation will find the value <span class="math inline">\(\theta\)</span> that maximizes the likelihood function,</p>
 <p><span class="math display">\[\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. \]</span></p>
-<p>Before computing the maximum likelihood estimate, however, it is important to apply a <span class="math inline">\(\log\)</span> transformation so that the computation of the derivative is greatly simplified and does not involve a lengthy application of the quotient, product,
-and chain rules. In applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function, the log-likelihood function shown below in Equation <span class="math inline">\(\ref{eq:binom-log-likelihood}\)</span> results:</p>
+<p>Before computing the maximum likelihood estimate, however, it is important to apply a <span class="math inline">\(\log\)</span> transformation for two reasons. First, applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function of Equation <span class="math inline">\(\ref{eq:mle-binomial}\)</span> greatly simplifies the computation of the derivative because the taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid <em>underflow</em>: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(h=70\)</span>, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero. Instead of directly representing extremely small values, <span class="math inline">\(\log\)</span> likelihoods can be used and allow numerical precision to be retained. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), <span class="math inline">\(\log_{10}{1.2e73} = -72.92\)</span>. In applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function, the log-likelihood function shown below in Equation <span class="math inline">\(\ref{eq:binom-log-likelihood}\)</span> is obtained:</p>
 <p><span class="math display">\[
-\log[ L(\theta|h,n)] = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\log\big(L(\theta|h,n)\big) = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
 \label{eq:binom-log-likelihood}
+\]</span>
+To solve for <span class="math inline">\(\theta_{MLE}\)</span>, the partial derivative of <span class="math inline">\(\log[L(\theta|h,n)]\)</span> with respect to <span class="math inline">\(\theta\)</span> is computed below and then set to zero (at a peak, the likelihood function has a zero-value rate of change with respect to <span class="math inline">\(\theta\)</span>).</p>
+<p><span class="math display">\[  
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \log[L(\theta|h,n)]}{\delta \theta} &amp;= \frac{\delta}{\delta \theta}  \Bigg(\log {n \choose h} + h\log(\theta) + (n-h)\log(1-\theta) \Bigg) \nonumber \\\\
+&amp;= 0 + h(\frac{1}{\theta}) + (n-h)(-1)(\frac{1}{1-\theta})\nonumber \\\\
+0 &amp;= \frac{h}{\theta}- \frac{n-h}{1-\theta} \nonumber \\\\
+\frac{n-h}{1-\theta} &amp;= \frac{h}{\theta} \nonumber \\\\
+\theta n - \theta h &amp;= h - \theta h \nonumber \\\\
+\theta n &amp;=h \nonumber \\\\
+\theta &amp;= \frac{h}{n}
+\label{eq:theta-binom-ll}
+\end{align}
+\end{spreadlines}
+\]</span>
+Therefore, the maximum of the likelihood estimate for the probability of heads, <span class="math inline">\(\theta\)</span>, is found by dividing the observed number of heads by the number of trials, <span class="math inline">\(\frac{h}{n}\)</span> (see Equation <span class="math inline">\(\ref{eq:theta-binom-ll}\)</span>. In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70,
+<span class="math inline">\(\theta_{MLE} = \frac{7}{10} = .70\)</span>.</p>
+<div id="maximum-likelihood-estimation-for-several-binomial-cases" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Maximum Likelihood Estimation for Several Binomial Cases</h3>
+<p>To build on the current example, consider a more realistic example where a researcher decides to flip a coin over multiple sessions. Specifically, in each of 10 <span class="math inline">\(k\)</span> sessions, the researcher flips the coin 10 times. Across the 10 sessions, the following number of heads are obtained: <span class="math inline">\(\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]\)</span>. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to <span class="math inline">\(\theta\)</span>
+because the equation will contain <span class="math inline">\(k=10\)</span> terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a <span class="math inline">\(\theta_{MLE}\)</span> equation for multiple coin flipping sessions, I will compute the function for <span class="math inline">\(\theta_{MLE}\)</span> with only two coin flipping sessions that each have their corresponding number of flips, <span class="math inline">\(\mathbf{n} = \[n_1, n_2\]\)</span>, and heads, (<span class="math inline">\(\mathbf{h} = \[h_1, h_2\]\)</span></p>
+<p><span class="math display">\[  
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \big( \log[L(\theta|h_1,n_1)] +  \log[L(\theta|h_2,n_2)]\big)}{\delta \theta} &amp;= \frac{\delta}{\delta \theta}  \Bigg(\Big(\log {n_1 \choose h_1} + h_1\log(\theta) + (n_1-h_1)\log(1-\theta) \Big) + \nonumber \\\\
+&amp;\Big(\log {n_2 \choose h_2} + h_2\log(\theta) + (n_2-h_2)\log(1-\theta) \Big)\Bigg) \nonumber \\\\
+&amp;= 0 + h_1(\frac{1}{\theta}) + (n_1-h_1)(-1)(\frac{1}{1-\theta}) + h_2(\frac{1}{\theta}) + (n_2-h_2)(-1)(\frac{1}{1-\theta}) \nonumber \\\\
+&amp;= \frac{h_1}{\theta}+ \frac{-n_1+h_1}{1-\theta} + \frac{h_2}{\theta} + \frac{-n_2+h_2}{1-\theta} \nonumber \\\\
+&amp;= \frac{h_1 + h_2}{\theta}+  \frac{h_1 + h_2 - n_1 -n_2}{1-\theta} \nonumber \\\\
+-\theta(h_1 + h_2 - n_1 -n_2) &amp;= (1 - \theta)(h_1 + h_2) \nonumber \\\\
+-\theta h_1  -\theta h_2 + \theta n_1  + \theta n_2 &amp;= h_1 - \theta h_1 + h_2 - \theta h_2 \nonumber \\\\
+\theta (n_1  + n_2) &amp;= h_1 + h_2 \nonumber \\\\
+\theta  &amp;= \frac{h_1 + h_2}{n_1+ n_2} \nonumber \\\\
+\theta_{MLE} &amp;=  \frac{\sum^k_{i=1}h_i}{\sum^k_{i=1}n_i}
+\label{eq:theta-binom-k}
+\end{align}
+\end{spreadlines}
 \]</span></p>
+<p>Therefore, to obtain <span class="math inline">\(\theta_{MLE}\)</span> when there are <span class="math inline">\(k\)</span> coin flipping sessions, we simply divide the sum of heads,<span class="math inline">\(\sum^k_{i=1} h_i\)</span>, by the sum of total flips, <span class="math inline">\(\sum^k_{i=1} n_i\)</span>. In the current example where <span class="math inline">\(\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]\)</span> and each session has 10 coin flips, the maximum likelihood estimate for the probability of heads, <span class="math inline">\(\theta_{MLE}\)</span>, is .48 (see lines below).</p>
+<pre class="r"><code>h &lt;- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
+theta_mle &lt;- sum(h)/sum(rep(x = 10, times = 10))</code></pre>
+</div>
+</div>
+<div id="maximum-likelihood-estimation-for-the-gaussian-case" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Maximum Likelihood Estimation for the Gaussian Case</h2>
 </div>
 </div>
 <div id="references" class="section level1" number="4">

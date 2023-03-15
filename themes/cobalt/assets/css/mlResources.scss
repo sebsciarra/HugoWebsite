@@ -105,3 +105,14 @@ a[href*="https"]:hover {
 }
 
 @import 'responsive';
+
+
+
+/*prevent white dot from appearing at top*/
+.MJX_LiveRegion{
+ display: none;
+}
+
+.MathJax {
+  color:var(--navbar-color);
+}

@@ -131,6 +131,7 @@ time{
     font-size: 14px;
     font-family: palatino;
     padding-bottom: 5rem;
+    line-height: 1.5;
 }
 
 
@@ -217,3 +218,14 @@ a[href*="/about"] {
 }
 
 @import 'responsive';
+
+
+
+/*prevent white dot from appearing at top*/
+.MJX_LiveRegion{
+ display: none;
+}
+
+.MathJax {
+  color:var(--navbar-color);
+}

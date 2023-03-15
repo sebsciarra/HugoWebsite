@@ -71,6 +71,8 @@ window.addEventListener('scroll', function () {
 });
 
 const tocButton = document.getElementById("toc_button");
+const tocButton_bottom = document.getElementById("toc_button_bottom");
+
 const tocScroll = document.querySelector(".toc_scroll");
 
 
@@ -88,6 +90,20 @@ tocButton.addEventListener('click', function() {
   }
 });
 
+
+let isTocExpanded_bottom = true; // flag variable to keep track of current state
+
+tocButton_bottom.addEventListener('click', function() {
+  if (isTocExpanded_bottom) {
+    tocScroll.style.display = 'none';
+    tocButton_bottom.innerHTML = '<i class="fa-solid fa-circle-arrow-up"></i>';
+    isTocExpanded_bottom = false;
+  } else {
+    tocScroll.style.display = 'block';
+    tocButton_bottom.innerHTML = '<i class="fas fa-circle-down"></i>';
+    isTocExpanded_bottom = true;
+  }
+});
 
 
 

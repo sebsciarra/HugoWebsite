@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   
   <title>Sebastian Sciarra - Probability, Likelihood, and Maximum Likelihood Estimation</title>
 
   <meta name="author" content="Sebastian Sciarra">
         <link rel="stylesheet" href="/css/webStyling.css"/>
-        <link rel="stylesheet" href="/css/webStyling.min.3b8aef450a3feaa08fced568dce8b0f9e024fc3c6a15776805ce0ce97f61cb60.css">
+        <link rel="stylesheet" href="/css/webStyling.min.abbd1066440353ad4b1f0d345757263e74fb4c175e680cf29d7ec16b45828f3d.css">
 
   <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
   <meta name="description" content="Seb&#39;s portfolio site">
@@ -94,7 +95,7 @@
 
 
     <div class = 'content'>
-      <h1 id="probability-mass-functions-the-probability-of-observing-each-possible-outcome-given-specific-parameter-values">Probability Mass Functions: The Probability of Observing Each Possible Outcome Given Specific Parameter Values</h1>
+      <h1 id="probability-mass-functions-the-probability-of-observing-each-possible-outcome-given-one-set-of-parameter-values">Probability Mass Functions: The Probability of Observing Each Possible Outcome Given One Set of Parameter Values</h1>
 <p>Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a <code>1</code> for heads and <code>0</code> for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \{0, 1 \}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\{h|0 \le h \le10\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the <em>binomial function</em> shown below in Equation \ref{eq:prob-mass-function} can be used:
 $$
 \begin{align}
@@ -103,8 +104,7 @@ P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 \end{align}
 $$
 where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a given number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips ${n \choose h}$.</p>
-<div style="display:none">\(\nextSection\)</div>
-As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
+<p>As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below.</p>
 <p>$$
 \begin{alignat}{2}
 P(h = 4|\theta = 0.50, n = 10) &amp;= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \nonumber \\
@@ -140,7 +140,6 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">num_trials</span> <span class="o">&lt;-</span> <span class="m">10</span>
 </span></span><span class="line"><span class="cl"><span class="n">prob_success</span> <span class="o">&lt;-</span> <span class="m">0.5</span>
 </span></span><span class="line"><span class="cl"><span class="n">num_successes</span> <span class="o">&lt;-</span> <span class="m">0</span><span class="o">:</span><span class="m">10</span>  <span class="c1">#manipulated variable </span>
@@ -155,15 +154,6 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 </span></span><span class="line"><span class="cl"><span class="n">highest_number_ind</span> <span class="o">&lt;-</span> <span class="nf">which.max</span><span class="p">(</span><span class="n">prob_distribution</span><span class="o">$</span><span class="n">probability</span><span class="p">)</span> 
 </span></span><span class="line"><span class="cl"><span class="c1">##most likely number of successes</span>
 </span></span><span class="line"><span class="cl"><span class="n">most_likely_number</span> <span class="o">&lt;-</span> <span class="n">prob_distribution</span><span class="o">$</span><span class="n">num_successes[highest_number_ind]</span> 
-</span></span><span class="line"><span class="cl"><span class="c1">##probability value of most likely number of successes</span>
-</span></span><span class="line"><span class="cl"><span class="n">highest_prob</span> <span class="o">&lt;-</span> <span class="nf">max</span><span class="p">(</span><span class="n">prob_distribution</span><span class="o">$</span><span class="n">probability</span><span class="p">)</span> 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">rectangle_data</span> <span class="o">&lt;-</span><span class="nf">data.frame</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#39;xmin&#39;</span> <span class="o">=</span> <span class="n">most_likely_number</span> <span class="o">-</span> <span class="m">0.10</span><span class="p">,</span> 
-</span></span><span class="line"><span class="cl">  <span class="s">&#39;xmax&#39;</span> <span class="o">=</span> <span class="n">most_likely_number</span> <span class="o">+</span> <span class="m">0.10</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#39;ymin&#39;</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#39;ymax&#39;</span> <span class="o">=</span> <span class="n">highest_prob</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">#create pmf plot </span>
 </span></span><span class="line"><span class="cl"><span class="n">pmf_plot</span> <span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">prob_distribution</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">num_successes</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">probability</span><span class="p">))</span> <span class="o">+</span> 
@@ -171,10 +161,8 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 </span></span><span class="line"><span class="cl">           <span class="n">fill</span> <span class="o">=</span>  <span class="nf">ifelse</span><span class="p">(</span><span class="n">test</span> <span class="o">=</span> <span class="n">prob_distribution</span><span class="o">$</span><span class="n">num_successes</span> <span class="o">==</span> <span class="n">most_likely_number</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl">                                <span class="n">no</span> <span class="o">=</span>  <span class="s">&#34;#002241&#34;</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl">                                <span class="n">yes</span> <span class="o">=</span> <span class="s">&#34;#00182d&#34;</span><span class="p">))</span> <span class="o">+</span>  <span class="c1">#calculate sum of probability for each num_successes</span>
-</span></span><span class="line"><span class="cl"> <span class="c1">## geom_rect(inherit.aes = F, </span>
-</span></span><span class="line"><span class="cl"> <span class="c1">##           data = rectangle_data, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), </span>
-</span></span><span class="line"><span class="cl"> <span class="c1">##           fill = &#39;grey50&#39;, color = NA, alpha = 0.2) +</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">bquote</span><span class="p">(</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;P(h&#34;</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;|&#34;</span><span class="o">*</span><span class="nf">italic</span><span class="p">(</span><span class="n">theta</span> <span class="o">==</span> <span class="n">.(prob_success</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;,&#34;</span><span class="o">~</span><span class="n">n</span> <span class="o">==</span> <span class="n">.(num_trials</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;)&#34;</span><span class="p">)))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">bquote</span><span class="p">(</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;P(h&#34;</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;|&#34;</span><span class="o">*</span><span class="nf">italic</span><span class="p">(</span><span class="n">theta</span> <span class="o">==</span> <span class="n">.(prob_success</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;,&#34;</span><span class="o">~</span><span class="n">n</span> <span class="o">==</span> <span class="n">.(num_trials</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;)&#34;</span><span class="p">)))</span> <span class="o">+</span> 
 </span></span><span class="line"><span class="cl">  <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">bquote</span><span class="p">(</span><span class="s">&#34;Number of Heads (i.e., &#34;</span><span class="o">*</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;h&#34;</span><span class="p">)</span><span class="o">~</span><span class="s">&#34;)&#34;</span><span class="p">),</span> 
 </span></span><span class="line"><span class="cl">                     <span class="n">breaks</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">theme_classic</span><span class="p">(</span><span class="n">base_family</span> <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">,</span> <span class="n">base_size</span> <span class="o">=</span> <span class="m">18</span><span class="p">)</span> <span class="o">+</span>
@@ -187,7 +175,8 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 </span></span><span class="line"><span class="cl">                                <span class="n">no</span> <span class="o">=</span>  <span class="s">&#34;plain&#34;</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl">                                <span class="n">yes</span> <span class="o">=</span> <span class="s">&#34;bold&#34;</span><span class="p">)),</span> 
 </span></span><span class="line"><span class="cl">        <span class="n">text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">        <span class="n">line</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.line</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.ticks</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span>  <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
 </span></span><span class="line"><span class="cl">        <span class="n">axis.text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">ggsave</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;images/pmf_plot.png&#39;</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="n">pmf_plot</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">8</span><span class="p">)</span>
@@ -198,7 +187,7 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
     </caption>
   </div>
    <div class="figTitle">
-    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)</span> 
+    Probability Mass Function With an Unbiased Coin (<span class = "theta">&theta;</span> = 0.50) and Ten Coin Flips (n = 10)
   </div>
     <img src="images/pmf_plot.png" width="70%" height="70%"> 
   <div class="figNote">
@@ -216,22 +205,98 @@ Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin
 </code></pre>
 <p>With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea of what outcomes to expect after flipping the coin 10 times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin&rsquo;s probability of heads after data have been collected; in computing the probability mass function, the probability of heads ($\theta$) is fixed. Thus, the researcher must use a different type of distribution to estimate the coin&rsquo;s probability of heads.</p>
 <h1 id="likelihood-distributions-the-probability-of-observing-each-possible-set-of-parameter-values-given-a-specific-outcome">Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome</h1>
-<p>Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With this data, the researcher wants to determine the probability value of heads that most likely produced the data. In other words, the researcher wants to find the value of $\theta$ that maximizes the possibility of observing the data, $\max_{\theta \in \Theta} P(h = 7, n = 10|\theta)$. Before continuing, it is vital to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.</p>
+<p>Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, $\theta$, that most likely produced the data, $P(h, n|\theta)$<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>.  Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.</p>
 <h2 id="likelihoods-are-not-probabilities">Likelihoods are not Probabilities</h2>
-<p>Although probability density functions compute the probability that a set of data values have been observed given a fixed set of parameter valuess, we are seldom interested in this probability. Practitioners and researchers
-are more interested in the probability that a certain set of parameter values characterize the larger population (i.e, $p(\theta|y)$). When trying to determine the most likely set of
-parameter values, we use likelihood functions. Thus, the likelihood of a set of parameters given the observed data is represented as $L(\theta|y)$. Importantly, likelihoods do not
-represent the probability that a given set of parameter values defines the population (i.e., $P(\theta)$); we sample data and want to infer parameter values at the population level. With
-probabilities, we assume knowledge of the population parameter values and calculate the probability of observing any given set of data. Using perhaps more relatable terms, the
-hypothesis is assumed to be true when calculating conditional probabilities and the data are varied. For likelihoods, the data is fixed and the hypothesis is varied. Note that Bayes
-theorem can be used to convert likelihoods ($L(\theta|y)$) to probabilities ($P(\theta)$).</p>
-<p>To compute likelihoods, the function used to compute the above probabilities is used. Although confusing, the parameter values (the probability of success in this example [$\theta_1$])
-are now being manipulated and not the data (see Figure @ref(fig:likelihood-dist). Importantly, the sum of all the likelihoods does not sum to 1 ($\int^n_0 f(y|n, \theta) \neq 1$),
-which explains why likelihoods are sometimes called <em>unnormalized probabilities</em>. Although it seems unintuitive that the sum of the likelihoods is not 1, remember that likelihoods do not
-describe the probability of a set of parameter being true (i.e., $p(\theta)$); if they did, then the integral would sum to 1. Given that we have two parameters, we can also produce
-another likelihood function by changing the values of the number of trials $\theta_1$ (see Figure @ref(likelihood-dist2)). A joint likelihood function can be produced by varying
-both parameters simultaneously.</p>
-<h2 id="resources">Resources</h2>
+<p>Because we are interested in determining which value of $\theta \in [0, 1]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in [0, 1]$, the resulting values are not probabilities because they do not sum to 1. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see <a href="#proof-likelihood">Appendix B</a> and are, therefore, not probabilities: they are likelihoods. To signify the fundamental difference between probabilities and likelihoods, we use different notations.  When fixing the data and varying the parameter values, we compute the likelihood of the parameter given the data, $L(\theta|h, n)$.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">num_trials</span> <span class="o">&lt;-</span> <span class="m">10</span>
+</span></span><span class="line"><span class="cl"><span class="n">num_successes</span> <span class="o">&lt;-</span> <span class="m">7</span>
+</span></span><span class="line"><span class="cl"><span class="n">prob_success</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">)</span> <span class="c1">#manipulated variable </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#compute P(h, n|theta) for each theta in [0, 1].</span>
+</span></span><span class="line"><span class="cl"><span class="n">likelihood_distribution</span> <span class="o">&lt;-</span> <span class="nf">compute_binom_mass_density</span><span class="p">(</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">num_trials</span><span class="p">,</span> <span class="n">num_successes</span> <span class="o">=</span>  <span class="n">num_successes</span><span class="p">,</span> <span class="n">prob_success</span> <span class="o">=</span> <span class="n">prob_success</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">sum</span><span class="p">(</span><span class="n">likelihood_distribution</span><span class="o">$</span><span class="n">probability</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='r-code'>[1] 9.09091
+</code></pre>
+<p>In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihoods for each value of $\theta$ can be computed.</p>
+<h2 id="creating-a-likelihood-distribution-to-find-the-maximum-likelihood-estimate">Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate</h2>
+<p>In Figure \ref{fig:likelihood-dist}, I have plotted the likelihood for each value of $\theta \in [0, 1]$. By plotting the likelihoods, the parameter value that most likely produced the data or the <em>maximum likelihood estimate</em> can be identified. The maximum likelihood estimate of $\theta$ is the value of .70, which is emboldened on the x-axis and its likelihood indicated by the vertical bar.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">num_trials</span> <span class="o">&lt;-</span> <span class="m">10</span>
+</span></span><span class="line"><span class="cl"><span class="n">num_successes</span> <span class="o">&lt;-</span> <span class="m">7</span>
+</span></span><span class="line"><span class="cl"><span class="n">prob_success</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">)</span> <span class="c1">#manipulated variable </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">likelihood_distribution</span> <span class="o">&lt;-</span> <span class="nf">compute_binom_mass_density</span><span class="p">(</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">num_trials</span><span class="p">,</span> <span class="n">num_successes</span> <span class="o">=</span>  <span class="n">num_successes</span><span class="p">,</span> <span class="n">prob_success</span> <span class="o">=</span> <span class="n">prob_success</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#create data set for shaded rectangle that indicates the most likely value </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##index of highest probability </span>
+</span></span><span class="line"><span class="cl"><span class="n">highest_number_ind</span> <span class="o">&lt;-</span> <span class="nf">which.max</span><span class="p">(</span><span class="n">likelihood_distribution</span><span class="o">$</span><span class="n">probability</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">##most likely number of successes</span>
+</span></span><span class="line"><span class="cl"><span class="n">maximum_likelihood_estimate</span> <span class="o">&lt;-</span> <span class="n">likelihood_distribution</span><span class="o">$</span><span class="n">prob_success[highest_number_ind]</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">##probability value of most likely number of successes</span>
+</span></span><span class="line"><span class="cl"><span class="n">highest_prob</span> <span class="o">&lt;-</span> <span class="nf">max</span><span class="p">(</span><span class="n">likelihood_distribution</span><span class="o">$</span><span class="n">probability</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rectangle_data</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;xmin&#39;</span> <span class="o">=</span> <span class="n">maximum_likelihood_estimate</span> <span class="o">-</span> <span class="m">.005</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;xmax&#39;</span> <span class="o">=</span> <span class="n">maximum_likelihood_estimate</span> <span class="o">+</span> <span class="m">.005</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;ymin&#39;</span> <span class="o">=</span> <span class="m">-0.5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;ymax&#39;</span> <span class="o">=</span> <span class="n">highest_prob</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">likelihood_plot</span> <span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">likelihood_distribution</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">prob_success</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">probability</span><span class="p">))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_rect</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">             <span class="n">fill</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">data</span> <span class="o">=</span> <span class="n">rectangle_data</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ymax</span><span class="p">))</span><span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">bquote</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="s">&#34;Probability of Heads (&#34;</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="s">&#34;)&#34;</span><span class="p">)),</span> 
+</span></span><span class="line"><span class="cl">                       <span class="n">breaks</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0.10</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                       <span class="n">labels</span> <span class="o">=</span> <span class="n">scales</span><span class="o">::</span><span class="nf">number_format</span><span class="p">(</span><span class="n">accuracy</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">))</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">bquote</span><span class="p">(</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;L(&#34;</span><span class="p">)</span><span class="o">*</span><span class="nf">italic</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;| &#34;</span><span class="o">*</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;h&#34;</span><span class="p">)</span><span class="o">==</span> <span class="n">.(num_successes</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;,&#34;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="s">&#34;n&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="n">.(num_trials</span><span class="p">)</span><span class="o">*</span><span class="s">&#34;)&#34;</span><span class="p">),</span>  
+</span></span><span class="line"><span class="cl">                       <span class="n">labels</span> <span class="o">=</span> <span class="n">scales</span><span class="o">::</span><span class="nf">number_format</span><span class="p">(</span><span class="n">accuracy</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                       <span class="n">breaks</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">.30</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">.10</span><span class="p">))</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">coord_cartesian</span><span class="p">(</span><span class="n">ylim</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">.30</span><span class="p">))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nf">theme_classic</span><span class="p">(</span><span class="n">base_family</span> <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">,</span> <span class="n">base_size</span> <span class="o">=</span> <span class="m">18</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0.10</span><span class="p">)</span> <span class="o">==</span> <span class="n">maximum_likelihood_estimate</span><span class="p">,</span> <span class="s">&#34;bold&#34;</span><span class="p">,</span> <span class="s">&#34;plain&#34;</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">axis.line</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.ticks</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span>  <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">ggsave</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;images/likelihood_plot.png&#39;</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="n">likelihood_plot</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">8</span><span class="p">)</span>
+</span></span></code></pre></div><div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:likelihood-dist}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Likelihood Distribution With Seven Heads (h = 7) and Ten Coin Flips (n = 10)</span>
+  </div>
+    <img src="images/likelihood_plot.png" width="70%" height="70%"> 
+  <div class="figNote">
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the value of <span class = "theta">&theta;</span> that is the maximum likelihood estimate, with the corresponding bar in dark blue indicating the corresponding value.</span> 
+  </div>
+</div>
+<p>Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, however, many situations arise where many parameter values are estimated, and plotting in an <em>n</em>-dimensional space becomes very difficult when $n &gt; 3$, and virtually impossible when $n &gt; 5$. Thus, a more efficient method is needed to find maximum likelihood estimates.</p>
+<h1 id="using-maximum-likelihood-estimation-to-find-the-most-likely-set-of-parameter-values">Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values</h1>
+<p>Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, $\theta_{MLE}$, is the value of $\theta$ that maximizes the likelihood of the data such that</p>
+<p>$$
+\theta_{MLE} = \underset{\theta}{\arg\max}  L(\theta|D).
+\label{eq:MLE-general}
+$$
+In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases.</p>
+<h2 id="maximum-likelihood-estimation-for-the-binomial-case">Maximum Likelihood Estimation for the Binomial Case</h2>
+<p>In the binomial case, there is only one parameter value of interest: the probability of heads, $\theta$. Thus, maximum likelihood estimation will find the value $\theta$ that maximizes the likelihood function,</p>
+<p>$$\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. $$</p>
+<p>Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation so that the computation of the derivative is greatly simplified and does not involve a lengthy application of the quotient, product,
+and chain rules. In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} results:</p>
+<p>$$
+\log[ L(\theta|h,n)] = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\label{eq:binom-log-likelihood}
+$$</p>
 <h1 id="references">References</h1>
 
   
@@ -247,7 +312,54 @@ both parameters simultaneously.</p>
 
 
 
-Bibliography called, but no references
+<section class="hugo-cite-bibliography">
+  <dl>
+    
+
+      <div id="fine2019">
+
+          
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Fine</span>,&#32; 
+    <meta itemprop="givenName" content="Kimberly L." />
+    K.   </span>&#32; 
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Suk</span>,&#32; 
+    <meta itemprop="givenName" content="Hye Won" />
+    H.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Grimm</span>,&#32; 
+    <meta itemprop="givenName" content="Kevin J." />
+    K.   </span>
+  &#32;
+    (<span itemprop="datePublished">2019</span>).
+  &#32;<span itemprop="name">An examination of a functional mixed-effects modeling approach to the analysis of longitudinal data</span>.<i>
+    <span itemprop="about">Multivariate Behavioral Research</span>,&#32;54(4)</i>,&#32;<span itemprop="pagination">475–491</span>.
+  <a href="https://doi.org/10.1080/00273171.2018.1520626"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1080/00273171.2018.1520626</a></span>
+
+
+
+
+
+
+</dd>
+
+      </div>
+  </dl>
+</section>
 
 
 
@@ -268,7 +380,7 @@ Bibliography called, but no references
 <p>\begin{spreadlines}{0.5em}
 \begin{align*}
 (p + 1 -p)^n &amp;= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\ \nonumber
-1 &amp;= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber
+1 &amp;= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \qquad\qquad _\square   \nonumber
 \end{align*}
 \end{spreadlines}</p>
 <p>For a proof of the binomial theorem, see <a href="#proof-binomial">Appendix E</a>.</p>
@@ -335,7 +447,7 @@ Given that the gamma function can be stated as a factorial, Equation \ref{eq:bin
 \begin{align}
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\
 &amp;= \frac{n!}{(n + 1)!} \nonumber \\
-&amp;= \frac{1}{n+1}
+&amp;= \frac{1}{n+1} \qquad\qquad _\square
 \label{eq:likelihood-proof}<br>
 \end{align}
 \end{spreadlines}
@@ -434,16 +546,256 @@ $$</p>
 \Gamma(x)\Gamma(y) &amp;= \int_0^1 \int_0^\infty u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} ,du,dv \\
 &amp;=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} ,dv \\
 &amp;=  \Gamma(x + y)\mathrm{B}(x,y) \\
-\mathrm{B}(x,y) &amp;= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)}
+\mathrm{B}(x,y) &amp;= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)} \qquad\qquad _\square
 \end{align*}
 \end{spreadlines}</p>
 <h1 id="proof-gamma-factorial">Appendix D: Proof of Relation Between Gamma and Factorial Functions </h1>
+<p>To prove the following proposition in Equation \ref{eq:gamma-factorial} that</p>
+<p>$$
+\begin{align}
+\Gamma(x) &amp;= \int_0^\infty t^{x-1}e^{-t} dt =(x-1)!,
+\label{eq:gamma-factorial}
+\end{align}
+$$
+it is first helpful to prove the proposition below in Equation \ref{eq:gamma-pre-fac} that
+$$
+\begin{align}
+\Gamma(\alpha + 1) &amp;= \alpha\Gamma(\alpha )
+\label{eq:gamma-pre-fac}
+\end{align}
+$$
+To prove Equation \ref{eq:gamma-pre-fac}, we first expand Equation \ref{eq:gamma-pre-fac} in Equation \ref{eq:gamma-expand} and then simplify Equation \ref{eq:gamma-expand} using integration by parts such that</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\Gamma(\alpha + 1) &amp;= \int^\infty_0 t^\alpha e^{-t} \text{ } dt
+\label{eq:gamma-expand} \\
+\int u \text{ }dv &amp;= uv - \int v \text{ } du.<br>
+\label{eq:int-parts} \\
+\text{Let } u &amp;= t^\alpha \text{, } dv = e^{-t} \text{ } dt \text{, } \nonumber \\
+du &amp;= \alpha t^{\alpha - 1}\text{, and } v = -e^{-t}. \nonumber\\
+\int u \text{ }dv &amp;= -t^\alpha e^{-t}|^\infty_0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}
+\label{eq:gamma-int-parts}
+\end{align}
+\end{spreadlines}
+$$
+To simplify Equation \ref{eq:gamma-int-parts}, I will first focus on the evaluation of $-t^\alpha e^{-t}$ between $\infty$ and $0$ below. At $t = \infty$,</p>
+<p>$$
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-\infty^{\alpha}}{e^\infty},
+\label{eq:inf-eval}
+\end{align*}
+$$
+and because $e^{\infty}$ approaches $\infty$ faster than $-\infty^\alpha$ approaches $-\infty$, Equation \ref{eq:inf-eval} becomes zero. At $t = 0$,
+$$
+\begin{align*}
+-t^\alpha e^{-t} = \frac{-0^{\alpha}}{e^0} = \frac{0}{1} = 0.
+\end{align*}
+$$
+Therefore, Equation \ref{eq:gamma-int-parts} simplifies to</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\int u \text{ }dv &amp;= 0 - 0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}  \\
+&amp;= \alpha  \int^\infty_0t^{\alpha - 1} e^{-t}  \\
+&amp;= \alpha \Gamma(\alpha) \qquad\qquad _\square
+\end{align*}
+\end{spreadlines}
+$$
+Having proven that $\Gamma(\alpha + 1) = \alpha\Gamma(\alpha)$, it becomes easy to prove Equation \ref{eq:gamma-factorial} which states that $\Gamma(x) = (x-1)!$. If I continue to expand the gamma function, $\Gamma(x-n)$, where $n = x -1$, I will obtain</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) &amp;= (x-1)\Gamma(x-1) \\
+\Gamma(x-1) &amp;= (x-2)\Gamma(x-2) \\
+&amp;\vdots \\
+\Gamma(x-n) &amp;= (1)\Gamma(1)
+\end{align*}
+\end{spreadlines}
+$$
+To evaluate $\Gamma(1)$, I write out its expansion and show that</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(1) &amp;= \int^\infty_0t^{1-1}e^{-t} \text{ } dt \\
+&amp;= e^{-t}|^\infty_0 \\
+&amp;= e^{-\infty} - e^{0} \\
+&amp;= 0 + 1 = 1\\
+\end{align*}
+\end{spreadlines}
+$$
+Therefore,  $\Gamma(x)$ expands to $(x-1)!$ because the last term will inevitably be  $1\times\Gamma(1) = 1$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+\Gamma(x) = (x-1)(x-2)(x-3)&hellip;(x-n)\Gamma(x-n)  \\
+=(x-1)(x-2)(x-3)&hellip;(1)\Gamma(1) \\
+=(x-1)(x-2)(x-3)&hellip;(1)\Gamma(1) \\
+=(x-1)! \qquad\qquad _\square
+\end{align*}
+\end{spreadlines}
+$$</p>
 <h1 id="proof-binomial">Appendix E: Proof of Binomial Theorem </h1>
+<p>The binomial theorem provided below in Equation \ref{eq:binomial2} states that
+$$
+(x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.
+\label{eq:binomial2}
+$$
+I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where $n=1$ so that I can later generalize the proof with a larger number of $n+1$.  In the base case, the binomial theorem is proven such that
+$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+x + y &amp;= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\
+&amp;= x + y.
+\end{align*}
+\end{spreadlines}
+$$
+Now, I will prove the binomial theorem with $n + 1$. Thus,
+$$
+(x + y)^{n+1} = \sum^{n+1}_{k=0} {n+1 \choose k} x^{n+1-k}y^k.
+\label{eq:binomial-induction}
+$$
+I now expand the left-hand side of Equation \ref{eq:binomial-induction}, to obtain</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+&amp;=(x + y)(x + y)^n \nonumber \\
+&amp;= (x+y) \sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber  \\
+&amp;=x\sum^n_{k=0} {n \choose k} x^{n-k}y^k + y\sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber \\
+&amp;=\sum^n_{k=0} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=0} {n \choose k} x^{n-k}y^{k+1} \nonumber \\
+&amp;=\sum^n_{k=0} {n \choose k} x^{(n+1)-k}y^k + \sum^{n+1}_{k=1} {n \choose k-1} x^{n-(k-1)}y^{(k-1)+1}
+\label{eq:binom-sums}
+\end{align}
+\end{spreadlines}
+$$
+Now I, respectively, remove $k = 0$ and $k = n+1$ from the first and second terms of Equation \ref{eq:binom-sums} so that the sums iterate over the same range of $k=1$ to $k = n$. I then use Pascal&rsquo;s rule to combine the two summations into one summation.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+&amp;= \binom{n}{0} x^{n+1-0}y^0 + \binom{n}{n} x^{n-(n + 1 -1)}y^{(n+1-1)+1} + \sum^n_{k=1} \binom{n}{k} x^{(n+1)-k}y^k + \sum^n_{k=1} \binom{n}{k-1} x^{n-(k-1)}y^{(k-1)+1} \nonumber \\
+&amp;=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=1} {n \choose k-1}  x^{n-k+1}y^{k}.
+\label{eq:add-sums}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>I then apply Pascal&rsquo;s rule to simplify the addition of summations in Equation \ref{eq:add-sums} to obtain</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align*}
+&amp;=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\
+&amp;= {n+1 \choose 0} x^{n+1-0}y^0 + {n+1 \choose n+1} x^{n+1-(n+1)}y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\
+&amp;= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\square
+\end{align*}
+\end{spreadlines}
+$$</p>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
 <p>Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \{0, 1, 2, &hellip;, n\}$.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>It should be noted that Bayes&rsquo; formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes&rsquo; formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation">(<span class="hugo-cite-group">
+
+          <a href="#fine2019"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="Kimberly L."><span itemprop="familyName">Fine</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Fine</span>,&#32; 
+    <meta itemprop="givenName" content="Kimberly L." />
+    K.   </span>&#32; 
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Suk</span>,&#32; 
+    <meta itemprop="givenName" content="Hye Won" />
+    H.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Grimm</span>,&#32; 
+    <meta itemprop="givenName" content="Kevin J." />
+    K.   </span>
+  &#32;
+    (<span itemprop="datePublished">2019</span>).
+  &#32;<span itemprop="name">An examination of a functional mixed-effects modeling approach to the analysis of longitudinal data</span>.<i>
+    <span itemprop="about">Multivariate Behavioral Research</span>,&#32;54(4)</i>,&#32;<span itemprop="pagination">475–491</span>.
+  <a href="https://doi.org/10.1080/00273171.2018.1520626"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1080/00273171.2018.1520626</a></span>
+
+
+
+
+
+
+</span></span>)
+</span>
+
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+
+).&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
@@ -480,7 +832,9 @@ $$</p>
         </nav>
       </div>
     </div>
-    <button id="toc_button"><i class="fas fa-circle-left"></i></button>
+    <button id="toc_button"><i class="fas fa-circle-right"></i></button>
+    <button id="toc_button_bottom"><i class="fas fa-circle-down"></i></button>
+
 
   
 
