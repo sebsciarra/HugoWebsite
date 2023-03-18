@@ -334,6 +334,7 @@ To explain maximum likelihood estimation for the gaussian case, let's consider a
 $$ 
 \begin{align}
 P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss}
 \end{align}
 $$
 Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities must be used (see [Likelihood are not probabilities](#like-prob)). Although Equation \ref{eq:gauss} will still be used to compute likelihoods, I will rewrite Equation \ref{eq:gauss} to explicitly indicate that likelihoods will be computed such that
@@ -341,6 +342,7 @@ Because the researcher is interested in determining the parameter values that mo
 $$
 \begin{align}
 L(\sigma, \mu|\mathbf{y_i}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss-like}
 \end{align}
 $$
 Importantly, Equation \ref{eq:gauss-like} above only computes the likelihood given one $y_i$ data point. Because the researcher want to determine the parameter values that produced all the 100 data points, $y_i \in \mathbf{y}$, Equation \ref{eq:gauss-like} must be used each for each data point and all the resulting values likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, $L(\sigma, \mu|\mathbf{y})$, which yields Equation \ref{eq:gauss-prod} below: 

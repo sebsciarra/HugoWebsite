@@ -610,12 +610,14 @@ theta_mle &lt;- sum(h)/sum(rep(x = 10, times = 10))</code></pre>
 <p><span class="math display">\[
 \begin{align}
 P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss}
 \end{align}
 \]</span>
 Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities must be used (see <a href="#like-prob">Likelihood are not probabilities</a>). Although Equation <span class="math inline">\(\ref{eq:gauss}\)</span> will still be used to compute likelihoods, I will rewrite Equation <span class="math inline">\(\ref{eq:gauss}\)</span> to explicitly indicate that likelihoods will be computed such that</p>
 <p><span class="math display">\[
 \begin{align}
 L(\sigma, \mu|\mathbf{y_i}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss-like}
 \end{align}
 \]</span>
 Importantly, Equation <span class="math inline">\(\ref{eq:gauss-like}\)</span> above only computes the likelihood given one <span class="math inline">\(y_i\)</span> data point. Because the researcher want to determine the parameter values that produced all the 100 data points, <span class="math inline">\(y_i \in \mathbf{y}\)</span>, Equation <span class="math inline">\(\ref{eq:gauss-like}\)</span> must be used each for each data point and all the resulting values likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, <span class="math inline">\(L(\sigma, \mu|\mathbf{y})\)</span>, which yields Equation <span class="math inline">\(\ref{eq:gauss-prod}\)</span> below:</p>
