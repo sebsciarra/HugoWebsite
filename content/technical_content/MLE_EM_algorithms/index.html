@@ -456,7 +456,7 @@ sum(prob_distribution$probability)  #1</code></pre>
 <div id="likelihood-distributions-the-probability-of-observing-each-possible-set-of-parameter-values-given-a-specific-outcome" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome</h1>
 <p>Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, <span class="math inline">\(\theta\)</span>, that most likely produced the data, <span class="math inline">\(P(h, n|\theta)\)</span><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods.</p>
-<div id="likelihoods-are-not-probabilities" class="section level2" number="2.1">
+<div id="like-prob" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Likelihoods are not Probabilities</h2>
 <p>Because we are interested in determining which value of <span class="math inline">\(\theta \in \[0, 1\]\)</span> most likely produced the data, the probability of observing the data must be computed for each of these values, <span class="math inline">\(P(h = 7, n = 10|\theta)\)</span>. Thus, we now fix the data, <span class="math inline">\(h = 7, n = 10\)</span>, and vary the parameter value of <span class="math inline">\(\theta\)</span>. Although we also use the binomial function to compute <span class="math inline">\(P(h = 7, n = 10|\theta)\)</span> for each <span class="math inline">\(\theta \in \[0, 1\]\)</span>, the resulting values are not probabilities because they do not sum to 1. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see <a href="#proof-likelihood">Appendix B</a> and are, therefore, not probabilities: they are likelihoods. To signify the fundamental difference between probabilities and likelihoods, we use different notations. When fixing the data and varying the parameter values, we compute the likelihood of the parameter given the data, <span class="math inline">\(L(\theta|h, n)\)</span>.</p>
 <pre class="r"><code>num_trials &lt;- 10
@@ -530,7 +530,7 @@ ggsave(filename = &#39;images/likelihood_plot.png&#39;, plot = likelihood_plot, 
 </div>
 <pre><code>&lt;img src=&quot;images/likelihood_plot.png&quot; width=&quot;70%&quot; height=&quot;70%&quot;&gt; </code></pre>
 <div class="figNote">
-<pre><code>  &lt;span&gt;&lt;em&gt;Note. &lt;/em&gt; Number emboldened on the x-axis indicates the value of &lt;span class = &quot;theta&quot;&gt;&amp;theta;&lt;/span&gt; that is the maximum likelihood estimate, with the corresponding bar in dark blue indicating the corresponding value.&lt;/span&gt; </code></pre>
+<pre><code>  &lt;span&gt;&lt;em&gt;Note. &lt;/em&gt; Number emboldened on the x-axis indicates the maximum likelihood estiamte for &lt;span class = &quot;theta&quot;&gt;&amp;theta;&lt;/span&gt; and the corresponding bar in dark blue indicates the likelihood value.&lt;/span&gt; </code></pre>
 </div>
 </div>
 <p>Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, however, many situations arise where many parameter values are estimated, and plotting in an <em>n</em>-dimensional space becomes very difficult when <span class="math inline">\(n &gt; 3\)</span>, and virtually impossible when <span class="math inline">\(n &gt; 5\)</span>. Thus, a more efficient method is needed to find maximum likelihood estimates.</p>
@@ -540,18 +540,27 @@ ggsave(filename = &#39;images/likelihood_plot.png&#39;, plot = likelihood_plot, 
 <h1><span class="header-section-number">3</span> Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values</h1>
 <p>Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, <span class="math inline">\(\theta_{MLE}\)</span>, is the value of <span class="math inline">\(\theta\)</span> that maximizes the likelihood of the data such that</p>
 <p><span class="math display">\[
-\theta_{MLE} = \underset{\theta}{\arg\max}  L(\theta|D).
+\begin{align}
+\theta_{MLE} &amp;= \underset{\theta}{\arg\max}  L(\theta|D).
 \label{eq:MLE-general}
+\end{align}
 \]</span>
 In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases.</p>
 <div id="maximum-likelihood-estimation-for-the-binomial-case" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Maximum Likelihood Estimation for the Binomial Case</h2>
 <p>In the binomial case, there is only one parameter value of interest: the probability of heads, <span class="math inline">\(\theta\)</span>. Thus, maximum likelihood estimation will find the value <span class="math inline">\(\theta\)</span> that maximizes the likelihood function,</p>
-<p><span class="math display">\[\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. \]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) &amp;= \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}.
+\label{eq:mle-binomial}
+\end{align}
+\]</span></p>
 <p>Before computing the maximum likelihood estimate, however, it is important to apply a <span class="math inline">\(\log\)</span> transformation for two reasons. First, applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function of Equation <span class="math inline">\(\ref{eq:mle-binomial}\)</span> greatly simplifies the computation of the derivative because the taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid <em>underflow</em>: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(h=70\)</span>, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero. Instead of directly representing extremely small values, <span class="math inline">\(\log\)</span> likelihoods can be used and allow numerical precision to be retained. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), <span class="math inline">\(\log_{10}{1.2e73} = -72.92\)</span>. In applying a <span class="math inline">\(\log\)</span> transformation to the likelihood function, the log-likelihood function shown below in Equation <span class="math inline">\(\ref{eq:binom-log-likelihood}\)</span> is obtained:</p>
 <p><span class="math display">\[
-\log\big(L(\theta|h,n)\big) = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\begin{align}
+\log\big(L(\theta|h,n)\big) &amp;= \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
 \label{eq:binom-log-likelihood}
+\end{align}
 \]</span>
 To solve for <span class="math inline">\(\theta_{MLE}\)</span>, the partial derivative of <span class="math inline">\(\log[L(\theta|h,n)]\)</span> with respect to <span class="math inline">\(\theta\)</span> is computed below and then set to zero (at a peak, the likelihood function has a zero-value rate of change with respect to <span class="math inline">\(\theta\)</span>).</p>
 <p><span class="math display">\[  
@@ -568,12 +577,11 @@ To solve for <span class="math inline">\(\theta_{MLE}\)</span>, the partial deri
 \end{align}
 \end{spreadlines}
 \]</span>
-Therefore, the maximum of the likelihood estimate for the probability of heads, <span class="math inline">\(\theta\)</span>, is found by dividing the observed number of heads by the number of trials, <span class="math inline">\(\frac{h}{n}\)</span> (see Equation <span class="math inline">\(\ref{eq:theta-binom-ll}\)</span>. In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70,
-<span class="math inline">\(\theta_{MLE} = \frac{7}{10} = .70\)</span>.</p>
+Therefore, the maximum of the likelihood estimate for the probability of heads, <span class="math inline">\(\theta\)</span>, is found by dividing the observed number of heads by the number of trials, <span class="math inline">\(\frac{h}{n}\)</span> (see Equation <span class="math inline">\(\ref{eq:theta-binom-ll}\)</span>). In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70, <span class="math inline">\(\theta_{MLE} = \frac{7}{10} = .70\)</span>.</p>
 <div id="maximum-likelihood-estimation-for-several-binomial-cases" class="section level3" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Maximum Likelihood Estimation for Several Binomial Cases</h3>
 <p>To build on the current example, consider a more realistic example where a researcher decides to flip a coin over multiple sessions. Specifically, in each of 10 <span class="math inline">\(k\)</span> sessions, the researcher flips the coin 10 times. Across the 10 sessions, the following number of heads are obtained: <span class="math inline">\(\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]\)</span>. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to <span class="math inline">\(\theta\)</span>
-because the equation will contain <span class="math inline">\(k=10\)</span> terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a <span class="math inline">\(\theta_{MLE}\)</span> equation for multiple coin flipping sessions, I will compute the function for <span class="math inline">\(\theta_{MLE}\)</span> with only two coin flipping sessions that each have their corresponding number of flips, <span class="math inline">\(\mathbf{n} = \[n_1, n_2\]\)</span>, and heads, (<span class="math inline">\(\mathbf{h} = \[h_1, h_2\]\)</span></p>
+because the equation will contain <span class="math inline">\(k=10\)</span> terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a <span class="math inline">\(\theta_{MLE}\)</span> equation for multiple coin flipping sessions, I will compute the function for <span class="math inline">\(\theta_{MLE}\)</span> with only two coin flipping sessions that each have their corresponding number of flips, <span class="math inline">\(\mathbf{n} = \[n_1, n_2\]\)</span>, and heads, <span class="math inline">\(\mathbf{h} = \[h_1, h_2\]\)</span>.</p>
 <p><span class="math display">\[  
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -598,14 +606,134 @@ theta_mle &lt;- sum(h)/sum(rep(x = 10, times = 10))</code></pre>
 </div>
 <div id="maximum-likelihood-estimation-for-the-gaussian-case" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Maximum Likelihood Estimation for the Gaussian Case</h2>
+<p>To explain maximum likelihood estimation for the gaussian case, let’s consider a new example where a researcher measures the heights of 100 males, <span class="math inline">\(\mathbf{y} \in \mathcal{R}^{100}\)</span>. From previous studies, the researcher believes heights to be normally distributed and would, thus, like to estimate the population mean and standard deviation for the heights of males. To obtain population estimates for the mean and variance, the Gaussian function can be used. The Gaussian function computes the probability of observing a <span class="math inline">\(y_i\)</span> score given a population mean, <span class="math inline">\(\mu\)</span>, and standard deviation, <span class="math inline">\(\sigma\)</span>, and is provided below in Equation <span class="math inline">\(\ref{eq:gauss}\)</span>:</p>
+<p><span class="math display">\[
+\begin{align}
+P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\end{align}
+\]</span>
+Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities must be used (see <a href="#like-prob">Likelihood are not probabilities</a>). Although Equation <span class="math inline">\(\ref{eq:gauss}\)</span> will still be used to compute likelihoods, I will rewrite Equation <span class="math inline">\(\ref{eq:gauss}\)</span> to explicitly indicate that likelihoods will be computed such that</p>
+<p><span class="math display">\[
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\end{align}
+\]</span>
+Importantly, Equation <span class="math inline">\(\ref{eq:gauss-like}\)</span> above only computes the likelihood given one <span class="math inline">\(y_i\)</span> data point. Because the researcher want to determine the parameter values that produced all the 100 data points, <span class="math inline">\(y_i \in \mathbf{y}\)</span>, Equation <span class="math inline">\(\ref{eq:gauss-like}\)</span> must be used each for each data point and all the resulting values likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, <span class="math inline">\(L(\sigma, \mu|\mathbf{y})\)</span>, which yields Equation <span class="math inline">\(\ref{eq:gauss-prod}\)</span> below:</p>
+<p><span class="math display">\[
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) &amp;=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss-prod}
+\end{align}
+\]</span></p>
+<p>As in the binomial case, the likelihood equation must be transformed to a <span class="math inline">\(\log\)</span> scale to prevent underflow and to simplify the derivation of the partial derivatives. Given that the equation contains Euler’s number, <span class="math inline">\(e\)</span>, I will use log of base <span class="math inline">\(e\)</span> or the natural log (<span class="math inline">\(\ln\)</span>), to further simplify the derivatives. Before applying the log
+transformation, Equation <span class="math inline">\(\ref{eq:gauss-prod}\)</span> can be simplified to yield Equation <span class="math inline">\(\ref{eq:gauss-prod-s}\)</span> below:</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) &amp;=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}
+\nonumber \\\\
+&amp;= \sigma^{-n}(2\pi)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Big)}
+\label{eq:gauss-prod-s}
+\end{align}
+\end{spreadlines}
+\]</span></p>
+<p>With a simplified form of Equation <span class="math inline">\(\ref{eq:gauss-prod}\)</span>, Equation <span class="math inline">\(\ref{eq:gauss-prod-s}\)</span> can now be converted to a log scale by using the product rule and then the power rule to yield the log-likelihood Gaussian function shown below in Equation <span class="math inline">\(\ref{eq:log-gauss}\)</span>.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\text{Apply product rule }\text{ } &amp;\Rightarrow \ln(\sigma^{-n}) + \ln \Big((\sqrt{2\pi})^{-\frac{n}{2}}\Big) + \ln \Big(e^{\big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\big)}\Big) \nonumber \\\\
+\text{Apply power rule }\text{ } &amp;\Rightarrow -n\ln(\sigma) -\frac{n}{2}\ln(\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2 \ln(e) \nonumber \\\\
+\ln L(\sigma, \mu|\mathbf{y})  &amp;= -n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2
+\label{eq:log-gauss}
+\end{align}
+\end{spreadlines}
+\]</span></p>
+<p>The maximum likelihood estimate functions for the mean, <span class="math inline">\(\mu\)</span>, and standard deviation, <span class="math inline">\(\sigma\)</span>, can now be obtained by taking the derivative of the log-likelihood function with respect to each parameter. The derivation below solves for <span class="math inline">\(\mu\)</span>.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \mu} &amp;= \frac{\delta}{\delta \mu} \Bigg(-n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Bigg) \nonumber \\\\
+&amp;= 0 -0 -\frac{1}{2\sigma^2}\sum_{i=1}^n 2(y_i - \mu) \frac{\delta}{\delta \mu}(y_i - \mu) \nonumber \\\\
+&amp;= -\frac{1}{2\sigma^2}\sum_{i=1}^n 2(y_i - \mu) \cdot -1 \nonumber \\\\
+&amp;= \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \mu) \nonumber \\\\
+\text {Set  } \frac{\delta \ln L(\sigma, \mu|\mathbf{y}) }{\delta \mu} = 0 \nonumber \\\\
+0 &amp;= \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \mu) \nonumber \\\\
+0 &amp;= \sum_{i=1}^n y_i - \sum_{i=1}^n \mu \nonumber \\\\
+0 &amp;= \sum_{i=1}^n y_i - n\mu \nonumber \\\\
+\mu_{MLE} &amp;= \frac{1}{n}\sum_{i=1}^n y_i
+\label{eq:mean-mle}
+\end{align}
+\end{spreadlines}
+\]</span>
+Therefore, Equation <span class="math inline">\(\ref{eq:mean-mle}\)</span> above shows that the the maximum likelihood estimate for the mean can be obtained by simply computing the mean of the observed <span class="math inline">\(y_i\)</span> scores. The derivation below solves for <span class="math inline">\(\sigma\)</span>.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \sigma} &amp;= \frac{\delta}{\delta \sigma} \Bigg(-n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi})  - \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Bigg) \nonumber \\\\
+&amp;= -\frac{n}{\sigma} + 0 - \frac{1}{2}(-2\sigma^{-3})\sum_{i=1}^n (y_i - \mu)^2 \nonumber \\\\
+&amp;= -\frac{n}{\sigma}  + \frac{\sum_{i=1}^n (y_i - \mu)^2}{\sigma^3}  \nonumber \\\\
+&amp;= \frac{1}{\sigma^3}(\sum_{i=1}^n(y_i - \mu)^2 - n\sigma^2)  \nonumber \\\\
+\text {Set }\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \sigma} &amp;= 0  \nonumber \\\\
+0 &amp;= \sum_{i=1}^n(y_i - \mu)^2 - n\sigma^2  \nonumber \\\\
+n\sigma^2 &amp;= \sum_{i=1}^n(y_i - \mu)^2 \nonumber \\\\
+\sigma_{MLE} &amp;= \sqrt{\frac{1}{n} \sum_{i=1}^n(y_i - \mu)^2}
+\label{eq:mle-sigma}
+\end{align}
+\end{spreadlines}
+\]</span>
+Therefore, Equation <span class="math inline">\(\ref{eq:mean-mle}\)</span> above shows that the the maximum likelihood estimate for the standard deviation parameter, <span class="math inline">\(\sigma\)</span>, is the square root of the average squared deviation from the mean observed score.</p>
+<pre class="r"><code>#generate scores from Gaussian distribution 
+mu &lt;- 5
+sd &lt;- 5
+n &lt;- 500
+
+ind_scores &lt;- rnorm(n = n, mean = mu, sd = sd)
+
+mu_mle &lt;- mean(ind_scores)
+sigma_mle &lt;- var(ind_scores)
+
+compute_log_like &lt;- function(ind_scores, parameters){
+  
+  mu_value &lt;- parameters[1]
+  sd_value &lt;- parameters[2]
+
+  n &lt;- length(ind_scores)
+  
+  log_like &lt;- -.5*n*log(2*pi) -.5*n*log(sd_value^2) - (1/(2*sd_value^2))*sum((ind_scores-mu_value)^2)
+  return(-log_like)
+}
+
+sd_values &lt;- seq(from = 1, to = 10, by=1)
+mu_values &lt;- seq(from = 1, to = 10, by=1)
+
+#find maximum likelihood estimates 
+MLE_estimates &lt;- optim(par=c(1,1), compute_log_like, 
+      ind_scores = ind_scores, 
+      method = &quot;L-BFGS-B&quot;,  
+      hessian=TRUE, 
+      lower = c(0, 0),   
+      upper = c(10, 10))
+                    
+# Examine estimates
+MLE_par &lt;- MLE_estimates$par
+MLE_SE &lt;- sqrt(diag(solve(MLE_estimates$hessian)))
+MLE &lt;- data.table(param = c(&quot;mu&quot;, &quot;sd&quot;),
+                  estimates = MLE_par,
+                  sd = MLE_SE)
+
+kable(MLE)
+compute_log_like(ind_scores, parameters = c(4.959401, 4.841803)) #returns same value of 1498.113</code></pre>
 </div>
 </div>
-<div id="references" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> References</h1>
+<div id="conclusion" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Conclusion</h1>
+</div>
+<div id="references" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> References</h1>
 <p>{{&lt; bibliography cited &gt;}}</p>
 </div>
-<div id="proof-pmf" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Appendix A: Proof That the Binomial Function is a Probability Mass Function</h1>
+<div id="proof-pmf" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Appendix A: Proof That the Binomial Function is a Probability Mass Function</h1>
 <p>To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1.</p>
 <p>For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, <span class="math inline">\(n \choose k\)</span>, and the binomial factors, <span class="math inline">\(p^k (1-p)^{n-k}\)</span>. With respect to the binomial coefficient, <span class="math inline">\(n \choose k\)</span>, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, <span class="math inline">\(n\)</span>, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes (<span class="math inline">\(n, k\)</span>, respectively), the probability of success and failure are also always nonnegative (<span class="math inline">\(p, k \in \[0,1\]\)</span>). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative.</p>
 <p>For the second condition, the equality stated below in Equation <span class="math inline">\(\ref{eq:binomial-sum-one}\)</span> must be proven:</p>
@@ -621,8 +749,8 @@ theta_mle &lt;- sum(h)/sum(rep(x = 10, times = 10))</code></pre>
 <p>Given the striking resemblance between the binomial function in Equation <span class="math inline">\(\ref{eq:binomial-sum-one}\)</span> and the binomial theorem in Equation <span class="math inline">\(\ref{eq:binomial-sum-one}\)</span>, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let <span class="math inline">\(a = p\)</span> and <span class="math inline">\(b = 1-p\)</span>, which returns the proof as shown below:</p>
 <p>For a proof of the binomial theorem, see <a href="#proof-binomial">Appendix E</a>.</p>
 </div>
-<div id="proof-likelihood" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Appendix B: Proof That Likelihoods are not Probabilities</h1>
+<div id="proof-likelihood" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Appendix B: Proof That Likelihoods are not Probabilities</h1>
 <p>As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those set to be fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed (<span class="math inline">\(\theta\)</span>, <span class="math inline">\(n\)</span>) and the data are varied (<span class="math inline">\(h\)</span>; notice how, in Appendix A, probabilities were summed across all possible values of <span class="math inline">\(h\)</span>). With likelihoods, however, the data are fixed (<span class="math inline">\(h\)</span>) and the parameters are varied (<span class="math inline">\(\theta\)</span>, <span class="math inline">\(n\)</span>). For the current proof, it is sufficient to only allow <span class="math inline">\(\theta\)</span> to vary. To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see <a href="#proof-pmf">Appendix A</a>), likelihoods likewise can never ne negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to 1. Thus, the following proposition must be proven:</p>
 <p><span class="math display">\[
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1.
@@ -700,8 +828,8 @@ sum(likelihood_distribution$probability) #compute integral</code></pre>
 <pre><code class="r-code">[1] 9.09091
 </code></pre>
 </div>
-<div id="proof-beta-gamma" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Appendix C: Proof of Relation Between Beta and Gamma Functions</h1>
+<div id="proof-beta-gamma" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Appendix C: Proof of Relation Between Beta and Gamma Functions</h1>
 <p>Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span> below will be proven</p>
 <p><span class="math display">\[
 \begin{align}
@@ -782,8 +910,8 @@ At this point, we need to determine the integration limits of <span class="math 
 \]</span></p>
 <p>Therefore, the original integration limits of 0 to <span class="math inline">\(\infty\)</span> of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> produce integration limits 0 to <span class="math inline">\(\infty\)</span> for <span class="math inline">\(u\)</span> and 0 to 1 for <span class="math inline">\(v\)</span>. Recalling the gamma function (Equation <span class="math inline">\(\ref{eq:gamma-function}\)</span> and the beta function (Equation <span class="math inline">\(\ref{eq:beta-function}\)</span>, the beta function can now be expressed in terms of the gamma function, proving Equation <span class="math inline">\(\ref{eq:beta-gamma-proof}\)</span>.</p>
 </div>
-<div id="proof-gamma-factorial" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> Appendix D: Proof of Relation Between Gamma and Factorial Functions</h1>
+<div id="proof-gamma-factorial" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Appendix D: Proof of Relation Between Gamma and Factorial Functions</h1>
 <p>To prove the following proposition in Equation <span class="math inline">\(\ref{eq:gamma-factorial}\)</span> that</p>
 <p><span class="math display">\[
 \begin{align}
@@ -815,10 +943,10 @@ du &amp;= \alpha t^{\alpha - 1}\text{, and } v = -e^{-t}. \nonumber\\\\
 \]</span>
 To simplify Equation <span class="math inline">\(\ref{eq:gamma-int-parts}\)</span>, I will first focus on the evaluation of <span class="math inline">\(-t^\alpha e^{-t}\)</span> between <span class="math inline">\(\infty\)</span> and <span class="math inline">\(0\)</span> below. At <span class="math inline">\(t = \infty\)</span>,</p>
 <p><span class="math display">\[
-\begin{align*}
+\begin{align}
 -t^\alpha e^{-t} = \frac{-\infty^{\alpha}}{e^\infty},
 \label{eq:inf-eval}
-\end{align*}
+\end{align}
 \]</span>
 and because <span class="math inline">\(e^{\infty}\)</span> approaches <span class="math inline">\(\infty\)</span> faster than <span class="math inline">\(-\infty^\alpha\)</span> approaches <span class="math inline">\(-\infty\)</span>, Equation <span class="math inline">\(\ref{eq:inf-eval}\)</span> becomes zero. At <span class="math inline">\(t = 0\)</span>,
 <span class="math display">\[
@@ -870,8 +998,8 @@ Therefore, <span class="math inline">\(\Gamma(x)\)</span> expands to <span class
 \end{spreadlines}
 \]</span></p>
 </div>
-<div id="proof-binomial" class="section level1" number="9">
-<h1><span class="header-section-number">9</span> Appendix E: Proof of Binomial Theorem</h1>
+<div id="proof-binomial" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> Appendix E: Proof of Binomial Theorem</h1>
 <p>The binomial theorem provided below in Equation <span class="math inline">\(\ref{eq:binomial2}\)</span> states that
 <span class="math display">\[
 (x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.

@@ -155,7 +155,7 @@ Continuing with the coin flipping example, the researcher flips the coin 10 time
 
 [^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "fine2019" >}}). 
 
-## Likelihoods are not Probabilities
+## Likelihoods are not Probabilities{#like-prob}
 
 Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to 1. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the fundamental difference between probabilities and likelihoods, we use different notations.  When fixing the data and varying the parameter values, we compute the likelihood of the parameter given the data, $L(\theta|h, n)$. 
   
@@ -240,7 +240,7 @@ ggsave(filename = 'images/likelihood_plot.png', plot = likelihood_plot, height =
     <img src="images/likelihood_plot.png" width="70%" height="70%"> 
   
   <div class="figNote">
-      <span><em>Note. </em> Number emboldened on the x-axis indicates the value of <span class = "theta">&theta;</span> that is the maximum likelihood estimate, with the corresponding bar in dark blue indicating the corresponding value.</span> 
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the maximum likelihood estiamte for <span class = "theta">&theta;</span> and the corresponding bar in dark blue indicates the likelihood value.</span> 
   </div>
 </div>
 
@@ -252,8 +252,10 @@ Although maximum likelihood estimates can be identified by creating likelihood d
 Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, $\theta_{MLE}$, is the value of $\theta$ that maximizes the likelihood of the data such that 
 
 $$ 
-\theta_{MLE} = \underset{\theta}{\arg\max}  L(\theta|D).
+\begin{align}
+\theta_{MLE} &= \underset{\theta}{\arg\max}  L(\theta|D).
 \label{eq:MLE-general}
+\end{align}
 $$
 In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases. 
 
@@ -261,13 +263,20 @@ In the two sections that follow, I will apply maximum likelihood estimation for 
 
 In the binomial case, there is only one parameter value of interest: the probability of heads, $\theta$. Thus, maximum likelihood estimation will find the value $\theta$ that maximizes the likelihood function,
 
-$$\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) = \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. $$
+$$
+\begin{align}
+\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) &= \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. 
+\label{eq:mle-binomial}
+\end{align}
+$$
 
 Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation for two reasons. First, applying a $\log$ transformation to the likelihood function of Equation \ref{eq:mle-binomial} greatly simplifies the computation of the derivative because the taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid *underflow*: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as $n = 100$ and $h=70$, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero. Instead of directly representing extremely small values, $\log$ likelihoods can be used and allow numerical precision to be retained. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), $\log_{10}{1.2e73} = -72.92$.  In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} is obtained: 
 
 $$
-\log\big(L(\theta|h,n)\big) = \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
+\begin{align}
+\log\big(L(\theta|h,n)\big) &= \log {n \choose h}\ + h\log(\theta) + (n-h)\log(1-\theta)
 \label{eq:binom-log-likelihood}
+\end{align}
 $$
 To solve for $\theta_{MLE}$, the partial derivative of $\log[L(\theta|h,n)]$ with respect to $\theta$ is computed below and then set to zero (at a peak, the likelihood function has a zero-value rate of change with respect to $\theta$). 
 
@@ -285,13 +294,12 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Therefore, the maximum of the likelihood estimate for the probability of heads, $\theta$, is found by dividing the observed number of heads  by the number of trials, $\frac{h}{n}$ (see Equation \ref{eq:theta-binom-ll}. In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70,
-$\theta_{MLE} = \frac{7}{10} = .70$. 
+Therefore, the maximum of the likelihood estimate for the probability of heads, $\theta$, is found by dividing the observed number of heads  by the number of trials, $\frac{h}{n}$ (see Equation \ref{eq:theta-binom-ll}). In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70, $\theta_{MLE} = \frac{7}{10} = .70$. 
 
 ### Maximum Likelihood Estimation for Several Binomial Cases 
 
 To build on the current example, consider a more realistic example where a researcher decides to flip a coin over multiple sessions. Specifically, in each of 10 $k$ sessions, the researcher flips the coin 10 times. Across the 10 sessions, the following number of heads are obtained: $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to $\theta$
-because the equation will contain $k=10$ terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a $\theta_{MLE}$ equation for multiple coin flipping sessions, I will compute the function for $\theta_{MLE}$ with only two coin flipping sessions that each have their corresponding number of flips, $\mathbf{n} = \[n_1, n_2\]$, and heads, ($\mathbf{h} = \[h_1, h_2\]$
+because the equation will contain $k=10$ terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a $\theta_{MLE}$ equation for multiple coin flipping sessions, I will compute the function for $\theta_{MLE}$ with only two coin flipping sessions that each have their corresponding number of flips, $\mathbf{n} = \[n_1, n_2\]$, and heads, $\mathbf{h} = \[h_1, h_2\]$.
 
 $$  
 \begin{spreadlines}{0.5em}
@@ -319,7 +327,142 @@ theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
 ```
 
 
-## Maximum Likelihood Estimation for the Gaussian  Case 
+## Maximum Likelihood Estimation for the Gaussian Case 
+
+To explain maximum likelihood estimation for the gaussian case, let's consider a new example where a researcher measures the heights of 100 males, $\mathbf{y} \in \mathcal{R}^{100}$. From previous studies, the researcher believes heights to be normally distributed and would, thus, like to estimate the population mean and standard deviation for the heights of males. To obtain population estimates for the mean and variance, the Gaussian function can be used. The Gaussian function computes the probability of observing a $y_i$ score given a population mean, $\mu$, and standard deviation, $\sigma$, and is provided below in Equation \ref{eq:gauss}: 
+
+$$ 
+\begin{align}
+P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\end{align}
+$$
+Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities must be used (see [Likelihood are not probabilities](#like-prob)). Although Equation \ref{eq:gauss} will still be used to compute likelihoods, I will rewrite Equation \ref{eq:gauss} to explicitly indicate that likelihoods will be computed such that
+
+$$
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\end{align}
+$$
+Importantly, Equation \ref{eq:gauss-like} above only computes the likelihood given one $y_i$ data point. Because the researcher want to determine the parameter values that produced all the 100 data points, $y_i \in \mathbf{y}$, Equation \ref{eq:gauss-like} must be used each for each data point and all the resulting values likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, $L(\sigma, \mu|\mathbf{y})$, which yields Equation \ref{eq:gauss-prod} below: 
+
+$$
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) &=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+\label{eq:gauss-prod}
+\end{align} 
+$$
+
+As in the binomial case, the likelihood equation must be transformed to a $\log$ scale to prevent underflow and to simplify the derivation of the partial derivatives. Given that the equation contains Euler's number, $e$, I will use log of base $e$ or the natural log ($\ln$), to further simplify the derivatives. Before applying the log 
+transformation, Equation \ref{eq:gauss-prod} can be simplified to yield Equation \ref{eq:gauss-prod-s} below:  
+
+$$ 
+\begin{spreadlines}{0.5em}
+\begin{align}
+L(\sigma, \mu|\mathbf{y_i}) &=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}
+ \nonumber \\\\
+&= \sigma^{-n}(2\pi)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Big)} 
+\label{eq:gauss-prod-s}
+\end{align} 
+\end{spreadlines}
+$$
+
+With a simplified form of Equation \ref{eq:gauss-prod}, Equation \ref{eq:gauss-prod-s} can now be converted to a log scale by using the product rule and then the power rule to yield the log-likelihood Gaussian function shown below in Equation \ref{eq:log-gauss}. 
+
+$$ 
+\begin{spreadlines}{0.5em}
+\begin{align}
+\text{Apply product rule }\text{ } &\Rightarrow \ln(\sigma^{-n}) + \ln \Big((\sqrt{2\pi})^{-\frac{n}{2}}\Big) + \ln \Big(e^{\big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\big)}\Big) \nonumber \\\\
+\text{Apply power rule }\text{ } &\Rightarrow -n\ln(\sigma) -\frac{n}{2}\ln(\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2 \ln(e) \nonumber \\\\
+\ln L(\sigma, \mu|\mathbf{y})  &= -n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2
+\label{eq:log-gauss}
+\end{align}
+\end{spreadlines}
+$$
+
+The maximum likelihood estimate functions for the mean, $\mu$, and standard deviation, $\sigma$, can now be obtained by taking the derivative of the log-likelihood function with respect to each parameter. The derivation below solves for $\mu$. 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \mu} &= \frac{\delta}{\delta \mu} \Bigg(-n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi}) -\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Bigg) \nonumber \\\\
+&= 0 -0 -\frac{1}{2\sigma^2}\sum_{i=1}^n 2(y_i - \mu) \frac{\delta}{\delta \mu}(y_i - \mu) \nonumber \\\\
+&= -\frac{1}{2\sigma^2}\sum_{i=1}^n 2(y_i - \mu) \cdot -1 \nonumber \\\\
+&= \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \mu) \nonumber \\\\
+\text {Set  } \frac{\delta \ln L(\sigma, \mu|\mathbf{y}) }{\delta \mu} = 0 \nonumber \\\\
+0 &= \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \mu) \nonumber \\\\
+0 &= \sum_{i=1}^n y_i - \sum_{i=1}^n \mu \nonumber \\\\
+0 &= \sum_{i=1}^n y_i - n\mu \nonumber \\\\
+\mu_{MLE} &= \frac{1}{n}\sum_{i=1}^n y_i 
+\label{eq:mean-mle}
+\end{align}
+\end{spreadlines}
+$$
+Therefore, Equation \ref{eq:mean-mle} above shows that the the maximum likelihood estimate for the mean can be obtained by simply computing the mean of the observed $y_i$ scores. The derivation below solves for $\sigma$. 
+
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \sigma} &= \frac{\delta}{\delta \sigma} \Bigg(-n\ln(\sigma) -\frac{n}{2}\ln (\sqrt{2\pi})  - \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Bigg) \nonumber \\\\
+&= -\frac{n}{\sigma} + 0 - \frac{1}{2}(-2\sigma^{-3})\sum_{i=1}^n (y_i - \mu)^2 \nonumber \\\\
+&= -\frac{n}{\sigma}  + \frac{\sum_{i=1}^n (y_i - \mu)^2}{\sigma^3}  \nonumber \\\\
+&= \frac{1}{\sigma^3}(\sum_{i=1}^n(y_i - \mu)^2 - n\sigma^2)  \nonumber \\\\
+\text {Set }\frac{\delta \ln L(\sigma, \mu|\mathbf{y})}{\delta \sigma} &= 0  \nonumber \\\\
+0 &= \sum_{i=1}^n(y_i - \mu)^2 - n\sigma^2  \nonumber \\\\
+n\sigma^2 &= \sum_{i=1}^n(y_i - \mu)^2 \nonumber \\\\
+\sigma_{MLE} &= \sqrt{\frac{1}{n} \sum_{i=1}^n(y_i - \mu)^2}
+\label{eq:mle-sigma}
+\end{align}
+\end{spreadlines}
+$$
+Therefore, Equation \ref{eq:mean-mle} above shows that the the maximum likelihood estimate for the standard deviation parameter, $\sigma$, is the square root of the average squared deviation from the mean observed score. 
+
+```r 
+#generate scores from Gaussian distribution 
+mu <- 5
+sd <- 5
+n <- 500
+
+ind_scores <- rnorm(n = n, mean = mu, sd = sd)
+
+mu_mle <- mean(ind_scores)
+sigma_mle <- var(ind_scores)
+
+compute_log_like <- function(ind_scores, parameters){
+  
+  mu_value <- parameters[1]
+  sd_value <- parameters[2]
+
+  n <- length(ind_scores)
+  
+  log_like <- -.5*n*log(2*pi) -.5*n*log(sd_value^2) - (1/(2*sd_value^2))*sum((ind_scores-mu_value)^2)
+  return(-log_like)
+}
+
+sd_values <- seq(from = 1, to = 10, by=1)
+mu_values <- seq(from = 1, to = 10, by=1)
+
+#find maximum likelihood estimates 
+MLE_estimates <- optim(par=c(1,1), compute_log_like, 
+      ind_scores = ind_scores, 
+      method = "L-BFGS-B",  
+      hessian=TRUE, 
+      lower = c(0, 0),   
+      upper = c(10, 10))
+                    
+# Examine estimates
+MLE_par <- MLE_estimates$par
+MLE_SE <- sqrt(diag(solve(MLE_estimates$hessian)))
+MLE <- data.table(param = c("mu", "sd"),
+                  estimates = MLE_par,
+                  sd = MLE_SE)
+
+kable(MLE)
+compute_log_like(ind_scores, parameters = c(4.959401, 4.841803)) #returns same value of 1498.113
+```
+
+
+# Conclusion 
 
 # References
 
@@ -581,10 +724,10 @@ $$
 To simplify Equation \ref{eq:gamma-int-parts}, I will first focus on the evaluation of $-t^\alpha e^{-t}$ between $\infty$ and $0$ below. At $t = \infty$, 
 
 $$
-\begin{align*}
+\begin{align}
 -t^\alpha e^{-t} = \frac{-\infty^{\alpha}}{e^\infty}, 
 \label{eq:inf-eval}
-\end{align*}
+\end{align}
 $$
 and because $e^{\infty}$ approaches $\infty$ faster than $-\infty^\alpha$ approaches $-\infty$, Equation \ref{eq:inf-eval} becomes zero. At $t = 0$, 
 $$
