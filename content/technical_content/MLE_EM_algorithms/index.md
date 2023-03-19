@@ -146,7 +146,7 @@ sum(prob_distribution$probability)  #1
 [1] 1
 </code></pre>
 
-With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea what outcomes to expect after flipping the coin ten times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's actual probability of heads, $\thets$, after data have been collected; in computing the probability mass function, the probability of heads is fixed. Thus, the researcher must use a different type of distribution to determine the coin's probability of heads. 
+With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea what outcomes to expect after flipping the coin ten times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's actual probability of heads, $\theta$, after data have been collected; in computing the probability mass function, the probability of heads is fixed. Thus, the researcher must use a different type of distribution to determine the coin's probability of heads. 
 
 
 # Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome
