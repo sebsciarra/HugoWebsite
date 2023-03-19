@@ -23,7 +23,7 @@ libraries(packages)
 
 #use_python(python = "/usr/local/bin/python3.9")
 
-knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE, results = 'hold')
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
 # knitr hook to use Hugo highlighting options
 knitr::knit_hooks$set(
   source = function(x, options) {
@@ -387,12 +387,12 @@ $$
 
 Therefore, to obtain $\theta_{MLE}$ when there are $k$ coin flipping sessions, the sum of heads,$\sum^k_{i=1} h_i$, is divided by the sum of coin flips across the sessions, $\sum^k_{i=1} n_i$. In the current example where $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$ and each session has 10 coin flips, the maximum likelihood estimate for the probability of heads, $\theta_{MLE}$, is .48 (see lines below).
 
-```{r mle-mult-binom}
+```{r mle-mult-binom,  echo=T, eval=F, results='hide', warning = F}
 h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
 theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
 theta_mle
 ```
-```{r mle-mult-binom_result, results='hold', echo=F}
+```{r mle-mult-binom_result,  class_name = 'r-code', results = 'hold', echo=F, eval=T}
 h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
 theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
 theta_mle

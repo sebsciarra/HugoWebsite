@@ -326,9 +326,7 @@ h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
 theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
 theta_mle
 ```
-<pre><code class=''>[1] 0.48
-</code></pre>
-<pre><code class=''>[1] 0.48
+<pre><code class='r-code'>[1] 0.48
 </code></pre>
 
 
