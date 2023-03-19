@@ -35,6 +35,54 @@
     "volume": "54"
   },
   {
+    "DOI": "10.1177/251524591774",
+    "author": [
+      {
+        "family": "Etz",
+        "given": "A."
+      }
+    ],
+    "container-title": "Advances in Methods and Practices in Psychological Science",
+    "id": "etz2018",
+    "issue": "1",
+    "issued": {
+      "date-parts": [
+        [
+          2018
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "60-69",
+    "title": "Introduction to the concept of likelihood and its applications",
+    "type": "article-journal",
+    "volume": "1"
+  },
+  {
+    "DOI": "10.1016/S0022-2496(02)00028-7",
+    "author": [
+      {
+        "family": "Etz",
+        "given": "A."
+      }
+    ],
+    "container-title": "Journal of Mathematical Psychology",
+    "id": "myung2003",
+    "issue": "1",
+    "issued": {
+      "date-parts": [
+        [
+          2018
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "90-100",
+    "title": "Tutorial on maximum likelihood estimation",
+    "type": "article-journal",
+    "volume": "47"
+  },
+  {
     "DOI": "10.1177/0165025416644076",
     "URL": "http://dx.doi.org/10.1177/0165025416644076",
     "author": [

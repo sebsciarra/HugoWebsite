@@ -1,8 +1,8 @@
 ---
 title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
 draft: false
-summary: 'Probability and likelihood are discussed in the context of a coin flipping scenario and it is shown that only probabilities sum to one. Although likelihoods cannot be interpreted as probabilities, they can be used to determine the set of parameter values that most likely produced a data set (maximum likelihood estimates). Maximum likelihood estimation provides one efficient method for determining maximum likelihood estimates and is applied in the binomial and gaussian cases.' 
-date: "2023-03-09"
+summary: 'Probability and likelihood are discussed in the context of a coin flipping scenario and it is shown that only probabilities sum to one. Although likelihoods cannot be interpreted as probabilities, they can be used to determine the set of parameter values that most likely produced a data set (maximum likelihood estimates). Maximum likelihood estimation provides one efficient method for determining maximum likelihood estimates and is applied in the binomial and Gaussian cases.' 
+date: "2023-03-19"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -22,28 +22,28 @@ tags: []
 
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given One Set of Parameter Values
 
-Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails, thus obtaining a vector of 10 observed scores, $\mathbf{y} \in \\{0, 1 \\}^{10}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
+Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails. Thus, a vector of 10 observed scores is obtained, $\mathbf{y} \in \\{0, 1 \\}^{n}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
 $$
 \begin{align}
 P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 \label{eq:prob-mass-function}
 \end{align}
 $$
-where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a given number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips ${n \choose h}$.
+where ${n \choose h}$ gives the total number of ways in which $h$ heads (or successes) can be obtained in a series of $n$ attempts (i.e., coin flips) and $(\theta)^{h}(1-\theta)^{(n-h)}$ gives the probability of obtaining a given number of $h$ heads and $n-h$ tails in a given set of $n$ flips. Thus, the binomial function (Equation \ref{eq:prob-mass-function}) has an underlying intuition: To compute the probability of obtaining a specific number of $h$ heads given $n$ flips and a certain $\theta$ probability of success, the probability of obtaining $h$ heads in a given set of $n$ coin flips, $(\theta)^{h}(1-\theta)^{(n-h)}$, is multiplied by the total number of ways in which $h$ heads can be obtained in $n$ coin flips, ${n \choose h}$.
 
 As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
 
 $$
-\begin{alignat}{2}
+\begin{align}
 P(h = 4|\theta = 0.50, n = 10) &= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \nonumber \\\\
 &= \frac{10!}{4! (10 - 4)!}(0.50)^{4}(1-0.50)^{(10-4)} \nonumber \\\\
 &= 210(0.5)^{10}\nonumber \\\\
 &= 0.205 \nonumber
-\end{alignat}
+\end{align}
 $$
 Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of $(0.5)^{10}$ of occurring. Altogether, four heads have a probability of .205 of occurring given a probability of heads of .50 and 10 coin flips. 
 
-In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation \ref{eq:prob-mass-function}) can be computed for each number. The resulting probabilities of obtaining each number of heads can then be plotted to produce a *probability mass function*: A distribution that gives the probability of obtaining each possible value of a discrete random variable[^1] (see Figure \ref{fig:prob-mass-binom}). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is zero. The R code block below (lines <a href="#1">1--68</a>) produces a probability mass function for the binomial situation.
+In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation \ref{eq:prob-mass-function}) can be computed for each number of heads, $h$. The resulting probabilities of obtaining each number of heads can then be plotted to produce a *probability mass function*: A distribution that gives the probability of obtaining each possible value of a discrete random variable[^1] (see Figure \ref{fig:prob-mass-binom}). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is one The R code block below (lines <a href="#1">1--68</a>) produces a probability mass function for the current binomial example.
 
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
@@ -146,18 +146,18 @@ sum(prob_distribution$probability)  #1
 [1] 1
 </code></pre>
 
-With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea of what outcomes to expect after flipping the coin 10 times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's probability of heads after data have been collected; in computing the probability mass function, the probability of heads ($\theta$) is fixed. Thus, the researcher must use a different type of distribution to estimate the coin's probability of heads. 
+With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea what outcomes to expect after flipping the coin ten times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's actual probability of heads, $\thets$, after data have been collected; in computing the probability mass function, the probability of heads is fixed. Thus, the researcher must use a different type of distribution to determine the coin's probability of heads. 
 
 
 # Likelihood Distributions: The Probability of Observing Each Possible Set of Parameter Values Given a Specific Outcome
 
 Continuing with the coin flipping example, the researcher flips the coin 10 times and obtains seven heads. With these data, the researcher wants to determine the probability value of heads, $\theta$, that most likely produced the data, $P(h, n|\theta)$[^2].  Before continuing, it is important to explain why the researcher is no longer dealing with probabilities and is instead dealing with likelihoods. 
 
-[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< cite "fine2019" >}}). 
+[^2]: It should be noted that Bayes' formula can also be used to determine the value of $\theta$ that most likely produced the data. Instead of calculating, $P(h, n|\theta)$, however, Bayes' formula uses prior information about an hypothesis to calculate the probability of $\theta$ given the data, $P(\theta|h, n)$ (for a review, see {{< citePara "etz2018" >}}). 
 
 ## Likelihoods are not Probabilities{#like-prob}
 
-Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to 1. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the fundamental difference between probabilities and likelihoods, we use different notations.  When fixing the data and varying the parameter values, we compute the likelihood of the parameter given the data, $L(\theta|h, n)$. 
+Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to one. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the shift from probabilities to likelihoods, a different notation is used. Instead of computing the probability of the data given a parameter value, $P(h = 7, n = 10|\theta)$, the likelihood of the parameter given the data is computed, $L(\theta|h, n)$. 
   
 ```r 
 num_trials <- 10
@@ -173,11 +173,11 @@ sum(likelihood_distribution$probability)
 <pre><code class='r-code'>[1] 9.09091
 </code></pre>
 
-In computing likelihoods, it is important to note they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihoods for each value of $\theta$ can be computed. 
+In computing likelihoods, it is important to note that, because they do not sum to one, they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihood values of all the other $\theta$ can be computed. 
 
 ## Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate
 
-In Figure \ref{fig:likelihood-dist}, I have plotted the likelihood for each value of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ is the value of .70, which is emboldened on the x-axis and its likelihood indicated by the vertical bar. 
+Figure \ref{fig:likelihood-dist} shows the likelihood distribution of for all values of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ in this example is .70, which is emboldened on the x-axis and its likelihood indicated by the height of the vertical bar. 
 
 
 ```r 
@@ -244,12 +244,12 @@ ggsave(filename = 'images/likelihood_plot.png', plot = likelihood_plot, height =
   </div>
 </div>
 
-Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, however, many situations arise where many parameter values are estimated, and plotting in an *n*-dimensional space becomes very difficult when $n > 3$, and virtually impossible when $n > 5$. Thus, a more efficient method is needed to find maximum likelihood estimates. 
+Although maximum likelihood estimates can be identified by creating likelihood distributions, this method is not efficient. Under many circumstances, creating such distributions is computationally demanding when a large range of parameter values must be considered. Even more important, many situations arise where many parameters are estimated, and this can make plotting the likelihood distribution impossible. As an example, if a researcher wants to estimate six parameters and plot the likelihood distribution, then six dimensions would have to be represented on a 2D plot, which is a nearly impossible task.  Thus, a more efficient method is needed to find maximum likelihood estimates that does not rely on plotting. 
 
 
 # Using Maximum Likelihood Estimation to Find the Most Likely Set of Parameter Values
 
-Maximum likelihood estimation uses calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point is the maximum likelihood value. In mathematical notation, then, the maximum likelihood estimate, $\theta_{MLE}$, is the value of $\theta$ that maximizes the likelihood of the data such that 
+Maximum likelihood estimation identifies maximum likelihood estimates by using calculus to find a peak on the likelihood distribution. In mathematical parlance, maximum likelihood estimation solves for the parameter value where the derivative (i.e., rate of change) is zero. Assuming the likelihood only has one peak (i.e., it is convex), then the parameter value at the zero-derivative point will have the highest likelihood and will, therefore, be the maximum likelihood estimate. In mathematical notation, then, the maximum likelihood estimate, $\theta_{MLE}$, is the value of $\theta$ that maximizes the likelihood function
 
 $$ 
 \begin{align}
@@ -257,7 +257,7 @@ $$
 \label{eq:MLE-general}
 \end{align}
 $$
-In the two sections that follow, I will apply maximum likelihood estimation for the binomial and gaussian cases. 
+In the two sections that follow, I will apply maximum likelihood estimation for the binomial and Gaussian cases. 
 
 ## Maximum Likelihood Estimation for the Binomial Case 
 
@@ -265,12 +265,12 @@ In the binomial case, there is only one parameter value of interest: the probabi
 
 $$
 \begin{align}
-\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) &= \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}. 
+\underset{\theta}{\arg\max}\text{ } L(\theta|h, n) &= \underset{\theta}{\arg\max}\text{ }{n \choose h}(\theta)^{h}(1-\theta)^{(n-h)}.
 \label{eq:mle-binomial}
 \end{align}
 $$
 
-Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation for two reasons. First, applying a $\log$ transformation to the likelihood function of Equation \ref{eq:mle-binomial} greatly simplifies the computation of the derivative because the taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid *underflow*: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as $n = 100$ and $h=70$, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero. Instead of directly representing extremely small values, $\log$ likelihoods can be used and allow numerical precision to be retained. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), $\log_{10}{1.2e73} = -72.92$.  In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} is obtained: 
+Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation on Equation \ref{eq:mle:binomial} for two reasons. First, applying a $\log$ transformation to the likelihood function of Equation \ref{eq:mle-binomial} greatly simplifies the computation of the derivative because taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid *underflow*: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as $n = 100$ and $h=70$, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero within computers. Instead of directly representing extremely small values, $\log$ likelihoods can be used to retain numerical precision. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), $\log_{10}{1.2e73} = -72.92$. In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} is obtained: 
 
 $$
 \begin{align}
@@ -294,12 +294,12 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Therefore, the maximum of the likelihood estimate for the probability of heads, $\theta$, is found by dividing the observed number of heads  by the number of trials, $\frac{h}{n}$ (see Equation \ref{eq:theta-binom-ll}). In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximized the probability of observing the data is .70, $\theta_{MLE} = \frac{7}{10} = .70$. 
+Therefore, the maximum likelihood estimate for the probability of heads, $\theta$, is found by dividing the number of observed headsby the number of flips, $\frac{h}{n}$ (see Equation \ref{eq:theta-binom-ll}). In the current example where seven heads were obtained in ten coin flips, the probability value of heads that that maximizes the probability of observing the data is .70, $\theta_{MLE} = \frac{7}{10} = .70$. 
 
 ### Maximum Likelihood Estimation for Several Binomial Cases 
 
 To build on the current example, consider a more realistic example where a researcher decides to flip a coin over multiple sessions. Specifically, in each of 10 $k$ sessions, the researcher flips the coin 10 times. Across the 10 sessions, the following number of heads are obtained: $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$. At this point, it may seem daunting to compute the partial derivative of the resulting likelihood function with respect to $\theta$
-because the equation will contain $k=10$ terms. Thankfully, a simply equation can be derived that does not require a lengthy partial derivative computation. To derive a $\theta_{MLE}$ equation for multiple coin flipping sessions, I will compute the function for $\theta_{MLE}$ with only two coin flipping sessions that each have their corresponding number of flips, $\mathbf{n} = \[n_1, n_2\]$, and heads, $\mathbf{h} = \[h_1, h_2\]$.
+because the equation will contain $k=10$ terms. Thankfully, a simple equation can be derived that does not require a lengthy partial derivative computation. To derive a $\theta_{MLE}$ equation for multiple coin flipping sessions, I will compute the function for $\theta_{MLE}$ with only two coin flipping sessions that each have their corresponding number of flips, $\mathbf{n} = \[n_1, n_2\]$, and heads, $\mathbf{h} = \[h_1, h_2\]$.
 
 $$  
 \begin{spreadlines}{0.5em}
@@ -319,25 +319,30 @@ $$
 \end{spreadlines}
 $$
 
-Therefore, to obtain $\theta_{MLE}$ when there are $k$ coin flipping sessions, we simply divide the sum of heads,$\sum^k_{i=1} h_i$, by the sum of total flips, $\sum^k_{i=1} n_i$. In the current example where $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$ and each session has 10 coin flips, the maximum likelihood estimate for the probability of heads, $\theta_{MLE}$, is .48 (see lines below).
+Therefore, to obtain $\theta_{MLE}$ when there are $k$ coin flipping sessions, the sum of heads,$\sum^k_{i=1} h_i$, is divided by the sum of coin flips across the sessions, $\sum^k_{i=1} n_i$. In the current example where $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$ and each session has 10 coin flips, the maximum likelihood estimate for the probability of heads, $\theta_{MLE}$, is .48 (see lines below).
 
 ```r 
 h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
 theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
+theta_mle
 ```
+<pre><code class=''>[1] 0.48
+</code></pre>
+<pre><code class=''>[1] 0.48
+</code></pre>
 
 
 ## Maximum Likelihood Estimation for the Gaussian Case 
 
-To explain maximum likelihood estimation for the gaussian case, let's consider a new example where a researcher measures the heights of 100 males, $\mathbf{y} \in \mathcal{R}^{100}$. From previous studies, the researcher believes heights to be normally distributed and would, thus, like to estimate the population mean and standard deviation for the heights of males. To obtain population estimates for the mean and variance, the Gaussian function can be used. The Gaussian function computes the probability of observing a $y_i$ score given a population mean, $\mu$, and standard deviation, $\sigma$, and is provided below in Equation \ref{eq:gauss}: 
+To explain maximum likelihood estimation for the Gaussian case, let's consider a new example where a researcher measures the heights of 100 males, $\mathbf{y} \in \mathcal{R}^{100}$. From previous studies, the researcher believes heights to be normally distributed and, thus, estimates a mean, $\mu$, and standard deviation, $\sigma$, for the population heights of males. To obtain population estimates for the mean and standard deviation, the Gaussian function shown below in Equation \ref{eq:gauss} can be used:
 
 $$ 
 \begin{align}
-P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}.
+P(y_i|\sigma, \mu) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2},
 \label{eq:gauss}
 \end{align}
 $$
-Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities must be used (see [Likelihood are not probabilities](#like-prob)). Although Equation \ref{eq:gauss} will still be used to compute likelihoods, I will rewrite Equation \ref{eq:gauss} to explicitly indicate that likelihoods will be computed such that
+where the probability of observing a $y_i$ score given a population mean, $\mu$, and standard deviation, $\sigma$, is computed, $P(y_i|\sigma, \mu)$. Because the researcher is interested in determining the parameter values that most likely produced the data, parameter values will be varied and the data will be fixed. Thus, likelihoods and not probabilities will be used (see [Likelihood are not probabilities](#like-prob)). Although Equation \ref{eq:gauss} will still be used to compute likelihoods, I will rewrite Equation \ref{eq:gauss} to explicitly indicate that likelihoods will be computed, as shown below in Equation \ref{eq:gauss-like}:
 
 $$
 \begin{align}
@@ -345,7 +350,8 @@ L(\sigma, \mu|\mathbf{y_i}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\f
 \label{eq:gauss-like}
 \end{align}
 $$
-Importantly, Equation \ref{eq:gauss-like} above only computes the likelihood given one $y_i$ data point. Because the researcher want to determine the parameter values that produced all the 100 data points, $y_i \in \mathbf{y}$, Equation \ref{eq:gauss-like} must be used each for each data point and all the resulting values likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, $L(\sigma, \mu|\mathbf{y})$, which yields Equation \ref{eq:gauss-prod} below: 
+
+Importantly, Equation \ref{eq:gauss-like} above only computes the likelihood given one $y_i$ data point. Because the researcher wants to determine the parameter values that produced all the 100 data points, $y_i \in \mathbf{y}$, Equation \ref{eq:gauss-like} must be used each for each data point and all the resulting likelihood values must be multiplied together. Thus, a product of likelihoods must be computed to obtain the likelihood of the parameters given the entire data set, $L(\sigma, \mu|\mathbf{y})$, as shown below in Equation \ref{eq:gauss-prod}: 
 
 $$
 \begin{align}
@@ -354,21 +360,20 @@ L(\sigma, \mu|\mathbf{y_i}) &=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\fra
 \end{align} 
 $$
 
-As in the binomial case, the likelihood equation must be transformed to a $\log$ scale to prevent underflow and to simplify the derivation of the partial derivatives. Given that the equation contains Euler's number, $e$, I will use log of base $e$ or the natural log ($\ln$), to further simplify the derivatives. Before applying the log 
-transformation, Equation \ref{eq:gauss-prod} can be simplified to yield Equation \ref{eq:gauss-prod-s} below:  
+As in the binomial case, the likelihood equation must be transformed to a $\log$ scale to prevent underflow and to simplify the derivation of the partial derivatives. Given that the equation contains Euler's number, $e$, I will use log of base $e$ or the natural log, $\ln$, to further simplify the derivatives. Before applying the log transformation, Equation \ref{eq:gauss-prod} can be simplified to yield Equation \ref{eq:gauss-prod-s} below:  
 
 $$ 
 \begin{spreadlines}{0.5em}
 \begin{align}
 L(\sigma, \mu|\mathbf{y_i}) &=  \prod^n_{i=1}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\big(\frac{y_i - \mu}{\sigma}\big)^2}
  \nonumber \\\\
-&= \sigma^{-n}(2\pi)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Big)} 
+&= \sigma^{-n}(2\pi)^{-\frac{n}{2}}e^{\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu)^2\Big)}.
 \label{eq:gauss-prod-s}
 \end{align} 
 \end{spreadlines}
 $$
 
-With a simplified form of Equation \ref{eq:gauss-prod}, Equation \ref{eq:gauss-prod-s} can now be converted to a log scale by using the product rule and then the power rule to yield the log-likelihood Gaussian function shown below in Equation \ref{eq:log-gauss}. 
+With a simplified form of Equation \ref{eq:gauss-prod}, Equation \ref{eq:gauss-prod-s} can now be converted to a log scale by using the product rule and then the power rule to obtain the log-likelihood Gaussian function shown below in Equation \ref{eq:log-gauss}. 
 
 $$ 
 \begin{spreadlines}{0.5em}
@@ -399,7 +404,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Therefore, Equation \ref{eq:mean-mle} above shows that the the maximum likelihood estimate for the mean can be obtained by simply computing the mean of the observed $y_i$ scores. The derivation below solves for $\sigma$. 
+Therefore, Equation \ref{eq:mean-mle} above shows that the maximum likelihood estimate for the mean can be obtained by simply computing the mean of the observed $y_i$ scores. The derivation below solves for $\sigma$. 
 
 
 $$
@@ -417,54 +422,16 @@ n\sigma^2 &= \sum_{i=1}^n(y_i - \mu)^2 \nonumber \\\\
 \end{align}
 \end{spreadlines}
 $$
-Therefore, Equation \ref{eq:mean-mle} above shows that the the maximum likelihood estimate for the standard deviation parameter, $\sigma$, is the square root of the average squared deviation from the mean observed score. 
+Therefore, Equation \ref{eq:mle-sigma} above shows that the the maximum likelihood estimate for the standard deviation parameter, $\sigma$, is the square root of the average squared deviation from the mean observed score. 
 
-```r 
-#generate scores from Gaussian distribution 
-mu <- 5
-sd <- 5
-n <- 500
 
-ind_scores <- rnorm(n = n, mean = mu, sd = sd)
-
-mu_mle <- mean(ind_scores)
-sigma_mle <- var(ind_scores)
-
-compute_log_like <- function(ind_scores, parameters){
-  
-  mu_value <- parameters[1]
-  sd_value <- parameters[2]
-
-  n <- length(ind_scores)
-  
-  log_like <- -.5*n*log(2*pi) -.5*n*log(sd_value^2) - (1/(2*sd_value^2))*sum((ind_scores-mu_value)^2)
-  return(-log_like)
-}
-
-sd_values <- seq(from = 1, to = 10, by=1)
-mu_values <- seq(from = 1, to = 10, by=1)
-
-#find maximum likelihood estimates 
-MLE_estimates <- optim(par=c(1,1), compute_log_like, 
-      ind_scores = ind_scores, 
-      method = "L-BFGS-B",  
-      hessian=TRUE, 
-      lower = c(0, 0),   
-      upper = c(10, 10))
-                    
-# Examine estimates
-MLE_par <- MLE_estimates$par
-MLE_SE <- sqrt(diag(solve(MLE_estimates$hessian)))
-MLE <- data.table(param = c("mu", "sd"),
-                  estimates = MLE_par,
-                  sd = MLE_SE)
-
-kable(MLE)
-compute_log_like(ind_scores, parameters = c(4.959401, 4.841803)) #returns same value of 1498.113
-```
+Thus, as in the binomial case, maximum likelihood estimation provides a simple function for calculating maximum likelihood estimates for the Gaussian parameters. 
 
 
 # Conclusion 
+
+In conclusion, probabilities and likelihoods are fundamentally different. Probabilities sum to one, whereas likelihoods do not sum to one. Thus, likelihoods cannot be interpreted as probabilities. Although likelihoods cannot be interpreted as probabilities, they can be used to determine parameter values that most likely produce observed data sets (maximum likelihood estimates). Maximum likelihood estimation provides an efficient method for determining maximum likelihood estimates and was applied in the binomial and Gaussian cases.
+ 
 
 # References
 
@@ -473,14 +440,14 @@ compute_log_like(ind_scores, parameters = c(4.959401, 4.841803)) #returns same v
 
 # Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
 
-To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is one. 
 
-For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose h$, and the binomial factors, $\theta^h (1-\theta)^{n-h}$. With respect to the binomial coefficient, $n \choose h$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of heads, $h$, can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the constituent terms are nonnegative; in addition to the number of trials and heads ($n, h$, respectively),  the probability of heads and tails are also always nonnegative ($\theta, (1-\theta) \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so are always nonnegative.
 
 For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
 
 \begin{align}
-1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  
+1 = \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h}.  
 \label{eq:binomial-sum-one}
 \end{align}
 
@@ -491,12 +458,12 @@ Importantly, it can be proven that all probabilities sum to one by using the bin
 \label{eq:binomial}
 \end{align}
 
-Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = \theta$ and $b = 1-\theta$, which returns the proof as shown below: 
 
 \begin{spreadlines}{0.5em}
 \begin{align*}
-(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
-1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \qquad\qquad _\square   \nonumber 
+(\theta + 1 -\theta)^n &= \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h} \\\\ \nonumber
+1 &= \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h} \qquad\qquad _\square   \nonumber 
 \end{align*}
 \end{spreadlines}
 
@@ -506,7 +473,7 @@ For a proof of the binomial theorem, see [Appendix E](#proof-binomial).
 
 # Appendix B: Proof That Likelihoods are not Probabilities  {#proof-likelihood}
 
-As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those set to be fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed ($\theta$, $n$) and the data are varied ($h$; notice how, in Appendix A, probabilities were summed across all possible values of $h$). With likelihoods, however, the data are fixed ($h$) and the parameters are varied ($\theta$, $n$). For the current proof, it is sufficient to only allow $\theta$ to vary. To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see [Appendix A](#proof-pmf)), likelihoods likewise can never ne negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to 1. Thus, the following proposition must be proven: 
+As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those that are fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed (i.e., $\theta$) and the data are varied ($h, n$). With likelihoods, however, the data are fixed ($h, n$) and the parameters are varied ($\theta$). To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see [Appendix A](#proof-pmf)), likelihoods likewise can never be negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to one. Thus, the following proposition must be proven: 
  
 $$
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
@@ -543,7 +510,7 @@ $$
 \label{eq:beta-restate}
 \end{align}
 $$
-At this point, another proof becomes important because it allows us to express the beta function in terms of another function that will, ultimately, allow us to simplify Equation \ref{eq:beta-restate} and prove that likelihoods do not sum to one and are, therefore, not probabilities.  Specifically, the beta function, $\mathrm{B}(x, y)$ can be stated in terms of the gamma function $\Gamma$ such that 
+At this point, another proof becomes important because it allows us to express the beta function in terms of another function that will, ultimately, allow us to simplify Equation \ref{eq:beta-restate} and prove that likelihoods do not sum to one. Specifically, the beta function, $\mathrm{B}(x, y)$ can be stated in terms of the gamma function $\Gamma$ such that 
 
 $$
 \begin{align}
@@ -566,6 +533,7 @@ $$
 \Gamma(x) = (x - 1)!.
 \end{align}
 $$
+
 Given that the gamma function can be stated as a factorial, Equation \ref{eq:binomial-gamma} can be now be written with factorial terms and simplified to prove that likelihoods do not sum to one. 
 
 $$
@@ -579,7 +547,7 @@ $$
 \end{spreadlines}
 $$
 
-Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provided an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
+Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provides an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
 
 ```r 
 num_trials <- 10 #n
@@ -589,11 +557,13 @@ prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.
 likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
 sum(likelihood_distribution$probability) #compute integral
 ```
+
 <pre><code class='r-code'>[1] 9.09091
 </code></pre>
+
 # Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-beta-gamma}
 
-Equation \ref{eq:beta-gamma-proof} below will be proven 
+Equation \ref{eq:beta-gamma-proof} below will be proven:
 
 $$
 \begin{align}
@@ -601,7 +571,7 @@ $$
 \label{eq:beta-gamma-proof}
 \end{align}
 $$
-To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and the numerator of Equation \ref{eq:beta-gamma-proof}, \Gamma(x)\Gamma(y), where 
+To begin, let's write out the expansions of the gamma function, $\Gamma(x)$, and the numerator of Equation \ref{eq:beta-gamma-proof}, $\Gamma(x)\Gamma(y)$, where 
 $$
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -612,7 +582,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Equation \ref{eq:gamma-function} shows the gamma function which will be useful as a reference and Equation \ref{eq:gamma-numerator} shows the expansion of the numerator in Equation \ref{eq:beta-gamma-proof}. To prove Equation \ref{eq:beta-gamma-proof}, we will begin by changing the variables of $s$ and $t$ in Equation \ref{eq:gamma-numerator} by reexpressing them in terms of $u$ and $v$. Importantly,  when changing variables in a double integral, the formula below in Equation \ref{eq:double-integral} must be followed: 
+Equation \ref{eq:gamma-function} shows the gamma function, $\Gamma(x)$, which will be useful as a reference and Equation \ref{eq:gamma-numerator} shows the expansion of the numerator in Equation \ref{eq:beta-gamma-proof}. To prove Equation \ref{eq:beta-gamma-proof}, we will begin by changing the variables of $s$ and $t$ in Equation \ref{eq:gamma-numerator} by reexpressing them in terms of $u$ and $v$. Importantly,  when changing variables in a double integral, the formula below in Equation \ref{eq:double-integral} must be followed: 
 
 $$
 \begin{align}
@@ -651,7 +621,7 @@ v & u
 \end{align}
 \end{spreadlines}
 $$
-With the $\det\mathbf{J}(u, v)$ computed, we can no express the new function with the changed variables, as shown below in Equation \ref{eq:gamma-reexp}. 
+With $\det\mathbf{J}(u, v)$ computed, we can no express the new function with the changed variables, as shown below in Equation \ref{eq:gamma-reexp}. 
 
 $$
 \begin{align}
@@ -677,7 +647,7 @@ $$
 \end{spreadlines}
 $$
 
-Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produce integration limits 0 to $\infty$ for $u$ and 0 to 1 for $v$.  Recalling the gamma function (Equation \ref{eq:gamma-function} and the beta function (Equation \ref{eq:beta-function}, the beta function can now be expressed in terms of the gamma function, proving Equation \ref{eq:beta-gamma-proof}. 
+Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produce integration limits 0 to $\infty$ for $u$ and 0 to 1 for $v$.  Recalling the gamma function (Equation \ref{eq:gamma-function} and the beta function (Equation \ref{eq:beta-function}), the beta function can now be expressed in terms of the gamma function, proving Equation \ref{eq:beta-gamma-proof}. 
 
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -811,7 +781,7 @@ I now expand the left-hand side of Equation \ref{eq:binomial-induction}, to obta
 $$
 \begin{spreadlines}{0.5em}
 \begin{align}
-&=(x + y)(x + y)^n \nonumber \\\\
+(x + y)^{n+1} &=(x + y)(x + y)^n \nonumber \\\\
  &= (x+y) \sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber  \\\\
 &=x\sum^n_{k=0} {n \choose k} x^{n-k}y^k + y\sum^n_{k=0} {n \choose k} x^{n-k}y^k \nonumber \\\\
 &=\sum^n_{k=0} {n \choose k} x^{n+1-k}y^k + \sum^n_{k=0} {n \choose k} x^{n-k}y^{k+1} \nonumber \\\\
@@ -820,7 +790,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Now I, respectively, remove $k = 0$ and $k = n+1$ from the first and second terms of Equation \ref{eq:binom-sums} so that the sums iterate over the same range of $k=1$ to $k = n$. I then use Pascal's rule to combine the two summations into one summation. 
+Now I, respectively, remove $k = 0$ and $k = n+1$ from the first and second terms of Equation \ref{eq:binom-sums} so that the sums iterate over the same range of $k=1$ to $k = n$.
 
 $$
 \begin{spreadlines}{0.5em}
