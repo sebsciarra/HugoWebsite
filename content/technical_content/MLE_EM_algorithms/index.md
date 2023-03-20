@@ -43,7 +43,7 @@ P(h = 4|\theta = 0.50, n = 10) &= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \n
 $$
 Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of $(0.5)^{10}$ of occurring. Altogether, four heads have a probability of .205 of occurring given a probability of heads of .50 and 10 coin flips. 
 
-In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation \ref{eq:prob-mass-function}) can be computed for each number of heads, $h$. The resulting probabilities of obtaining each number of heads can then be plotted to produce a *probability mass function*: A distribution that gives the probability of obtaining each possible value of a discrete random variable[^1] (see Figure \ref{fig:prob-mass-binom}). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is one The R code block below (lines <a href="#1">1--68</a>) produces a probability mass function for the current binomial example.
+In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation \ref{eq:prob-mass-function}) can be computed for each number of heads, $h$. The resulting probabilities of obtaining each number of heads can then be plotted to produce a *probability mass function*: A distribution that gives the probability of obtaining each possible value of a discrete random variable[^1] (see Figure \ref{fig:prob-mass-binom}). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is one. The R code block below (see lines <a href="#1">1--65</a>) produces a probability mass function for the current binomial example.
 
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
@@ -132,7 +132,7 @@ ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
   </div>
 </div>
 
-Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
+Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below (lines <a href="#66">66--70</a>) verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
 ```r 
 #Condition 1: All probability values have nonnegative values. 
@@ -157,7 +157,7 @@ Continuing with the coin flipping example, the researcher flips the coin 10 time
 
 ## Likelihoods are not Probabilities{#like-prob}
 
-Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to one. Indeed, the code below shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the shift from probabilities to likelihoods, a different notation is used. Instead of computing the probability of the data given a parameter value, $P(h = 7, n = 10|\theta)$, the likelihood of the parameter given the data is computed, $L(\theta|h, n)$. 
+Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to one. Indeed, the R code block below ( lines <a href="#73">73--80</a>) shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the shift from probabilities to likelihoods, a different notation is used. Instead of computing the probability of the data given a parameter value, $P(h = 7, n = 10|\theta)$, the likelihood of the parameter given the data is computed, $L(\theta|h, n)$. 
   
 ```r 
 num_trials <- 10
@@ -177,7 +177,7 @@ In computing likelihoods, it is important to note that, because they do not sum 
 
 ## Creating a Likelihood Distribution to Find the Maximum Likelihood Estimate
 
-Figure \ref{fig:likelihood-dist} shows the likelihood distribution of for all values of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ in this example is .70, which is emboldened on the x-axis and its likelihood indicated by the height of the vertical bar. 
+Figure \ref{fig:likelihood-dist} shows the likelihood distribution of for all values of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ in this example is .70, which is emboldened on the x-axis and its likelihood indicated by the height of the vertical bar. The R code block below (lines <a href="#82">82--126</a>) plots computes the likelihood values for all $\theta \in \[0, 1\]$. 
 
 
 ```r 
@@ -545,7 +545,7 @@ $$
 \end{spreadlines}
 $$
 
-Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provides an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the code below. 
+Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provides an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the R code block below (lines <a href="#131">131--136</a>). 
 
 ```r 
 num_trials <- 10 #n
