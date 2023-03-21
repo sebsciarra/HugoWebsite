@@ -718,15 +718,13 @@ Therefore, Equation <span class="math inline">\(\ref{eq:mle-sigma}\)</span> abov
 <h1><span class="header-section-number">7</span> Appendix B: Proof That Likelihoods are not Probabilities</h1>
 <p>As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those that are fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed (i.e., <span class="math inline">\(\theta\)</span>) and the data are varied (<span class="math inline">\(h, n\)</span>). With likelihoods, however, the data are fixed (<span class="math inline">\(h, n\)</span>) and the parameters are varied (<span class="math inline">\(\theta\)</span>). To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see <a href="#proof-pmf">Appendix A</a>), likelihoods likewise can never be negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to one. Thus, the following proposition must be proven:</p>
 <p><span class="math display">\[
-\int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1.
+\sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1.
 \]</span>
-In summing each likelihood for <span class="math inline">\(\theta \in \[0, 1\]\)</span>, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
+In summing each likelihood for <span class="math inline">\(\theta \in \[0, 1\]\)</span>, an equivalent calculation is to take the integral of the binomial function with respect to <span class="math inline">\(\theta\)</span> such that
 <span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
-\int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
-\label{eq:int-sum-likelihood}\\\\
-&amp;= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
+\sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} &amp;= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
 \label{eq:int-sum-likelihood-binomial}
 \end{align}
 \end{spreadlines}

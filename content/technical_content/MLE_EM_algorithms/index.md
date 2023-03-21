@@ -474,15 +474,13 @@ For a proof of the binomial theorem, see [Appendix E](#proof-binomial).
 As a reminder, although the same formula is used to compute likelihoods and probabilities, the variables allowed to vary and those that are fixed differ when computing likelihoods and probabilities. With probabilities, the parameters are fixed (i.e., $\theta$) and the data are varied ($h, n$). With likelihoods, however, the data are fixed ($h, n$) and the parameters are varied ($\theta$). To prove that likelihoods are not probabilities, we have to prove that likelihoods do not satisfy one of the two conditions required by probabilities (i.e., likelihoods can have negative values or likelihoods do not sum to one). Given that likelihoods are calculated with the same function as probabilities and probabilities can never be negative (see [Appendix A](#proof-pmf)), likelihoods likewise can never be negative. Therefore, to prove that likelihoods are not probabilities, we must prove that likelihoods do not always sum to one. Thus, the following proposition must be proven: 
  
 $$
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta= \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
+ \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} \neq 1. 
 $$
-In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to theta such that
+In summing each likelihood for $\theta \in \[0, 1\]$, an equivalent calculation is to take the integral of the binomial function with respect to $\theta$ such that
 $$
 \begin{spreadlines}{0.5em}
 \begin{align}
- \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \int_0^1 L(\theta|h ,n) \phantom{c} d\theta  
-\label{eq:int-sum-likelihood}\\\\
-&= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
+ \sum_{\theta = 0}^1{n \choose h} \theta^h(1 - \theta)^{n-h} &= {n \choose h} \int_0^1 \theta^h(1-\theta)^{n-h}.
 \label{eq:int-sum-likelihood-binomial}
 \end{align}
 \end{spreadlines}
