@@ -9,73 +9,12 @@ output:
      keep_md: true
 always_allow_html: true
 header-includes: 
-bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
+bibFile: content/technical_content/MLE/biblio.json    
 tags: []
 ---   
 
 
-```{r package_loading_1, include=F}
-#load packages   
-library(easypackages) 
-packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'shiny',
-               'knitr', 'RefManageR', 'gluedown', 'formatR')
-libraries(packages)  
 
-#use_python(python = "/usr/local/bin/python3.9")
-
-knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
-# knitr hook to use Hugo highlighting options
-knitr::knit_hooks$set(
-  source = function(x, options) {
-  hlopts <- options$hlopts
-    paste0(
-      "```", "r ",
-      if (!is.null(hlopts)) {
-      paste0("{",
-        glue::glue_collapse(
-          glue::glue('{names(hlopts)}={hlopts}'),
-          sep = ","
-        ), "}"
-        )
-      },
-      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
-    )
-  }
-)
-
-chunk_class <- function(before, options, envir) {
-    class_name = options$class_name
-
-    
-    if (!is.null(before)) { 
-      
-        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
-        n <- length(lines)  #determines numbers of lines
-        
-        #if (line_numbers) { 
-           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
-                            
-                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
-        #}
-        
-       
-          
-          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
-                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
-    }
-        return(res)
-    
-}
-
-knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
-
-#knitr::knit_hooks$set(output = function(x, options) { 
-#  paste(c("<pre><code class = 'r-code'>",
-#        gsub('^## Error', '**Error**', x),
-#        '</pre></code>'), collapse = '\n')
-#})
-
-```
 
 
 
@@ -109,7 +48,7 @@ In order to calculate the probability of obtaining each possible number of heads
 
 [^1]: Discrete variables have a countable number of discrete values. In the current example with ten coin flips ($n = 10$), the number of heads is a discrete variable because the number of heads, $h$, has a countable number of outcomes, $h \in \\{0, 1, 2, ..., n\\}$. 
 
-```{r prob-mass-binom, echo=T, eval=T, results='hide', warning = F}
+```r 
 #create function that computes probability mass function with following arguments:
   ##num_trials = number of trials (10  [coin flips] in the current example)
   ##prob_success = probability of success (or heads; 0.50 in the current example)
@@ -195,7 +134,7 @@ ggsave(filename = 'images/pmf_plot.png', plot = pmf_plot, height = 6, width = 8)
 
 Figure \ref{fig:prob-mass-binom} shows the probability mass function that results with an unbiased coin ($\theta = 0.50$) and ten coin flips ($n = 10$). In looking across the probability values of obtaining each number of heads (x-axis), 5 heads is the most likely value, as indicated by the emboldened number on the x-axis and the bar above it with a darker blue color. As an aside, the R code below (lines <a href="#66">66--70</a>) verifies the two conditions of probability mass functions for the current example (for a mathematical proof, see [Appendix A](#proof-pmf)). 
 
-```{r pmf-checks-code, echo=T, eval=T, results='hide', warning = F}
+```r 
 #Condition 1: All probability values have nonnegative values. 
 sum(prob_distribution$probability >= 0) #11 nonnegative values 
 
@@ -203,13 +142,9 @@ sum(prob_distribution$probability >= 0) #11 nonnegative values
 sum(prob_distribution$probability)  #1
 ```
 
-```{r pmf-checks-output, class_name = 'r-code', results = 'hold', echo=F, eval=T}
-#Condition 1: All probability values have nonnegative values. 
-sum(prob_distribution$probability >= 0) #11 nonnegative values 
-
-#Condition 2: Sum of all probability values is 1. 
-sum(prob_distribution$probability)  #1
-```
+<pre><code class='r-code'>[1] 11
+[1] 1
+</code></pre>
 
 With a probability mass function that shows the probability of obtaining each possible number of heads, the researcher now has an idea what outcomes to expect after flipping the coin ten times. Unfortunately, the probability mass function in Figure \ref{fig:prob-mass-binom} gives no insight into the coin's actual probability of heads, $\theta$, after data have been collected; in computing the probability mass function, the probability of heads is fixed. Thus, the researcher must use a different type of distribution to determine the coin's probability of heads. 
 
@@ -224,7 +159,7 @@ Continuing with the coin flipping example, the researcher flips the coin 10 time
 
 Because we are interested in determining which value of $\theta \in \[0, 1\]$ most likely produced the data, the probability of observing the data must be computed for each of these values, $P(h = 7, n = 10|\theta)$. Thus, we now fix the data, $h = 7, n = 10$, and vary the parameter value of $\theta$. Although we also use the binomial function to compute $P(h = 7, n = 10|\theta)$ for each $\theta \in \[0, 1\]$, the resulting values are not probabilities because they do not sum to one. Indeed, the R code block below ( lines <a href="#73">73--80</a>) shows that the values sum to 9.09. Thus, when fixing the data and varying the parameter values, the resulting values do not sum to one (for a mathematical proof with the binomial function, see [Appendix B](#proof-likelihood) and are, therefore, not probabilities: they are likelihoods. To signify the shift from probabilities to likelihoods, a different notation is used. Instead of computing the probability of the data given a parameter value, $P(h = 7, n = 10|\theta)$, the likelihood of the parameter given the data is computed, $L(\theta|h, n)$. 
   
-```{r likelihood-check, echo=T, eval=T, results='hide', warning = F}
+```r 
 num_trials <- 10
 num_successes <- 7
 prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
@@ -235,9 +170,8 @@ likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, n
 sum(likelihood_distribution$probability)
 ```
 
-```{r likelihood-check-output, class_name = 'r-code', results = 'hold', echo=F, eval=T}
-sum(likelihood_distribution$probability)
-```
+<pre><code class='r-code'>[1] 9.09091
+</code></pre>
 
 In computing likelihoods, it is important to note that, because they do not sum to one, they cannot be interpreted as probabilities. As an example, the likelihood of 0.108 obtained for $L(\theta = .50|h=7, n=10)$ does not mean that, given a probability of heads of .50, there is a 10.80% chance that seven heads will arise in 10 coin flips: The value of $L(\theta = .50|h=7, n=10) = 0.108$ provides a measure of how strongly the data are expected under the hypothesis that $\theta = .50$. To gain a better understanding of whether the likelihood value of 0.108 is a high value, the likelihood values of all the other $\theta$ can be computed. 
 
@@ -246,7 +180,7 @@ In computing likelihoods, it is important to note that, because they do not sum 
 Figure \ref{fig:likelihood-dist} shows the likelihood distribution of for all values of $\theta \in \[0, 1\]$. By plotting the likelihoods, the parameter value that most likely produced the data or the *maximum likelihood estimate* can be identified. The maximum likelihood estimate of $\theta$ in this example is .70, which is emboldened on the x-axis and its likelihood indicated by the height of the vertical bar. The R code block below (lines <a href="#82">82--126</a>) plots computes the likelihood values for all $\theta \in \[0, 1\]$. 
 
 
-```{r likelihood-dist}
+```r 
 num_trials <- 10
 num_successes <- 7
 prob_success <- seq(from = 0, to = 1, by = 0.01) #manipulated variable 
@@ -336,7 +270,7 @@ $$
 \end{align}
 $$
 
-Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation on Equation \ref{eq:mle:binomial} for two reasons. First, applying a $\log$ transformation to the likelihood function of Equation \ref{eq:mle-binomial} greatly simplifies the computation of the derivative because taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid *underflow*: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as $n = 100$ and $h=70$, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero within computers. Instead of directly representing extremely small values, $\log$ likelihoods can be used to retain numerical precision. For example, the value of 1.2E-73 becomes `r log(x = 1.2e-73, base = 10)` on a log scale (base 10), $\log_{10}{1.2e73} = -72.92$. In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} is obtained: 
+Before computing the maximum likelihood estimate, however, it is important to apply a $\log$ transformation on Equation \ref{eq:mle:binomial} for two reasons. First, applying a $\log$ transformation to the likelihood function of Equation \ref{eq:mle-binomial} greatly simplifies the computation of the derivative because taking the derivative of the log-likelihood does not involve a lengthy application of the quotient, product, and chain rules. Second, log-likelihoods are necessary to avoid *underflow*: the rounding of small numbers to zero in computers. As an example, in a coin flipping example with a moderate number of flips such as $n = 100$ and $h=70$, many likelihood values become extremely small (e.g., 1.20E-73) and can easily be rounded down to zero within computers. Instead of directly representing extremely small values, $\log$ likelihoods can be used to retain numerical precision. For example, the value of 1.2E-73 becomes -72.9208188 on a log scale (base 10), $\log_{10}{1.2e73} = -72.92$. In applying a $\log$ transformation to the likelihood function, the log-likelihood function shown below in Equation \ref{eq:binom-log-likelihood} is obtained: 
 
 $$
 \begin{align}
@@ -387,16 +321,13 @@ $$
 
 Therefore, to obtain $\theta_{MLE}$ when there are $k$ coin flipping sessions, the sum of heads,$\sum^k_{i=1} h_i$, is divided by the sum of coin flips across the sessions, $\sum^k_{i=1} n_i$. In the current example where $\mathbf{h} = \[1, 6, 4, 7, 3, 4 ,5, 10, 5, 3\]$ and each session has 10 coin flips, the maximum likelihood estimate for the probability of heads, $\theta_{MLE}$, is .48 (see lines below).
 
-```{r mle-mult-binom,  echo=T, eval=F, results='hide', warning = F}
+```r 
 h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
 theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
 theta_mle
 ```
-```{r mle-mult-binom_result,  class_name = 'r-code', results = 'hold', echo=F, eval=T}
-h <- c(1, 6, 4, 7, 3, 4 ,5, 10, 5, 3)
-theta_mle <- sum(h)/sum(rep(x = 10, times = 10))
-theta_mle
-```
+<pre><code class='r-code'>[1] 0.48
+</code></pre>
 
 
 ## Maximum Likelihood Estimation for the Gaussian Case 
@@ -608,7 +539,7 @@ $$
 
 Therefore, binomial likelihoods sum to a multiple of $\frac{1}{1+n}$, where the multiple is the number of integration steps. The R code block below provides an example where the integral can be shown to be a multiple of the value in Equation \ref{eq:likelihood-proof}. In the example, the integral of the likelihood is taken over 100 equally spaced steps. Thus, the sum of likelihoods should be $100\frac{1}{1+n} = 9.09$, and this turns out to be true in the R code block below (lines <a href="#131">131--136</a>). 
 
-```{r likelihood-sum, echo=T, eval=F}
+```r 
 num_trials <- 10 #n
 num_successes <- 7 #h
 prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.e., there are 100 dtheta values)
@@ -617,14 +548,8 @@ likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, n
 sum(likelihood_distribution$probability) #compute integral
 ```
 
-```{r likelihood-sum-result, class_name = 'r-code', echo=F, eval=T}
-num_trials <- 10 #n
-num_successes <- 7 #h
-prob_success <- seq(from = 0, to = 1, by = 0.01) #theta; contains 100 values (i.e., there are 100 dtheta values)
-
-likelihood_distribution <- compute_binom_mass_density(num_trials = num_trials, num_successes =  num_successes, prob_success = prob_success)
-sum(likelihood_distribution$probability) #compute integral
-```
+<pre><code class='r-code'>[1] 9.09091
+</code></pre>
 
 # Appendix C: Proof of Relation Between Beta and Gamma Functions  {#proof-beta-gamma}
 
