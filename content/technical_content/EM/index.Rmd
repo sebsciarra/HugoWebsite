@@ -1,0 +1,81 @@
+---
+title: "The Expectation-Maximization Algorithm: A Method for Modelling Mixture Models" 
+draft: false
+summary: 'Upcoming post' 
+date: "2023-04-02"
+article_type: technical
+output:
+  bookdown::html_document2:
+     keep_md: true
+always_allow_html: true
+header-includes: 
+bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
+tags: []
+---   
+
+
+```{r package_loading_1, include=F}
+#load packages   
+library(easypackages) 
+packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'shiny',
+               'knitr', 'RefManageR', 'gluedown', 'formatR')
+libraries(packages)  
+
+#use_python(python = "/usr/local/bin/python3.9")
+
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
+# knitr hook to use Hugo highlighting options
+knitr::knit_hooks$set(
+  source = function(x, options) {
+  hlopts <- options$hlopts
+    paste0(
+      "```", "r ",
+      if (!is.null(hlopts)) {
+      paste0("{",
+        glue::glue_collapse(
+          glue::glue('{names(hlopts)}={hlopts}'),
+          sep = ","
+        ), "}"
+        )
+      },
+      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
+    )
+  }
+)
+
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
+
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
+       
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
+
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
+
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
+
+```
+
+
+
