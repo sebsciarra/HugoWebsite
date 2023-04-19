@@ -212,6 +212,11 @@ p {
   color:  var(--hover-color);
 }
 
+
+ol {
+  line-height: 2;
+}
+
 .blog_name {
   display: block;
   font-family: monospace;
