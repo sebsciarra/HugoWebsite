@@ -54,6 +54,9 @@ ul.tableOfContentsList li {
   margin: 0;
 }
 
+.tableContents ul li a[href*="#"] {
+font-family: Helvetica;
+}
 
 //title of table of contents
 .tableContents span {
