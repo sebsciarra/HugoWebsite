@@ -306,7 +306,7 @@ ggsave(filename = 'images/likelihood_plot.png', plot = likelihood_plot, height =
     <img src="images/likelihood_plot.png" width="70%" height="70%"> 
   
   <div class="figNote">
-      <span><em>Note. </em> Number emboldened on the x-axis indicates the maximum likelihood estiamte for <span class = "theta">&theta;</span> and the corresponding bar in dark blue indicates the likelihood value.</span> 
+      <span><em>Note. </em> Number emboldened on the x-axis indicates the maximum likelihood estimate for <span class = "theta">&theta;</span> and the corresponding bar in dark blue indicates the likelihood value.</span> 
   </div>
 </div>
 

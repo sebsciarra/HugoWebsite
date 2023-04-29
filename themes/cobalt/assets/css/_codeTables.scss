@@ -249,7 +249,7 @@ code[class = "python-code"]  table td:nth-child(2)   {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  width: 60px;
+  width: 65px;
   min-width: 40px;
   color: white;
   opacity: .95;
@@ -339,13 +339,14 @@ button[id = "collapseButton"]:hover{
   font-size: 9px;
   position: absolute;
   width: fit-content;
-  right: 60px;
+  right: 65px;
   top: 0;
   height: fit-content;
   text-align: right;
   z-index: 1;
   padding-left: 0;
 }
+
 
 .language-box-collapsed::after {
   box-sizing: content-box;

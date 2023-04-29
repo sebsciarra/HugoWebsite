@@ -1,0 +1,467 @@
+---
+title: "The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions" 
+draft: false
+summary: 'Upcoming post' 
+date: ""
+article_type: technical
+output:
+  bookdown::html_document2:
+     keep_md: true
+always_allow_html: true
+header-includes: 
+tags: []
+---   
+
+
+```{r package_loading_1, include=F}
+#load packages   
+library(easypackages) 
+packages <- c('devtools','tidyverse', 'reticulate', 'RColorBrewer')
+libraries(packages)  
+
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
+# knitr hook to use Hugo highlighting options
+knitr::knit_hooks$set(
+  source = function(x, options) {
+  hlopts <- options$hlopts
+    paste0(
+      "```", "r ",
+      if (!is.null(hlopts)) {
+      paste0("{",
+        glue::glue_collapse(
+          glue::glue('{names(hlopts)}={hlopts}'),
+          sep = ","
+        ), "}"
+        )
+      },
+      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
+    )
+  }
+)
+
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
+
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
+       
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
+
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
+
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
+
+options(reticulate.autocomplete = TRUE)
+
+
+#install_miniconda(path = "e:/miniconda", update = T)
+use_condaenv(condaenv = "r-reticulate", conda = "/Users/sebastiansciarra/Library/r-miniconda/bin/conda")
+py_install(packages = 'pandas')
+#py_packages <- c('numpy', 'pandas', 'scipy')
+#py_install(packages = py_packages)
+
+```
+
+
+
+
+# Coding and Visualizing the Expectation-Maximization (EM) Algorithm
+
+With an understanding of the EM algorithm, I will now show how to produce one of its popular visualizations. 
+
+```{python binom-mixture-function, echo=F, eval=F, hlopts=list(language = 'python'), tidy=F}
+def generate_binomial_mixture(num_components, size, p, mix):
+  """
+  Generate data according to a mixture of binomials.
+  Parameters:
+      - num_components (int): Number of mixture components
+      - size (int or tuple of ints): Size of the generated data
+      - p (list or array): List or array of probabilities of success for each binomial distribution
+      - mix (list or array): List or array of mixing coefficients for each component
+  Returns:
+      - data (ndarray): Generated data according to the mixture of binomials
+  """
+  assert num_components == len(p), "Number of components must match the length of the probability list."
+  assert num_components == len(mix), "Number of components must match the length of the mixing coefficient list."
+  assert sum(mix) == 1, "Mixture probabilities sum to 1"
+  
+  # Generate data for each binomial distribution 
+  binomial_mixture_data = np.random.binomial(n=1, p=p, size=(size, num_components))
+  
+  # Compute dot product between mixture values and binomial mixture data. If dot product >= 0.5, value = 1, else, value = 0. 
+  binomial_mixture_data = (np.dot(binomial_mixture_data, mix) >= 0.5).astype(int)
+  
+  return binomial_mixture_data
+
+```
+
+```{python em-algorithm-plot, echo=F,  eval=F, hlopts=list(language = 'python'), tidy=F}
+#data given to researcher
+binom_mixture_data = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
+
+#initial guesses for E step 
+mu_fixed = [0.5, 0.5] #mixture probabilities are fixed so that convergence does not occur in one trial
+p = [0.1, 0.1] #probabilities of heads
+
+#1) Incomplete-data log-likelihood
+##create Dataframe with all possible probability combinations [x, 0.1], such that 
+##the probability of heads for the second coin is fixed to 1
+incomplete_data_like = pd.DataFrame({'p1': np.arange(start = 0, stop = 1, step = 0.01)})
+incomplete_data_like.insert(0, 'p2', 0.1)   #fix probability of heads for second coin to 0.1 
+
+##compute incomplete-data log-likelihood across all combinations of [x, 0.1]
+incomplete_data_like['likelihood'] = incomplete_data_like.apply(lambda row: 
+  compute_incomplete_log_like(data = binom_mixture_data, 
+  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
+
+
+#2) Old evidence lower bound 
+##compute first (i.e., old) responsibilities
+rs_old = e_step(data = binom_mixture_data, mu = mu_fixed, p = p)
+
+old_lower_bound = pd.DataFrame({'p1': np.arange(start = 0.01, stop = 1, step = 0.01)})
+old_lower_bound.insert(0, 'p2', 0.1)  #fix probability of heads for second coin to 0.1 
+
+old_lower_bound['likelihood'] = old_lower_bound.apply(lambda row: 
+  compute_lower_bound(responsibilities = rs_old, 
+  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
+
+compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed, p = p)
+compute_lower_bound(responsibilities = rs_old, mu = mu_fixed, p = p)
+
+
+#2) New evidence lower bound
+##compute new (i.e., new) responsibilities byt first computing estimates
+estimates = m_step(responsibilities = rs_old) #compute new estimates first 
+estimates['p_new'][1] = 0.1  #fix probability of heads for second coin to 0.1 
+rs_new = e_step(data = binom_mixture_data, mu = mu_fixed, p = estimates['p_new'])
+
+new_lower_bound = pd.DataFrame({'p1': np.arange(start = 0.01, stop = 1, step = 0.01)})
+new_lower_bound.insert(0, 'p2', 0.1)  #fix probability of heads for second coin to 0.1 
+
+new_lower_bound['likelihood'] = new_lower_bound.apply(lambda row: 
+  compute_lower_bound(responsibilities = rs_new, 
+  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
+```
+
+```{r em-plot, echo=T, eval=F}
+#devtools::install_github("nicolash2/ggbrace")
+library(latex2exp)
+library(ggbrace)
+
+incomplete_data_like <- py$incomplete_data_like
+old_lower_bound <- py$old_lower_bound
+new_lower_bound <- py$new_lower_bound
+
+#combine old and new lower bounds data sets and introduce factor variable to track old/new status 
+lower_bounds_df <- bind_rows(
+  data.frame(old_lower_bound, iteration = "old"),
+  data.frame(new_lower_bound, iteration = "new")) %>% 
+  mutate(iteration = as.factor(iteration))
+
+#Three components for making EM algorithm plot 
+#1)Vertical dashed line data that shows intersection points 
+##old lower bound and value where it intersects incomplete-data log-likelihood 
+old_p_value <- py$p[1]
+old_intersection <- py$compute_lower_bound(responsibilities = py$rs_old, 
+                                           mu = py$mu_fixed, 
+                                           p = c(old_p_value, 0.1))
+
+##old lower bound and value where it intersects incomplete-data log-likelihood 
+new_p_value <- py$estimates$p_new[1]
+new_intersection <- py$compute_lower_bound(responsibilities = py$rs_new, 
+                                           mu = py$mu_fixed, 
+                                           p = c(new_p_value, 0.1))
+
+##vertical line data set 
+intersection_data <- data.frame('p1_value' = c(old_p_value, new_p_value), 
+                                'y_min' = c(-20, -20), 
+                                'intersection_point' = c(old_intersection, new_intersection))
+    
+
+#2) X-axis labels to show the new and old parameter values
+x_axis_labels <- sprintf("%0.2f", seq(from = 0, to = 1, by = 0.1))  
+
+##modify second and fifth elements to include theta labels
+x_axis_labels[2] <- expression(atop("0.10", p^old))
+x_axis_labels[5] <- expression(atop("0.40", p^new))
+
+#3) Math text data to show mathematical notation 
+##create latex math to be shown on the plot 
+incomplete_data_log <- "$L(\\textit{p}_1|\\textbf{x})$"
+lbound_new <- "\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{new}}), \\textit{p_1})$"
+lbound_old <- "\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{old}}), \\textit{p_1})$"
+
+##create data frame
+math_text_data <- data.frame('latex_math' = c(incomplete_data_log, lbound_new, lbound_old), 
+                            'x' = c(0.95, 0.95, 0.85), 
+                            'y' = c(-6.5, -8.2, -13.5))
+
+#4) Brace data information for KL divergence and increase in lower bound 
+kl_divergence <- "$KL(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{new}})\\|\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{old}}))$"
+lbound_increase <- "$\\textit{Q}(\\textit{p}^{new}|\\textit{p}^{old}) -\\textit{Q}(\\textit{p}^{old}|\\textit{p}^{old})$"
+
+max_old_lbound <- old_lower_bound$likelihood[which.max(old_lower_bound$likelihood)]
+  
+  
+em_plot <- ggplot(data = incomplete_data_like, mapping = aes(x = p1, y = likelihood)) + 
+  
+  #vertical dashed lines 
+  geom_segment(data = intersection_data, 
+               mapping = aes(x = p1_value, y = y_min, xend = p1_value, yend = intersection_point), 
+               linetype = 2) + 
+  
+  #curly brace for KL divergence 
+  geom_brace(aes(x = c(0.4, 0.45), y = c(max_old_lbound, new_intersection),  
+                 label=TeX(kl_divergence, output="character")), 
+             inherit.data=F, labelsize=4, rotate = 90, parse=T) + 
+  
+  #curly brace for increase in evidence lower bound  
+  geom_brace(aes(x = c(0.4, 0.45), y = c(old_intersection, max_old_lbound),  
+                 label=TeX(lbound_increase, output="character")), 
+             inherit.data=F, labelsize=4, rotate = 90, parse=T, mid = 0.25) + 
+  
+  #likelihoods 
+  geom_line(linewidth = 1) +  
+  geom_line(inherit.aes = F, data = lower_bounds_df, 
+            mapping = aes(x = p1, y = likelihood, group = iteration, color = iteration),
+            linewidth = 0.5) + 
+  
+  #colour details 
+  scale_color_manual(values = c('old' ='#9ECAE1', 'new' =  '#2171B5')) + 
+  
+  #math text
+  geom_text(inherit.aes = F, data = math_text_data, parse = TRUE, size = 4, 
+          mapping = aes(x = x, y = y, label=TeX(latex_math, output="character"))) + 
+  
+ 
+  #axis & legend details 
+  scale_x_continuous(name = expression(Coin~1~Probability~of~Heads(italic(p)[1]*';'~italic(p)[2]~'= 0.10')),  
+                     breaks = seq(from = 0, to = 1, by = 0.1), 
+                     limits = c(0, 1.1), 
+                     labels = x_axis_labels) + 
+  scale_y_continuous(name = 'Log-Likelihood', 
+                     limits = c(-20, -5), 
+                     expand = c(0, 0)) + 
+  labs(color = 'Lower bound') + 
+  
+  #other aesthetics 
+  theme_classic(base_family = 'Helvetica', base_size = 14) + 
+  theme(text = element_text(color = "#002241"),
+        axis.line = element_line(color = "#002241"), 
+        axis.ticks = element_line(color =  "#002241"), 
+        axis.text = element_text(color = "#002241"))
+
+
+#high resolution needed for greek letter to print clearly
+ggsave(filename = 'images/em_plot.png', plot = em_plot, width = 10, height = 6, dpi = 1000) 
+```
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:em-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Depiction of how the Expectation-Maximization (EM) Algorithm Indirectly Estimates the Incomplete-Data Log-Likelihood </span>
+  </div>
+    <img src="images/em_plot.png" width="100%" height="100%"> 
+  
+  <div class="figNote">
+  </div>
+</div>
+
+# Replicating the Coin-Tossing Example From Do and Batzoglou (2008)
+
+
+
+# Conclusion
+
+
+```{python em-algorithm, echo=F,  eval=F, hlopts=list(language = 'python'), tidy=F}
+import numpy as np
+import pandas as pd
+from scipy.stats import binom
+
+def e_step(data, mu, p, n = 1):
+  """
+  Compute expectations (i.e., responsibilities) for each data point's membership to each mixture
+  Parameters:
+      - data: data set 
+      - mu: Probability of each component 
+      - p: Probabilities of success for each binomial distribution
+  Returns:
+      - pandas dataframe
+  """
+    
+  assert len(mu) == len(p), "Number of estimates in mu is equal to the number of sucsess probabilities"
+  assert sum(mu) == 1, "Sum of mu should be equal to 1"
+  
+  #unnormalized responsibilities for each data point for each mixture
+  unnormalized_responsibilities = [mu * binom.pmf(x, n=n, p= np.array(p)) for x in data]
+  
+  #normalized probabilites (i.e., responsibilities)
+  normalized_responsibilities = [rp / np.sum(rp) for rp in unnormalized_responsibilities]
+  
+  column_names = ['resp_mixture_{}'.format(mix+1) for mix in range(len(normalized_responsibilities[0]))]
+
+  df_responsibilities = pd.DataFrame(np.vstack(normalized_responsibilities), 
+                                    columns = column_names)
+  
+  #insert data column as the first one
+  df_responsibilities.insert(0, 'data', data)                
+
+  return(df_responsibilities)
+
+
+def m_step(responsibilities, n = 1):
+  
+  #isolate columns that contain responsibilities
+  resp_cols = responsibilities.filter(like = 'resp_mixture')
+
+  #new probability success estimates
+  #specify axis=1 so that operations are conducted along rows 
+  p_new = np.sum(responsibilities.filter(regex='^resp_mixture').mul(responsibilities['data'], 
+  axis=0))/(np.sum(resp_cols)*n)
+
+  #new mixture probabilities 
+  mu_new = resp_cols.sum()/resp_cols.sum().sum()
+
+  return pd.DataFrame({'p_new': p_new, 'mu_new': mu_new})
+
+
+#incomplete/complete-data log-likelihood
+def compute_incomplete_log_like(data, mu, p):
+  
+  #probability of each data point coming from each distribution
+  mixture_sums = [np.sum(mu * binom.pmf(flip_result, n=1, p= np.array(p))) for flip_result in binom_mixture_data]
+  
+  #log of mixture_sums
+  log_mixture_sums = np.log(mixture_sums)
+  
+  #sums of log of mixture_sums
+  incomplete_like = np.sum(log_mixture_sums)
+
+  return incomplete_like
+
+#lower bound
+def compute_lower_bound(responsibilities, mu, p):
+  
+  #expected complete-data log-likelihood 
+  expected_complete_data_like = responsibilities.apply(compute_expected_complete_like, mu = mu, p = p, axis=1).sum()
+
+  ##compute entropy
+  entropy = compute_entropy(responsibilities = responsibilities)
+
+  return expected_complete_data_like + entropy
+
+
+def compute_entropy(responsibilities):
+  
+  ##extract responsibility columns and then compute entropy, x*np.log(x), for each cell value
+  resp_colummns = responsibilities.filter(like = 'resp_mixture')
+  entropy = -np.sum(resp_colummns.values * np.log(resp_colummns.values))
+  
+  return entropy
+  
+  
+#expected complete-data log-likelihood
+def compute_expected_complete_like(row, mu, p):
+  resp_columns = [col for col in row.index if 'resp_mixture' in col]
+  resp_values = [row[col] for col in resp_columns]
+  
+  return np.sum(
+      [resp_values * (np.log(mu) + 
+      row['data'] * np.log(p) + #non-zero if flip result is success (i.e., 'heads')
+      (1 - row['data']) * np.log(1 - np.array(p)) #non-zero if flip result is failure (i.e., 'tails')
+      )]
+  )
+
+
+
+
+mu_pop = [0.6, 0.4]
+p_pop = [0.7, 0.3]
+
+np.random.seed(27)
+binom_mixture_data = generate_binomial_mixture(num_components=2, size=100, p = p_pop, mix = mu_pop)
+
+#initial guesses for E step 
+mu_fixed = [0.5, 0.5] #mixture probabilities 
+p = [0.3, 0.2] #success probabilities
+
+rs_old = e_step(data = binom_mixture_data, mu = mu_fixed, p = p)
+
+#equality between lower bound and likelihood 
+compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed,  p = p) #-104.57245516327764
+compute_lower_bound(responsibilities=rs_old, mu = mu_fixed, p = p) #-104.57245516327764
+
+#M step 
+estimates = m_step(responsibilities = rs)
+
+#difference between lower bound and incomplete-data log-likelihood after M step 
+compute_lower_bound(responsibilities=rs_old, mu = mu_fixed, p = estimates['p_new']) #-67.55981029970859
+compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed,  p = estimates['p_new']) #-61.98106362224311
+
+#amount that lower bound increased by after M step (difference in expected complete-data log-likelihoods. )
+rs_old.apply(compute_expected_complete_like, mu = mu_fixed, p = p, axis=1).sum()  - rs_old.apply(compute_expected_complete_like, mu = mu_fixed, p = estimates['p_new'], axis=1).sum()
+
+
+#difference between lower bound and incomplete-data log-likelihood = KL divergence 
+#between entropy and cross-entropy
+rs_new = e_step(data = binom_mixture_data, mu = mu_fixed, p = es)
+cross_entropy = compute_cross_entropy()
+entropy = -np.sum(resp_colummns_old.values * np.log(resp_colummns_old.values))
+cross_entropy - entropy
+```
+
+
+
+
+
+```{python do-batzoglou, echo=F, eval=F}
+
+#convert string of Hs and Ts from Do & Batzoglou (2008) to a numeric vector of 1s and 0s
+flip_outcomes = 'HTTT H HT HT H HHHHTHHHHH HTHHHHHTHH HTHTTTHHTT THHHTHHHTH'
+flip_outcomes = flip_outcomes.replace('H', '1').replace('T', '0').split()
+flip_outcomes = ','.join(flip_outcomes)
+
+x = 'HTTT H HT HT H HHHHTHHHHH HTHHHHHTHH HTHTTTHHTT THHHTHHHTH'
+x = x.replace('H', '1').replace('T', '0')
+x = ','.join(x[i:i+1] for i in range(0, len(x)) if x[i:i+1].strip())
+x = np.array([int(i) for i in x.split(',')])
+
+
+
+#initial guesses for E step 
+mu_fixed = [0.5, 0.5] #mixture probabilities 
+p = [0.6, 0.5] #success probabilities
+
+rs_old = e_step(data = x[0:9], mu = mu_fixed, p = p)
+e_step(data = x[10:19], mu = mu_fixed, p = p)
+
+
+rs_new = e_step(data = x, mu = mu_fixed, p = es_old['p_new'])
+es_old = m_step(responsibilities=rs_new)
+```
