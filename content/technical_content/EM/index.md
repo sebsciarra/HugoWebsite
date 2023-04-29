@@ -2,7 +2,7 @@
 title: "The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions" 
 draft: false
 summary: 'Upcoming post' 
-date: ""
+date: "2023-04-28"
 article_type: technical
 output:
   bookdown::html_document2:
