@@ -1,7 +1,7 @@
 ---
 title: "The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions" 
 draft: false
-summary: 'Upcoming post' 
+summary: 'The expectation-maximization (EM) algorithm provides a method for modelling mixtures of distributions. To explain the EM algorithm, I do so in the context of a coin-flipping example where, for each flip, one of two coins are used, and so a mixture of binomial distributions underlie the data. Although maximum likelihood estimation cannot estimate mixture models, the EM algorithm can because it optimizes the likelihood function indirectly. In the expectation (E) step, a lower-bounding function is used to obtain responsibilities. In the maximization step (M), the lower-bounding function is optimized, with the responsibilities being used to obtain new parameter estimates. By optimizing the lower-bounding function, likelihood function increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating.' 
 date: "2023-04-28"
 article_type: technical
 output:
@@ -9,13 +9,13 @@ output:
      keep_md: true
 always_allow_html: true
 header-includes: 
+bibFile: content/technical_content/EM/refs.json    
 tags: []
 ---   
 
 
 
-
-To write this post on the expectation-maximization algorithm, I used the following academic sources: Bishop (2006), Do & Batzoglou (2008). I also used the following lectures/blogs as aids: [EM blog](#https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](#https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
+To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< cite "bishop2006" >}} and {{< cite"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](#https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](#https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
 
 # Introduction to Mixture Models
 
@@ -108,7 +108,7 @@ $$
 &= \frac{4}{\mu_1 + p_2} + \frac{6}{ \mu_1 + 1 - p_2} \nonumber \\\\
 &= 4(\mu_1 + 1 - p_2) + 6(\mu_1 + p_2) \nonumber \\\\
 &= 10\mu_1 + 2p_2 + 4 \nonumber \\\\
-\mu_1 = \frac{-p_2 - 2}{5} 
+\mu_1 &= \frac{-p_2 - 2}{5} 
 \label{eq:unsolvable-mu1}
 \end{align}
 \end{spreadlines}
@@ -795,6 +795,11 @@ $$
 
 In conclusion, the expectation-maximization (EM) algorithm provides a method for indirectly optimizing the incomplete-data log-likelihood. To work with the incomplete-data log-likelihood, the EM algorithm uses a lower-bounding function in the E step that can be used to obtain responsibilities. The responsibilities are then used in the M step to optimize the lower-bounding function and obtain new parameter estimates. By optimizing the lower-bounding function, the incomplete-data log-likelihood increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating. 
 
+# References
+
+
+{{< bibliography cited >}}
+
 # Appendix A: Proof of Jensen's Inequality {#jensen}
 
 Jensen's inequality applies to convex and concave functions. Beginning with convex functions, we can use the first-order condition to prove Jensen's inequality, which is shown below in Equation \ref{eq:first-order-convex}: 
@@ -865,7 +870,7 @@ KL(P\\|Q)& \ge 0
 \end{spreadlines}
 $$
 
-# Appendix C: Proof of Gibbs' Inequality{#gibbs}
+# Appendix C: Proof of Gibbs' Inequality {#gibbs}
 
 Gibbs' inequality states that the cross-entropy, $- P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)$, is greater than or equal to the entropy, $- P(\mathbf{x}) \log\big(P(\mathbf{x})\big)$ (see Equation \ref{eq:gibb-inequality-proof}). Gibbs' inequality can be easily proven using the fact that the KL divergence is always greater than or equal to zero.  
 
@@ -875,6 +880,7 @@ $$
 KL(P\\|Q) &\ge 0 \nonumber \\\\
 \sum_{\mathbf{x}} P(\mathbf{x}) \log\big(P(\mathbf{x})\big) - \sum_{\mathbf{x}} P(\mathbf{x}) \log\big(Q(\mathbf{x})\big) &\ge 0 \nonumber \\\\
 {- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}  &\ge {- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}
+\label{eq:gibb-inequality-proof}
 \end{align}
 \end{spreadlines}
 $$

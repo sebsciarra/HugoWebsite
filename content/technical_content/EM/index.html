@@ -342,7 +342,7 @@ display: none;
 </div>
 
 
-<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: Bishop (2006), Do &amp; Batzoglou (2008). I also used the following lectures/blogs as aids: <a href="#https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="#https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
+<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: {{&lt; cite “bishop2006” &gt;}} and {{&lt; cite”do2008” &gt;}}. I also used the following lectures/blogs as aids: <a href="#https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="#https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
 <div id="introduction-to-mixture-models" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction to Mixture Models</h1>
 <p>Consider a situation where a researcher entrusts a colleague to flip coins and record the results of 10 flips. Flips that result in heads are recorded as <code>1</code> and flips that result in tails are recorded as <code>0</code>. Importantly, before each flip, the colleague picks one of two coins (according to another probability mass function) but does not tell the researcher which coin was flipped. When the colleague records the results of the 10 coin flips, they provide the researcher with the following data: <span class="math inline">\(\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]\)</span>. With these data, the researcher wants to estimate the following three parameters:</p>
@@ -424,7 +424,7 @@ where <span class="math inline">\(H\)</span> indicates the total number of heads
 &amp;= \frac{4}{\mu_1 + p_2} + \frac{6}{ \mu_1 + 1 - p_2} \nonumber \\\\
 &amp;= 4(\mu_1 + 1 - p_2) + 6(\mu_1 + p_2) \nonumber \\\\
 &amp;= 10\mu_1 + 2p_2 + 4 \nonumber \\\\
-\mu_1 = \frac{-p_2 - 2}{5}
+\mu_1 &amp;= \frac{-p_2 - 2}{5}
 \label{eq:unsolvable-mu1}
 \end{align}
 \end{spreadlines}
@@ -1021,8 +1021,12 @@ p_k^{old} &amp;= \frac{\sum_{n = 1}^{10} x_n \gamma(z_{nk})}{\sum_{n = 1}^{10} \
 <h1><span class="header-section-number">4</span> Conclusion</h1>
 <p>In conclusion, the expectation-maximization (EM) algorithm provides a method for indirectly optimizing the incomplete-data log-likelihood. To work with the incomplete-data log-likelihood, the EM algorithm uses a lower-bounding function in the E step that can be used to obtain responsibilities. The responsibilities are then used in the M step to optimize the lower-bounding function and obtain new parameter estimates. By optimizing the lower-bounding function, the incomplete-data log-likelihood increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating.</p>
 </div>
-<div id="jensen" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Appendix A: Proof of Jensen’s Inequality</h1>
+<div id="references" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> References</h1>
+<p>{{&lt; bibliography cited &gt;}}</p>
+</div>
+<div id="jensen" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Appendix A: Proof of Jensen’s Inequality</h1>
 <p>Jensen’s inequality applies to convex and concave functions. Beginning with convex functions, we can use the first-order condition to prove Jensen’s inequality, which is shown below in Equation <span class="math inline">\(\ref{eq:first-order-convex}\)</span>:</p>
 <p><span class="math display">\[
 \begin{align}
@@ -1055,8 +1059,8 @@ f(\mathbb{E}[x]) \ge \mathbb{E}[f(x)]
 \end{align}
 \]</span></p>
 </div>
-<div id="kl-divergence-proof" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Appendix B: Proof that KL Divergence is Always Non-Negative</h1>
+<div id="kl-divergence-proof" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Appendix B: Proof that KL Divergence is Always Non-Negative</h1>
 <p>As explained in section on the <a href="#kl-divergence">KL divergence and entropy</a>, the KL divergence measures the difference between two probability distributions, <span class="math inline">\(P(\mathbf{x})\)</span> and <span class="math inline">\(Q(\mathbf{x})\)</span>, by computing the sum of weighted logarithmic ratios, as shown below in a repetition of Equation <span class="math inline">\(\ref{eq:kl-divergence}\)</span>. Note that I flip the fraction inside the logarithm to obtain the negative (or reverse) KL divergence in Equation <span class="math inline">\(\ref{eq:rev-kl}\)</span></p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
@@ -1081,8 +1085,8 @@ KL(P\\|Q)&amp; \ge 0
 \end{spreadlines}
 \]</span></p>
 </div>
-<div id="gibbs" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Appendix C: Proof of Gibbs’ Inequality</h1>
+<div id="gibbs" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Appendix C: Proof of Gibbs’ Inequality</h1>
 <p>Gibbs’ inequality states that the cross-entropy, <span class="math inline">\(- P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)\)</span>, is greater than or equal to the entropy, <span class="math inline">\(- P(\mathbf{x}) \log\big(P(\mathbf{x})\big)\)</span> (see Equation <span class="math inline">\(\ref{eq:gibb-inequality-proof}\)</span>). Gibbs’ inequality can be easily proven using the fact that the KL divergence is always greater than or equal to zero.</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
@@ -1090,6 +1094,7 @@ KL(P\\|Q)&amp; \ge 0
 KL(P\\|Q) &amp;\ge 0 \nonumber \\\\
 \sum_{\mathbf{x}} P(\mathbf{x}) \log\big(P(\mathbf{x})\big) - \sum_{\mathbf{x}} P(\mathbf{x}) \log\big(Q(\mathbf{x})\big) &amp;\ge 0 \nonumber \\\\
 {- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}  &amp;\ge {- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}
+\label{eq:gibb-inequality-proof}
 \end{align}
 \end{spreadlines}
 \]</span></p>
