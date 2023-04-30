@@ -237,7 +237,7 @@ P(z_{nk} |x_n, \boldsymbol{\theta} = \[\mu_k, p_k\]) &= \gamma(z_{nk}) = \frac{\
 \end{align}
 $$
 
-Because these values represent the (posterior) probability of membership to each $k$ mixture, they are often called *responsibilities*. Note that the responsibilities are often represented as $\gamma(z_{nk})$, which is simply the scalar form of$\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}$ that I use throughout this post. Therefore, by setting $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$, we can compute $q(\mathbf{z})$ and also obtain a lower bound, $\mathcal{L}(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}), \boldsymbol{\theta})$ that is equal to the complete-data log-likelihood. Using Equation \ref{eq:bayes}, we can rewrite the inequality of Equation \ref{eq:variation-inequality} as an equality in Equation \ref{eq:post-variation-inequality} below:
+Because these values represent the (posterior) probability of membership to each $k$ mixture, they are often called *responsibilities*. Note that the responsibilities are often represented as $\gamma(z_{nk})$, which is simply the scalar form of $\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}$ that I use throughout this post. Therefore, by setting $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$, we can compute $q(\mathbf{z})$ and also obtain a lower bound, $\mathcal{L}(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}), \boldsymbol{\theta})$ that is equal to the complete-data log-likelihood. Using Equation \ref{eq:bayes}, we can rewrite the inequality of Equation \ref{eq:variation-inequality} as an equality in Equation \ref{eq:post-variation-inequality} below:
 
 $$
 \begin{spreadlines}{0.5em}
@@ -249,7 +249,7 @@ $$
 \end{spreadlines}
 $$
 
-To show that the lower bound is equal to the complete-data log-likelihood when $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$ (see Equation \ref{eq:equality}), I provide the Python code block below. In order to better understand the Python code, I provide the function for the incomplete-data log-likelihood ( Equation \ref{eq:log-incomplete-data}) and the expansion for the evidence lower bound (Equation \ref{eq:log-incomplete-data}). Importantly, and as I will discuss later on in this post, the first term in Equation \ref{eq:lower-bound-exp} is the expected complete-data log-likelihood, and the second term is the entropy of the responsibilities. Recall that the researcher's data set is $\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]$.
+To show that the lower bound is equal to the complete-data log-likelihood when $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$ (see Equation \ref{eq:equality}), I provide the Python code block below (see lines <a href="#1">1--109</a>). In order to better understand the Python code, I provide the function for the incomplete-data log-likelihood ( Equation \ref{eq:log-incomplete-data}) and the expansion for the evidence lower bound (Equation \ref{eq:log-incomplete-data}). Importantly, and as I will discuss later on in this post, the first term in Equation \ref{eq:lower-bound-exp} is the expected complete-data log-likelihood, and the second term is the entropy of the responsibilities. Recall that the researcher's data set is $\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]$.
 
 $$
 \begin{spreadlines}{0.5em}
@@ -519,7 +519,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-The Python code block below shows that, after the M step, the evidence lower bound indeed only increases by as much as the expected complete-data log-likelihood. Note that, although I have not yet shown how to derive new parameter estimates, I do so in the section on [computing new parameter estimates](#m-step-math). To better understand how new values are computed for $\mu_k$ (probability of selecting each $k$ coin) and $p_k$ (probability of heads for each $k$ coin), I provide previews of the solutions in Equations \ref{eq:mixture-prob} and \ref{eq:mu-solution}. 
+The Python code block below (see lines <a href="#112">112--158</a>) shows that, after the M step, the evidence lower bound indeed only increases by as much as the expected complete-data log-likelihood. Note that, although I have not yet shown how to derive new parameter estimates, I do so in the section on [computing new parameter estimates](#m-step-math). To better understand how new values are computed for $\mu_k$ (probability of selecting each $k$ coin) and $p_k$ (probability of heads for each $k$ coin), I provide previews of the solutions in Equations \ref{eq:mixture-prob} and \ref{eq:mu-solution}. 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -654,7 +654,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-The Python code block below shows that, after the M step, the incomplete-data log-likelihood indeed increases by as much as the evidence lower bound and the KL divergence between the new and old responsibilities. Note that I fix the values of $mu_k$ so that convergence does not occur in one trial. 
+The Python code block below (see lines <a href="#161">161--210</a>)  shows that, after the M step, the incomplete-data log-likelihood indeed increases by as much as the evidence lower bound and the KL divergence between the new and old responsibilities. Note that I fix the values of $mu_k$ so that convergence does not occur in one trial. 
 
 
 ```r {language=python}
