@@ -1,6 +1,6 @@
 ---
 title: "Probability, Likelihood, and Maximum Likelihood Estimation" 
-draft: true
+draft: false
 summary: 'Explanation of post' 
 date: "2023-03-09"
 article_type: coding 
@@ -15,6 +15,134 @@ tags: []
 ---   
 
 
+
+
+```r {language=python}
+import numpy as np
+import matplotlib as mpt
+import pandas as pd
+
+#string copied from Do & Batzoglou (2008)
+raw_string = 'HTTTHHTHTHHHHHTHHHHH H T H H H H H T H H HTHTTTHHTT T H H H T H H H T H' 
+
+#remove spaces between elements 
+raw_string = raw_string.replace(" ", "")
+
+#convert Hs to 1s and Ts to 0s
+binary_string = raw_string.replace('H', '1').replace('T', '0')
+
+#convert to numeric format 
+binary_array = np.fromiter(iter = binary_string, dtype=int)
+
+#divide binary_array into five lists, where each list contains the flips of a session
+coin_flipping_sessions = np.array_split(ary = binary_array, indices_or_sections = 5)
+
+#take the sum of each coin-flipping session
+analytical_data_coin_flip = [np.sum(session) for session in coin_flipping_sessions]
+```
+
+
+```r {language=python}
+import numpy as np
+import pandas as pd
+from scipy.stats import binom
+
+def e_step(data, mu, p, n = 1):
+  """
+  Compute expectations (i.e., responsibilities) for each data point's membership to each mixture
+  Parameters:
+      - data: data set 
+      - mu: Probability of each component 
+      - p: Probabilities of success for each binomial distribution
+  Returns:
+      - pandas dataframe
+  """
+    
+  assert len(mu) == len(p), "Number of estimates in mu is equal to the number of sucsess probabilities"
+  assert sum(mu) == 1, "Sum of mu should be equal to 1"
+  
+  #unnormalized responsibilities for each data point for each mixture (i.e., numerator)
+  unnormalized_responsibilities = [mu * binom.pmf(x, n=n, p= np.array(p)) for x in data]
+  
+  #normalized responsibilities (i.e., probabilities)
+  normalized_responsibilities = [rp / np.sum(rp) for rp in unnormalized_responsibilities]
+  
+  column_names = ['coin_{}'.format(coin) for coin in ['A', 'B']]
+
+  df_responsibilities = pd.DataFrame(np.vstack(normalized_responsibilities), 
+                                    columns = column_names)
+  
+  #insert data column as the first one
+  df_responsibilities.insert(0, 'data', data)                
+
+  return(df_responsibilities)
+
+
+#Initial guesses
+mu_fixed = [0.5, 0.5] #fix values at .50 for each coin 
+p = [0.6, 0.5] #initial guesses from Step 1 in Do & Batzoglou (2008)
+n = 10 #number of coin flips in each session 
+
+#compute responsibilities in the E step
+responsibilities = e_step(data = analytical_data_coin_flip, mu = mu_fixed, p = p, n = 10)
+
+#print responsibilities rounded to two decimal places
+np.round(responsibilities.filter(like = 'coin'), 2)
+```
+<pre><code class='python-code'>   coin_A  coin_B
+0    0.45    0.55
+1    0.80    0.20
+2    0.73    0.27
+3    0.35    0.65
+4    0.65    0.35
+</code></pre>
+
+
+```r {language=python}
+def compute_effective_number_heads(responsibilities, n = 10):
+  
+  #specify axis=1 so that operations are conducted along rows 
+  return responsibilities.filter(regex='^coin').mul(responsibilities['data'], axis=0)
+
+
+def compute_effective_number_tails(responsibilities, n = 10):
+  
+  #multiply the responsibilities by the number of tails (number of flips - number of heads)
+  return responsibilities.filter(regex='^coin').mul(n - responsibilities['data'], axis=0)
+
+#effective number of heads and tails
+eff_number_heads = compute_effective_number_heads(responsibilities = responsibilities)
+eff_number_tails = compute_effective_number_tails(responsibilities = responsibilities)
+
+#add rows of total sums
+eff_number_heads.loc['Total'] = eff_number_heads.sum()
+eff_number_tails.loc['Total'] = eff_number_tails.sum()
+
+np.round(eff_number_heads, 1)
+```
+<pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         7.2     1.8
+2         5.9     2.1
+3         1.4     2.6
+4         4.5     2.5
+Total    21.3    11.7
+</code></pre>
+
+
+The Python code block below prints the effective number of tails. 
+
+```r {language=python}
+np.round(eff_number_tails, 1)
+```
+<pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         0.8     0.2
+2         1.5     0.5
+3         2.1     3.9
+4         1.9     1.1
+Total     8.6     8.4
+</code></pre>
 
 
 

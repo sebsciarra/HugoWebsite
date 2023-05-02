@@ -79,8 +79,6 @@ use_condaenv(condaenv = "r-reticulate", conda = "/Users/sebastiansciarra/Library
 py_install(packages = 'pandas')
 #py_packages <- c('numpy', 'pandas', 'scipy')
 #pandoc content/technical_content/EM/refs.bib -t csljson -o content/technical_content/EM/refs.json
-
-
 ```
 
 To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< cite "bishop2006" >}} and {{< cite"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](#https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](#https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
@@ -130,7 +128,7 @@ $$
 \label{eq:log-incomplete-data-expanded}
 \end{align}
 $$
-To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, $n = 1$ and $h = \{0, 1\}$, which means that ${n \choose h} = 1$. In expanding Equation \ref{eq:log-incomplete-data-expanded} over the summation sign within the logarithm, Equation \ref{eq:log-incomplete-data-binom-expanded} is obtained 
+To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, $n = 1$ and $h = \\{0, 1\\}$, which means that ${n \choose h} = 1$. In expanding Equation \ref{eq:log-incomplete-data-expanded} over the summation sign within the logarithm, Equation \ref{eq:log-incomplete-data-binom-expanded} is obtained 
 
 $$ 
 \begin{align}
@@ -138,7 +136,7 @@ $$
 \label{eq:log-incomplete-data-binom-expanded}
 \end{align}
 $$
-Because $h = \{0, 1\}$ for any given $n$ flip, the term inside the logarithm will only ever take on one of the two following forms: 
+Because $h = \\{0, 1\\}$ for any given $n$ flip, the term inside the logarithm will only ever take on one of the two following forms: 
 
 $$
 \begin{spreadlines}{0.5em}

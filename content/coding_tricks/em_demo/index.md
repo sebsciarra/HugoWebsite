@@ -14,83 +14,12 @@ tags: []
 ---   
 
 
-```{r package_loading_1, include=F}
-#load packages   
-library(easypackages) 
-packages <- c('devtools','tidyverse', 'reticulate', 'RColorBrewer')
-libraries(packages)  
 
-knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
-# knitr hook to use Hugo highlighting options
-knitr::knit_hooks$set(
-  source = function(x, options) {
-  hlopts <- options$hlopts
-    paste0(
-      "```", "r ",
-      if (!is.null(hlopts)) {
-      paste0("{",
-        glue::glue_collapse(
-          glue::glue('{names(hlopts)}={hlopts}'),
-          sep = ","
-        ), "}"
-        )
-      },
-      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
-    )
-  }
-)
-
-chunk_class <- function(before, options, envir) {
-    class_name = options$class_name
-
-    
-    if (!is.null(before)) { 
-      
-        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
-        n <- length(lines)  #determines numbers of lines
-        
-        #if (line_numbers) { 
-           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
-                            
-                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
-        #}
-        
-       
-          
-          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
-                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
-    }
-        return(res)
-    
-}
-
-knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
-
-#knitr::knit_hooks$set(output = function(x, options) { 
-#  paste(c("<pre><code class = 'r-code'>",
-#        gsub('^## Error', '**Error**', x),
-#        '</pre></code>'), collapse = '\n')
-#})
-
-#use_virtualenv("EM_post")
-options(reticulate.autocomplete = TRUE)
-
-#create and use conda environment
-#conda_create(envname = 'blog_posts',  python_version = '3.10.11')
-use_condaenv(condaenv = 'blog_posts')
-
-#install packages in conda environment
-#py_packages <- c('numpy', 'pandas', 'scipy')
-#conda_install(envname = 'blog_posts', packages = py_packages)
-
-#useful for checking what packages are loaded
-#py_list_packages(envname = 'blog_posts', type = 'conda')
-```
 
 
 Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the expectation-maximization (EM) algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the [EM algorithm](#https://sebastiansciarra.com/technical_content/em/). Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeable, I use the `reticulate` package made for R and create a conda environment to use Python (see lines below).
 
-```{r python-r-setup, eval=F, echo=T} 
+```r 
 library(reticulate)
 
 #create and use conda environment
@@ -137,7 +66,7 @@ In the sections that follow, I will go through each step of Figure \ref{fig:do-b
 
 In the Python code block below, I construct a short pre-processing pipeline for constructing the data set that can be used for each step. The pre-processing pipeline below takes the original raw string that can be copied from the figure in {{< cite "do2008" >}} and converts it into a list of five elements, where each element contains the number of heads obtained in each of the five coin-flipping sessions. 
 
-```{python pre-processing, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 import numpy as np
 import pandas as pd
 #string copied from Do & Batzoglou (2008)
@@ -181,7 +110,7 @@ $$
 
 Note that, the probability of picking either $k$ coin, $\mu_k$, is fixed to .50, and so $\mu_k$ is not an estimated parameter. 
 
-```{python e-step, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 import numpy as np
 import pandas as pd
 from scipy.stats import binom
@@ -228,6 +157,13 @@ responsibilities = e_step(data = analytical_data_coin_flip, mu = mu_fixed, p = p
 #print responsibilities rounded to two decimal places
 np.round(responsibilities.filter(like = 'coin'), 2)
 ```
+<pre><code class='python-code'>   coin_A  coin_B
+0    0.45    0.55
+1    0.80    0.20
+2    0.73    0.27
+3    0.35    0.65
+4    0.65    0.35
+</code></pre>
 
 
 ## Step 3: Computing New Parameter Estimates in the Maximization (M) Step
@@ -252,7 +188,7 @@ T_k &= \sum_{n = 1}^5 (f - x_n) \gamma(z_{nk}),
 $$
 where the responsibilities in each $n$ coin-flipping session are weighed by the number of tails obtained in that session, $f - x_n$ (note that $f = 10$). Note that the effective number of flips for a $k$ coin can be obtained by summing the corresponding effective number of heads and tails, $N_k = H_k + T_k$. The Python code block below computes the effective number of heads and tails. 
 
-```{python effective-numbers, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 def compute_effective_number_heads(responsibilities, n = 10):
   
   #specify axis=1 so that operations are conducted along rows 
@@ -274,30 +210,35 @@ eff_number_tails.loc['Total'] = eff_number_tails.sum()
 
 np.round(eff_number_heads, 1)
 ```
+<pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         7.2     1.8
+2         5.9     2.1
+3         1.4     2.6
+4         4.5     2.5
+Total    21.3    11.7
+</code></pre>
 
 
 The Python code block below prints the effective number of tails. 
 
-```{python effective-tails, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 np.round(eff_number_tails, 1)
 ```
+<pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         0.8     0.2
+2         1.5     0.5
+3         2.1     3.9
+4         1.9     1.1
+Total     8.6     8.4
+</code></pre>
 
-```{r effective-number, echo=F, message = F, warning=F} 
-library(kableExtra)
 
-#import dataframes from Python 
-heads_df <- round(x = py$eff_number_heads, digits = 1)
-tails_df <- round(x = py$eff_number_tails, digits = 1)
-
-#join dataframes and include additional information that is contained in figure table
-effective_number_data <- data.frame('Coin A' = paste0("$\\approx$ ", heads_df$coin_A, " H, ", tails_df$coin_A, " T"), 
-                         'Coin B' = paste0("$\\approx$ ", heads_df$coin_B, " H, ", tails_df$coin_B, " T"), 
-                         check.names = F)
-```
 
 Given that this post is a demo, I also decided to print out the effective number of heads and tails in a table that is styled to resemble the table in Figure \ref{fig:do-batzoglou}. To recreate this table, I used a combination of the CSS (see lines) and R code blocks below. 
 
-```{r table-css, engine =  'css', echo=T, eval=T, hlopts=list(language = 'css')}
+```r {language=css}
 /*change colour of header background colours*/
 .do_batzoglou_table th:nth-child(1) {background-color: #C3625B}
 .do_batzoglou_table th:nth-child(2) {background-color: #5F8DB9}
@@ -313,8 +254,24 @@ Given that this post is a demo, I also decided to print out the effective number
 }
 ```
 
+<style type="text/css">
+/*change colour of header background colours*/
+.do_batzoglou_table th:nth-child(1) {background-color: #C3625B}
+.do_batzoglou_table th:nth-child(2) {background-color: #5F8DB9}
 
-```{r effective-number-table, echo=T, eval = T, message = F, warning=F} 
+
+/*change colour of 'approximately equal to` signs*/
+.do_batzoglou_table td:first-child > .MathJax.CtxtMenu_Attached_0[aria-label="almost equals"] {
+        color: #8F4944;
+}
+
+.do_batzoglou_table td:nth-child(2) > .MathJax.CtxtMenu_Attached_0[aria-label="almost equals"] {
+    color: #476685;
+}
+</style>
+
+
+```r 
 library(kableExtra) 
 
 #import dataframes from Python 
@@ -355,11 +312,51 @@ kbl(x = effective_number_data, format = 'html', digits = 2, booktabs = TRUE,
   #give table class name so that above CSS code is applied on it
   kable_styling(htmltable_class = 'do_batzoglou_table', position = 'center', html_font = 'Arial')
 ```
+<table style="border-bottom: 1pt solid whiteborder-bottom: 0; font-family: Arial; margin-left: auto; margin-right: auto;" class=" do_batzoglou_table">
+<caption>(\#tab:effective-number-table)Effective Number of Heads and Tails for Each of Two Coins</caption>
+ <thead>
+  <tr>
+   <th style="text-align:center;border-bottom: 1pt solid white; color: white "> Coin A </th>
+   <th style="text-align:center;border-bottom: 1pt solid white; color: white "> Coin B </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 2.2 H, 2.2 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.8 H, 2.8 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;"> $\approx$ 7.2 H, 0.8 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;"> $\approx$ 1.8 H, 0.2 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 5.9 H, 1.5 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.1 H, 0.5 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;"> $\approx$ 1.4 H, 2.1 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;"> $\approx$ 2.6 H, 3.9 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 4.5 H, 1.9 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.5 H, 1.1 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;background-color: white !important;"> $\approx$ 21.3 H, 8.6 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;background-color: white !important;"> $\approx$ 11.7 H, 8.4 T </td>
+  </tr>
+</tbody>
+<tfoot>
+<tr><td style="padding: 0; " colspan="100%"><span style="font-style: italic;"> </span></td></tr>
+<tr><td style="padding: 0; " colspan="100%">
+<sup></sup> <em>Note</em>. Table was recreated to resemble the table in Step 3 of Figure \ref{fig:do-batzoglou}.</td></tr>
+</tfoot>
+</table>
 
 
 Having computed the effective number of heads and tails for each $k$ coin, new estimates can be computed for each coin's probability of heads, $\hat{\theta}_A^{(1)}$ and $\hat{\theta}_B^{(1)}$, using Equation \ref{fig:param-est. The Python code block below compues new parameter estimates.  
 
-```{python m-step, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 def m_step(responsibilities, n = 10):
   
   #isolate columns that contain responsibilities
@@ -375,6 +372,10 @@ def m_step(responsibilities, n = 10):
 
 np.round(m_step(responsibilities=responsibilities, n = 10), 2)
 ```
+<pre><code class='python-code'>coin_A    0.71
+coin_B    0.58
+dtype: float64
+</code></pre>
 
 
 Thus, as in Step 3 of Figure \ref{fig:do-batzoglou}, the estimate for $\hat{\theta}_A^{(1)}$ = 0.71 and the estimate for $\hat{\theta}_B^{(1)}$ = 0.58. 
@@ -383,7 +384,7 @@ Thus, as in Step 3 of Figure \ref{fig:do-batzoglou}, the estimate for $\hat{\the
 
 To iterate the EM algorithm 10 times, I have created the nested the {{< inline-src python >}}e_step(){{< /inline-src >}} and {{< inline-src python >}}m_step(){{< /inline-src >}} functions into the {{< inline-src python >}}em_algorithm(){{< /inline-src >}} function in the Python code block below. 
 
-```{python em-algorithm, echo=T, eval=T, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
+```r {language=python}
 def em_algorithm(data, mu, probs_heads, num_iterations, n = 10): 
   
   #define iteration counter
@@ -408,6 +409,10 @@ est_ten_iter = em_algorithm(data = analytical_data_coin_flip, mu = mu_fixed, pro
 #print estimates
 np.round(est_ten_iter, 2)
 ```
+<pre><code class='python-code'>coin_A    0.80
+coin_B    0.52
+dtype: float64
+</code></pre>
 
 Therefore, after 10 iterations, the estimates shown in Figure \ref{fig:do-batzoglou} are obtained such that $\hat{\theta}_A^{(10)}$ = 0.80 and $\hat{\theta}_B^{(10)}$ = 0.52. 
 
@@ -416,163 +421,16 @@ Therefore, after 10 iterations, the estimates shown in Figure \ref{fig:do-batzog
 ## Coding the Incomplete-Data Log-Likelihood 
 
 
-```{python lower-equal-incomplete, echo=F, eval=F, results = 'hold',  class_name = 'python-code', hlopts=list(language = 'python')}
 
-#incomplete/complete-data log-likelihood
-def compute_incomplete_log_like(data, mu, p):
-  """
-  Compute incomplete-data log-likelihood 
-  Parameters:
-      - data: data set 
-      - mu: Probability of each component 
-      - p: Probability of success for each binomial distribution
-  """
-  
-  #probability of each data point coming from each distribution
-  mixture_sums = [np.sum(mu * binom.pmf(flip_result, n=1, p= np.array(p))) for flip_result in binom_mixture_data]
-  
-  #log of mixture_sums
-  log_mixture_sums = np.log(mixture_sums)
-  
-  #sums of log of mixture_sums
-  incomplete_like = np.sum(log_mixture_sums)
-
-  return(incomplete_like)
-
-
-#lower bound = expected complete-data log-likelihood + entropy 
-def compute_lower_bound(responsibilities, mu, p):
-  
-  #expected complete-data log-likelihood 
-  expected_complete_data_like = responsibilities.apply(compute_expected_complete_like, mu = mu, p = p, axis=1).sum()
-
-  ##compute entropy
-  entropy = compute_entropy(responsibilities = responsibilities)
-
-  return expected_complete_data_like + entropy
-
-
-#entropy: sum of rs*log(rs) for all rs (responsibilities)
-def compute_entropy(responsibilities):
-  
-  ##extract responsibility columns and then compute entropy
-  resp_colummns = responsibilities.filter(like = 'resp_mixture')
-  
-  ##take sum of x*log(x) for each responsibility
-  entropy = -np.sum(resp_colummns.values * np.log(resp_colummns.values))
-  
-  return entropy
-  
-
-#expected complete-data log-likelihood
-def compute_expected_complete_like(row, mu, p):
-  resp_columns = [col for col in row.index if 'resp_mixture' in col]
-  resp_values = [row[col] for col in resp_columns]
-  
-  return np.sum(
-      [resp_values * (np.log(mu) + 
-      row['data'] * np.log(p) + #non-zero if flip result is success (i.e., 'heads')
-      (1 - row['data']) * np.log(1 - np.array(p)) #non-zero if flip result is failure (i.e., 'tails')
-      )]
-  )
-    
-    
-#data given to researcher
-binom_mixture_data = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
-
-#initial guesses for E step 
-mu = [0.3, 0.7] #mixture probabilities 
-p = [0.6, 0.8] #success probabilities
-
-#E step
-responsibilities = e_step(data = binom_mixture_data, mu = mu, p = p)
-
-evidence_lower_bound = np.round(compute_incomplete_log_like(data = binom_mixture_data, mu = mu, p = p), 5)
-incomplete_log_likelihood = np.round(compute_lower_bound(responsibilities = responsibilities,  mu = mu, p = p), 5)
-
-print('Incomplete-data log-likelihood:', evidence_lower_bound)
-print('Lower bound:', incomplete_log_likelihood)
-```
 ## Coding the Two Evidence Lower Bounds
 
 With an understanding of the EM algorithm, I will now show how to produce one of its popular visualizations. 
 
-```{python binom-mixture-function, echo=F, eval=F, hlopts=list(language = 'python'), tidy=F}
-def generate_binomial_mixture(num_components, size, p, mix):
-  """
-  Generate data according to a mixture of binomials.
-  Parameters:
-      - num_components (int): Number of mixture components
-      - size (int or tuple of ints): Size of the generated data
-      - p (list or array): List or array of probabilities of success for each binomial distribution
-      - mix (list or array): List or array of mixing coefficients for each component
-  Returns:
-      - data (ndarray): Generated data according to the mixture of binomials
-  """
-  assert num_components == len(p), "Number of components must match the length of the probability list."
-  assert num_components == len(mix), "Number of components must match the length of the mixing coefficient list."
-  assert sum(mix) == 1, "Mixture probabilities sum to 1"
-  
-  # Generate data for each binomial distribution 
-  binomial_mixture_data = np.random.binomial(n=1, p=p, size=(size, num_components))
-  
-  # Compute dot product between mixture values and binomial mixture data. If dot product >= 0.5, value = 1, else, value = 0. 
-  binomial_mixture_data = (np.dot(binomial_mixture_data, mix) >= 0.5).astype(int)
-  
-  return binomial_mixture_data
-
-```
-
-```{python em-algorithm-plot, echo=F,  eval=F, hlopts=list(language = 'python'), tidy=F}
-#data given to researcher
-binom_mixture_data = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
-
-#initial guesses for E step 
-mu_fixed = [0.5, 0.5] #mixture probabilities are fixed so that convergence does not occur in one trial
-p = [0.1, 0.1] #probabilities of heads
-
-#1) Incomplete-data log-likelihood
-##create Dataframe with all possible probability combinations [x, 0.1], such that 
-##the probability of heads for the second coin is fixed to 1
-incomplete_data_like = pd.DataFrame({'p1': np.arange(start = 0, stop = 1, step = 0.01)})
-incomplete_data_like.insert(0, 'p2', 0.1)   #fix probability of heads for second coin to 0.1 
-
-##compute incomplete-data log-likelihood across all combinations of [x, 0.1]
-incomplete_data_like['likelihood'] = incomplete_data_like.apply(lambda row: 
-  compute_incomplete_log_like(data = binom_mixture_data, 
-  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
 
 
-#2) Old evidence lower bound 
-##compute first (i.e., old) responsibilities
-rs_old = e_step(data = binom_mixture_data, mu = mu_fixed, p = p)
-
-old_lower_bound = pd.DataFrame({'p1': np.arange(start = 0.01, stop = 1, step = 0.01)})
-old_lower_bound.insert(0, 'p2', 0.1)  #fix probability of heads for second coin to 0.1 
-
-old_lower_bound['likelihood'] = old_lower_bound.apply(lambda row: 
-  compute_lower_bound(responsibilities = rs_old, 
-  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
-
-compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed, p = p)
-compute_lower_bound(responsibilities = rs_old, mu = mu_fixed, p = p)
 
 
-#2) New evidence lower bound
-##compute new (i.e., new) responsibilities byt first computing estimates
-estimates = m_step(responsibilities = rs_old) #compute new estimates first 
-estimates['p_new'][1] = 0.1  #fix probability of heads for second coin to 0.1 
-rs_new = e_step(data = binom_mixture_data, mu = mu_fixed, p = estimates['p_new'])
-
-new_lower_bound = pd.DataFrame({'p1': np.arange(start = 0.01, stop = 1, step = 0.01)})
-new_lower_bound.insert(0, 'p2', 0.1)  #fix probability of heads for second coin to 0.1 
-
-new_lower_bound['likelihood'] = new_lower_bound.apply(lambda row: 
-  compute_lower_bound(responsibilities = rs_new, 
-  mu = mu_fixed, p = [row['p1'], row['p2']]), axis = 1)
-```
-
-```{r em-plot, echo=T, eval=F}
+```r 
 #devtools::install_github("nicolash2/ggbrace")
 library(latex2exp)
 library(ggbrace)
@@ -708,166 +566,7 @@ ggsave(filename = 'images/em_plot.png', plot = em_plot, width = 10, height = 6, 
 
 {{< bibliography cited >}}
 
-```{python em-algorithm2, echo=F,  eval=F, hlopts=list(language = 'python'), tidy=F}
-import numpy as np
-import pandas as pd
-from scipy.stats import binom
-
-def e_step(data, mu, p, n = 1):
-  """
-  Compute expectations (i.e., responsibilities) for each data point's membership to each mixture
-  Parameters:
-      - data: data set 
-      - mu: Probability of each component 
-      - p: Probabilities of success for each binomial distribution
-  Returns:
-      - pandas dataframe
-  """
-    
-  assert len(mu) == len(p), "Number of estimates in mu is equal to the number of sucsess probabilities"
-  assert sum(mu) == 1, "Sum of mu should be equal to 1"
-  
-  #unnormalized responsibilities for each data point for each mixture
-  unnormalized_responsibilities = [mu * binom.pmf(x, n=n, p= np.array(p)) for x in data]
-  
-  #normalized probabilites (i.e., responsibilities)
-  normalized_responsibilities = [rp / np.sum(rp) for rp in unnormalized_responsibilities]
-  
-  column_names = ['resp_mixture_{}'.format(mix+1) for mix in range(len(normalized_responsibilities[0]))]
-
-  df_responsibilities = pd.DataFrame(np.vstack(normalized_responsibilities), 
-                                    columns = column_names)
-  
-  #insert data column as the first one
-  df_responsibilities.insert(0, 'data', data)                
-
-  return(df_responsibilities)
-
-
-def m_step(responsibilities, n = 1):
-  
-  #isolate columns that contain responsibilities
-  resp_cols = responsibilities.filter(like = 'resp_mixture')
-
-  #new probability success estimates
-  #specify axis=1 so that operations are conducted along rows 
-  p_new = np.sum(responsibilities.filter(regex='^resp_mixture').mul(responsibilities['data'], 
-  axis=0))/(np.sum(resp_cols)*n)
-
-  #new mixture probabilities 
-  mu_new = resp_cols.sum()/resp_cols.sum().sum()
-
-  return pd.DataFrame({'p_new': p_new, 'mu_new': mu_new})
-
-
-#incomplete/complete-data log-likelihood
-def compute_incomplete_log_like(data, mu, p):
-  
-  #probability of each data point coming from each distribution
-  mixture_sums = [np.sum(mu * binom.pmf(flip_result, n=1, p= np.array(p))) for flip_result in binom_mixture_data]
-  
-  #log of mixture_sums
-  log_mixture_sums = np.log(mixture_sums)
-  
-  #sums of log of mixture_sums
-  incomplete_like = np.sum(log_mixture_sums)
-
-  return incomplete_like
-
-#lower bound
-def compute_lower_bound(responsibilities, mu, p):
-  
-  #expected complete-data log-likelihood 
-  expected_complete_data_like = responsibilities.apply(compute_expected_complete_like, mu = mu, p = p, axis=1).sum()
-
-  ##compute entropy
-  entropy = compute_entropy(responsibilities = responsibilities)
-
-  return expected_complete_data_like + entropy
-
-
-def compute_entropy(responsibilities):
-  
-  ##extract responsibility columns and then compute entropy, x*np.log(x), for each cell value
-  resp_colummns = responsibilities.filter(like = 'resp_mixture')
-  entropy = -np.sum(resp_colummns.values * np.log(resp_colummns.values))
-  
-  return entropy
-  
-  
-#expected complete-data log-likelihood
-def compute_expected_complete_like(row, mu, p):
-  resp_columns = [col for col in row.index if 'resp_mixture' in col]
-  resp_values = [row[col] for col in resp_columns]
-  
-  return np.sum(
-      [resp_values * (np.log(mu) + 
-      row['data'] * np.log(p) + #non-zero if flip result is success (i.e., 'heads')
-      (1 - row['data']) * np.log(1 - np.array(p)) #non-zero if flip result is failure (i.e., 'tails')
-      )]
-  )
 
 
 
 
-mu_pop = [0.6, 0.4]
-p_pop = [0.7, 0.3]
-
-np.random.seed(27)
-binom_mixture_data = generate_binomial_mixture(num_components=2, size=100, p = p_pop, mix = mu_pop)
-
-#initial guesses for E step 
-mu_fixed = [0.5, 0.5] #mixture probabilities 
-p = [0.3, 0.2] #success probabilities
-
-rs_old = e_step(data = binom_mixture_data, mu = mu_fixed, p = p)
-
-#equality between lower bound and likelihood 
-compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed,  p = p) #-104.57245516327764
-compute_lower_bound(responsibilities=rs_old, mu = mu_fixed, p = p) #-104.57245516327764
-
-#M step 
-estimates = m_step(responsibilities = rs)
-
-#difference between lower bound and incomplete-data log-likelihood after M step 
-compute_lower_bound(responsibilities=rs_old, mu = mu_fixed, p = estimates['p_new']) #-67.55981029970859
-compute_incomplete_log_like(data=binom_mixture_data, mu = mu_fixed,  p = estimates['p_new']) #-61.98106362224311
-
-#amount that lower bound increased by after M step (difference in expected complete-data log-likelihoods. )
-rs_old.apply(compute_expected_complete_like, mu = mu_fixed, p = p, axis=1).sum()  - rs_old.apply(compute_expected_complete_like, mu = mu_fixed, p = estimates['p_new'], axis=1).sum()
-
-
-#difference between lower bound and incomplete-data log-likelihood = KL divergence 
-#between entropy and cross-entropy
-rs_new = e_step(data = binom_mixture_data, mu = mu_fixed, p = es)
-cross_entropy = compute_cross_entropy()
-entropy = -np.sum(resp_colummns_old.values * np.log(resp_colummns_old.values))
-cross_entropy - entropy
-```
-
-
-```{python do-batzoglou, echo=F, eval=F}
-
-#convert string of Hs and Ts from Do & Batzoglou (2008) to a numeric vector of 1s and 0s
-flip_outcomes = 'HTTT H HT HT H HHHHTHHHHH HTHHHHHTHH HTHTTTHHTT THHHTHHHTH'
-flip_outcomes = flip_outcomes.replace('H', '1').replace('T', '0').split()
-flip_outcomes = ','.join(flip_outcomes)
-
-x = 'HTTT H HT HT H HHHHTHHHHH HTHHHHHTHH HTHTTTHHTT THHHTHHHTH'
-x = x.replace('H', '1').replace('T', '0')
-x = ','.join(x[i:i+1] for i in range(0, len(x)) if x[i:i+1].strip())
-x = np.array([int(i) for i in x.split(',')])
-
-
-
-#initial guesses for E step 
-mu_fixed = [0.5, 0.5] #mixture probabilities 
-p = [0.6, 0.5] #success probabilities
-
-rs_old = e_step(data = x[0:9], mu = mu_fixed, p = p)
-e_step(data = x[10:19], mu = mu_fixed, p = p)
-
-
-rs_new = e_step(data = x, mu = mu_fixed, p = es_old['p_new'])
-es_old = m_step(responsibilities=rs_new)
-```

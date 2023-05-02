@@ -383,7 +383,7 @@ To prevent <em>underflow</em> (the rounding of small numbers to zero in computer
 \label{eq:log-incomplete-data-expanded}
 \end{align}
 \]</span>
-To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, <span class="math inline">\(n = 1\)</span> and <span class="math inline">\(h = \{0, 1\}\)</span>, which means that <span class="math inline">\({n \choose h} = 1\)</span>. In expanding Equation <span class="math inline">\(\ref{eq:log-incomplete-data-expanded}\)</span> over the summation sign within the logarithm, Equation <span class="math inline">\(\ref{eq:log-incomplete-data-binom-expanded}\)</span> is obtained</p>
+To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, <span class="math inline">\(n = 1\)</span> and <span class="math inline">\(h = {0, 1}\)</span>, which means that <span class="math inline">\({n \choose h} = 1\)</span>. In expanding Equation <span class="math inline">\(\ref{eq:log-incomplete-data-expanded}\)</span> over the summation sign within the logarithm, Equation <span class="math inline">\(\ref{eq:log-incomplete-data-binom-expanded}\)</span> is obtained</p>
 <p><span class="math display">\[
 \begin{align}
 \log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum^{10}_{n = 1} \log \Big( \mu_1 p_1^h (1-p_k)^{n-h} + (1-\mu_1) p_2^h (1-p_2)^{n-h}  \Big).

@@ -29,6 +29,10 @@
 }
 /* KeywordDeclaration */ .chroma .kd { color: var(--navbar-color); }
 
+/*Python inline code block colouring*/
+.language-python[data-lang="python"] .n {
+  color: var(--resources-color);
+}
 
 /* KeywordNamespace */ .chroma .kn { color: var(--navbar-color) }
 div[language="bash"] .chroma .kn { color: white }

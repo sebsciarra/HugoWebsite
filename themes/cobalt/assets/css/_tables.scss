@@ -140,7 +140,7 @@ th {
 }
 
 caption {
-  font-size: 12px;
+  font-size: 13.5px;
   text-align: left;
   font-style: italic;
   font-family: Helvetica;
@@ -161,6 +161,7 @@ span[id*="tab"]{
 tfoot{
   border-top: 1.5px solid var(--hover-color); /*border line above footnote */
   display: table-footer-group;
+  font-size: 11.5px;
 }
 
 
@@ -170,4 +171,6 @@ tfoot td{
   width: 1rem;
    word-wrap: break-word;
 }
+
+
 

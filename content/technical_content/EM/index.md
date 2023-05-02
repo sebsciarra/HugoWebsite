@@ -62,7 +62,7 @@ $$
 \label{eq:log-incomplete-data-expanded}
 \end{align}
 $$
-To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, $n = 1$ and $h = \{0, 1\}$, which means that ${n \choose h} = 1$. In expanding Equation \ref{eq:log-incomplete-data-expanded} over the summation sign within the logarithm, Equation \ref{eq:log-incomplete-data-binom-expanded} is obtained 
+To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, $n = 1$ and $h = \\{0, 1\\}$, which means that ${n \choose h} = 1$. In expanding Equation \ref{eq:log-incomplete-data-expanded} over the summation sign within the logarithm, Equation \ref{eq:log-incomplete-data-binom-expanded} is obtained 
 
 $$ 
 \begin{align}
@@ -70,7 +70,7 @@ $$
 \label{eq:log-incomplete-data-binom-expanded}
 \end{align}
 $$
-Because $h = \{0, 1\}$ for any given $n$ flip, the term inside the logarithm will only ever take on one of the two following forms: 
+Because $h = \\{0, 1\\}$ for any given $n$ flip, the term inside the logarithm will only ever take on one of the two following forms: 
 
 $$
 \begin{spreadlines}{0.5em}
