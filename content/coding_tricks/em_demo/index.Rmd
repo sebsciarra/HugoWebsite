@@ -2,7 +2,7 @@
 title: "Coding and Visualizing the Expectation-Maximization (EM) Algorithm"
 summary: 'In this post, I provide two segments of code. The code segment reproduces a coin-tossing example in a popular publication on the expectation-maximization (EM) algorithm. The second code segment reproduces a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.' 
 draft: false
-date: "2023-04-29"
+date: "2023-05-03"
 article_type: coding
 output:
   bookdown::html_document2:
@@ -417,7 +417,7 @@ Therefore, after 10 iterations, the estimates shown in Figure \ref{fig:do-batzog
 
 In many explanations of the EM algorithm, one popular visual is often used. Specifically, it is common to see a figure that shows how the incomplete-data log-likelihood can be indirectly optimized by repeatedly creating a lower-bounding function E step and then maximizing it in the M step. I have reprinted one of these visualizations from {{< cite "bishop2006" >}} in Figure \ref{fig:em-visual}. 
 
-In looking at Figure \ref{fig:em-visual, it is important to note that only a cross-section of the optimization problem is shown. In other words, the incomplete-data log-likelihood and evidence lower bounds are shown across all values of only one parameter. Because Figure \ref{fig:em-visual} is a 2D plot and the likelihood values are represented on the y-axis, the optimization problem can only be shown across the values of one parameter using the x-axis. 
+In looking at Figure \ref{fig:em-visual}, it is important to note that only a cross-section of the optimization problem is shown. In other words, the incomplete-data log-likelihood and evidence lower bounds are shown across all values of only one parameter. Because Figure \ref{fig:em-visual} is a 2D plot and the likelihood values are represented on the y-axis, the optimization problem can only be shown across the values of one parameter using the x-axis. 
 
 <div class="figure">
   <div class="figDivLabel">
