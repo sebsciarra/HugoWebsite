@@ -342,7 +342,7 @@ display: none;
 </div>
 
 
-<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: {{&lt; cite “bishop2006” &gt;}} and {{&lt; cite”do2008” &gt;}}. I also used the following lectures/blogs as aids: <a href="#https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="#https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
+<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: {{&lt; cite “bishop2006” &gt;}} and {{&lt; cite”do2008” &gt;}}. I also used the following lectures/blogs as aids: <a href="https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
 <div id="introduction-to-mixture-models" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction to Mixture Models</h1>
 <p>Consider a situation where a researcher entrusts a colleague to flip coins and record the results of 10 flips. Flips that result in heads are recorded as <code>1</code> and flips that result in tails are recorded as <code>0</code>. Importantly, before each flip, the colleague picks one of two coins (according to another probability mass function) but does not tell the researcher which coin was flipped. When the colleague records the results of the 10 coin flips, they provide the researcher with the following data: <span class="math inline">\(\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]\)</span>. With these data, the researcher wants to estimate the following three parameters:</p>
@@ -383,14 +383,14 @@ To prevent <em>underflow</em> (the rounding of small numbers to zero in computer
 \label{eq:log-incomplete-data-expanded}
 \end{align}
 \]</span>
-To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, <span class="math inline">\(n = 1\)</span> and <span class="math inline">\(h = {0, 1}\)</span>, which means that <span class="math inline">\({n \choose h} = 1\)</span>. In expanding Equation <span class="math inline">\(\ref{eq:log-incomplete-data-expanded}\)</span> over the summation sign within the logarithm, Equation <span class="math inline">\(\ref{eq:log-incomplete-data-binom-expanded}\)</span> is obtained</p>
+To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, <span class="math inline">\(n = 1\)</span> and <span class="math inline">\(h = \\{0, 1\\}\)</span>, which means that <span class="math inline">\({n \choose h} = 1\)</span>. In expanding Equation <span class="math inline">\(\ref{eq:log-incomplete-data-expanded}\)</span> over the summation sign within the logarithm, Equation <span class="math inline">\(\ref{eq:log-incomplete-data-binom-expanded}\)</span> is obtained</p>
 <p><span class="math display">\[
 \begin{align}
 \log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum^{10}_{n = 1} \log \Big( \mu_1 p_1^h (1-p_k)^{n-h} + (1-\mu_1) p_2^h (1-p_2)^{n-h}  \Big).
 \label{eq:log-incomplete-data-binom-expanded}
 \end{align}
 \]</span>
-Because <span class="math inline">\(h = \{0, 1\}\)</span> for any given <span class="math inline">\(n\)</span> flip, the term inside the logarithm will only ever take on one of the two following forms:</p>
+Because <span class="math inline">\(h = \\{0, 1\\}\)</span> for any given <span class="math inline">\(n\)</span> flip, the term inside the logarithm will only ever take on one of the two following forms:</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}

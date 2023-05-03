@@ -74,14 +74,21 @@ knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
 options(reticulate.autocomplete = TRUE)
 
 
-#install_miniconda(path = "e:/miniconda", update = T)
-use_condaenv(condaenv = "r-reticulate", conda = "/Users/sebastiansciarra/Library/r-miniconda/bin/conda")
-py_install(packages = 'pandas')
+#create and use conda environment
+#conda_create(envname = 'blog_posts',  python_version = '3.10.11')
+use_condaenv(condaenv = 'blog_posts')
+
+#install packages in conda environment
 #py_packages <- c('numpy', 'pandas', 'scipy')
-#pandoc content/technical_content/EM/refs.bib -t csljson -o content/technical_content/EM/refs.json
+#conda_install(envname = 'blog_posts', packages = py_packages)
+
+#useful for checking what packages are loaded
+#py_list_packages(envname = 'blog_posts', type = 'conda')
+
+#pandoc content/coding_tricks/em_demo/refs.bib -t csljson -o content/coding_tricks/em_demo/refs.json
 ```
 
-To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< cite "bishop2006" >}} and {{< cite"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](#https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](#https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
+To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< cite "bishop2006" >}} and {{< cite"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
 
 # Introduction to Mixture Models
 

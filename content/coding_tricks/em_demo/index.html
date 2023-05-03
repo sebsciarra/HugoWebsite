@@ -566,7 +566,7 @@ display: none;
 </div>
 
 
-<p>Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the expectation-maximization (EM) algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the <a href="#https://sebastiansciarra.com/technical_content/em/">EM algorithm</a>. Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeable, I use the <code>reticulate</code> package made for R and create a conda environment to use Python (see lines below).</p>
+<p>Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the expectation-maximization (EM) algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the <a href="https://sebastiansciarra.com/technical_content/em/">EM algorithm</a>. Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeable, I use the <code>reticulate</code> package made for R and create a conda environment to use Python (see lines <a href="#1">1–12</a> below).</p>
 <pre class="r"><code>library(reticulate)
 
 #create and use conda environment
@@ -579,8 +579,8 @@ conda_install(envname = &#39;blog_posts&#39;, packages = py_packages)
 
 #useful for checking what packages are loaded
 py_list_packages(envname = &#39;blog_posts&#39;, type = &#39;conda&#39;)</code></pre>
-<div id="replicating-the-three-steps-in-the-coin-flipping-example-from-do-and-batzoglou-2008" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Replicating the Three Steps in the Coin-Flipping Example From Do and Batzoglou (2008)</h1>
+<div id="coding-the-expectation-maximization-em-algorithm-reproducing-three-steps-in-the-coin-flipping-example-from-do-and-batzoglou-2008" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Coding the Expectation-Maximization (EM) Algorithm: Reproducing Three Steps in the Coin-Flipping Example From Do and Batzoglou (2008)</h1>
 <p>One popular publication of the expectation-maximization (EM) algorithm is presented in {{&lt; cite “do2008” &gt;}}. In their paper, they present a coin-flipping example that is solved by the EM algorithm. I have reprinted Figure <span class="math inline">\(\ref{fig:do-batzoglou}\)</span> from their paper, which contains the following four steps:</p>
 <ul>
 <li><strong>Step 1</strong>: Initial guesses are made for probability of heads for Coin A, <span class="math inline">\(\mathit{\hat{\theta}_A}^{(0)}\)</span>, and Coin B, <span class="math inline">\(\mathit{\hat{\theta}_B}^{(0)}\)</span>, and are entered into the EM algorithm.</li>
@@ -605,7 +605,7 @@ py_list_packages(envname = &#39;blog_posts&#39;, type = &#39;conda&#39;)</code><
 <p>In the sections that follow, I will go through each step of Figure <span class="math inline">\(\ref{fig:do-batzoglou}\)</span> except the first step. Importantly, before going through Steps 2–4, I will first provide go through the necessary code for setting up the data set.</p>
 <div id="creating-the-data" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Creating the Data</h2>
-<p>In the Python code block below, I construct a short pre-processing pipeline for constructing the data set that can be used for each step. The pre-processing pipeline below takes the original raw string that can be copied from the figure in {{&lt; cite “do2008” &gt;}} and converts it into a list of five elements, where each element contains the number of heads obtained in each of the five coin-flipping sessions.</p>
+<p>In the Python code block below (lines <a href="#13">13–31</a>), I construct a short pre-processing pipeline for constructing the data set that can be used for each step. The pre-processing pipeline below takes the original raw string that can be copied from the figure in {{&lt; cite “do2008” &gt;}} and converts it into a list of five elements, where each element contains the number of heads obtained in each of the five coin-flipping sessions.</p>
 <pre class="r" language="python"><code>import numpy as np
 import pandas as pd
 #string copied from Do &amp; Batzoglou (2008)
@@ -635,14 +635,14 @@ P(z_{nk} |x_n, \mu_k, \theta_k) &amp;= \gamma(z_{nk}) = \frac{\mu_k B(x_n|\theta
 \label{eq:ind-posterior}
 \end{align}
 \]</span>
-where <span class="math inline">\(B(x_n|\theta_km f)\)</span> is the binomial probability of obtaining <span class="math inline">\(x_n\)</span> heads given a <span class="math inline">\(\theta_k\)</span> probability of heads and <span class="math inline">\(f\)</span> number of flips. Because each session has 10 flips, <span class="math inline">\(f = 10\)</span>, which is explicitly indicated in the binomial probability function below (Equation <span class="math inline">\(\ref{eq:binom-exp}\)</span>):</p>
+where <span class="math inline">\(B(x_n|\theta_k, f)\)</span> is the binomial probability of obtaining <span class="math inline">\(x_n\)</span> heads given a <span class="math inline">\(\theta_k\)</span> probability of heads and <span class="math inline">\(f\)</span> number of flips. Because each session has 10 flips, <span class="math inline">\(f = 10\)</span>, which is explicitly indicated in the binomial probability function below (Equation <span class="math inline">\(\ref{eq:binom-exp}\)</span>):</p>
 <p><span class="math display">\[
 \begin{align}
 B(x_n|\theta_k, f = 10) = {x_n \choose f} \theta_k^{x_n}(1 - \theta_k)^{(f - x_n)}.
 \label{eq:binom-exp}
 \end{align}
 \]</span></p>
-<p>Note that, the probability of picking either <span class="math inline">\(k\)</span> coin, <span class="math inline">\(\mu_k\)</span>, is fixed to .50, and so <span class="math inline">\(\mu_k\)</span> is not an estimated parameter.</p>
+<p>Note that, the probability of picking either <span class="math inline">\(k\)</span> coin, <span class="math inline">\(\mu_k\)</span>, is fixed to .50, and so <span class="math inline">\(\mu_k\)</span> is not an estimated parameter. In the Python code block below, I compute the responsibilities (lines <a href="#32">32–76</a>).</p>
 <pre class="r" language="python"><code>import numpy as np
 import pandas as pd
 from scipy.stats import binom
@@ -712,7 +712,7 @@ T_k &amp;= \sum_{n = 1}^5 (f - x_n) \gamma(z_{nk}),
 \label{eq:effective-tails}
 \end{align}
 \]</span>
-where the responsibilities in each <span class="math inline">\(n\)</span> coin-flipping session are weighed by the number of tails obtained in that session, <span class="math inline">\(f - x_n\)</span> (note that <span class="math inline">\(f = 10\)</span>). Note that the effective number of flips for a <span class="math inline">\(k\)</span> coin can be obtained by summing the corresponding effective number of heads and tails, <span class="math inline">\(N_k = H_k + T_k\)</span>. The Python code block below computes the effective number of heads and tails.</p>
+where the responsibilities in each <span class="math inline">\(n\)</span> coin-flipping session are weighed by the number of tails obtained in that session, <span class="math inline">\(f - x_n\)</span> (note that <span class="math inline">\(f = 10\)</span>). Note that the effective number of flips for a <span class="math inline">\(k\)</span> coin can be obtained by summing the corresponding effective number of heads and tails, <span class="math inline">\(N_k = H_k + T_k\)</span>. The Python code block below computes the effective number of heads and tails (lines <a href="#83">83–102</a>).</p>
 <pre class="r" language="python"><code>def compute_effective_number_heads(responsibilities, n = 10):
   
   #specify axis=1 so that operations are conducted along rows 
@@ -751,7 +751,7 @@ Total    21.3    11.7
 4         1.9     1.1
 Total     8.6     8.4
 </code></pre>
-<p>Given that this post is a demo, I also decided to print out the effective number of heads and tails in a table that is styled to resemble the table in Figure <span class="math inline">\(\ref{fig:do-batzoglou}\)</span>. To recreate this table, I used a combination of the CSS (see lines) and R code blocks below.</p>
+<p>Given that this post is a demo, I also decided to print out the effective number of heads and tails in a table that is styled to resemble the table in Figure <span class="math inline">\(\ref{fig:do-batzoglou}\)</span>. To recreate this table, I used a combination of the CSS (see lines <a href="#118">118–130</a>) and R code blocks below (see lines <a href="#131">131–168</a>).</p>
 <pre class="r" language="css"><code>/*change colour of header background colours*/
 .do_batzoglou_table th:nth-child(1) {background-color: #C3625B}
 .do_batzoglou_table th:nth-child(2) {background-color: #5F8DB9}
@@ -809,7 +809,6 @@ kbl(x = effective_number_data, format = &#39;html&#39;, digits = 2, booktabs = T
   #place after so that white colour overrides previous colours
   row_spec(row = nrow(effective_number_data), background = &#39;white&#39;) %&gt;%
 
-  #increase row heights
   
   #footnote
    footnote(general =  &quot;&lt;em&gt;Note&lt;/em&gt;. Table was recreated to resemble the table in Step 3 of Figure \\ref{fig:do-batzoglou}.&quot;,  threeparttable = T,  escape = F, general_title = &#39; &#39;) %&gt;%
@@ -893,7 +892,7 @@ Coin B
 </tr>
 </tfoot>
 </table>
-<p>Having computed the effective number of heads and tails for each <span class="math inline">\(k\)</span> coin, new estimates can be computed for each coin’s probability of heads, <span class="math inline">\(\hat{\theta}_A^{(1)}\)</span> and <span class="math inline">\(\hat{\theta}_B^{(1)}\)</span>, using Equation \ref{fig:param-est. The Python code block below compues new parameter estimates.</p>
+<p>Having computed the effective number of heads and tails for each <span class="math inline">\(k\)</span> coin, new estimates can be computed for each coin’s probability of heads, <span class="math inline">\(\hat{\theta}_A^{(1)}\)</span> and <span class="math inline">\(\hat{\theta}_B^{(1)}\)</span>, using Equation <span class="math inline">\(\ref{eq:param-est}\)</span>. The Python code block below computes new parameter estimates (see lines <a href="#169">169–182</a>).</p>
 <pre class="r" language="python"><code>def m_step(responsibilities, n = 10):
   
   #isolate columns that contain responsibilities
@@ -916,7 +915,7 @@ dtype: float64
 </div>
 <div id="step-4-iterating-the-expectation-maximization-em-algorithm-ten-times" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Step 4: Iterating the Expectation-Maximization (EM) Algorithm Ten Times</h2>
-<p>To iterate the EM algorithm 10 times, I have created the nested the {{&lt; inline-src python &gt;}}e_step(){{&lt; /inline-src &gt;}} and {{&lt; inline-src python &gt;}}m_step(){{&lt; /inline-src &gt;}} functions into the {{&lt; inline-src python &gt;}}em_algorithm(){{&lt; /inline-src &gt;}} function in the Python code block below.</p>
+<p>To iterate the EM algorithm 10 times, I have created the nested the {{&lt; inline-src python &gt;}}e_step(){{&lt; /inline-src &gt;}} and {{&lt; inline-src python &gt;}}m_step(){{&lt; /inline-src &gt;}} functions into the {{&lt; inline-src python &gt;}}em_algorithm(){{&lt; /inline-src &gt;}} function in the Python code block below (see lines <a href="#186">186–208</a>).</p>
 <pre class="r" language="python"><code>def em_algorithm(data, mu, probs_heads, num_iterations, n = 10): 
   
   #define iteration counter
@@ -947,14 +946,182 @@ dtype: float64
 <p>Therefore, after 10 iterations, the estimates shown in Figure <span class="math inline">\(\ref{fig:do-batzoglou}\)</span> are obtained such that <span class="math inline">\(\hat{\theta}_A^{(10)}\)</span> = 0.80 and <span class="math inline">\(\hat{\theta}_B^{(10)}\)</span> = 0.52.</p>
 </div>
 </div>
-<div id="coding-and-visualizing-the-expectation-maximization-em-algorithm" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Coding and Visualizing the Expectation-Maximization (EM) Algorithm</h1>
+<div id="visualizing-the-expectation-maximization-em-algorithm" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Visualizing the Expectation-Maximization (EM) Algorithm</h1>
+<p>In many explanations of the EM algorithm, one popular visual is often used. Specifically, it is common to see a figure that shows how the incomplete-data log-likelihood can be indirectly optimized by repeatedly creating a lower-bounding function E step and then maximizing it in the M step. I have reprinted one of these visualizations from {{&lt; cite “bishop2006” &gt;}} in Figure <span class="math inline">\(\ref{fig:em-visual}\)</span>.</p>
+<p>In looking at Figure \ref{fig:em-visual, it is important to note that only a cross-section of the optimization problem is shown. In other words, the incomplete-data log-likelihood and evidence lower bounds are shown across all values of only one parameter. Because Figure <span class="math inline">\(\ref{fig:em-visual}\)</span> is a 2D plot and the likelihood values are represented on the y-axis, the optimization problem can only be shown across the values of one parameter using the x-axis.</p>
+<div class="figure">
+<div class="figDivLabel">
+<pre><code>&lt;caption&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:em-visual}&lt;span&gt; 
+&lt;/caption&gt;</code></pre>
+</div>
+<div class="figTitle">
+<pre><code>&lt;span&gt;Depiction of EM Algorithm from Bishop (2006)&lt;/span&gt;</code></pre>
+</div>
+<pre><code>&lt;img src=&quot;images/bishop_em.png&quot; width=&quot;80%&quot; height=&quot;80%&quot;&gt; </code></pre>
+<div class="figNote">
+<pre><code> &lt;span&gt;&lt;em&gt;Note. &lt;/em&gt; The incomplete-data log-likelihood is shown in red, $\ln p(\mathbf{x}, \theta)$. The first evidence lower bound is shown in blue, $\mathcal{L}(q, \theta)$, and the second evidence lower bound is shown in green. From &lt;em&gt;Pattern Recognition and Machine Learning &lt;/em&gt; (p. 453) by C. Bishop, 2006, &lt;em&gt;Springer New York&lt;/em&gt; (&lt;a href=&quot;bit.ly/411YnEq&quot;&gt;bit.ly/411YnEq&lt;/a&gt;).&lt;/span&gt; </code></pre>
+</div>
+</div>
+<p>To show a cross-section of the optimization problem, I will similarly only show compute likelihood across all the values of one only parameter. As in the previous example, a set of coin-flipping data, <span class="math inline">\(\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]\)</span>, will be used where each flip could be the result of two coins: Coin 1 and Coin 2. Each coin has its independent probability of heads, <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span>, and its corresponding probability of being selected for a flip, <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2 = 1 - \mu_1\)</span>. In order to create a cross-section of the optimization problem, I will compute the incomplete-data log-likelihood and evidence lower bounds across all values of <span class="math inline">\(p_1\)</span> and fix <span class="math inline">\(p_2 = .50\)</span> and <span class="math inline">\(\mu_1 = \mu_2 = .50\)</span>.</p>
+<p>To recreate a depiction of the EM algorithm similar to the one in Figure <span class="math inline">\(\ref{fig:em-visual}\)</span>, I will do so in two parts. First, I will show how to compute and visualize the incomplete-data log-likelihood. Second, I will show how to compute and visualize the evidence lower bounds.</p>
 <div id="coding-the-incomplete-data-log-likelihood" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Coding the Incomplete-Data Log-Likelihood</h2>
+<p>Beginning with the incomplete-data log-likelihood, the Python code block below computes it across all probability values of the first coin, <span class="math inline">\(p_1\)</span> (see lines <a href="#212">212–249</a>). I also provide the function for computing the incomplete-data log-likelihood below in Equation <span class="math inline">\(\ref{eq:log-incomplete-data}\)</span>:</p>
+<p><span class="math display">\[
+\begin{align}
+\log L(p_1, p_2 = .10, \mu_1 = \mu_2 = .50|\mathbf{x}) &amp;= \sum_{n=1}^{10} \log\Big(\sum_{k=1}^{2} \mu_k B(x_n|p_k) \Big).
+\label{eq:log-incomplete-data} \\\\
+&amp;= \log L(p_1|\mathbf{x})
+\end{align}
+\]</span>
+Briefly, for each of the 10 <span class="math inline">\(x_n\)</span> data points, the binomial probability of each <span class="math inline">\(k\)</span> mixture producing data point, <span class="math inline">\(B(x_n|p_k)\)</span>, is computed and then summed, with the logarithmic sum being taken. The sum of all the logarithmic sums is then computed to obtain the incomplete-data log-likelihood. As a reminder, the probability of selecting each <span class="math inline">\(k\)</span> coin is fixed to 50%, <span class="math inline">\(\mu_1 = \mu_2 = .50\)</span>, and the second coin’s probability value of heads is fixed to .10, <span class="math inline">\(p_2 = .10\)</span>. Given that only <span class="math inline">\(p_1\)</span> is allowed to vary, Equation <span class="math inline">\(\ref{eq:log-incomplete-data}\)</span> can be represented as only a function of <span class="math inline">\(p_1\)</span>, <span class="math inline">\(\log L(p_1|\mathbf{x})\)</span>.</p>
+<pre class="r" language="python"><code>def compute_incomplete_log_like(data, mu, p):
+  &quot;&quot;&quot;
+  Compute incomplete-data log-likelihood 
+  Parameters:
+      - data: data set 
+      - mu: Probability of each component 
+      - p: Probability of success for each binomial distribution
+  &quot;&quot;&quot;
+  
+  #probability of each data point coming from each distribution
+  mixture_sums = [np.sum(mu * binom.pmf(flip_result, n=1, p= np.array(p))) for flip_result in binom_mixture_data]
+  
+  #log of mixture_sums
+  log_mixture_sums = np.log(mixture_sums)
+  
+  #sums of log of mixture_sums
+  incomplete_like = np.sum(log_mixture_sums)
+
+  return(incomplete_like)
+
+
+#data given to researcher
+binom_mixture_data = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
+
+#initial guesses for E step 
+mu_fixed = [0.5, 0.5] #mixture probabilities are fixed so that convergence does not occur in one trial
+
+
+#1) Incomplete-data log-likelihood
+##create Dataframe with all possible probability combinations [x, 0.1], such that 
+##the probability of heads for the second coin is fixed to 1
+incomplete_data_like = pd.DataFrame({&#39;p1&#39;: np.arange(start = 0, stop = 1, step = 0.01)})
+incomplete_data_like.insert(0, &#39;p2&#39;, 0.1)   #fix probability of heads for second coin to 0.1 
+
+##compute incomplete-data log-likelihood across all combinations of [x, 0.1]
+incomplete_data_like[&#39;likelihood&#39;] = incomplete_data_like.apply(lambda row: 
+  compute_incomplete_log_like(data = binom_mixture_data, 
+  mu = mu_fixed, p = [row[&#39;p1&#39;], row[&#39;p2&#39;]]), axis = 1)</code></pre>
 </div>
 <div id="coding-the-two-evidence-lower-bounds" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Coding the Two Evidence Lower Bounds</h2>
-<p>With an understanding of the EM algorithm, I will now show how to produce one of its popular visualizations.</p>
+<p>Ending with the two evidence lower bounds, the Python code block below computes them (see lines <a href="#250">250–316</a>). Briefly, Equation <span class="math inline">\(\ref{eq:lower-bound}\)</span> shows that the lower bound is computed by taking the sum of the expected complete-data log-likelihood and the entropy. I have provided Equation <span class="math inline">\(\ref{eq:lower-bound-exp}\)</span> below to show the computation of the evidence lower bound.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, p_1)\big) &amp;=  \underbrace{\mathbb{E}\_{P(\mathbf{z}|\mathbf{x}, p_1)}\log (L(p_1|\mathbf{x},\mathbf{z}))}\_{\text{Expected complete-data log-likelihood}} \phantom{e x} \underbrace{-\mathbb{E}\_{P(\mathbf{z}|\mathbf{x}, p_1)} \log({P(\mathbf{z}|\mathbf{x}, p_1)})}\_{\text{Entropy}} \label{eq:lower-bound}\\\\
+&amp;= \sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k) + x_n\log(p_k) + (1 - x_n)\log(1 - p_k)\big) - \gamma(z_{nk})\log\big(\gamma(z_{nk})\big)
+\label{eq:lower-bound-exp}
+\end{align}
+\end{spreadlines}
+\]</span>
+As a reminder, because the probability of selecting each <span class="math inline">\(k\)</span> coin is fixed to 50%, <span class="math inline">\(\mu_1 = \mu_2 = .50\)</span>, and the second coin’s probability value of heads is fixed to .10, <span class="math inline">\(p_2 = .10\)</span>, the evidence lower bound is only a function of <span class="math inline">\(p_1\)</span>. To compute two lower bounds, the E step needs to be computed twice and the M step once. In other words, two sets of responsibilities need to be computed and new parameter estimates need to be computed once.</p>
+<pre class="r" language="python"><code>#evidence lower bound = expected complete-data log-likelihood + entropy of responsibilities
+def compute_lower_bound(responsibilities, mu, p):
+  
+  #expected complete-data log-likelihood 
+  expected_complete_data_like = responsibilities.apply(compute_expected_complete_like, mu = mu, p = p, axis=1).sum()
+
+  ##compute entropy
+  entropy = compute_entropy(responsibilities = responsibilities)
+
+  return expected_complete_data_like + entropy
+
+#entropy: sum of rs*log(rs) for all rs (responsibilities)
+def compute_entropy(responsibilities):
+  
+  ##extract responsibility columns and then compute entropy
+  resp_colummns = responsibilities.filter(like = &#39;coin&#39;)
+  
+  ##take sum of x*log(x) for each responsibility
+  entropy = -np.sum(resp_colummns.values * np.log(resp_colummns.values))
+  
+  return entropy
+  
+#expected complete-data log-likelihood
+def compute_expected_complete_like(row, mu, p):
+  resp_columns = [col for col in row.index if &#39;coin&#39; in col]
+  resp_values = [row[col] for col in resp_columns]
+  
+  return np.sum(
+      [resp_values * (np.log(mu) + 
+      row[&#39;data&#39;] * np.log(p) + #non-zero if flip result is success (i.e., &#39;heads&#39;)
+      (1 - row[&#39;data&#39;]) * np.log(1 - np.array(p)) #non-zero if flip result is failure (i.e., &#39;tails&#39;)
+      )]
+  )
+    
+    
+#data given to researcher
+binom_mixture_data = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
+
+#initial guesses for E step 
+mu_fixed = [0.5, 0.5] #mixture probabilities are fixed so that convergence does not occur in one trial
+p = [0.1, 0.1] #probabilities of heads
+n = 1 #number of flips in each session 
+
+#1) Old evidence lower bound 
+##compute first (i.e., old) responsibilities
+old_responsibilities = e_step(data = binom_mixture_data, mu = mu_fixed, p = p, n = n)
+
+old_lower_bound = pd.DataFrame({&#39;p1&#39;: np.arange(start = 0.01, stop = 1, step = 0.01)})
+old_lower_bound.insert(0, &#39;p2&#39;, 0.1)  #fix probability of heads for second coin to 0.1 
+
+old_lower_bound[&#39;likelihood&#39;] = old_lower_bound.apply(lambda row: 
+  compute_lower_bound(responsibilities = old_responsibilities, 
+  mu = mu_fixed, p = [row[&#39;p1&#39;], row[&#39;p2&#39;]]), axis = 1)
+
+
+#2) New evidence lower bound
+##compute new (i.e., new) responsibilities byt first computing estimates
+estimates = m_step(responsibilities = old_responsibilities, n = n) #compute new estimates first 
+estimates[1] = 0.1  #fix probability of heads for second coin to 0.1 
+new_responsibilities = e_step(data = binom_mixture_data, mu = mu_fixed, p = estimates, n = n)
+
+new_lower_bound = pd.DataFrame({&#39;p1&#39;: np.arange(start = 0.01, stop = 1, step = 0.01)})
+new_lower_bound.insert(0, &#39;p2&#39;, 0.1)  #fix probability of heads for second coin to 0.1 
+
+new_lower_bound[&#39;likelihood&#39;] = new_lower_bound.apply(lambda row: 
+  compute_lower_bound(responsibilities = new_responsibilities, 
+  mu = mu_fixed, p = [row[&#39;p1&#39;], row[&#39;p2&#39;]]), axis = 1)</code></pre>
+<p>`</p>
+</div>
+<div id="visualizing-the-incomplete-data-log-likelihood-and-the-evidence-lower-bounds" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Visualizing the Incomplete-Data Log-Likelihood and the Evidence Lower Bounds</h2>
+<p>Having computed the incomplete-data log-likelihood and the two evidence lower bounds, they can now be visualized. To visualize the expectation-maximization (EM) algorithm, I use the <code>ggplot2</code> package in R (see lines <a href="#317">317–453</a>). Note that I also depict two other phenomena of the EM algorithm. First, I show the increase in the evidence lower bound after the M step with braces (see Figure <span class="math inline">\(\ref{fig:em-plot}\)</span>). Following the M step, the evidence lower bound increases as much as the expected complete-data log-likelihood, as shown below in Equation <span class="math inline">\(\ref{eq:lower-bound-increase}\)</span>. Note that the increase in the evidence lower bound after the M step can also be shown with auxiliary functions in Equation <span class="math inline">\(\ref{eq:auxiliary}\)</span>.</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{new}) \big) - \big(P(\mathbf{z}|\mathbf{x}, p_1^{old}), p_1^{old}\big) &amp;= \mathbb{E}\_{P(\mathbf{z}|\mathbf{x}, p_1^{old})} \log \big( L\big(p_1^{new}|\mathbf{x},\mathbf{z})\big) -\mathbb{E}\_{P(\mathbf{z}|\mathbf{x}, p_1^{old})}\log \big(L\big(p_1^{old}|\mathbf{x},\mathbf{z})\big)
+\label{eq:lower-bound-increase} \\\\
+&amp;= Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})
+\label{eq:auxiliary}
+\end{align}
+\end{spreadlines}
+\]</span>
+Second, I show the increase in the incomplete-data log-likelihood after the M step with braces (see Figure <span class="math inline">\(\ref{fig:em-plot}\)</span>). Following the M step, the incomplete-data log-likelihood increases by as much as the expected complete-data log-likelihood and the Kullback-Lielber divergence between the old responsibilities and new responsibilities (see Equation <span class="math inline">\(\ref{eq:incomplete-increase}\)</span>), which I also represent with auxiliary functions (see Equation <span class="math inline">\(\ref{eq:incomplete-inc-aux}\)</span>).</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(p_1^{new}|\mathbf{x})  - \log L(p_1^{old}|\mathbf{x}) &amp;= \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{new}\Big) - \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{old}\Big) + KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})\|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)
+\label{eq:incomplete-increase} \\\\
+&amp;= Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})  + KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})\|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)
+\label{eq:incomplete-inc-aux}\\\\
+\end{align}
+\end{spreadlines}
+\]</span></p>
 <pre class="r"><code>#devtools::install_github(&quot;nicolash2/ggbrace&quot;)
 library(latex2exp)
 library(ggbrace)
@@ -965,21 +1132,22 @@ new_lower_bound &lt;- py$new_lower_bound
 
 #combine old and new lower bounds data sets and introduce factor variable to track old/new status 
 lower_bounds_df &lt;- bind_rows(
-  data.frame(old_lower_bound, iteration = &quot;old&quot;),
-  data.frame(new_lower_bound, iteration = &quot;new&quot;)) %&gt;% 
+  data.frame(old_lower_bound, iteration = &quot;Old&quot;),
+  data.frame(new_lower_bound, iteration = &quot;New&quot;)) %&gt;% 
   mutate(iteration = as.factor(iteration))
 
-#Three components for making EM algorithm plot 
+
+#Four components for making EM algorithm plot 
 #1)Vertical dashed line data that shows intersection points 
-##old lower bound and value where it intersects incomplete-data log-likelihood 
+##old lower bound and value where it intersects the incomplete-data log-likelihood 
 old_p_value &lt;- py$p[1]
-old_intersection &lt;- py$compute_lower_bound(responsibilities = py$rs_old, 
+old_intersection &lt;- py$compute_lower_bound(responsibilities = py$old_responsibilities, 
                                            mu = py$mu_fixed, 
                                            p = c(old_p_value, 0.1))
 
-##old lower bound and value where it intersects incomplete-data log-likelihood 
-new_p_value &lt;- py$estimates$p_new[1]
-new_intersection &lt;- py$compute_lower_bound(responsibilities = py$rs_new, 
+##old lower bound and value where it intersects the incomplete-data log-likelihood 
+new_p_value &lt;- py$estimates[1]
+new_intersection &lt;- py$compute_lower_bound(responsibilities = py$new_responsibilities, 
                                            mu = py$mu_fixed, 
                                            p = c(new_p_value, 0.1))
 
@@ -996,20 +1164,22 @@ x_axis_labels &lt;- sprintf(&quot;%0.2f&quot;, seq(from = 0, to = 1, by = 0.1))
 x_axis_labels[2] &lt;- expression(atop(&quot;0.10&quot;, p^old))
 x_axis_labels[5] &lt;- expression(atop(&quot;0.40&quot;, p^new))
 
+
 #3) Math text data to show mathematical notation 
 ##create latex math to be shown on the plot 
 incomplete_data_log &lt;- &quot;$L(\\textit{p}_1|\\textbf{x})$&quot;
-lbound_new &lt;- &quot;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{new}}), \\textit{p_1})$&quot;
-lbound_old &lt;- &quot;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{old}}), \\textit{p_1})$&quot;
+lbound_new &lt;- &quot;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{new}}), \\textit{p_1})$&quot;
+lbound_old &lt;- &quot;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{old}}), \\textit{p_1})$&quot;
 
 ##create data frame
 math_text_data &lt;- data.frame(&#39;latex_math&#39; = c(incomplete_data_log, lbound_new, lbound_old), 
-                            &#39;x&#39; = c(0.95, 0.95, 0.85), 
+                            &#39;x&#39; = c(0.95, 0.97, 0.83), 
                             &#39;y&#39; = c(-6.5, -8.2, -13.5))
 
+
 #4) Brace data information for KL divergence and increase in lower bound 
-kl_divergence &lt;- &quot;$KL(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{new}})\\|\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p^{old}}))$&quot;
-lbound_increase &lt;- &quot;$\\textit{Q}(\\textit{p}^{new}|\\textit{p}^{old}) -\\textit{Q}(\\textit{p}^{old}|\\textit{p}^{old})$&quot;
+kl_divergence &lt;- &quot;$KL(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{new}})\\|\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{old}}))$&quot;
+lbound_increase &lt;- &quot;$\\textit{Q}(\\textit{p_1^{new}}|\\textit{p_1^{old}}) - \\textit{Q}(\\textit{p_1^{old}}|\\textit{p_1^{old}})$&quot;
 
 max_old_lbound &lt;- old_lower_bound$likelihood[which.max(old_lower_bound$likelihood)]
   
@@ -1018,31 +1188,55 @@ em_plot &lt;- ggplot(data = incomplete_data_like, mapping = aes(x = p1, y = like
   
   #vertical dashed lines 
   geom_segment(data = intersection_data, 
+                #aesthetics
                mapping = aes(x = p1_value, y = y_min, xend = p1_value, yend = intersection_point), 
-               linetype = 2) + 
+               #formatting
+               linetype = 2, color = &#39;#002241&#39;) + 
+  
+  #horizontal dashed line for showing height of first intersection between 
+  #(i.e., old lower bound with incomplete-data log-likelihood)
+  geom_segment(inherit.aes = F, 
+               #aesthetics
+               mapping = aes(x = old_p_value, xend = new_p_value, 
+                             y = old_intersection, yend = old_intersection), 
+               #formatting
+               color = &#39;#9ECAE1&#39;, linetype = 3, size = 1) + 
   
   #curly brace for KL divergence 
-  geom_brace(aes(x = c(0.4, 0.45), y = c(max_old_lbound, new_intersection),  
-                 label=TeX(kl_divergence, output=&quot;character&quot;)), 
-             inherit.data=F, labelsize=4, rotate = 90, parse=T) + 
+  geom_brace(inherit.aes = F, inherit.data = F,
+             #aesthetics
+             mapping = aes(x = c(0.4, 0.43), y = c(max_old_lbound, new_intersection),  
+                       label=TeX(kl_divergence, output=&quot;character&quot;)), 
+             #formatting
+             color = &#39;#002241&#39;, labelsize = 3.75, rotate = 90, labeldistance = 0,
+             #Latex rendering
+             parse=T) + 
   
   #curly brace for increase in evidence lower bound  
-  geom_brace(aes(x = c(0.4, 0.45), y = c(old_intersection, max_old_lbound),  
+  geom_brace(inherit.aes = F, inherit.data = F,
+             #aesthetics
+             aes(x = c(0.4, 0.43), y = c(old_intersection, max_old_lbound), 
                  label=TeX(lbound_increase, output=&quot;character&quot;)), 
-             inherit.data=F, labelsize=4, rotate = 90, parse=T, mid = 0.25) + 
+             #formatting
+             color = &#39;#002241&#39;, labelsize = 3.75, rotate = 90, labelrotate = -1,
+             labeldistance = 0, mid = 0.25,
+             
+             #Latex rendering
+             parse=T) + 
   
   #likelihoods 
-  geom_line(linewidth = 1) +  
+  geom_line(linewidth = 1, color = &#39;#002241&#39;) +  
   geom_line(inherit.aes = F, data = lower_bounds_df, 
             mapping = aes(x = p1, y = likelihood, group = iteration, color = iteration),
             linewidth = 0.5) + 
   
   #colour details 
-  scale_color_manual(values = c(&#39;old&#39; =&#39;#9ECAE1&#39;, &#39;new&#39; =  &#39;#2171B5&#39;)) + 
+  scale_color_manual(values = c(&#39;Old&#39; =&#39;#9ECAE1&#39;, &#39;New&#39; =  &#39;#2171B5&#39;)) + 
   
   #math text
-  geom_text(inherit.aes = F, data = math_text_data, parse = TRUE, size = 4, 
-          mapping = aes(x = x, y = y, label=TeX(latex_math, output=&quot;character&quot;))) + 
+  geom_text(inherit.aes = F, data = math_text_data, parse = TRUE, size = 3.75, 
+          mapping = aes(x = x, y = y, label=TeX(latex_math, output=&quot;character&quot;)), 
+          color = &quot;#002241&quot;) + 
   
  
   #axis &amp; legend details 
@@ -1063,8 +1257,8 @@ em_plot &lt;- ggplot(data = incomplete_data_like, mapping = aes(x = p1, y = like
         axis.text = element_text(color = &quot;#002241&quot;))
 
 
-#high resolution needed for greek letter to print clearly
-ggsave(filename = &#39;images/em_plot.png&#39;, plot = em_plot, width = 10, height = 6, dpi = 1000) </code></pre>
+#high resolution needed for special characters to print clearly
+ggsave(filename = &#39;images/em_plot.png&#39;, plot = em_plot, width = 10, height = 6, dpi = 300) </code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
@@ -1076,13 +1270,14 @@ ggsave(filename = &#39;images/em_plot.png&#39;, plot = em_plot, width = 10, heig
 </div>
 <pre><code>&lt;img src=&quot;images/em_plot.png&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt; </code></pre>
 <div class="figNote">
-
+<span><em>Note. </em>The dark blue line represents the incomplete-data log-likelihood, <span class="math inline">\(L(p_1|\mathbf{x})\)</span>. The blue line represents the new evidence lower bound, <span class="math inline">\(\mathcal{L}(P(\mathbf{z}|\mathbf{x}, p_1^{new}, p_1))\)</span>. The light blue line represents the old evidence lower bound, <span class="math inline">\(\mathcal{L}(P(\mathbf{z}|\mathbf{x}, p_1^{old}, p_1))\)</span>. By repeatedly optimizing lower bounds to create new lower bounds, the otherwise unoptimizable incomplete-data log-likelihood can be optimized. After the maximization (M) step, the evidence lower bound increases by the increase in the expected complete-data log-likelihood, <span class="math inline">\(Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})\)</span>, whereas the incomplete-data log-likelihood increases by this amount in addition to the Kullback-Liebler (KL) divergence between the new and old responsibilities, <span class="math inline">\(KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})\|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)\)</span>.</span>
 </div>
 </div>
 </div>
 </div>
 <div id="conclusion" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Conclusion</h1>
+<p>In conclusion, this post provides two demonstrations of the expectation-maximization (EM) algorithm. First, the application of the EM algorithm on a coin-flipping scenario from {{&lt; cite “do2008” &gt;}} is reproduced. Second, a popular depiction of the optimization process in the EM algorithm is produced.</p>
 </div>
 <div id="references" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> References</h1>

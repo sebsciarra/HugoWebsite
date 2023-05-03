@@ -13,26 +13,26 @@
   opacity: 1;
 }
 
+a[rel*="noopener"]{
+  text-decoration: none;
+}
+
+a[rel*="noopener"]:visited{
+  color: gray;
+}
+
+
+a[rel*="noopener"]:hover{
+  color: blue;
+   text-decoration: underline;
+}
+
+
 
 a[role=doc-biblioref]:hover {
   text-decoration: none;
   color: gray;
 }
-
-
-a[href*="eq"] {
-  font-family: no-parens;
-}
-a[href*="eq"]:visited{
-   color: gray;
-}
-
-a[href*="eq"]:hover{
-   color: blue;
-   font-weight: bold;
-   text-decoration: underline;
-}
-
 
 a[href*="#"]{
    color: blue;
@@ -47,5 +47,22 @@ a[href*="#"]:hover{
    color: blue;
    text-decoration: underline;
 }
+
+
+
+a[href*="eq"], a[href*="fig"] {
+  font-family: no-parens;
+}
+a[href*="eq"]:visited, a[href*="fig"]:visited{
+   color: gray;
+}
+
+a[href*="eq"]:hover, a[href*="fig"]:hover {
+   color: blue;
+   font-weight: bold;
+   text-decoration: none;
+}
+
+
 
 
