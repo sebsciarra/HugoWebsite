@@ -1,6 +1,6 @@
 ---
 title: "Coding and Visualizing the Expectation-Maximization (EM) Algorithm"
-summary: 'In this post, I provide two segments of code. The code segment reproduces a coin-tossing example in a popular publication on the expectation-maximization (EM) algorithm. The second code segment reproduces a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.' 
+summary: 'Two demonstrations are provided in this post. The first demonstration uses Python and R code to reproduce a coin-tossing example in a popular publication on the expectation-maximization (EM) algorithm. The second demonstration also uses Python and R code to reproduce a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.' 
 draft: false
 date: "2023-05-03"
 article_type: coding
