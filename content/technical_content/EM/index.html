@@ -342,7 +342,7 @@ display: none;
 </div>
 
 
-<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: {{&lt; cite “bishop2006” &gt;}} and {{&lt; cite”do2008” &gt;}}. I also used the following lectures/blogs as aids: <a href="https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
+<p>To write this post on the expectation-maximization algorithm, I used the following academic sources: {{&lt; citePara “bishop2006” &gt;}} and {{&lt; citePara”do2008” &gt;}}. I also used the following lectures/blogs as aids: <a href="https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
 <div id="introduction-to-mixture-models" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction to Mixture Models</h1>
 <p>Consider a situation where a researcher entrusts a colleague to flip coins and record the results of 10 flips. Flips that result in heads are recorded as <code>1</code> and flips that result in tails are recorded as <code>0</code>. Importantly, before each flip, the colleague picks one of two coins (according to another probability mass function) but does not tell the researcher which coin was flipped. When the colleague records the results of the 10 coin flips, they provide the researcher with the following data: <span class="math inline">\(\mathbf{x} = \[1, 1, 1, 1, 0, 0, 0, 0, 0, 0\]\)</span>. With these data, the researcher wants to estimate the following three parameters:</p>

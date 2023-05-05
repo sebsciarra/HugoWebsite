@@ -15,7 +15,7 @@ tags: []
 
 
 
-To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< cite "bishop2006" >}} and {{< cite"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
+To write this post on the expectation-maximization algorithm, I used the following academic sources: {{< citePara "bishop2006" >}} and {{< citePara"do2008" >}}. I also used the following lectures/blogs as aids: [EM blog](https://gregorygundersen.com/blog/2019/01/22/kld/) and [EM lecture](https://www.youtube.com/watch?v=lMShR1vjbUo&t=1161s). 
 
 # Introduction to Mixture Models
 
