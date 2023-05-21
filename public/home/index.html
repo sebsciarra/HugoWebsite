@@ -9,7 +9,7 @@
 
   <meta name="author" content="Sebastian Sciarra">
         <link rel="stylesheet" href="/css/webStyling.css"/>
-        <link rel="stylesheet" href="/css/webStyling.min.abbd1066440353ad4b1f0d345757263e74fb4c175e680cf29d7ec16b45828f3d.css">
+        <link rel="stylesheet" href="/css/webStyling.min.7e0af8b405762c891be56b8312098dcd60a1bc4e750cef36a906b4cfa1ae982b.css">
 
   <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
   <meta name="description" content="Seb&#39;s portfolio site">
@@ -81,18 +81,40 @@
 
           
           <link rel="stylesheet" href="/css/home.css"/>
-          <link rel="stylesheet" href="/css/home.min.03d909741a1580829a7014a364cf37c78b58600fa4991e54e028c65d06bfb466.css">
+          <link rel="stylesheet" href="/css/home.min.817ca095986533e97803629aca110ea7ef127cfb4c1dd4c1f2c737d6fefa0f5c.css">
 
 
 
           
     
-        <a href="/technical_content/mle_em_algorithms/" class="blog_link">
+        <a href="/coding_tricks/em_demo/" class="blog_link">
+            <div class="header coding">
+                <h2 class="blog_title">Coding and Visualizing the Expectation-Maximization Algorithm</h2>
+                <div class="blog_summary">Two demonstrations are provided in this post. The first demonstration uses Python and R code to reproduce a coin-flipping example in a popular publication on the expectation-maximization (EM) algorithm. The second demonstration uses Python and R code to reproduce a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.</div>
+                <br>
+                <time><b> Published </b><br>  3 May 2023</time>
+            </div>
+        </a>
+    
+
+    
+        <a href="/technical_content/em/" class="blog_link">
+            <div class="header technical">
+                <h2 class="blog_title">The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions</h2>
+                <div class="blog_summary">The expectation-maximization (EM) algorithm provides a method for modelling mixtures of distributions. To explain the EM algorithm, I do so in the context of a coin-flipping example where, for each flip, one of two coins are used, and so a mixture of binomial distributions underlie the data. Although maximum likelihood estimation cannot estimate mixture models, the EM algorithm can because it optimizes the likelihood function indirectly. In the expectation (E) step, a lower-bounding function is used to obtain responsibilities. In the maximization step (M), the lower-bounding function is optimized, with the responsibilities being used to obtain new parameter estimates. By optimizing the lower-bounding function, likelihood function increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating.</div>
+                <br>
+                <time><b> Published </b><br>  28 April 2023</time>
+            </div>
+        </a>
+    
+
+    
+        <a href="/technical_content/mle/" class="blog_link">
             <div class="header technical">
                 <h2 class="blog_title">Probability, Likelihood, and Maximum Likelihood Estimation</h2>
-                <div class="blog_summary">Explanation of post</div>
+                <div class="blog_summary">Probability and likelihood are discussed in the context of a coin flipping scenario and it is shown that only probabilities sum to one. Although likelihoods cannot be interpreted as probabilities, they can be used to determine the set of parameter values that most likely produced a data set (maximum likelihood estimates). Maximum likelihood estimation provides one efficient method for determining maximum likelihood estimates and is applied in the binomial and Gaussian cases.</div>
                 <br>
-                <time><b> Published </b><br>  9 March 2023</time>
+                <time><b> Published </b><br>  19 March 2023</time>
             </div>
         </a>
     

@@ -16,6 +16,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "index\\.html", "about\\.h
   coding =  "coding_summ"
   simulation =  "simulation_summ"
   resources =  "ml_resources"
+  livereload = true
 
 [markup]
   defaultMarkdownHandler = "goldmark"

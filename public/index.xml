@@ -6,14 +6,32 @@
     <description>Recent content in Home  on Sebastian Sciarra</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Coding and Visualizing the Expectation-Maximization Algorithm</title>
+      <link>/coding_tricks/em_demo/</link>
+      <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/coding_tricks/em_demo/</guid>
+      <description>Two demonstrations are provided in this post. The first demonstration uses Python and R code to reproduce a coin-flipping example in a popular publication on the expectation-maximization (EM) algorithm. The second demonstration uses Python and R code to reproduce a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.</description>
+    </item>
+    
+    <item>
+      <title>The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions</title>
+      <link>/technical_content/em/</link>
+      <pubDate>Fri, 28 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/technical_content/em/</guid>
+      <description>The expectation-maximization (EM) algorithm provides a method for modelling mixtures of distributions. To explain the EM algorithm, I do so in the context of a coin-flipping example where, for each flip, one of two coins are used, and so a mixture of binomial distributions underlie the data. Although maximum likelihood estimation cannot estimate mixture models, the EM algorithm can because it optimizes the likelihood function indirectly. In the expectation (E) step, a lower-bounding function is used to obtain responsibilities. In the maximization step (M), the lower-bounding function is optimized, with the responsibilities being used to obtain new parameter estimates. By optimizing the lower-bounding function, likelihood function increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating.</description>
+    </item>
+    
     <item>
       <title>Probability, Likelihood, and Maximum Likelihood Estimation</title>
-      <link>/technical_content/mle_em_algorithms/</link>
-      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+      <link>/technical_content/mle/</link>
+      <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>/technical_content/mle_em_algorithms/</guid>
-      <description>Explanation of post</description>
+      <guid>/technical_content/mle/</guid>
+      <description>Probability and likelihood are discussed in the context of a coin flipping scenario and it is shown that only probabilities sum to one. Although likelihoods cannot be interpreted as probabilities, they can be used to determine the set of parameter values that most likely produced a data set (maximum likelihood estimates). Maximum likelihood estimation provides one efficient method for determining maximum likelihood estimates and is applied in the binomial and Gaussian cases.</description>
     </item>
     
     <item>

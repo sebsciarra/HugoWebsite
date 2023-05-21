@@ -26,7 +26,7 @@ for (let i = 0; i < h1Elements.length; i++) {
 
 // Get the <h1> element with innerText that starts with 'Appendix A'
 const appendixHeader = document.querySelector("h1.appendix");
- console.log(appendixHeader);
+
 if (appendixHeader && appendixHeader.innerText.startsWith("Appendix A")) {
 
   const div = document.createElement("div");

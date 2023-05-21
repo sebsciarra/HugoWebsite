@@ -148,11 +148,11 @@ tags.forEach(function(tag){
 
  //set padding right of first row in second column for code blocks
  if (tag.previousSibling && tag.previousSibling.style && tag.parentNode.innerHTML.startsWith('<span')) {
- tag.previousSibling.style.paddingRight = 60 + tag_language_width + "px";
+ tag.previousSibling.style.paddingRight = 65 + tag_language_width + "px";
  }
  //set padding right for code output blocks
  else{
-  tag.parentNode.style.paddingRight = 60 + tag_language_width + "px";
+  tag.parentNode.style.paddingRight = 65 + tag_language_width + "px";
  }
 
 });
@@ -240,7 +240,7 @@ codeTables_2.forEach(function(table){
 
   //set padding right of first row in second column
   if (tag.previousSibling && tag.previousSibling.style) {
-  tag.previousSibling.style.paddingRight = 60 + tag_language_width + "px";
+  tag.previousSibling.style.paddingRight = 65 + tag_language_width + "px";
   }
   }
     else {

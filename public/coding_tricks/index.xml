@@ -5,6 +5,16 @@
     <link>/coding_tricks/</link>
     <description>Recent content in Coding Demos &amp; Tricks on Sebastian Sciarra</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/coding_tricks/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Wed, 03 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/coding_tricks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Coding and Visualizing the Expectation-Maximization Algorithm</title>
+      <link>/coding_tricks/em_demo/</link>
+      <pubDate>Wed, 03 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/coding_tricks/em_demo/</guid>
+      <description>Two demonstrations are provided in this post. The first demonstration uses Python and R code to reproduce a coin-flipping example in a popular publication on the expectation-maximization (EM) algorithm. The second demonstration uses Python and R code to reproduce a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function.</description>
+    </item>
+    
   </channel>
 </rss>

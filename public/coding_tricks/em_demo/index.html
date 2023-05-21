@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html><!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <title>Sebastian Sciarra - Coding and Visualizing the Expectation-Maximization Algorithm</title>
+
+  <meta name="author" content="Sebastian Sciarra">
+        <link rel="stylesheet" href="/css/webStyling.css"/>
+        <link rel="stylesheet" href="/css/webStyling.min.7e0af8b405762c891be56b8312098dcd60a1bc4e750cef36a906b4cfa1ae982b.css">
+
+  <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
+  <meta name="description" content="Seb&#39;s portfolio site">
+
+ 
+  
+
+
+</head>
+
+
+<body>
+
+      <div class="container"><!DOCTYPE html>
+
+
+
+
+  
+   <script src="https://kit.fontawesome.com/23dde744ab.js" crossorigin="anonymous"></script>
+
+   
+    <script type = 'text/javascript'>
+
+      function active() {
+         document.getElementsByClassName('navbar-links')[0].classList.toggle('active');
+      }
+
+    </script>
+
+
+    <div class = 'navbar'>
+       <h1 class = 'blog_name'>Blog Directory</h1>
+
+       <ul class = 'navbar-links'>
+        <li><a class = 'home', href = "/home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a class = 'technical', href = "/technical_content"><i class="fa-solid fa-gears"></i> Technical Content</a></li>
+        <li><a class = 'coding', href = "/coding_tricks"><i class="fa-solid fa-code"></i> Coding Demos & Tricks</a></li>
+        <li><a class = 'simulation', href = "/simulation_exps"><i class="fa-brands fa-buromobelexperte"></i> Simulation Experiments</a></li>
+        <li><a class = 'resources', href = "/mlresources"><i class="fa-solid fa-key"></i> ML Resources</a></li>
+        <li><a class = 'about', href = "/about"><i class="fa-solid fa-question"></i> About</a></li>
+        <li><a class = 'portal', href = "/"><i class="fa-solid fa-circle-chevron-left"></i> back to portal</a></li>
+       </ul>
+
+      <button hef = '#', class = "toggle-button",  onclick="active()">
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+      </button>
+
+
+  </div>
+
+
+
+
+
+<link rel="alternate" type="application/rss+xml" href="http://example.com/feed" >
+
+
+
+
+
+<main>
+<div class = 'blog_post'>
+
+
+  <div class = 'post'>
+
+     <div class = 'header coding'>
+
+        <h2 class = 'blog_title'> Coding and Visualizing the Expectation-Maximization Algorithm </h2>
+
+        <div class = 'blog_summary'> Two demonstrations are provided in this post. The first demonstration uses Python and R code to reproduce a coin-flipping example in a popular publication on the expectation-maximization (EM) algorithm. The second demonstration uses Python and R code to reproduce a population depiction of the EM algorithm whereby a likelihood function is approximated and optimized by a lower-bounding function. </div>
+
+         <br>
+
+        <time> <b> Published </b> <br>
+        3 May 2023
+        </time>
+
+    </div>
+
+
+    <div class = 'content'>
+      <p>Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the expectation-maximization (EM) algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the <a href="https://sebastiansciarra.com/technical_content/em/">EM algorithm</a>. Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeable, I use the <code>reticulate</code> package made for R and create a conda environment to use Python (see lines <a href="#1">1&ndash;12</a> below).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">reticulate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#create and use conda environment</span>
+</span></span><span class="line"><span class="cl"><span class="nf">conda_create</span><span class="p">(</span><span class="n">envname</span> <span class="o">=</span> <span class="s">&#39;blog_posts&#39;</span><span class="p">,</span>  <span class="n">python_version</span> <span class="o">=</span> <span class="s">&#39;3.10.11&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">use_condaenv</span><span class="p">(</span><span class="n">condaenv</span> <span class="o">=</span> <span class="s">&#39;blog_posts&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#install packages in conda environment</span>
+</span></span><span class="line"><span class="cl"><span class="n">py_packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;numpy&#39;</span><span class="p">,</span> <span class="s">&#39;pandas&#39;</span><span class="p">,</span> <span class="s">&#39;scipy&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">conda_install</span><span class="p">(</span><span class="n">envname</span> <span class="o">=</span> <span class="s">&#39;blog_posts&#39;</span><span class="p">,</span> <span class="n">packages</span> <span class="o">=</span> <span class="n">py_packages</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#useful for checking what packages are loaded</span>
+</span></span><span class="line"><span class="cl"><span class="nf">py_list_packages</span><span class="p">(</span><span class="n">envname</span> <span class="o">=</span> <span class="s">&#39;blog_posts&#39;</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#39;conda&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><h1 id="coding-the-expectation-maximization-em-algorithm-reproducing-three-steps-in-the-coin-flipping-example-from-do-and-batzoglou-2008">Coding the Expectation-Maximization (EM) Algorithm: Reproducing Three Steps in the Coin-Flipping Example From Do and Batzoglou (2008)</h1>
+<p>One popular publication of the expectation-maximization (EM) algorithm is presented in 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation">(<span class="hugo-cite-group">
+
+          <a href="#do2008"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="Chuong B"><span itemprop="familyName">Do</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</span></span>)
+</span>
+
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+. In their paper, they present a coin-flipping example that is solved by the EM algorithm. I have reprinted Figure \ref{fig:do-batzoglou} from their paper, which contains the following four steps:</p>
+<ul>
+<li><strong>Step 1</strong>: Initial guesses are made for probability of heads for Coin A, $\mathit{\hat{\theta}_A}^{(0)}$, and Coin B, $\mathit{\hat{\theta}_B}^{(0)}$, and are entered into the EM algorithm.</li>
+<li><strong>Step 2</strong>: Responsibilities are computed for each of the five coin-flipping sessions. For instance, for the first session, the responsibility for Coin A is .45 and the responsibility for Coin B is .55.</li>
+<li><strong>Step 3</strong>: The responsibilities and data are used to compute new parameter estimates for the probability of heads of Coin A and Coin B.</li>
+<li><strong>Step 4</strong>: After 10 iterations of EM algorithm, the final parameter estimates are obtained such that $\mathit{\hat{\theta}_A}^{(10)} = 0.80$ and $\mathit{\hat{\theta}_B}^{(10)}$ = 0.52.</li>
+</ul>
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:do-batzoglou}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Example of EM Algorithm Application on Coin-Flipping Scenario From Do and Batzoglou (2008)</span>
+  </div>
+    <img src="images/do_batzoglou_2008.png" width="80%" height="80%"> 
+  <div class="figNote">
+     <span><em>Note. </em>Step 1: Initial guesses are made for probability of heads for Coin A, $\mathit{\hat{\theta}_A}^{(0)}$, and Coin B, $\mathit{\hat{\theta}_B}^{(0)}$, and are entered into the EM algorithm. Step 2: Responsibilities are computed for each of the five coin-flipping sessions. For instance, for the first session, the responsibility for Coin A is .45 and the responsibility for Coin B is .55. Step 3: The responsibilities and data are used to compute new parameter estimates for the probability of heads of Coin A and Coin B. Step 4: After 10 iterations of EM algorithm, the final parameter estimates are obtained such that $\mathit{\hat{\theta}_A}^{(10)} = 0.80$ and $\mathit{\hat{\theta}_B}^{(10)}$ = 0.52. From "What is the expectation maximization algorithm?" by C. Do and S. Batzoglou, 2008, <em>Nature Biotechnology</em>, <em>26</em>(8), p. 898 (<a href="https://doi.org/10.1038/nbt1406">https://doi.org/10.1038/nbt1406</a>).</span> 
+  </div>
+</div>
+<p>In the sections that follow, I will go through each step of Figure \ref{fig:do-batzoglou} except the first step. Importantly, before going through Steps 2&ndash;4, I will first provide go through the necessary code for setting up the data set.</p>
+<h2 id="creating-the-data">Creating the Data</h2>
+<p>In the Python code block below (lines <a href="#13">13&ndash;31</a>), I construct a short pre-processing pipeline for constructing the data set that can be used for each step. The pre-processing pipeline below takes the original raw string that can be copied from the figure in 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation">(<span class="hugo-cite-group">
+
+          <a href="#do2008"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="Chuong B"><span itemprop="familyName">Do</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</span></span>)
+</span>
+
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+ and converts it into a list of five elements, where each element contains the number of heads obtained in each of the five coin-flipping sessions.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">pandas</span> <span class="n">as</span> <span class="n">pd</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#string copied from Do &amp; Batzoglou (2008)</span>
+</span></span><span class="line"><span class="cl"><span class="n">raw_string</span> <span class="o">=</span> <span class="s">&#39;HTTTHHTHTHHHHHTHHHHH H T H H H H H T H H HTHTTTHHTT T H H H T H H H T H&#39;</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#remove spaces between elements </span>
+</span></span><span class="line"><span class="cl"><span class="n">raw_string</span> <span class="o">=</span> <span class="nf">raw_string.replace</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#convert Hs to 1s and Ts to 0s</span>
+</span></span><span class="line"><span class="cl"><span class="n">binary_string</span> <span class="o">=</span> <span class="nf">raw_string.replace</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span><span class="nf">.replace</span><span class="p">(</span><span class="s">&#39;T&#39;</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#convert to numeric format </span>
+</span></span><span class="line"><span class="cl"><span class="n">binary_array</span> <span class="o">=</span> <span class="nf">np.fromiter</span><span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">binary_string</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#divide binary_array into five lists, where each list contains the flips of a session</span>
+</span></span><span class="line"><span class="cl"><span class="n">coin_flipping_sessions</span> <span class="o">=</span> <span class="nf">np.array_split</span><span class="p">(</span><span class="n">ary</span> <span class="o">=</span> <span class="n">binary_array</span><span class="p">,</span> <span class="n">indices_or_sections</span> <span class="o">=</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#take the sum of each coin-flipping session</span>
+</span></span><span class="line"><span class="cl"><span class="n">analytical_data_coin_flip</span> <span class="o">=</span> <span class="nf">[np.sum</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="n">for</span> <span class="n">session</span> <span class="n">in</span> <span class="n">coin_flipping_sessions]</span>
+</span></span></code></pre></div><h2 id="step-2-computing-responsibilities-in-the-expectation-e-step">Step 2: Computing Responsibilities in the Expectation (E) Step</h2>
+<p>In Step 2 of Figure \ref{fig:do-batzoglou}, responsibilities are computed for each coin-flipping session. As a brief review, <em>responsibilities</em> represent the probability of a mixture producing the observed data. In the current example, two responsibilities would be computed for each coin-flipping session: one responsibility for Coin A and another for Coin B. To compute the responsibilities, Equation \ref{eq:ind-posterior} below is computed for each $n$ data point in $\mathbf{x} = [5, 9, 8, 4, 7]$</p>
+<p>$$
+\begin{align}
+P(z_{nk} |x_n, \mu_k, \theta_k) &amp;= \gamma(z_{nk}) = \frac{\mu_k B(x_n|\theta_k, f)}{\sum_k^2 \mu_k B(x_n|\theta_k, f)},
+\label{eq:ind-posterior}
+\end{align}
+$$
+where $B(x_n|\theta_k, f)$ is the binomial probability of obtaining $x_n$ heads given a $\theta_k$ probability of heads and $f$ number of flips. Because each session has 10 flips, $f = 10$, which is explicitly indicated in the binomial probability function below (Equation \ref{eq:binom-exp}):</p>
+<p>$$
+\begin{align}
+B(x_n|\theta_k, f = 10) = {x_n \choose f} \theta_k^{x_n}(1 - \theta_k)^{(f - x_n)}.
+\label{eq:binom-exp}
+\end{align}
+$$</p>
+<p>Note that, the probability of picking either $k$ coin, $\mu_k$, is fixed to .50, and so $\mu_k$ is not an estimated parameter. In the Python code block below, I compute the responsibilities (lines <a href="#32">32&ndash;76</a>).</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">pandas</span> <span class="n">as</span> <span class="n">pd</span>
+</span></span><span class="line"><span class="cl"><span class="n">from</span> <span class="n">scipy.stats</span> <span class="n">import</span> <span class="n">binom</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  Compute expectations (i.e., responsibilities) for each data point&#39;s membership to each mixture
+</span></span></span><span class="line"><span class="cl"><span class="s">  Parameters:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - data: data set 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - mu: Probability of each component 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - p: Probabilities of success for each binomial distribution
+</span></span></span><span class="line"><span class="cl"><span class="s">  Returns:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - pandas dataframe
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">  <span class="n">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="s">&#34;Number of estimates in mu is equal to the number of sucsess probabilities&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">assert</span> <span class="nf">sum</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">,</span> <span class="s">&#34;Sum of mu should be equal to 1&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#unnormalized responsibilities for each data point for each mixture (i.e., numerator)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">unnormalized_responsibilities</span> <span class="o">=</span> <span class="n">[mu</span> <span class="o">*</span> <span class="nf">binom.pmf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="n">for</span> <span class="n">x</span> <span class="n">in</span> <span class="n">data]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#normalized responsibilities (i.e., probabilities)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">normalized_responsibilities</span> <span class="o">=</span> <span class="n">[rp</span> <span class="o">/</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="n">for</span> <span class="n">rp</span> <span class="n">in</span> <span class="n">unnormalized_responsibilities]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">column_names</span> <span class="o">=</span> <span class="n">[</span><span class="s">&#39;coin_{}&#39;</span><span class="nf">.format</span><span class="p">(</span><span class="n">coin</span><span class="p">)</span> <span class="n">for</span> <span class="n">coin</span> <span class="n">in</span> <span class="n">[</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="n">]]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">df_responsibilities</span> <span class="o">=</span> <span class="nf">pd.DataFrame</span><span class="p">(</span><span class="nf">np.vstack</span><span class="p">(</span><span class="n">normalized_responsibilities</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                                    <span class="n">columns</span> <span class="o">=</span> <span class="n">column_names</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#insert data column as the first one</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">df_responsibilities.insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>                
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">df_responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#Initial guesses</span>
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#fix values at .50 for each coin </span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">[0.6</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#initial guesses from Step 1 in Do &amp; Batzoglou (2008)</span>
+</span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">10</span> <span class="c1">#number of coin flips in each session </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#compute responsibilities in the E step</span>
+</span></span><span class="line"><span class="cl"><span class="n">responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">analytical_data_coin_flip</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#print responsibilities rounded to two decimal places</span>
+</span></span><span class="line"><span class="cl"><span class="nf">np.round</span><span class="p">(</span><span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;coin&#39;</span><span class="p">),</span> <span class="m">2</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>   coin_A  coin_B
+0    0.45    0.55
+1    0.80    0.20
+2    0.73    0.27
+3    0.35    0.65
+4    0.65    0.35
+</code></pre>
+<h2 id="step-3-computing-new-parameter-estimates-in-the-maximization-m-step">Step 3: Computing New Parameter Estimates in the Maximization (M) Step</h2>
+<p>In Step 3, new parameter estimates are computed for each coin&rsquo;s probability of success, $\hat{\theta}_A^{(1)}$ and $\hat{\theta}_B^{(1)}$. To compute new parameter estimates, the responsibilities obtained in the E step are used such that</p>
+<p>$$
+\begin{align}
+\theta_k^{(i+1)}&amp;= \frac{\sum_{n = 1}^5 x_n \gamma(z_{nk})}{\sum_{n = 1}^5 \gamma(z_{nk})} = \frac{H_k}{N_k}.
+\label{eq:param-est}
+\end{align}
+$$</p>
+<p>Thus, as shown above in Equation \ref{eq:param-est}, each $k$ coin&rsquo;s probability of heads is updated by dividing the sum of weighted responsibilities, where the weight is the number of heads in each $n$ coin-flipping session, by the sum of the responsibilities. In other words, for each $k$ coin, the effective number of heads, $H_k$, is divided by the effective number of flips, $N_k$. Because the table in Figure \ref{fig:do-batzoglou} also computes the effective number of heads for each $k$ coin, $T_k$, I also provide the function for computing $T_k$ in Equation \ref{eq:effective-tails} below:</p>
+<p>$$
+\begin{align}
+T_k &amp;= \sum_{n = 1}^5 (f - x_n) \gamma(z_{nk}),
+\label{eq:effective-tails}
+\end{align}
+$$
+where the responsibilities in each $n$ coin-flipping session are weighed by the number of tails obtained in that session, $f - x_n$ (note that $f = 10$). Note that the effective number of flips for a $k$ coin can be obtained by summing the corresponding effective number of heads and tails, $N_k = H_k + T_k$. The Python code block below computes the effective number of heads and tails (lines <a href="#83">83&ndash;102</a>).</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_effective_number_heads</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#specify axis=1 so that operations are conducted along rows </span>
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s">&#39;^coin&#39;</span><span class="p">)</span><span class="nf">.mul</span><span class="p">(</span><span class="n">responsibilities[</span><span class="s">&#39;data&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_effective_number_tails</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#multiply the responsibilities by the number of tails (number of flips - number of heads)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s">&#39;^coin&#39;</span><span class="p">)</span><span class="nf">.mul</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">responsibilities[</span><span class="s">&#39;data&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#effective number of heads and tails</span>
+</span></span><span class="line"><span class="cl"><span class="n">eff_number_heads</span> <span class="o">=</span> <span class="nf">compute_effective_number_heads</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">eff_number_tails</span> <span class="o">=</span> <span class="nf">compute_effective_number_tails</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#add rows of total sums</span>
+</span></span><span class="line"><span class="cl"><span class="n">eff_number_heads.loc[</span><span class="s">&#39;Total&#39;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">eff_number_heads.sum</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">eff_number_tails.loc[</span><span class="s">&#39;Total&#39;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">eff_number_tails.sum</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">np.round</span><span class="p">(</span><span class="n">eff_number_heads</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         7.2     1.8
+2         5.9     2.1
+3         1.4     2.6
+4         4.5     2.5
+Total    21.3    11.7
+</code></pre>
+<p>The Python code block below prints the effective number of tails.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">np.round</span><span class="p">(</span><span class="n">eff_number_tails</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>       coin_A  coin_B
+0         2.2     2.8
+1         0.8     0.2
+2         1.5     0.5
+3         2.1     3.9
+4         1.9     1.1
+Total     8.6     8.4
+</code></pre>
+<p>Given that this post is a demo, I also decided to print out the effective number of heads and tails in a table that is styled to resemble the table in Figure \ref{fig:do-batzoglou}. To recreate this table, I used a combination of the CSS (see lines <a href="#118">118&ndash;130</a>) and R code blocks below (see lines <a href="#131">131&ndash;168</a>).</p>
+<div class="highlight" language="css"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="o">/*</span><span class="n">change</span> <span class="n">colour</span> <span class="n">of</span> <span class="n">header</span> <span class="n">background</span> <span class="n">colours</span><span class="o">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">.do_batzoglou_table</span> <span class="n">th</span><span class="o">:</span><span class="n">nth</span><span class="o">-</span><span class="nf">child</span><span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">{</span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="o">:</span> <span class="c1">#C3625B}</span>
+</span></span><span class="line"><span class="cl"><span class="n">.do_batzoglou_table</span> <span class="n">th</span><span class="o">:</span><span class="n">nth</span><span class="o">-</span><span class="nf">child</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="p">{</span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="o">:</span> <span class="c1">#5F8DB9}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">/*</span><span class="n">change</span> <span class="n">colour</span> <span class="n">of</span> <span class="s">&#39;</span><span class="err">approximately equal to` signs*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">.do_batzoglou_table</span> <span class="n">td</span><span class="o">:</span><span class="n">first</span><span class="o">-</span><span class="n">child</span> <span class="o">&gt;</span> <span class="n">.MathJax.CtxtMenu_Attached_0[aria</span><span class="o">-</span><span class="n">label</span><span class="o">=</span><span class="s">&#34;almost equals&#34;</span><span class="n">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">color</span><span class="o">:</span> <span class="c1">#8F4944;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">.do_batzoglou_table</span> <span class="n">td</span><span class="o">:</span><span class="n">nth</span><span class="o">-</span><span class="nf">child</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">.MathJax.CtxtMenu_Attached_0[aria</span><span class="o">-</span><span class="n">label</span><span class="o">=</span><span class="s">&#34;almost equals&#34;</span><span class="n">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span><span class="o">:</span> <span class="c1">#476685;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><style type="text/css">
+/*change colour of header background colours*/
+.do_batzoglou_table th:nth-child(1) {background-color: #C3625B}
+.do_batzoglou_table th:nth-child(2) {background-color: #5F8DB9}
+
+
+/*change colour of 'approximately equal to` signs*/
+.do_batzoglou_table td:first-child > .MathJax.CtxtMenu_Attached_0[aria-label="almost equals"] {
+        color: #8F4944;
+}
+
+.do_batzoglou_table td:nth-child(2) > .MathJax.CtxtMenu_Attached_0[aria-label="almost equals"] {
+    color: #476685;
+}
+</style>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">kableExtra</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#import dataframes from Python </span>
+</span></span><span class="line"><span class="cl"><span class="n">heads_df</span> <span class="o">&lt;-</span> <span class="nf">round</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">eff_number_heads</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">tails_df</span> <span class="o">&lt;-</span> <span class="nf">round</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">eff_number_tails</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#join dataframes and include additional information that is contained in figure table</span>
+</span></span><span class="line"><span class="cl"><span class="n">effective_number_data</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;Coin A&#39;</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;$\\approx$ &#34;</span><span class="p">,</span> <span class="n">heads_df</span><span class="o">$</span><span class="n">coin_A</span><span class="p">,</span> <span class="s">&#34; H, &#34;</span><span class="p">,</span> <span class="n">tails_df</span><span class="o">$</span><span class="n">coin_A</span><span class="p">,</span> <span class="s">&#34; T&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">  <span class="s">&#39;Coin B&#39;</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;$\\approx$ &#34;</span><span class="p">,</span> <span class="n">heads_df</span><span class="o">$</span><span class="n">coin_B</span><span class="p">,</span> <span class="s">&#34; H, &#34;</span><span class="p">,</span> <span class="n">tails_df</span><span class="o">$</span><span class="n">coin_B</span><span class="p">,</span> <span class="s">&#34; T&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">check.names</span> <span class="o">=</span> <span class="bp">F</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#alternate row colouring </span>
+</span></span><span class="line"><span class="cl"><span class="n">first_col_colours</span> <span class="o">&lt;-</span> <span class="nf">rep</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;#E8C3BE&#39;</span><span class="p">,</span> <span class="s">&#39;#F6E5E2&#39;</span><span class="p">),</span> <span class="n">length.out</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">effective_number_data</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">second_col_colours</span> <span class="o">&lt;-</span> <span class="nf">rep</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;#C7D7E0&#39;</span><span class="p">,</span> <span class="s">&#39;#E5ECF0&#39;</span><span class="p">),</span> <span class="n">length.out</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">effective_number_data</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">kbl</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">effective_number_data</span><span class="p">,</span> <span class="n">format</span> <span class="o">=</span> <span class="s">&#39;html&#39;</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">booktabs</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">align</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">),</span> <span class="n">escape</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">caption</span> <span class="o">=</span> <span class="s">&#39;Effective Number of Heads and Tails for Each of Two Coins&#39;</span><span class="p">,</span>    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">#CSS styling</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">##make all borders white</span>
+</span></span><span class="line"><span class="cl">    <span class="n">table.attr</span> <span class="o">=</span> <span class="s">&#39;style=&#34;border-bottom: 1pt solid white&#34;&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">##replace header bottom border with white one </span>
+</span></span><span class="line"><span class="cl">    <span class="nf">row_spec</span><span class="p">(</span><span class="n">row</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">extra_css</span> <span class="o">=</span> <span class="s">&#39;border-bottom: 1pt solid white; color: white &#39;</span><span class="p">,</span> <span class="n">bold</span><span class="o">=</span> <span class="bp">F</span><span class="p">)</span>  <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#row colouring</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">column_spec</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="s">&#39;4cm&#39;</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#8F4944&#39;</span><span class="p">,</span> <span class="n">background</span> <span class="o">=</span> <span class="n">first_col_colours</span><span class="p">)</span> <span class="o">%&gt;%</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">column_spec</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="s">&#39;4cm&#39;</span><span class="p">,</span><span class="n">column</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#476685&#39;</span><span class="p">,</span> <span class="n">background</span> <span class="o">=</span> <span class="n">second_col_colours</span><span class="p">)</span> <span class="o">%&gt;%</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#place after so that white colour overrides previous colours</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">row_spec</span><span class="p">(</span><span class="n">row</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">effective_number_data</span><span class="p">),</span> <span class="n">background</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#footnote</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">footnote</span><span class="p">(</span><span class="n">general</span> <span class="o">=</span>  <span class="s">&#34;&lt;em&gt;Note&lt;/em&gt;. Table was recreated to resemble the table in Step 3 of Figure \\ref{fig:do-batzoglou}.&#34;</span><span class="p">,</span>  <span class="n">threeparttable</span> <span class="o">=</span> <span class="bp">T</span><span class="p">,</span>  <span class="n">escape</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> <span class="n">general_title</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#give table class name so that above CSS code is applied on it</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">kable_styling</span><span class="p">(</span><span class="n">htmltable_class</span> <span class="o">=</span> <span class="s">&#39;do_batzoglou_table&#39;</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="n">html_font</span> <span class="o">=</span> <span class="s">&#39;Arial&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><table style="border-bottom: 1pt solid whiteborder-bottom: 0; font-family: Arial; margin-left: auto; margin-right: auto;" class=" do_batzoglou_table">
+<caption>(\#tab:effective-number-table)Effective Number of Heads and Tails for Each of Two Coins</caption>
+ <thead>
+  <tr>
+   <th style="text-align:center;border-bottom: 1pt solid white; color: white "> Coin A </th>
+   <th style="text-align:center;border-bottom: 1pt solid white; color: white "> Coin B </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 2.2 H, 2.2 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.8 H, 2.8 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;"> $\approx$ 7.2 H, 0.8 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;"> $\approx$ 1.8 H, 0.2 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 5.9 H, 1.5 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.1 H, 0.5 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;"> $\approx$ 1.4 H, 2.1 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;"> $\approx$ 2.6 H, 3.9 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #E8C3BE !important;"> $\approx$ 4.5 H, 1.9 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #C7D7E0 !important;"> $\approx$ 2.5 H, 1.1 T </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;width: 4cm; color: #8F4944 !important;background-color: #F6E5E2 !important;background-color: white !important;"> $\approx$ 21.3 H, 8.6 T </td>
+   <td style="text-align:center;width: 4cm; color: #476685 !important;background-color: #E5ECF0 !important;background-color: white !important;"> $\approx$ 11.7 H, 8.4 T </td>
+  </tr>
+</tbody>
+<tfoot>
+<tr><td style="padding: 0; " colspan="100%"><span style="font-style: italic;"> </span></td></tr>
+<tr><td style="padding: 0; " colspan="100%">
+<sup></sup> <em>Note</em>. Table was recreated to resemble the table in Step 3 of Figure \ref{fig:do-batzoglou}.</td></tr>
+</tfoot>
+</table>
+<p>Having computed the effective number of heads and tails for each $k$ coin, new estimates can be computed for each coin&rsquo;s probability of heads, $\hat{\theta}_A^{(1)}$ and $\hat{\theta}_B^{(1)}$, using Equation \ref{eq:param-est}. The Python code block below computes new parameter estimates (see lines <a href="#169">169&ndash;182</a>).</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#isolate columns that contain responsibilities</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_cols</span> <span class="o">=</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;coin&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">#New estimate for the probability of heads</span>
+</span></span><span class="line"><span class="cl">  <span class="n">eff_number_heads</span> <span class="o">=</span> <span class="nf">compute_effective_number_heads</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">eff_number_tails</span> <span class="o">=</span> <span class="nf">compute_effective_number_tails</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">theta_new</span> <span class="o">=</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">eff_number_heads</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nf">np.sum</span><span class="p">(</span><span class="n">eff_number_heads</span><span class="p">)</span> <span class="o">+</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">eff_number_tails</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">theta_new</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">np.round</span><span class="p">(</span><span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span><span class="o">=</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10</span><span class="p">),</span> <span class="m">2</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>coin_A    0.71
+coin_B    0.58
+dtype: float64
+</code></pre>
+<p>Thus, as in Step 3 of Figure \ref{fig:do-batzoglou}, the estimate for $\hat{\theta}_A^{(1)}$ = 0.71 and the estimate for $\hat{\theta}_B^{(1)}$ = 0.58.</p>
+<h2 id="step-4-iterating-the-expectation-maximization-em-algorithm-ten-times">Step 4: Iterating the Expectation-Maximization (EM) Algorithm Ten Times</h2>
+<p>To iterate the EM algorithm 10 times, I have created the nested the <span class="inline-src chroma"><code class="language-python" data-lang="python"><span class="cl"><span class="n">e_step</span><span class="p">()</span></span></span></code> and <span class="inline-src chroma"><code class="language-python" data-lang="python"><span class="cl"><span class="n">m_step</span><span class="p">()</span></span></span></code> functions into the <span class="inline-src chroma"><code class="language-python" data-lang="python"><span class="cl"><span class="n">em_algorithm</span><span class="p">()</span></span></span></code> function in the Python code block below (see lines <a href="#186">186&ndash;208</a>).</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">em_algorithm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">probs_heads</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#define iteration counter</span>
+</span></span><span class="line"><span class="cl">  <span class="n">iteration</span> <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#EM algorithm iterates until iteration = num_iterations</span>
+</span></span><span class="line"><span class="cl">  <span class="n">while</span> <span class="n">iteration</span>  <span class="o">&lt;</span> <span class="n">num_iterations</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">probs_heads</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">probs_heads</span> <span class="o">=</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iteration</span> <span class="o">+=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">probs_heads</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#mu parameter fixed and not estimated</span>
+</span></span><span class="line"><span class="cl"><span class="n">probs_heads</span> <span class="o">=</span> <span class="n">[0.6</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#initial guesses from Do and Batzoglou (2008)</span>
+</span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">10</span> <span class="c1">#number of flips in each session</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#run EM algorithm for 10 iterations </span>
+</span></span><span class="line"><span class="cl"><span class="n">est_ten_iter</span> <span class="o">=</span> <span class="nf">em_algorithm</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">analytical_data_coin_flip</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">probs_heads</span> <span class="o">=</span> <span class="n">probs_heads</span><span class="p">,</span> <span class="n">num_iterations</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#print estimates</span>
+</span></span><span class="line"><span class="cl"><span class="nf">np.round</span><span class="p">(</span><span class="n">est_ten_iter</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>coin_A    0.80
+coin_B    0.52
+dtype: float64
+</code></pre>
+<p>Therefore, after 10 iterations, the estimates shown in Figure \ref{fig:do-batzoglou} are obtained such that $\hat{\theta}_A^{(10)}$ = 0.80 and $\hat{\theta}_B^{(10)}$ = 0.52.</p>
+<h1 id="visualizing-the-expectation-maximization-em-algorithm">Visualizing the Expectation-Maximization (EM) Algorithm</h1>
+<p>In many explanations of the EM algorithm, one popular visual is often used. Specifically, it is common to see a figure that shows how the incomplete-data log-likelihood can be indirectly optimized by repeatedly creating a lower-bounding function E step and then maximizing it in the M step. I have reprinted one of these visualizations from 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation">(<span class="hugo-cite-group">
+
+          <a href="#bishop2006"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="C. M."><span itemprop="familyName">Bishop</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Book"
+      data-type="book"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Bishop</span>,&#32; 
+    <meta itemprop="givenName" content="C. M." />
+    C.   </span>&#32;
+    (<span itemprop="datePublished">2006</span>).
+  &#32;<span itemprop="name">
+    <i>Pattern recognition and machine learning</i></span>.
+  &#32;
+  <span itemprop="publisher"
+             itemtype="http://schema.org/Organization"
+             itemscope="">
+    <span itemprop="name">Springer New York</span></span>.&#32;Retrieved from&#32;
+  <a href="bit.ly/411YnEq"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">bit.ly/411YnEq</a></span>
+
+
+
+
+
+
+</span></span>)
+</span>
+
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+ in Figure \ref{fig:em-visual}.</p>
+<p>In looking at Figure \ref{fig:em-visual}, it is important to note that only a cross-section of the optimization problem is shown. In other words, the incomplete-data log-likelihood and evidence lower bounds are shown across all values of only one parameter. Because Figure \ref{fig:em-visual} is a 2D plot and the likelihood values are represented on the y-axis, the optimization problem can only be shown across the values of one parameter using the x-axis.</p>
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:em-visual}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Depiction of EM Algorithm from Bishop (2006)</span>
+  </div>
+    <img src="images/bishop_em.png" width="80%" height="80%"> 
+  <div class="figNote">
+     <span><em>Note. </em> The incomplete-data log-likelihood is shown in red, $\ln p(\mathbf{x}, \theta)$. The first evidence lower bound is shown in blue, $\mathcal{L}(q, \theta)$, and the second evidence lower bound is shown in green. From <em>Pattern Recognition and Machine Learning </em> (p. 453) by C. Bishop, 2006, <em>Springer New York</em> (<a href="bit.ly/411YnEq">bit.ly/411YnEq</a>).</span> 
+  </div>
+</div>
+<p>To show a cross-section of the optimization problem, I will similarly only show compute likelihood across all the values of one only parameter. As in the previous example, a set of coin-flipping data, $\mathbf{x} = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]$, will be used where each flip could be the result of two coins: Coin 1 and Coin 2. Each coin has its independent probability of heads, $p_1$ and $p_2$, and its corresponding probability of being selected for a flip, $\mu_1$ and $\mu_2 = 1 - \mu_1$. In order to create a cross-section of the optimization problem, I will compute the incomplete-data log-likelihood and evidence lower bounds across all values of $p_1$ and fix $p_2 = .50$ and $\mu_1 = \mu_2 = .50$.</p>
+<p>To recreate a depiction of the EM algorithm similar to the one in Figure \ref{fig:em-visual}, I will do so in two parts. First, I will show how to compute and visualize the incomplete-data log-likelihood. Second, I will show how to compute and visualize the evidence lower bounds.</p>
+<h2 id="coding-the-incomplete-data-log-likelihood">Coding the Incomplete-Data Log-Likelihood</h2>
+<p>Beginning with the incomplete-data log-likelihood, the Python code block below computes it across all probability values of the first coin, $p_1$ (see lines <a href="#212">212&ndash;249</a>). I also provide the function for computing the incomplete-data log-likelihood below in Equation \ref{eq:log-incomplete-data}:</p>
+<p>$$
+\begin{align}
+\log L(p_1, p_2 = .10, \mu_1 = \mu_2 = .50|\mathbf{x}) &amp;= \sum_{n=1}^{10} \log\Big(\sum_{k=1}^{2} \mu_k B(x_n|p_k) \Big).
+\label{eq:log-incomplete-data} \\
+&amp;= \log L(p_1|\mathbf{x})
+\end{align}
+$$
+Briefly, for each of the 10 $x_n$ data points, the binomial probability of each $k$ mixture producing data point, $B(x_n|p_k)$, is computed and then summed, with the logarithmic sum being taken. The sum of all the logarithmic sums is then computed to obtain the incomplete-data log-likelihood. As a reminder, the probability of selecting each $k$ coin is fixed to 50%, $\mu_1 = \mu_2 = .50$, and the second coin&rsquo;s probability value of heads is fixed to .10, $p_2 = .10$. Given that only $p_1$ is allowed to vary, Equation \ref{eq:log-incomplete-data} can be represented as only a function of $p_1$, $\log L(p_1|\mathbf{x})$.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  Compute incomplete-data log-likelihood 
+</span></span></span><span class="line"><span class="cl"><span class="s">  Parameters:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - data: data set 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - mu: Probability of each component 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - p: Probability of success for each binomial distribution
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#probability of each data point coming from each distribution</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mixture_sums</span> <span class="o">=</span> <span class="nf">[np.sum</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="nf">binom.pmf</span><span class="p">(</span><span class="n">flip_result</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span> <span class="n">for</span> <span class="n">flip_result</span> <span class="n">in</span> <span class="n">binom_mixture_data]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#log of mixture_sums</span>
+</span></span><span class="line"><span class="cl">  <span class="n">log_mixture_sums</span> <span class="o">=</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">mixture_sums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#sums of log of mixture_sums</span>
+</span></span><span class="line"><span class="cl">  <span class="n">incomplete_like</span> <span class="o">=</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">log_mixture_sums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">incomplete_like</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#data given to researcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">binom_mixture_data</span> <span class="o">=</span> <span class="n">[1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#initial guesses for E step </span>
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#mixture probabilities are fixed so that convergence does not occur in one trial</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#1) Incomplete-data log-likelihood</span>
+</span></span><span class="line"><span class="cl"><span class="c1">##create Dataframe with all possible probability combinations [x, 0.1], such that </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##the probability of heads for the second coin is fixed to 1</span>
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_data_like</span> <span class="o">=</span> <span class="nf">pd.DataFrame</span><span class="p">({</span><span class="s">&#39;p1&#39;</span><span class="o">:</span> <span class="nf">np.arange</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">)})</span>
+</span></span><span class="line"><span class="cl"><span class="nf">incomplete_data_like.insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;p2&#39;</span><span class="p">,</span> <span class="m">0.1</span><span class="p">)</span>   <span class="c1">#fix probability of heads for second coin to 0.1 </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##compute incomplete-data log-likelihood across all combinations of [x, 0.1]</span>
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_data_like[</span><span class="s">&#39;likelihood&#39;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">incomplete_data_like.apply</span><span class="p">(</span><span class="n">lambda</span> <span class="n">row</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">[row[</span><span class="s">&#39;p1&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">row[</span><span class="s">&#39;p2&#39;</span><span class="n">]]</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="coding-the-two-evidence-lower-bounds">Coding the Two Evidence Lower Bounds</h2>
+<p>Ending with the two evidence lower bounds, the Python code block below computes them (see lines <a href="#250">250&ndash;316</a>). Briefly, Equation \ref{eq:lower-bound} shows that the lower bound is computed by taking the sum of the expected complete-data log-likelihood and the entropy.  I have provided Equation \ref{eq:lower-bound-exp} below to show the computation of the evidence lower bound.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, p_1)\big) &amp;=  \underbrace{\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, p_1)}\log (L(p_1|\mathbf{x},\mathbf{z}))}_{\text{Expected complete-data log-likelihood}} \phantom{e x} \underbrace{-\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, p_1)} \log({P(\mathbf{z}|\mathbf{x}, p_1)})}_{\text{Entropy}} \label{eq:lower-bound}\\
+&amp;= \sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k) + x_n\log(p_k) + (1 - x_n)\log(1 - p_k)\big) - \gamma(z_{nk})\log\big(\gamma(z_{nk})\big)
+\label{eq:lower-bound-exp}
+\end{align}
+\end{spreadlines}
+$$
+As a reminder, because the probability of selecting each $k$ coin is fixed to 50%, $\mu_1 = \mu_2 = .50$, and the second coin&rsquo;s probability value of heads is fixed to .10, $p_2 = .10$, the evidence lower bound is only a function of $p_1$. To compute two lower bounds, the E step needs to be computed twice and the M step once. In other words, two sets of responsibilities need to be computed and new parameter estimates need to be computed once.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#evidence lower bound = expected complete-data log-likelihood + entropy of responsibilities</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#expected complete-data log-likelihood </span>
+</span></span><span class="line"><span class="cl">  <span class="n">expected_complete_data_like</span> <span class="o">=</span> <span class="nf">responsibilities.apply</span><span class="p">(</span><span class="n">compute_expected_complete_like</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="nf">.sum</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">##compute entropy</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="nf">compute_entropy</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">expected_complete_data_like</span> <span class="o">+</span> <span class="n">entropy</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#entropy: sum of rs*log(rs) for all rs (responsibilities)</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_entropy</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">##extract responsibility columns and then compute entropy</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_colummns</span> <span class="o">=</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;coin&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">##take sum of x*log(x) for each responsibility</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="o">-</span><span class="nf">np.sum</span><span class="p">(</span><span class="n">resp_colummns.values</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">resp_colummns.values</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">entropy</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="c1">#expected complete-data log-likelihood</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_expected_complete_like</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_columns</span> <span class="o">=</span> <span class="n">[col</span> <span class="n">for</span> <span class="n">col</span> <span class="n">in</span> <span class="n">row.index</span> <span class="n">if</span> <span class="s">&#39;coin&#39;</span> <span class="n">in</span> <span class="n">col]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_values</span> <span class="o">=</span> <span class="n">[row[col]</span> <span class="n">for</span> <span class="n">col</span> <span class="n">in</span> <span class="n">resp_columns]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="nf">np.sum</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">[resp_values</span> <span class="o">*</span> <span class="p">(</span><span class="nf">np.log</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">row[</span><span class="s">&#39;data&#39;</span><span class="n">]</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="c1">#non-zero if flip result is success (i.e., &#39;heads&#39;)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">(</span><span class="m">1</span> <span class="o">-</span> <span class="n">row[</span><span class="s">&#39;data&#39;</span><span class="n">]</span><span class="p">)</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="m">1</span> <span class="o">-</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="c1">#non-zero if flip result is failure (i.e., &#39;tails&#39;)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">)</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">#data given to researcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">binom_mixture_data</span> <span class="o">=</span> <span class="n">[1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#initial guesses for E step </span>
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#mixture probabilities are fixed so that convergence does not occur in one trial</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">[0.1</span><span class="p">,</span> <span class="m">0.1</span><span class="n">]</span> <span class="c1">#probabilities of heads</span>
+</span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">1</span> <span class="c1">#number of flips in each session </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#1) Old evidence lower bound </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##compute first (i.e., old) responsibilities</span>
+</span></span><span class="line"><span class="cl"><span class="n">old_responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">old_lower_bound</span> <span class="o">=</span> <span class="nf">pd.DataFrame</span><span class="p">({</span><span class="s">&#39;p1&#39;</span><span class="o">:</span> <span class="nf">np.arange</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">)})</span>
+</span></span><span class="line"><span class="cl"><span class="nf">old_lower_bound.insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;p2&#39;</span><span class="p">,</span> <span class="m">0.1</span><span class="p">)</span>  <span class="c1">#fix probability of heads for second coin to 0.1 </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">old_lower_bound[</span><span class="s">&#39;likelihood&#39;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">old_lower_bound.apply</span><span class="p">(</span><span class="n">lambda</span> <span class="n">row</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">[row[</span><span class="s">&#39;p1&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">row[</span><span class="s">&#39;p2&#39;</span><span class="n">]]</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#2) New evidence lower bound</span>
+</span></span><span class="line"><span class="cl"><span class="c1">##compute new (i.e., new) responsibilities byt first computing estimates</span>
+</span></span><span class="line"><span class="cl"><span class="n">estimates</span> <span class="o">=</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span> <span class="c1">#compute new estimates first </span>
+</span></span><span class="line"><span class="cl"><span class="n">estimates[1]</span> <span class="o">=</span> <span class="m">0.1</span>  <span class="c1">#fix probability of heads for second coin to 0.1 </span>
+</span></span><span class="line"><span class="cl"><span class="n">new_responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">new_lower_bound</span> <span class="o">=</span> <span class="nf">pd.DataFrame</span><span class="p">({</span><span class="s">&#39;p1&#39;</span><span class="o">:</span> <span class="nf">np.arange</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="m">0.01</span><span class="p">)})</span>
+</span></span><span class="line"><span class="cl"><span class="nf">new_lower_bound.insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;p2&#39;</span><span class="p">,</span> <span class="m">0.1</span><span class="p">)</span>  <span class="c1">#fix probability of heads for second coin to 0.1 </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">new_lower_bound[</span><span class="s">&#39;likelihood&#39;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">new_lower_bound.apply</span><span class="p">(</span><span class="n">lambda</span> <span class="n">row</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">new_responsibilities</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">[row[</span><span class="s">&#39;p1&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">row[</span><span class="s">&#39;p2&#39;</span><span class="n">]]</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><p>`</p>
+<h2 id="visualizing-the-incomplete-data-log-likelihood-and-the-evidence-lower-bounds">Visualizing the Incomplete-Data Log-Likelihood and the Evidence Lower Bounds</h2>
+<p>Having computed the incomplete-data log-likelihood and the two evidence lower bounds, they can now be visualized. To visualize the expectation-maximization (EM) algorithm, I use the <code>ggplot2</code> package in R (see lines <a href="#317">317&ndash;453</a>). Note that I also depict two other phenomena of the EM algorithm. First, I show the increase in the evidence lower bound after the M step with braces (see Figure \ref{fig:em-plot}). Following the M step, the evidence lower bound increases as much as the expected complete-data log-likelihood, as shown below in Equation \ref{eq:lower-bound-increase}. Note that the increase in the evidence lower bound after the M step can also be shown with auxiliary functions in Equation \ref{eq:auxiliary}.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{new}) \big) - \big(P(\mathbf{z}|\mathbf{x}, p_1^{old}), p_1^{old}\big) &amp;= \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, p_1^{old})} \log \big( L\big(p_1^{new}|\mathbf{x},\mathbf{z})\big) -\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, p_1^{old})}\log \big(L\big(p_1^{old}|\mathbf{x},\mathbf{z})\big)
+\label{eq:lower-bound-increase} \\
+&amp;= Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})
+\label{eq:auxiliary}
+\end{align}
+\end{spreadlines}
+$$
+Second, I show the increase in the incomplete-data log-likelihood after the M step with braces (see Figure \ref{fig:em-plot}). Following the M step, the incomplete-data log-likelihood increases by as much as the expected complete-data log-likelihood and the Kullback-Lielber divergence between the old responsibilities and new responsibilities (see Equation \ref{eq:incomplete-increase}), which I also represent with auxiliary functions (see Equation \ref{eq:incomplete-inc-aux}).</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(p_1^{new}|\mathbf{x})  - \log L(p_1^{old}|\mathbf{x}) &amp;= \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{new}\Big) - \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, p_1^{old}),p_1^{old}\Big) + KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)
+\label{eq:incomplete-increase} \\
+&amp;= Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})  + KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)
+\label{eq:incomplete-inc-aux}\\
+\end{align}
+\end{spreadlines}
+$$</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#devtools::install_github(&#34;nicolash2/ggbrace&#34;)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">latex2exp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">ggbrace</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_data_like</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="n">incomplete_data_like</span>
+</span></span><span class="line"><span class="cl"><span class="n">old_lower_bound</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="n">old_lower_bound</span>
+</span></span><span class="line"><span class="cl"><span class="n">new_lower_bound</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="n">new_lower_bound</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#combine old and new lower bounds data sets and introduce factor variable to track old/new status </span>
+</span></span><span class="line"><span class="cl"><span class="n">lower_bounds_df</span> <span class="o">&lt;-</span> <span class="nf">bind_rows</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">data.frame</span><span class="p">(</span><span class="n">old_lower_bound</span><span class="p">,</span> <span class="n">iteration</span> <span class="o">=</span> <span class="s">&#34;Old&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">data.frame</span><span class="p">(</span><span class="n">new_lower_bound</span><span class="p">,</span> <span class="n">iteration</span> <span class="o">=</span> <span class="s">&#34;New&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">mutate</span><span class="p">(</span><span class="n">iteration</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">iteration</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#Four components for making EM algorithm plot </span>
+</span></span><span class="line"><span class="cl"><span class="c1">#1)Vertical dashed line data that shows intersection points </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##old lower bound and value where it intersects the incomplete-data log-likelihood </span>
+</span></span><span class="line"><span class="cl"><span class="n">old_p_value</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="n">p[1]</span>
+</span></span><span class="line"><span class="cl"><span class="n">old_intersection</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">old_responsibilities</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                           <span class="n">mu</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">mu_fixed</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                           <span class="n">p</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">old_p_value</span><span class="p">,</span> <span class="m">0.1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##old lower bound and value where it intersects the incomplete-data log-likelihood </span>
+</span></span><span class="line"><span class="cl"><span class="n">new_p_value</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="n">estimates[1]</span>
+</span></span><span class="line"><span class="cl"><span class="n">new_intersection</span> <span class="o">&lt;-</span> <span class="n">py</span><span class="o">$</span><span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">new_responsibilities</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                           <span class="n">mu</span> <span class="o">=</span> <span class="n">py</span><span class="o">$</span><span class="n">mu_fixed</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                           <span class="n">p</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">new_p_value</span><span class="p">,</span> <span class="m">0.1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##vertical line data set </span>
+</span></span><span class="line"><span class="cl"><span class="n">intersection_data</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="s">&#39;p1_value&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">old_p_value</span><span class="p">,</span> <span class="n">new_p_value</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                                <span class="s">&#39;y_min&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-20</span><span class="p">,</span> <span class="m">-20</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                                <span class="s">&#39;intersection_point&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">old_intersection</span><span class="p">,</span> <span class="n">new_intersection</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#2) X-axis labels to show the new and old parameter values</span>
+</span></span><span class="line"><span class="cl"><span class="n">x_axis_labels</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#34;%0.2f&#34;</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">0.1</span><span class="p">))</span>  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##modify second and fifth elements to include theta labels</span>
+</span></span><span class="line"><span class="cl"><span class="n">x_axis_labels[2]</span> <span class="o">&lt;-</span> <span class="nf">expression</span><span class="p">(</span><span class="nf">atop</span><span class="p">(</span><span class="s">&#34;0.10&#34;</span><span class="p">,</span> <span class="n">p^old</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">x_axis_labels[5]</span> <span class="o">&lt;-</span> <span class="nf">expression</span><span class="p">(</span><span class="nf">atop</span><span class="p">(</span><span class="s">&#34;0.40&#34;</span><span class="p">,</span> <span class="n">p^new</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#3) Math text data to show mathematical notation </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##create latex math to be shown on the plot </span>
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_data_log</span> <span class="o">&lt;-</span> <span class="s">&#34;$L(\\textit{p}_1|\\textbf{x})$&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">lbound_new</span> <span class="o">&lt;-</span> <span class="s">&#34;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{new}}), \\textit{p_1})$&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">lbound_old</span> <span class="o">&lt;-</span> <span class="s">&#34;\u2112$(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{old}}), \\textit{p_1})$&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##create data frame</span>
+</span></span><span class="line"><span class="cl"><span class="n">math_text_data</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="s">&#39;latex_math&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">incomplete_data_log</span><span class="p">,</span> <span class="n">lbound_new</span><span class="p">,</span> <span class="n">lbound_old</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                            <span class="s">&#39;x&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.95</span><span class="p">,</span> <span class="m">0.97</span><span class="p">,</span> <span class="m">0.83</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                            <span class="s">&#39;y&#39;</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-6.5</span><span class="p">,</span> <span class="m">-8.2</span><span class="p">,</span> <span class="m">-13.5</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#4) Brace data information for KL divergence and increase in lower bound </span>
+</span></span><span class="line"><span class="cl"><span class="n">kl_divergence</span> <span class="o">&lt;-</span> <span class="s">&#34;$KL(\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{new}})\\|\\textit{P}(\\textbf{z}, \\textbf{x}|\\textit{p_1^{old}}))$&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">lbound_increase</span> <span class="o">&lt;-</span> <span class="s">&#34;$\\textit{Q}(\\textit{p_1^{new}}|\\textit{p_1^{old}}) - \\textit{Q}(\\textit{p_1^{old}}|\\textit{p_1^{old}})$&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">max_old_lbound</span> <span class="o">&lt;-</span> <span class="n">old_lower_bound</span><span class="o">$</span><span class="n">likelihood</span><span class="nf">[which.max</span><span class="p">(</span><span class="n">old_lower_bound</span><span class="o">$</span><span class="n">likelihood</span><span class="p">)</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="n">em_plot</span> <span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">incomplete_data_like</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#vertical dashed lines </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_segment</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">intersection_data</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                <span class="c1">#aesthetics</span>
+</span></span><span class="line"><span class="cl">               <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">p1_value</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">xend</span> <span class="o">=</span> <span class="n">p1_value</span><span class="p">,</span> <span class="n">yend</span> <span class="o">=</span> <span class="n">intersection_point</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">               <span class="c1">#formatting</span>
+</span></span><span class="line"><span class="cl">               <span class="n">linetype</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#002241&#39;</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#horizontal dashed line for showing height of first intersection between </span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#(i.e., old lower bound with incomplete-data log-likelihood)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_segment</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">               <span class="c1">#aesthetics</span>
+</span></span><span class="line"><span class="cl">               <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">old_p_value</span><span class="p">,</span> <span class="n">xend</span> <span class="o">=</span> <span class="n">new_p_value</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                             <span class="n">y</span> <span class="o">=</span> <span class="n">old_intersection</span><span class="p">,</span> <span class="n">yend</span> <span class="o">=</span> <span class="n">old_intersection</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">               <span class="c1">#formatting</span>
+</span></span><span class="line"><span class="cl">               <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#9ECAE1&#39;</span><span class="p">,</span> <span class="n">linetype</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#curly brace for KL divergence </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_brace</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> <span class="n">inherit.data</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="c1">#aesthetics</span>
+</span></span><span class="line"><span class="cl">             <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.4</span><span class="p">,</span> <span class="m">0.43</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">max_old_lbound</span><span class="p">,</span> <span class="n">new_intersection</span><span class="p">),</span>  
+</span></span><span class="line"><span class="cl">                       <span class="n">label</span><span class="o">=</span><span class="nf">TeX</span><span class="p">(</span><span class="n">kl_divergence</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s">&#34;character&#34;</span><span class="p">)),</span> 
+</span></span><span class="line"><span class="cl">             <span class="c1">#formatting</span>
+</span></span><span class="line"><span class="cl">             <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#002241&#39;</span><span class="p">,</span> <span class="n">labelsize</span> <span class="o">=</span> <span class="m">3.75</span><span class="p">,</span> <span class="n">rotate</span> <span class="o">=</span> <span class="m">90</span><span class="p">,</span> <span class="n">labeldistance</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="c1">#Latex rendering</span>
+</span></span><span class="line"><span class="cl">             <span class="n">parse</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#curly brace for increase in evidence lower bound  </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_brace</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> <span class="n">inherit.data</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="c1">#aesthetics</span>
+</span></span><span class="line"><span class="cl">             <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.4</span><span class="p">,</span> <span class="m">0.43</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">old_intersection</span><span class="p">,</span> <span class="n">max_old_lbound</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                 <span class="n">label</span><span class="o">=</span><span class="nf">TeX</span><span class="p">(</span><span class="n">lbound_increase</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s">&#34;character&#34;</span><span class="p">)),</span> 
+</span></span><span class="line"><span class="cl">             <span class="c1">#formatting</span>
+</span></span><span class="line"><span class="cl">             <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#002241&#39;</span><span class="p">,</span> <span class="n">labelsize</span> <span class="o">=</span> <span class="m">3.75</span><span class="p">,</span> <span class="n">rotate</span> <span class="o">=</span> <span class="m">90</span><span class="p">,</span> <span class="n">labelrotate</span> <span class="o">=</span> <span class="m">-1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             <span class="n">labeldistance</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="m">0.25</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">             
+</span></span><span class="line"><span class="cl">             <span class="c1">#Latex rendering</span>
+</span></span><span class="line"><span class="cl">             <span class="n">parse</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#likelihoods </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_line</span><span class="p">(</span><span class="n">linewidth</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#002241&#39;</span><span class="p">)</span> <span class="o">+</span>  
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_line</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">lower_bounds_df</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">            <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span> <span class="n">group</span> <span class="o">=</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">iteration</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">linewidth</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#colour details </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;Old&#39;</span> <span class="o">=</span><span class="s">&#39;#9ECAE1&#39;</span><span class="p">,</span> <span class="s">&#39;New&#39;</span> <span class="o">=</span>  <span class="s">&#39;#2171B5&#39;</span><span class="p">))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#math text</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_text</span><span class="p">(</span><span class="n">inherit.aes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">math_text_data</span><span class="p">,</span> <span class="n">parse</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">3.75</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">          <span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nf">TeX</span><span class="p">(</span><span class="n">latex_math</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s">&#34;character&#34;</span><span class="p">)),</span> 
+</span></span><span class="line"><span class="cl">          <span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">  <span class="c1">#axis &amp; legend details </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">expression</span><span class="p">(</span><span class="n">Coin</span><span class="o">~</span><span class="m">1</span><span class="o">~</span><span class="n">Probability</span><span class="o">~</span><span class="n">of</span><span class="o">~</span><span class="nf">Heads</span><span class="p">(</span><span class="nf">italic</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="n">[1]</span><span class="o">*</span><span class="s">&#39;;&#39;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="n">[2]</span><span class="o">~</span><span class="s">&#39;= 0.10&#39;</span><span class="p">)),</span>  
+</span></span><span class="line"><span class="cl">                     <span class="n">breaks</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="n">from</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">0.1</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                     <span class="n">limits</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.1</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                     <span class="n">labels</span> <span class="o">=</span> <span class="n">x_axis_labels</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Log-Likelihood&#39;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                     <span class="n">limits</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-20</span><span class="p">,</span> <span class="m">-5</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                     <span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">labs</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#39;Lower bound&#39;</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#other aesthetics </span>
+</span></span><span class="line"><span class="cl">  <span class="nf">theme_classic</span><span class="p">(</span><span class="n">base_family</span> <span class="o">=</span> <span class="s">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">base_size</span> <span class="o">=</span> <span class="m">14</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">theme</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">axis.line</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.ticks</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span>  <span class="s">&#34;#002241&#34;</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">axis.text</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;#002241&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#high resolution needed for special characters to print clearly</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ggsave</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;images/em_plot.png&#39;</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="n">em_plot</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="m">300</span><span class="p">)</span> 
+</span></span></code></pre></div><div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:em-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Depiction of how the Expectation-Maximization (EM) Algorithm Indirectly Estimates the Incomplete-Data Log-Likelihood </span>
+  </div>
+    <img src="images/em_plot.png" width="100%" height="100%"> 
+  <div class="figNote">
+  <span><em>Note. </em>The dark blue line represents the incomplete-data log-likelihood, $L(p_1|\mathbf{x})$. The blue line represents the new evidence lower bound, $\mathcal{L}(P(\mathbf{z}|\mathbf{x}, p_1^{new}, p_1))$. The light blue line represents the old evidence lower bound, $\mathcal{L}(P(\mathbf{z}|\mathbf{x}, p_1^{old}, p_1))$. By repeatedly optimizing lower bounds to create new lower bounds, the otherwise unoptimizable incomplete-data log-likelihood can be optimized. After the maximization (M) step, the evidence lower bound increases by the increase in the expected complete-data log-likelihood, $Q(p_1^{old}|p_1^{new}) -Q(p_1^{old}|p_1^{old})$, whereas the incomplete-data log-likelihood increases by this amount in addition to the Kullback-Liebler (KL) divergence between the new and old responsibilities, $KL\big(P(\mathbf{z}|\mathbf{x}, p_1^{new})\|P(\mathbf{z}|\mathbf{x}, p_1^{old})\big)$.</span> 
+  </div>
+</div>
+<h1 id="conclusion">Conclusion</h1>
+<p>In conclusion, this post provides two demonstrations of the expectation-maximization (EM) algorithm. First, the application of the EM algorithm on a coin-flipping scenario from 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation">(<span class="hugo-cite-group">
+
+          <a href="#do2008"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="Chuong B"><span itemprop="familyName">Do</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</span></span>)
+</span>
+
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+ is reproduced. Second, a popular depiction of the optimization process in the EM algorithm is produced.</p>
+<h1 id="references">References</h1>
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+<section class="hugo-cite-bibliography">
+  <dl>
+    
+
+      <div id="bishop2006">
+
+          
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Book"
+      data-type="book"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Bishop</span>,&#32; 
+    <meta itemprop="givenName" content="C. M." />
+    C.   </span>&#32;
+    (<span itemprop="datePublished">2006</span>).
+  &#32;<span itemprop="name">
+    <i>Pattern recognition and machine learning</i></span>.
+  &#32;
+  <span itemprop="publisher"
+             itemtype="http://schema.org/Organization"
+             itemscope="">
+    <span itemprop="name">Springer New York</span></span>.&#32;Retrieved from&#32;
+  <a href="bit.ly/411YnEq"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">bit.ly/411YnEq</a></span>
+
+
+
+
+
+
+</dd>
+
+      </div>
+
+      <div id="do2008">
+
+          
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</dd>
+
+      </div>
+  </dl>
+</section>
+
+
+
+
+    </div>
+
+
+    <div class = 'comments'>
+    <script src="https://giscus.app/client.js"
+        data-repo="sciarraseb/HugoWebsite"
+        data-repo-id="R_kgDOIwrh4A"
+        data-category="Comments"
+        data-category-id="DIC_kwDOIwrh4M4CT1kX"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="https://cdn.jsdelivr.net/gh/sciarraseb/giscus@8cdfe5ff92c061ae8f8f3528299a0d5610530e8c/styles/themes/cobalt.css"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+    </div>
+
+  </div>
+
+  
+    <div class = 'toc_scroll'>
+      <div class = 'toc_container'>
+        <nav class="tableContents">
+          <span>Table of Contents</span>
+        </nav>
+      </div>
+    </div>
+    <button id="toc_button"><i class="fas fa-circle-right"></i></button>
+    <button id="toc_button_bottom"><i class="fas fa-circle-down"></i></button>
+
+
+  
+
+
+
+
+</div>
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="/js/mathjax_config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0-alpha.1/es5/tex-mml-chtml.js"></script>
+
+
+
+
+        </main><footer class="site-footer">
+  
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <script src="/js/external_links.js"></script>
+   <script src="/js/number_sections.js"></script>
+   <script src="/js/table_contents.js"></script>
+   <script src="/js/number_tables.js"></script>
+   <script src="/js/number_figures.js"></script>
+   <script src="/js/codefold.js"></script> 
+
+</footer>
+
+
+
+
+
+      </div>
+
+
+    </body>
+
+</html>
+

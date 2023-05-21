@@ -1,0 +1,53 @@
+[
+  {
+    "ISBN": "9780470057247",
+    "URL": "bit.ly/411YnEq",
+    "author": [
+      {
+        "family": "Bishop",
+        "given": "C. M."
+      }
+    ],
+    "id": "bishop2006",
+    "issued": {
+      "date-parts": [
+        [
+          2006
+        ]
+      ]
+    },
+    "publisher": "Springer New York",
+    "title": "Pattern recognition and machine learning",
+    "type": "book"
+  },
+  {
+    "DOI": "10.1038/nbt1406",
+    "URL": "http://dx.doi.org/10.1038/nbt1406",
+    "author": [
+      {
+        "family": "Do",
+        "given": "Chuong B"
+      },
+      {
+        "family": "Batzoglou",
+        "given": "Serafim"
+      }
+    ],
+    "container-title": "Nature Biotechnology",
+    "id": "do2008",
+    "issue": "8",
+    "issued": {
+      "date-parts": [
+        [
+          2008,
+          8
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "897-899",
+    "title": "What is the expectation maximization algorithm?",
+    "type": "article-journal",
+    "volume": "26"
+  }
+]

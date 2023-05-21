@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html><!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <title>Sebastian Sciarra - The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions</title>
+
+  <meta name="author" content="Sebastian Sciarra">
+        <link rel="stylesheet" href="/css/webStyling.css"/>
+        <link rel="stylesheet" href="/css/webStyling.min.7e0af8b405762c891be56b8312098dcd60a1bc4e750cef36a906b4cfa1ae982b.css">
+
+  <link rel="stylesheet" type="text/css" href="/hugo-cite.css" />
+  <meta name="description" content="Seb&#39;s portfolio site">
+
+ 
+  
+
+
+</head>
+
+
+<body>
+
+      <div class="container"><!DOCTYPE html>
+
+
+
+
+  
+   <script src="https://kit.fontawesome.com/23dde744ab.js" crossorigin="anonymous"></script>
+
+   
+    <script type = 'text/javascript'>
+
+      function active() {
+         document.getElementsByClassName('navbar-links')[0].classList.toggle('active');
+      }
+
+    </script>
+
+
+    <div class = 'navbar'>
+       <h1 class = 'blog_name'>Blog Directory</h1>
+
+       <ul class = 'navbar-links'>
+        <li><a class = 'home', href = "/home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a class = 'technical', href = "/technical_content"><i class="fa-solid fa-gears"></i> Technical Content</a></li>
+        <li><a class = 'coding', href = "/coding_tricks"><i class="fa-solid fa-code"></i> Coding Demos & Tricks</a></li>
+        <li><a class = 'simulation', href = "/simulation_exps"><i class="fa-brands fa-buromobelexperte"></i> Simulation Experiments</a></li>
+        <li><a class = 'resources', href = "/mlresources"><i class="fa-solid fa-key"></i> ML Resources</a></li>
+        <li><a class = 'about', href = "/about"><i class="fa-solid fa-question"></i> About</a></li>
+        <li><a class = 'portal', href = "/"><i class="fa-solid fa-circle-chevron-left"></i> back to portal</a></li>
+       </ul>
+
+      <button hef = '#', class = "toggle-button",  onclick="active()">
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+        <span class = "bar"> </span>
+      </button>
+
+
+  </div>
+
+
+
+
+
+<link rel="alternate" type="application/rss+xml" href="http://example.com/feed" >
+
+
+
+
+
+<main>
+<div class = 'blog_post'>
+
+
+  <div class = 'post'>
+
+     <div class = 'header technical'>
+
+        <h2 class = 'blog_title'> The Expectation-Maximization Algorithm: A Method for Modelling Mixtures of Distributions </h2>
+
+        <div class = 'blog_summary'> The expectation-maximization (EM) algorithm provides a method for modelling mixtures of distributions. To explain the EM algorithm, I do so in the context of a coin-flipping example where, for each flip, one of two coins are used, and so a mixture of binomial distributions underlie the data. Although maximum likelihood estimation cannot estimate mixture models, the EM algorithm can because it optimizes the likelihood function indirectly. In the expectation (E) step, a lower-bounding function is used to obtain responsibilities. In the maximization step (M), the lower-bounding function is optimized, with the responsibilities being used to obtain new parameter estimates. By optimizing the lower-bounding function, likelihood function increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating. </div>
+
+         <br>
+
+        <time> <b> Published </b> <br>
+        28 April 2023
+        </time>
+
+    </div>
+
+
+    <div class = 'content'>
+      <p>To write this post on the expectation-maximization algorithm, I used the following academic sources: 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation"><span class="hugo-cite-group">
+
+          <a href="#bishop2006"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="C. M."><span itemprop="familyName">Bishop</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Book"
+      data-type="book"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Bishop</span>,&#32; 
+    <meta itemprop="givenName" content="C. M." />
+    C.   </span>&#32;
+    (<span itemprop="datePublished">2006</span>).
+  &#32;<span itemprop="name">
+    <i>Pattern recognition and machine learning</i></span>.
+  &#32;
+  <span itemprop="publisher"
+             itemtype="http://schema.org/Organization"
+             itemscope="">
+    <span itemprop="name">Springer New York</span></span>.&#32;Retrieved from&#32;
+  <a href="bit.ly/411YnEq"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">bit.ly/411YnEq</a></span>
+
+
+
+
+
+
+</span></span></span>
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+
+ and 
+
+
+
+
+
+<span class="hugo-cite-intext"itemprop="citation"><span class="hugo-cite-group">
+
+          <a href="#do2008"><span class="visually-hidden">Citation: </span><span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="givenName" content="Chuong B"><span itemprop="familyName">Do</span></span></a><span class="hugo-cite-citation"> 
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</span></span></span>
+<script type="text/javascript">
+
+   document.addEventListener("DOMContentLoaded", function(e) {
+
+      
+     
+      
+      biblio = document.getElementsByClassName('hugo-cite-bibliography')[0];
+      references = biblio.getElementsByTagName('div');
+
+      
+      for (let i = 0; i < references.length; i++) {
+
+        
+        
+
+        
+        biblio_entry_id = references[i].getAttribute('id');
+
+       
+       biblio_entry = document.getElementById(CSS.escape(biblio_entry_id));
+
+        in_text_ref = document.querySelectorAll("a[href ^='#" + biblio_entry_id + "']");
+
+        
+            for (let i = 0; i < in_text_ref.length; i++) {
+
+              
+              family_names_raw = biblio_entry.querySelectorAll('[itemprop="familyName"]');  
+              publish_dates = biblio_entry.querySelectorAll('[itemprop="datePublished"]')[0].textContent; 
+
+              
+              var family_names = [];
+
+              for (let i = 0; i < family_names_raw.length; i++) {
+                family_names.push(family_names_raw[i].textContent);
+              }
+
+               
+              if(family_names.length > 2) {
+              in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' et al. ' + publish_dates;
+                }   else if (family_names.length == 2) {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ' & ' + family_names[1] + ', ' + publish_dates;
+                }  else {
+                in_text_ref[i].querySelector('[itemprop="familyName"]').textContent = family_names[0] + ', ' + publish_dates;
+                }
+            }
+          } 
+    });
+
+</script>
+
+. I also used the following lectures/blogs as aids: <a href="https://gregorygundersen.com/blog/2019/01/22/kld/">EM blog</a> and <a href="https://www.youtube.com/watch?v=lMShR1vjbUo&amp;t=1161s">EM lecture</a>.</p>
+<h1 id="introduction-to-mixture-models">Introduction to Mixture Models</h1>
+<p>Consider a situation where a researcher entrusts a colleague to flip coins and record the results of 10 flips. Flips that result in heads are recorded as <code>1</code> and flips that result in tails are recorded as <code>0</code>. Importantly, before each flip, the colleague picks one of two coins (according to another probability mass function) but does not tell the researcher which coin was flipped. When the colleague records the results of the 10 coin flips, they provide the researcher with the following data: $\mathbf{x} = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]$. With these data, the researcher wants to estimate the following three parameters:</p>
+<ol>
+<li>The probability of picking each of the two coins (i.e., a probability mass function), $\mu_1, \mu_2$. Given that both these probability values sum to one, only the probability of picking one coin must be estimated, $\mu_1$, with $\mu_2 = 1 - \mu_1$.</li>
+<li>The first coin&rsquo;s probability of heads, $p_1$.</li>
+<li>The second coin&rsquo;s probability of heads, $p_2$.</li>
+</ol>
+<h1 id="mixture-models-cannot-be-estimated-with-maximum-likelihood-estimation">Mixture Models Cannot be Estimated With Maximum Likelihood Estimation</h1>
+<p>One way to estimate the parameters ($\mu_1$, $\mu_2$, $p_1$, $p_2$) is to use maximum likelihood estimation (for a review, see my post on <a href="https://sebastiansciarra.com/technical_content/mle/">maximum likelihood estimation</a>). In maximum likelihood estimation, we solve for the parameter values $\boldsymbol{\theta} = \mu_1, p_1, p_2$ that maximize the probability of observing the data, $P(\mathbf{x}|\boldsymbol{\theta})$. Because the values being maximized are not technically probabilities and are instead likelihoods, $L(\boldsymbol{\theta}|\mathbf{x})$, maximum likelihood estimation solves for the parameter values with the highest likelihood, as shown below in Equation \ref{eq:mle}:</p>
+<p>$$
+\begin{align}
+\boldsymbol{\theta}_{MLE} &amp;= \underset{\boldsymbol{\theta}}{\arg\max}  L(\boldsymbol{\theta}|\mathbf{x}).
+\label{eq:mle}
+\end{align}
+$$
+In the current example, the likelihood values can be calculated by using Equation \ref{eq:incomplete-data} shown below:</p>
+<p>$$
+\begin{align}
+L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \prod_{n=1}^{10} \sum_{k=1}^{2} \mu_k B(x_n|p_k),
+\label{eq:incomplete-data}
+\end{align}
+$$</p>
+<p>where $B(x_n|p_k)$ is the binomial probability of the $n^{th}$ data point given the the $k^{th}$ coin, and this probability is weighted by the corresponding probability of selecting the $k^{th}$ coin. Importantly, because the researcher does not know which of the two coins produces the result of any flip, then any flip could be the result of flipping the first or second coin. To model this uncertainty, the calculation of the likelihood for each coin flip result, $x_n$, computes the sum of weighted binomial probabilities, $\sum^{2}_{k=1} \mu_k B(x_n|p_k)$. The lack of information surrounding the identity of the coin that produces each flip result also explains why Equation \ref{eq:incomplete-data} above is often called the <em>incomplete-data likelihood</em>.
+To prevent <em>underflow</em> (the rounding of small numbers to zero in computers), the log-likelihood is taken, resulting in the incomplete-data log-likelihood shown below in Equation \ref{eq:log-incomplete-data}:</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum_{n=1}^{10} \log\Big(\sum_{k=1}^{2} \mu_k B(x_n|p_k) \Big).
+\label{eq:log-incomplete-data}
+\end{align}
+$$</p>
+<p>To find maximum likelihood estimates for the parameters, partial derivatives can be computed with respect to each parameter ($\mu_1, p_1, p_2$) and then set to equal zero. In computing the partial derivatives of the incomplete-data log-likelihood (Equation \ref{eq:log-incomplete-data} with respect to the parameters, it is important to note that the existence of the summation symbol within the logarithm will oftentimes yield a complex and lengthy derivative because the chain rule has to be applied for each data point. Although computing the partial derivatives does not yield overly complex equations in the current example, solutions (often called closed-form solutions) for the parameters cannot be obtained. As an example, I will show how maximum likelihood estimation would be implemented for estimating the probability of selecting coin 1, $\mu_1$. To compute the likelihood, we can expand the binomial term in the incomplete-data log-likelihood function above (Equation \ref{eq:log-incomplete-data}) to produce</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum_{n = 1}^{10} \log \Big(\sum_{k=1}^{2} \mu_k  {n \choose h}p_k^h (1-p_k)^{n-h} \Big).
+\label{eq:log-incomplete-data-expanded}
+\end{align}
+$$
+To allow the partial derivative to be computed, I will apply the binomial calculation on each flip. Thus, $n = 1$ and $h = \{0, 1\}$, which means that ${n \choose h} = 1$. In expanding Equation \ref{eq:log-incomplete-data-expanded} over the summation sign within the logarithm, Equation \ref{eq:log-incomplete-data-binom-expanded} is obtained</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum^{10}_{n = 1} \log \Big( \mu_1 p_1^h (1-p_k)^{n-h} + (1-\mu_1) p_2^h (1-p_2)^{n-h}  \Big).
+\label{eq:log-incomplete-data-binom-expanded}
+\end{align}
+$$
+Because $h = \{0, 1\}$ for any given $n$ flip, the term inside the logarithm will only ever take on one of the two following forms:</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}_i) =
+\begin{cases}
+\text{If } \mathbf{x}_i = h, &amp; \log(\mu_1 p_1 + (1 - \mu_1)p_2), \\ \\
+\text{If } \mathbf{x}_i = t, &amp; \log(\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2))
+\end{cases}
+\label{eq:log-terms}
+\end{align},
+\end{spreadlines}
+$$
+where $h$ indicates a coin flip that results in &lsquo;heads&rsquo; and <code>t</code> indicates a coin flip that results in &rsquo;tails&rsquo; (i.e., $h = 0$). To expand Equation \ref{eq:log-incomplete-data-binom-expanded} over the summation sign outside the logarithm, we can apply Equation \ref{eq:log-terms} and obtain a simplified expression of the incomplete-data log-likelihood shown below in  Equation \ref{eq:incomplete-simplified}:</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= H\log(\mu_1 p_1 + (1 - \mu_1)p_2) + T\log(\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2)),
+\label{eq:incomplete-simplified}
+\end{align}
+$$
+where $H$ indicates the total number of heads and $T$ indicates the total number of tails. In the current data set, $\mathbf{x} = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]$, four heads and six tails are obtained. Although we can compute the partial derivative of Equation \ref{eq:incomplete-simplified} with respect to $\mu_1$ and obtain a closed-form solution, Equation \ref{eq:unsolvable-mu1} shows that it is inadmissible because it always yields negative values for $\mu_1$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= 4\log(\mu_1 p_1 + (1 - \mu_1)p_2) + 6\log(\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2))  \nonumber \\
+\frac{\partial L(\boldsymbol{\theta}|\mathbf{x})}{\partial \mu_1} &amp;= \frac{\partial}{\partial \mu_1} \Big( 4\log(\mu_1 p_1 + (1 - \mu_1)p_2) + 6\log(\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2))\Big) \nonumber \\
+&amp;= \frac{4(p_1 - p_2)}{\mu_1 p_1 + (1 - \mu_1)p_2} + \frac{6(p_2 - p_1)}{\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2)} \nonumber \\
+\text{Set } \frac{\partial L(\boldsymbol{\theta}|\mathbf{x})}{\partial \mu_1}&amp; = 0  \nonumber \\
+0 &amp;= \frac{4(p_1 - p_2)}{\mu_1 p_1 + (1 - \mu_1)p_2} + \frac{6(p_2 - p_1)}{\mu_1(1 - p_1) + (1 - \mu_1)(1 - p_2)} \nonumber \\
+&amp;= \frac{4(p_1 - p_2)}{\mu_1 p_1 - \mu_1p_2 + p_2} + \frac{6(p_2 - p_1)}{\mu_1 - \mu_1p_1 + 1 - \mu_1 + \mu_1p_2 - p_2} \nonumber \\
+&amp;= \frac{4(p_1 - p_2)}{\mu_1(p_1 - p_2) + p_2} + \frac{6(p_2 - p_1)}{ \mu_1(p_2 - p_1) + 1 - p_2} \nonumber \\
+&amp;= \frac{4}{\mu_1 + p_2} + \frac{6}{ \mu_1 + 1 - p_2} \nonumber \\
+&amp;= 4(\mu_1 + 1 - p_2) + 6(\mu_1 + p_2) \nonumber \\
+&amp;= 10\mu_1 + 2p_2 + 4 \nonumber \\
+\mu_1 &amp;= \frac{-p_2 - 2}{5}
+\label{eq:unsolvable-mu1}
+\end{align}
+\end{spreadlines}
+$$
+Therefore, although the summation symbol within the logarithm does not result in an overly complex partial derivative in the current example, maximum likelihood estimation results in inadmissible estimates for parameter values, and so is not a viable method for modelling mixture distributions.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<h1 id="mixture-models-can-be-estimated-with-the-expectation-maximization-em-algorithm">Mixture Models Can be Estimated with the Expectation-Maximization (EM) Algorithm</h1>
+<p>Unlike maximum likelihood estimation, the expectation-maximization (EM) algorithm provides viable parameter estimates for modelling mixture distributions. The EM algorithm works because it indirectly maximizes the incomplete-data log-likelihood; that is, it does not directly operate on the incomplete-data log-likelihood. To act as an indirect estimation method, the EM algorithm begins by modelling the uncertainty of the coin&rsquo;s identity on each flip as a <em>latent variable</em>: A variable that is assumed to exist but has not been directly measured, whether by choice or because direct measurement is impossible. To model the coin&rsquo;s identity on each $n$ flip as a latent variable, one-hot (or 1-of-<em>K</em>) encoding is used. In one-hot encoding, the levels of a categorical variable can be represented numerically with a binary vector that sums to one and has a length equal to the number of levels in the categorical variable. In the current example, the categorical variable is the coin&rsquo;s identity, and the two levels (i.e., coin 1, coin 2) can be represented in each $n$ flip by $\mathbf{z}_n$, as shown below in Equation \ref{eq:one-hot} below:</p>
+<p>$$
+\begin{align}
+\mathbf{z}_n =
+\begin{cases}
+\text{If coin 1 }, &amp; [1, 0] \\ \\
+\text{If coin 2 }, &amp; [0, 1]
+\end{cases}
+\label{eq:one-hot}
+\end{align}.
+$$
+By modelling the coin&rsquo;s status as a latent variable with one-hot encoding, the incomplete-data likelihood (Equation \ref{eq:incomplete-data}) can be modified to produce the <em>complete-data likelihood</em> shown below in Equation \ref{eq:complete-data}:</p>
+<p>$$
+\begin{align}
+L(\boldsymbol{\theta}|\mathbf{x}, \mathbf{z}) &amp;= \prod_{n=1}^{10} \prod_{k=1}^{2} \mu_k B(x_n|p_k)^{z_{nk}},
+\label{eq:complete-data}
+\end{align}
+$$</p>
+<p>where $k$ is used to index each value of $\mathbf{z}_n$. Note that, because the likelihood of each $x_n$ data point is raised to an exponent value of either 0 or 1, we now take the product over the <em>K</em> classes. Thus, data points that do not belong to a mixture do not contribute to the likelihood computation; these likelihoods are raised to the power of zero, and, therefore, contribute a redundant multiplication factor of one.</p>
+<p>Although including a binary exponent on the likelihood computation seems inconsequential, it provides two desirable outcomes. First, it allows viable parameter estimates to be computed. In taking the logarithm of the complete-data likelihood to prevent underflow, the <em>complete-data log-likelihood</em> is obtained and is shown below in Equation \ref{eq:log-complete-data}:</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}, \mathbf{z}) &amp;= \sum_{n=1}^{10} \sum_{k=1}^{2} z_{nk}\Big(\log(\mu_k) + \log\big(B(x_n|p_k)\big)\Big).
+\label{eq:log-complete-data}
+\end{align}
+$$
+Because the summation over <em>K</em> is now outside the logarithm, this means that the partial derivatives will be much less complex and yield admissible solutions.</p>
+<p>Second, using one-hot encoding creates an equivalence between the complete- and incomplete-data log-likelihoods. As shown below, the complete-data log-likelihood becomes the incomplete-data log-likelihood after summing over all $z$ possible latent variable representations for each $n$ data point (see Equation \ref{eq:complete-incomplete} below). Therefore, we can optimize the incomplete-data log-likelihood by optimizing the complete-data log-likelihood.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;=  \log \Big( \sum_{\mathbf{z}}L(\boldsymbol{\theta}|\mathbf{x}, \mathbf{z} \Big) \nonumber \\
+&amp;=\log \Big(\sum_{\mathbf{z}}  \prod_{n=1}^{10} \prod_{k=1}^{2} \mu_k B(x_n|p_k)^{z_{nk}} \Big) \nonumber \\
+&amp;= \log \Big(\mu_1 B(x_1|p_1)^1 \cdot \mu_2 B(x_1|p_2)^0 \cdot &hellip; \cdot \mu_1 B(x_{10}|p_1)^1 \cdot \mu_2 B(x_{10}|p_2)^0 + \nonumber \\
+&amp;\qquad\quad\text{ }\text{ } \mu_1 B(x_1|p_1)^0 \cdot \mu_2 B(x_1|p_2)^1 \cdot &hellip; \cdot \mu_1 B(x_{10}|p_1)^0 \cdot \mu_2 B(x_{10}|p_2)^1 \Big) \nonumber \\
+&amp;= \log \Big(\prod_{n=1}^{10} \sum_{k=1}^{2} \mu_k B(x_n|p_k)\Big)  \nonumber \\
+&amp;= \sum_{n=1}^{10} \log \Big(\sum_{k=1}^2 \mu_k B(x_n|p_k) \Big).
+\label{eq:complete-incomplete}
+\end{align}
+\end{spreadlines}
+$$
+As an aside, in computing the sum over $z$, we are marginalizing over $z$, which explains why the incomplete-data log-likelihood is often called the <em>marginal log-likelihood</em> and the complete-data log-likelihood is often called the <em>joint log-likelihood</em>.</p>
+<p>Despite the benefits of using one-hot encoding, one challenge remains. The complete-data log-likelihood cannot yet be computed because the latent variable memberships for each $n$ data point, $\mathbf{z}_n$, are unknown. Recall that the researcher does not know which coin produced the result of any flip. Related, and as an aside, Equation \ref{eq:complete-data} is called the complete-data likelihood because it can only be computed if we know the mixture membership of each $x_n$ data point; that is, we must have the complete data.</p>
+<p>Although the complete-data log-likelihood cannot be directly computed, the EM algorithm finds a clever way to circumvent this problem in the E step.</p>
+<h2 id="expectation-e-step-using-expectations-to-estimate-the-distribution-of-the-latent-variable">Expectation (E) Step: Using Expectations to Estimate the Distribution of the Latent Variable</h2>
+<p>The E step takes advantage of the equivalence between the incomplete- and complete-data log-likelihoods and applies two clever tricks to work with the complete-data log-likelihood. First, it applies what appears to be an inconsequential algebraic manipulation, whereby the complete-data log-likelihood is multiplied and divided by some distribution on the latent variable $q(\mathbf{z})$ as shown below in Equation \ref{eq:variation-method}:</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \log \sum_{\mathbf{z}} L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z}) \nonumber \\
+&amp;=\log \sum_{\mathbf{z}} q(\mathbf{z})\frac{L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z})}{q(\mathbf{z})}.
+\label{eq:variation-method}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Second, given that the logarithm is a concave function, Jensen&rsquo;s inequality can be applied to convert Equation \ref{eq:variation-method} into an inequality. Briefly, Jensen&rsquo;s inequality states that, for concave functions, the function of the expected value, $f(\mathbb{E}[x])$), is greater than or equal to the expected value of the function, $\mathbb{E}[f(x)]$ (for a proof, see <a href="#jensen">Appendix A</a>), and is shown below in Equation \ref{eq:jensen-concave}:</p>
+<p>$$
+\begin{align}
+f(\mathbb{E}[x]) \ge \mathbb{E}[f(x)].
+\label{eq:jensen-concave}
+\end{align}
+$$</p>
+<p>In other words, Equation \ref{eq:jensen-concave} above shows that $\mathbb{E}[f(x)]$ is a lower bound on $f(\mathbb{E}[x])$. Applying Jensen&rsquo;s inequality to Equation \ref{eq:variation-method}, a lower bound for the incomplete-data log-likelihood is obtained, $\mathcal{L}(q, \boldsymbol{\theta})$, resulting in the inequality shown below in Equation \ref{eq:variation-inequality}:</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;\ge \sum_{\mathbf{z}} q(\mathbf{z})\log \Bigg(\frac{L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z})}{q(\mathbf{z})}\Bigg) \nonumber \\
+&amp;\ge \mathbb{E}_{q(\mathbf{z})}\log \Bigg(\frac{L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z})}{q(\mathbf{z})}\Bigg) = \mathcal{L}(q, \boldsymbol{\theta}),<br>
+\label{eq:variation-inequality}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>where the summation over $z$ of $q(\mathbf{z})$ is the expected value of $q(\mathbf{z})$, and can be represented as $\mathbb{E}_{q(\mathbf{z})}$. As a note, the lower bound,  $\mathcal{L}(q, \boldsymbol{\theta})$, is often called the <em>evidence lower bound</em> because it is a lower bound on the marginal log-likelihood, which is often called the evidence in Bayesian inference.</p>
+<p>Although we still do not have a way for computing $q(\mathbf{z})$, a closer inspection of the above inequality provides a way forward. In the E step, it is in our best interest to obtain the most accurate approximation of the distribution $q(\mathbf{z})$. By obtaining the best estimate of $q(\mathbf{z})$, the greatest improvements in the parameter can be realized in the M step. To obtain the best estimate of $q(\mathbf{z})$, and thus maximize the potential for improvement in the parameter estimates in the M step, we need to maximize the evidence lower bound with respect to $q(\mathbf{z})$. Thus, the inequality of Equation \ref{eq:variation-inequality} must be transformed into an equality. To do so, we can compute $q(\mathbf{z})$ such that the logarithm, $\log \Big(\frac{L(\boldsymbol{\theta}|\mathbf{x}, \mathbf{y})}{q(\mathbf{z})}\Big)$, returns constant values, and this can be accomplished if the probability values computed for the latent variable $\mathbf{z}$ are proportional to the numerator, $q(\mathbf{z}) \propto L(\boldsymbol{\theta}|\mathbf{x},\mathbf{y})$. Fortunately, Bayes&rsquo; theorem provides one way for us to compute $q(\mathbf{z})$ to maximize the evidence lower bound such that</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}) &amp;= \frac{P(\mathbf{x}|\mathbf{z}, \boldsymbol{\theta})P(\mathbf{z}|\boldsymbol{\theta})}{ P(\mathbf{x}|\boldsymbol{\theta})}
+\label{eq:bayes} \\
+&amp;= \frac{P(\mathbf{z}, \mathbf{x}|\boldsymbol{\theta})}{\sum_{z\prime}P(\mathbf{z\prime}, \mathbf{x}|\boldsymbol{\theta})} \nonumber \\
+&amp;= \frac{L(\boldsymbol{\theta}|\mathbf{z}, \mathbf{x})}{\sum_{z\prime}L(\boldsymbol{\theta}|\mathbf{z\prime}, \mathbf{x})}
+\label{eq:posterior}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>where I have used likelihood notation in Equation \ref{eq:posterior} to highlight the equivalence with the calculation of probabilities and likelihoods. It is important to note that, because latent variable memberships exist for each $n$ data point for each $k$ mixture in the complete-data log-likelihood (Equation \ref{eq:log-complete-data}), Equation \ref{eq:posterior} above is computed for each $n$ data point such that</p>
+<p>$$
+\begin{align}
+P(z_{nk} |x_n, \boldsymbol{\theta} = [\mu_k, p_k]) &amp;= \gamma(z_{nk}) = \frac{\mu_k B(x_n|p_k)}{\sum_k^2 \mu_k B(x_n|p_k)}.
+\label{eq:ind-posterior}
+\end{align}
+$$</p>
+<p>Because these values represent the (posterior) probability of membership to each $k$ mixture, they are often called <em>responsibilities</em>. Note that the responsibilities are often represented as $\gamma(z_{nk})$, which is simply the scalar form of $\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}$ that I use throughout this post. Therefore, by setting $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$, we can compute $q(\mathbf{z})$ and also obtain a lower bound, $\mathcal{L}(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}), \boldsymbol{\theta})$ that is equal to the complete-data log-likelihood. Using Equation \ref{eq:bayes}, we can rewrite the inequality of Equation \ref{eq:variation-inequality} as an equality in Equation \ref{eq:post-variation-inequality} below:</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;=   \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}),\boldsymbol{\theta}\Big) \label{eq:equality} \\
+&amp;= \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}\log \Bigg(\frac{L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z})}{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}\Bigg)
+\label{eq:post-variation-inequality} \\
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>To show that the lower bound is equal to the complete-data log-likelihood when $q(\mathbf{z})= P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$ (see Equation \ref{eq:equality}), I provide the Python code block below (see lines <a href="#1">1&ndash;109</a>). In order to better understand the Python code, I provide the function for the incomplete-data log-likelihood ( Equation \ref{eq:log-incomplete-data}) and the expansion for the evidence lower bound (Equation \ref{eq:log-incomplete-data}). Importantly, and as I will discuss later on in this post, the first term in Equation \ref{eq:lower-bound-exp} is the expected complete-data log-likelihood, and the second term is the entropy of the responsibilities. Recall that the researcher&rsquo;s data set is $\mathbf{x} = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}|\mathbf{x}) &amp;= \sum_{n=1}^{10} \log \Big(\sum_{k=1}^2 \mu_k B(x_n|\mu_k)\Big)
+\tag{\ref{eq:log-incomplete-data} revisited} \\
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}), \boldsymbol{\theta})\big) &amp;=  \underbrace{\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})}\log (L(\boldsymbol{\theta}|\mathbf{x},\mathbf{z}))}_{\text{Expected complete-data log-likelihood}} \phantom{e x} \underbrace{-\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})} \log({P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})})}_{\text{Entropy}} \label{eq:lower-bound}\\
+&amp;= \sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k) + x_n\log(p_k) + (1 - x_n)\log(1 - p_k)\big) - \gamma(z_{nk})\log\big(\gamma(z_{nk})\big)
+\label{eq:lower-bound-exp}
+\end{align}
+\end{spreadlines}
+$$</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">pandas</span> <span class="n">as</span> <span class="n">pd</span>
+</span></span><span class="line"><span class="cl"><span class="n">from</span> <span class="n">scipy.stats</span> <span class="n">import</span> <span class="n">binom</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  Compute expectations (i.e., responsibilities) for each data point&#39;s membership to each mixture
+</span></span></span><span class="line"><span class="cl"><span class="s">  Parameters:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - data: data set 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - mu: Probability of each component 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - p: Probabilities of success for each binomial distribution
+</span></span></span><span class="line"><span class="cl"><span class="s">  Returns:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - pandas dataframe
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">  <span class="n">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="s">&#34;Number of estimates in mu is equal to the number of sucsess probabilities&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">assert</span> <span class="nf">sum</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">,</span> <span class="s">&#34;Sum of mu should be equal to 1&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#unnormalized responsibilities for each data point for each mixture</span>
+</span></span><span class="line"><span class="cl">  <span class="n">unnormalized_responsibilities</span> <span class="o">=</span> <span class="n">[mu</span> <span class="o">*</span> <span class="nf">binom.pmf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="n">for</span> <span class="n">x</span> <span class="n">in</span> <span class="n">data]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#normalized responsibilities (i.e., probabilities)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">normalized_responsibilities</span> <span class="o">=</span> <span class="n">[rp</span> <span class="o">/</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="n">for</span> <span class="n">rp</span> <span class="n">in</span> <span class="n">unnormalized_responsibilities]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">column_names</span> <span class="o">=</span> <span class="n">[</span><span class="s">&#39;resp_mixture_{}&#39;</span><span class="nf">.format</span><span class="p">(</span><span class="n">mix</span><span class="m">+1</span><span class="p">)</span> <span class="n">for</span> <span class="n">mix</span> <span class="n">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">normalized_responsibilities[0]</span><span class="p">))</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">df_responsibilities</span> <span class="o">=</span> <span class="nf">pd.DataFrame</span><span class="p">(</span><span class="nf">np.vstack</span><span class="p">(</span><span class="n">normalized_responsibilities</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">                                    <span class="n">columns</span> <span class="o">=</span> <span class="n">column_names</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#insert data column as the first one</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">df_responsibilities.insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>                
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">df_responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#incomplete/complete-data log-likelihood</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  Compute incomplete-data log-likelihood 
+</span></span></span><span class="line"><span class="cl"><span class="s">  Parameters:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - data: data set 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - mu: Probability of each component 
+</span></span></span><span class="line"><span class="cl"><span class="s">      - p: Probability of success for each binomial distribution
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#probability of each data point coming from each distribution</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mixture_sums</span> <span class="o">=</span> <span class="nf">[np.sum</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="nf">binom.pmf</span><span class="p">(</span><span class="n">flip_result</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span> <span class="n">for</span> <span class="n">flip_result</span> <span class="n">in</span> <span class="n">binom_mixture_data]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#log of mixture_sums</span>
+</span></span><span class="line"><span class="cl">  <span class="n">log_mixture_sums</span> <span class="o">=</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">mixture_sums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#sums of log of mixture_sums</span>
+</span></span><span class="line"><span class="cl">  <span class="n">incomplete_like</span> <span class="o">=</span> <span class="nf">np.sum</span><span class="p">(</span><span class="n">log_mixture_sums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">incomplete_like</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#lower bound = expected complete-data log-likelihood + entropy </span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#expected complete-data log-likelihood </span>
+</span></span><span class="line"><span class="cl">  <span class="n">expected_complete_data_like</span> <span class="o">=</span> <span class="nf">responsibilities.apply</span><span class="p">(</span><span class="n">compute_expected_complete_like</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="nf">.sum</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">##compute entropy</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="nf">compute_entropy</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">expected_complete_data_like</span> <span class="o">+</span> <span class="n">entropy</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#entropy: sum of rs*log(rs) for all rs (responsibilities)</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_entropy</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">##extract responsibility columns and then compute entropy</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_colummns</span> <span class="o">=</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;resp_mixture&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">##take sum of x*log(x) for each responsibility</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="o">-</span><span class="nf">np.sum</span><span class="p">(</span><span class="n">resp_colummns.values</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">resp_colummns.values</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">entropy</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#expected complete-data log-likelihood</span>
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_expected_complete_like</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_columns</span> <span class="o">=</span> <span class="n">[col</span> <span class="n">for</span> <span class="n">col</span> <span class="n">in</span> <span class="n">row.index</span> <span class="n">if</span> <span class="s">&#39;resp_mixture&#39;</span> <span class="n">in</span> <span class="n">col]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_values</span> <span class="o">=</span> <span class="n">[row[col]</span> <span class="n">for</span> <span class="n">col</span> <span class="n">in</span> <span class="n">resp_columns]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="nf">np.sum</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">[resp_values</span> <span class="o">*</span> <span class="p">(</span><span class="nf">np.log</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">row[</span><span class="s">&#39;data&#39;</span><span class="n">]</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="c1">#non-zero if flip result is success (i.e., &#39;heads&#39;)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">(</span><span class="m">1</span> <span class="o">-</span> <span class="n">row[</span><span class="s">&#39;data&#39;</span><span class="n">]</span><span class="p">)</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="m">1</span> <span class="o">-</span> <span class="nf">np.array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="c1">#non-zero if flip result is failure (i.e., &#39;tails&#39;)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">)</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">#data given to researcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">binom_mixture_data</span> <span class="o">=</span> <span class="n">[1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#initial guesses for E step </span>
+</span></span><span class="line"><span class="cl"><span class="n">mu</span> <span class="o">=</span> <span class="n">[0.3</span><span class="p">,</span> <span class="m">0.7</span><span class="n">]</span> <span class="c1">#mixture probabilities </span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">[0.6</span><span class="p">,</span> <span class="m">0.8</span><span class="n">]</span> <span class="c1">#success probabilities</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#E step</span>
+</span></span><span class="line"><span class="cl"><span class="n">responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">evidence_lower_bound</span> <span class="o">=</span> <span class="nf">np.round</span><span class="p">(</span><span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">),</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_log_likelihood</span> <span class="o">=</span> <span class="nf">np.round</span><span class="p">(</span><span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span>  <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">),</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Incomplete-data log-likelihood:&#39;</span><span class="p">,</span> <span class="n">evidence_lower_bound</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Lower bound:&#39;</span><span class="p">,</span> <span class="n">incomplete_log_likelihood</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>Incomplete-data log-likelihood: -9.28686
+Lower bound: -9.28686
+</code></pre>
+<p>Therefore, by introducing a distribution of the latent variable, $q(\mathbf{z})$), its expectation is taken so that the evidence lower bound becomes equal to the incomplete-data log-likelihood. More importantly, however, responsibilities are obtained for each $n$ data point for each $k$ mixture, $\gamma(z_{nk})$, which allow new parameter estimates to be obtained in the M step.</p>
+<h2 id="maximization-m-step-using-expectations-to-obtain-new-parameter-estimates">Maximization (M) Step: Using Expectations to Obtain New Parameter Estimates</h2>
+<p>In this section, I first discuss the intuition of computing new parameter estimates with the expectations (see <a href="#m-step-intuition">intuition of M step</a>) and then show how these estimates are computed by computing the appropriate partial derivatives (see <a href="#m-step-math">computation of new estimates</a>).</p>
+<h3 id="m-step-intuition">Understanding the Intuition of the M Step</h3>
+<p>Beginning with the intuition of the M step, it uses responsibilities obtained in the E step to compute new parameter estimates for $\boldsymbol{\theta}$. As in the E step, the M step also indirectly optimizes the incomplete-data log-likelihood by optimizing the evidence lower bound. In the M step, however, instead of optimizing the evidence lower bound with respect to $q(\mathbf{z})$, the lower bound is optimized with respect to the parameters, $\boldsymbol{\theta}$, resulting in new parameter estimates. Because new parameter estimates are obtained in the M step, I will represent them with $\boldsymbol{\theta}^{new}$ and the old estimates with $\boldsymbol{\theta}^{old}$. Thus, in optimizing the evidence lower bound with respect to the parameter values in the M step, we can say the lower bound is optimized with respect to $\boldsymbol{\theta}^{old}$. In optimizing the evidence lower bound with respect to $\boldsymbol{\theta}^{old}$, the incomplete-data log-likelihood is obtained with new parameter values, $\log L(\boldsymbol{\theta}^{new}|\mathbf{x})$, and increases by at least as much as the lower bound increases when optimized with respect to $\boldsymbol{\theta}^{old}$, as shown below in Equation \ref{eq:theta-optimize}:</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}^{new}|\mathbf{x}) - \log L(\boldsymbol{\theta}^{old}|\mathbf{x})  &amp;\ge \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})} \log \Big(L(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z})\Big)  - \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})} \log \Big(L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z})\Big).
+\label{eq:theta-optimize}
+\end{align}
+$$</p>
+<p>To understand the logic behind Equation \ref{eq:theta-optimize} above, a brief discussion of entropy, cross-entropy, and the Kullback-Liebler (KL) divergence is necessary and I provide an overview in the following section.</p>
+<h4 id="kl-divergence">A Brief Review of Entropy and the Kullback-Liebler (KL) Divergence</h4>
+<p>Consider an example where an analyst for a wine merchant records wine preferences among customers over a two-year period. Specifically, the analyst asks customers for their favourite type of wine from red, white, and sparkling. Figure \ref{fig:wine-year} shows the customers&rsquo; preferences in each year.</p>
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:wine-year}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Favourite Wine Types by Customers in Each of Two Years</span>
+  </div>
+    <img src="images/wine_plot.png" width="90%" height="90%"> 
+  <div class="figNote">
+  </div>
+</div>
+<p>To quantify the difference between the probability distributions with a single value, the analyst uses the Kullback-Liebler (KL) divergence shown below in Equation \ref{eq:kl-divergence}</p>
+<p>$$
+\begin{align}
+KL(P\|Q) &amp;= \sum_{\mathbf{x}} P(\mathbf{x}) \log\Bigg(\frac{P(\mathbf{x})}{Q(\mathbf{x})}\Bigg).
+\label{eq:kl-divergence}
+\end{align}
+$$</p>
+<p>To understand the KL divergence, it is helpful to understand each of its three computations (for an excellent explanation, see <a href="https://www.youtube.com/watch?v=q0AkK8aYbLY&amp;t=173s">KL divergence</a>) that are presented below:</p>
+<ol>
+<li>$\frac{P(\mathbf{x})}{Q(\mathbf{x})}$: measures the change in each wine type relative to Year 1.</li>
+<li>$\log$: gives equal weightings to reciprocals. As an example, consider the change in preferences across the two years for red and white wine. Across the two years, the preference for red wine across increases from 20% to 40%, whereas the preference for white wine decreases from 40% to 20%. Given that these changes are exactly the same, they should contribute the same amount to the total difference between the years. Using logarithm accomplishes this goal; whereas $\frac{2}{4} \neq \frac{4}{2}$, $\log(\frac{0.4}{0.2}) = \log(\frac{0.2}{0.4})$.</li>
+<li>$P(\mathbf{x})$: each value of $\mathbf{x}$ is weighed by its current probability (i.e., Year 2).</li>
+</ol>
+<p>Thus, the KL divergence measures the difference between two probability distributions, $P(\mathbf{x})$ and $Q(\mathbf{x})$, by computing the sum of weighted logarithmic ratios. Intuitively, if the two distributions are the same, the KL divergence is zero, and if the distributions are different, the KL divergence is positive. Therefore, the KL divergence is always non-negative, $KL \ge 0$ (for a proof, see <a href="#kl-divergence-proof">Appendix B</a>).</p>
+<p>To understand why the KL divergence is always non-negative, it is important to understand entropy and cross-entropy (for an excellent explanation, see <a href="https://www.youtube.com/watch?v=ErfnhcEV1O8&amp;t=376s">entropy &amp; cross-entropy</a>). If we expand the KL divergence expression of Equation \ref{eq:kl-divergence}, we obtain</p>
+<p>$$
+\begin{align}
+KL(P\|Q) &amp;= \underbrace{\sum_{\mathbf{x}} P(\mathbf{x}) \log (P(\mathbf{x}))}_{\text{(Negative) Entropy}}\text{ }\text{ }  \underbrace{-\sum_{\mathbf{x}} P(\mathbf{x}) \log (Q(\mathbf{x}))}_{\text{Cross-entropy}}.
+\label{eq:kl-divergence-exp}
+\end{align}
+$$</p>
+<p>The first term of Equation \ref{eq:kl-divergence-exp} represents <em>entropy</em>,<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> which can be conceptualized as the amount of information or surprise obtained for a given $x$ wine type from the distribution in Year 2, $P(\mathbf{x})$, when encoding it by itself.</p>
+<p>The second term of Equation \ref{eq:kl-divergence-exp} represents <em>cross-entropy</em>, which can be conceptualized as the amount of information or surprise obtained for a given $x$ wine type from the distribution in Year 1, $Q(\mathbf{x})$, when encoded by the distribution in Year 2, $P(\mathbf{x})$. Because the distributions in each year are different, it is intuitive to think that cross-entropy is greater than the entropy; that is, it should be more surprising to encode values of one distribution, $P(\mathbf{x})$, with values of another distribution, $Q(\mathbf{x})$, than with values of the same distribution.  The conceptualization that cross-entropy is greater than entropy is formally represented by Gibbs&rsquo; inequality (for a proof, see <a href="#gibbs">Appendix C</a>) below:</p>
+<p>$$
+\begin{align}
+-\sum_{\mathbf{x}}  P(\mathbf{x}) \log (Q(\mathbf{x})) \ge  -\sum_{\mathbf{x}}  P(\mathbf{x}) \log (P(\mathbf{x})).
+\end{align}
+$$
+Using Gibbs&rsquo; inequality, it then becomes clear looking at the expression in Equation \ref{eq:kl-divergence-exp} that the KL divergence will always be non-negative because the larger value of the cross-entropy is added to negative entropy, which has a smaller value.</p>
+<h4 id="computing-new-parameter-estimates-increases-the-incomplete-log-likelihood-more-than-the-evidence-lower-bound">Computing New Parameter Estimates Increases The Incomplete Log-Likelihood More Than the Evidence Lower Bound</h4>
+<p>Returning to the M step, the incomplete-data log-likelihood increases by at least as much as the evidence lower bound increases. The inequality between the increase in the incomplete-data log-likelihood and the evidence lower bound after the optimization of the lower bound with respect to $\boldsymbol{\theta}^{old}$ occurs because the optimization results in a larger-value cross-entropy term, $\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new}))$. Importantly, the cross-entropy term is absorbed by the incomplete-data log-likelihood and not the evidence lower bound. To understand how, after the M step, the increase in the incomplete-data log-likelihood is at least the increase in the evidence lower bound, I will prove the following two points:</p>
+<ul class="custom">
+  <li><strong>Point 1:</strong> After the M step, the evidence lower bound only increases as much as the expected complete-data log-likelihood.</li>
+  <li><strong>Point 2:</strong> After the M step, the incomplete-data log-likelihood increases by as much as the evidence lower bound and the cross-entropy of the new responsibilities, $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})$, with respect to the old responsibilities, $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})$.</li>
+</ul>
+<h5 id="point-1-the-increase-in-the-evidence-lower-bound-is-equal-to-the-increase-in-the-expected-complete-data-log-likelihood">Point 1: The Increase in the Evidence Lower Bound is Equal to the Increase in the Expected Complete-Data Log-Likelihood</h5>
+<p>In computing new parameter estimates in the M step, $\boldsymbol{\theta}^{new}$, the evidence lower bound increases by the amount that the expected complete-data log-likelihood increases. To show this, I repeat the function for the evidence lower bound below (Equation \ref{eq:lower-bound}) and set $\boldsymbol{\theta} = \boldsymbol{\theta}^{old}$ to keep track of the iteration index.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{old})\big) &amp;=  \underbrace{\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))}_{\text{Expected complete-data log-likelihood}} \phantom{e x} \underbrace{-\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})} \log({P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})})}_{\text{Entropy}}
+\tag{\ref{eq:lower-bound}$\phantom{i}$ revisited}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Below, I show that, when determining the parameters values, $\boldsymbol{\theta}^{old} = [\mu_k^{old}, p_k^{old}]$, that maximize the evidence lower bound, the entropy term does not contribute to the derivative (Equation \ref{eq:lower-bound-max}), and so the maximization is equivalent to maximizing the expected data complete-data log-likelihood (Equation \ref{eq:lower-bound-expected}).</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\underset{\boldsymbol{\theta}^{old} = [\mu_k^{old}, p_k^{old}]}{\arg \max} \mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{old})\big) &amp;=  \underset{\boldsymbol{\theta}^{old} = [\mu_k^{old}, p_k^{old}]}{\arg \max}  \Big(\sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k^{old}) + x_n\log(p_k^{old}) + (1 - x_n)\log(1 - p_k^{old})\big) \phantom{e x} -\underbrace{\gamma(z_{nk})\log\big(\gamma(z_{nk}\big)}_{\text{=0 (i.e., constant)}}\Big)
+\label{eq:lower-bound-max} \\
+&amp;= \sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k^{new}) +  x_n\log(p_k^{new}) + (1 - x_n)\log(1 - p_k^{new})  \\
+\underset{\boldsymbol{\theta}^{old} = [\mu_k^{old}, p_k^{old}]}{\arg \max} \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))  &amp;= \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z}))
+\label{eq:lower-bound-expected}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Therefore, optimizing the evidence lower bound with respect to $\boldsymbol{\theta}^{old}$ is equivalent to maximizing the expected complete-data log-likelihood with respect to $\boldsymbol{\theta}^{old}$. In other words, to obtain new parameter estimates, we only need to compute partial derivatives with respect to each parameter of the expected complete-data log-likelihood (see <a href="#m-step-math">computation of estimates</a> for these partial derivatives).  Importantly, to compute the value of the lower bound after it has been optimized with respect to $\boldsymbol{\theta}^{old}$, $\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{new})$, the entropy of $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})$ is included, as shown below in Equation \ref{eq:lower-bound-m}.</p>
+<p>$$
+\begin{align}
+\max \mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{old}) &amp;=\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{new}) = \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z})\big) - \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})} \log({P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})})
+\label{eq:lower-bound-m}
+\end{align}
+$$</p>
+<p>To more concisely represent the difference between the new and old evidence lower bounds, I use auxiliary function notation in Equation \ref{eq:auxiliary}, where $Q(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old})$ is the new lower bound and $Q(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})$ is the old lower bound.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{new}) - \mathcal{L}\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}), \boldsymbol{\theta}^{old}) &amp;= \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z})\big) - \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z})\big) \nonumber \\
+&amp;= Q(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old}) - Q(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})
+\label{eq:auxiliary}
+\end{align}
+\end{spreadlines}
+$$
+The Python code block below (see lines <a href="#112">112&ndash;158</a>) shows that, after the M step, the evidence lower bound indeed only increases by as much as the expected complete-data log-likelihood. Note that, although I have not yet shown how to derive new parameter estimates, I do so in the section on <a href="#m-step-math">computing new parameter estimates</a>. To better understand how new values are computed for $\mu_k$ (probability of selecting each $k$ coin) and $p_k$ (probability of heads for each $k$ coin), I provide previews of the solutions in Equations \ref{eq:mixture-prob} and \ref{eq:mu-solution}.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mu_k^{old} &amp;= \frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{N} = \frac{N_k}{N} = \mu_k^{new}
+\tag{\ref{eq:mu-solution}$\phantom{s}$ previewed} \\
+p_k^{old} &amp;= \frac{\sum_{n = 1}^{10} x_n \gamma(z_{nk})}{\sum_{n = 1}^{10} \gamma(z_{nk})} = \frac{\sum_{n = 1}^{10} x_n \gamma(z_{nk})}{N_k} = p_k^{new}
+\tag{\ref{eq:mixture-prob}$\phantom{s}$previewed} \\
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Also note that I fix the values of $\mu_k$ so that convergence does not occur in one trial.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#isolate columns that contain responsibilities</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_cols</span> <span class="o">=</span> <span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;resp_mixture&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">#New estimate for the probability of heads</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;&#34;&#34;Weigh each data point by the corresponding responsibility and divide by the sum
+</span></span></span><span class="line"><span class="cl"><span class="s">  of responsibilities for each coin (N_k).&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#specify axis=1 so that operations are conducted along rows </span>
+</span></span><span class="line"><span class="cl">  <span class="n">p_new</span> <span class="o">=</span> <span class="nf">np.sum</span><span class="p">(</span><span class="nf">responsibilities.filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s">&#39;^resp_mixture&#39;</span><span class="p">)</span><span class="nf">.mul</span><span class="p">(</span><span class="n">responsibilities[</span><span class="s">&#39;data&#39;</span><span class="n">]</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">axis</span><span class="o">=</span><span class="m">0</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nf">np.sum</span><span class="p">(</span><span class="n">resp_cols</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">#new mixture probabilities </span>
+</span></span><span class="line"><span class="cl">  <span class="n">mu_new</span> <span class="o">=</span> <span class="nf">resp_cols.sum</span><span class="p">()</span><span class="o">/</span><span class="nf">resp_cols.sum</span><span class="p">()</span><span class="nf">.sum</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="nf">pd.DataFrame</span><span class="p">({</span><span class="s">&#39;p_new&#39;</span><span class="o">:</span> <span class="n">p_new</span><span class="p">,</span> <span class="s">&#39;mu_new&#39;</span><span class="o">:</span> <span class="n">mu_new</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#data given to researcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">binom_mixture_data</span> <span class="o">=</span> <span class="n">[1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#initial guesses for E step </span>
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#mixture probabilities are fixed so that convergence does not occur in one trial</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">[0.6</span><span class="p">,</span> <span class="m">0.8</span><span class="n">]</span> <span class="c1">#success probabilities</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#E step</span>
+</span></span><span class="line"><span class="cl"><span class="n">responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#M step </span>
+</span></span><span class="line"><span class="cl"><span class="n">estimates</span> <span class="o">=</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#amount that lower bound increased by after M step </span>
+</span></span><span class="line"><span class="cl"><span class="n">optimized_lower_bound</span> <span class="o">=</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates[</span><span class="s">&#39;p_new&#39;</span><span class="n">]</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="n">expectation_lower_bound</span> <span class="o">=</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">responsibilities</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">lower_bound_increase</span> <span class="o">=</span> <span class="nf">np.round</span><span class="p">(</span><span class="n">optimized_lower_bound</span> <span class="o">-</span> <span class="n">expectation_lower_bound</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#amount that expected complete-data log-likelihood increases </span>
+</span></span><span class="line"><span class="cl"><span class="n">optimized_expected_complete</span> <span class="o">=</span> <span class="nf">responsibilities.apply</span><span class="p">(</span><span class="n">compute_expected_complete_like</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates[</span><span class="s">&#39;p_new&#39;</span><span class="n">]</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="nf">.sum</span><span class="p">()</span>     
+</span></span><span class="line"><span class="cl"><span class="n">expectation_expected_complete</span> <span class="o">=</span> <span class="nf">responsibilities.apply</span><span class="p">(</span><span class="n">compute_expected_complete_like</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="nf">.sum</span><span class="p">()</span>   
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">expected_complete_increase</span> <span class="o">=</span>  <span class="nf">np.round</span><span class="p">(</span><span class="n">optimized_expected_complete</span> <span class="o">-</span> <span class="n">expectation_expected_complete</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Increase in evidence lower bound = &#39;</span><span class="p">,</span> <span class="n">lower_bound_increase</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Increase in expected complete-data log-likelihood:&#39;</span><span class="p">,</span> <span class="n">expected_complete_increase</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>Increase in evidence lower bound =  1.81803
+Increase in expected complete-data log-likelihood: 1.81803
+</code></pre>
+<h5 id="point-2-the-incomplete-data-log-likelihood-increases-by-at-least-as-much-as-the-evidence-lower-bound">Point 2: The Incomplete-Data Log-Likelihood Increases by at Least as Much as the Evidence Lower Bound</h5>
+<p>In computing new parameter estimates in the M step, $\boldsymbol{\theta}^{new}$, the incomplete-data log-likelihood increases by at least as much as the evidence lower bound increases. To show the inequality between the increase in the incomplete-data log-likelihood and the evidence lower bound, I first show below that the incomplete-data log-likelihood can be decomposed as the sum of the lower bound and a KL divergence (see Equation \ref{eq:e-step-kl}. Importantly, I use probability notation in the beginning to highlight that $L(\boldsymbol{\theta}|\mathbf{x}, \mathbf{z}) = P(\mathbf{x}, \mathbf{z}|\boldsymbol{\theta})$, which can be decomposed into $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}) P(\mathbf{x}|\boldsymbol{\theta}) = P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})L(\boldsymbol{\theta}|\mathbf{x})$. I denote $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta})$ with probability notation because it is a true probability distribution, but I denote $P(\mathbf{x}|\boldsymbol{\theta})$ with likelihood notation, $L(\boldsymbol{\theta}|\mathbf{x})$, because, when fixing the data and varying the parameters, values become likelihoods (see my previous post on <a href="https://sebastiansciarra.com/technical_content/mle/">likelihood and probability</a>). As mentioned before, because the M step computes new parameter estimates, $\boldsymbol{\theta}^{new}$, I distinguish them from the current estimates, $\boldsymbol{\theta}^{old}$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathcal{L}(q, \boldsymbol{\theta}^{old}) &amp;= \sum_{\mathbf{z}} q(\mathbf{z}) \log \Bigg(\frac{P(\mathbf{x}, \mathbf{z}|\boldsymbol{\theta}^{old})}{q(\mathbf{z})}\Bigg) \nonumber \\
+&amp;=\sum_{\mathbf{z}} q(\mathbf{z})  \log \Bigg(\frac{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}) P(\mathbf{x}|\boldsymbol{\theta}^{old})}{q(\mathbf{z})}\Bigg)  \nonumber \\
+&amp;= \underbrace{\sum_{\mathbf{z}} q(\mathbf{z})  \log \Bigg(\frac{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}{q(\mathbf{z})}\Bigg)}_{\text{-ve (reverse) KL divergence}} +  {\underbrace{\vphantom{\Bigg(} \sum_{\mathbf{z}} q(\mathbf{z})}_{=1}} \log \big(P(\mathbf{x}|\boldsymbol{\theta}^{old}) \big)\nonumber \\
+&amp;= -\underbrace{\mathbb{E}_{q(\mathbf{z})} \log \Bigg(\frac{q(\mathbf{z})}{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\Bigg)}_{\text{KL divergence}}  + {\underbrace{\vphantom{\Bigg(} \log \big(P(\mathbf{x}|\boldsymbol{\theta}^{old}) \big)}_{\text{Incomplete-data log-likelihood}}} \nonumber \\
+\log \big(L(\boldsymbol{\theta}^{old}|\mathbf{x}) \big) &amp;= \mathcal{L}(q, \boldsymbol{\theta}^{old}) +\underbrace{\mathbb{E}_{q(\mathbf{z})} \log \Bigg(\frac{q(\mathbf{z})}{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\Bigg)}_{\text{KL divergence}}   \nonumber \\
+\log \big(L(\boldsymbol{\theta}^{old}|\mathbf{x}) \big) &amp;= \mathcal{L}(q, \boldsymbol{\theta}^{old}) + KL\big(q(\mathbf{z} )\| P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})\big)
+\label{eq:e-step-kl}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>As a brief aside, we can see that, by setting $q(\mathbf{z}) = P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})$ in the E step, the KL divergence goes to zero and the incomplete-data log-likelihood becomes equal to the evidence lower bound (Equation \ref{eq:equality} is repeated below, with $\boldsymbol{\theta} = \boldsymbol{\theta}^{old}$).</p>
+<p>$$
+\begin{align}
+\log L(\boldsymbol{\theta}^{old}|\mathbf{x}) &amp;=   \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}),\boldsymbol{\theta}^{old}\Big)
+\tag{\ref{eq:equality} revisited}
+\end{align}
+$$</p>
+<p>After computing new parameter estimates in the M step, the value of the incomplete-data log-likelihood increases at these new values $\boldsymbol{\theta}$ such that it it the sum of the old evidence lower bound maximized with respect to $\boldsymbol{\theta}^{new}$ and the KL divergence between the old responsibilities and some new distribution of the responsibilities, $q(\mathbf{z}^{new})$ (Equation \ref{eq:new-incomplete-q}). From Equation \ref{eq:ind-posterior}, we know that we can use Bayes&rsquo; theorem to compute the new distribution of the latent variables, and so I set $q(\mathbf{z}^{new} = P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})$) in Equation \ref{eq:new-incomplete-bayes}.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}^{new}|\mathbf{x}) &amp;=   \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}),\boldsymbol{\theta}^{new}\Big) + KL\big(q(\mathbf{z}^{new})|P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}))
+\label{eq:new-incomplete-q} \\
+&amp;= \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}),\boldsymbol{\theta}^{new}\Big) + KL\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})|P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}))
+\label{eq:new-incomplete-bayes}
+\end{align}
+\end{spreadlines}
+$$
+In looking at the difference between the incomplete-data log-likelihood at the old parameter values with the old responsibilities and the new parameter values, the incomplete-data log-likelihood increases by at least as much as the evidence lower bound because it absorbs the KL divergence between the old responsibilities and the new responsibilities. Therefore, we arrive at Equation \ref{eq:theta-optimize} presented at the beginning of this section.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}^{new}|\mathbf{x})  - \log L(\boldsymbol{\theta}^{old}|\mathbf{x}) &amp;= \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}),\boldsymbol{\theta}^{new}\Big) - \mathcal{L}\Big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}),\boldsymbol{\theta}^{old}\Big) + KL\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})|P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})) \\
+&amp;= \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z})\big) - \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z})\big) + KL\big(P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})|P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old}))
+\\
+&amp; \ge \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{new}|\mathbf{x},\mathbf{z})\big) - \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log L\big(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z})\big)
+\tag{\ref{eq:theta-optimize} revisited}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Note that Equation \ref{eq:theta-optimize} can also be represented using auxiliary function and entropy notation, whereby $H(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})$ is the entropy of $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})$ and $H(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old})$ is the cross-entropy of $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{new})$ with respect to $P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})$ (Equation \ref{eq:entropy-aux}). Because Gibbs&rsquo; inequality states that cross-entropy is greater than or equal to entropy (for a proof, see <a href="#gibbs">Appendix C</a>), $H(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old}) \ge H(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})$, and turns Equation \ref{eq:new-old-like-diff} into an inequality when removed.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\log L(\boldsymbol{\theta}^{new}|\mathbf{x})  - \log L(\boldsymbol{\theta}^{old}|\mathbf{x})
+&amp;=  Q(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old}) - Q(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old}) +  H(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old}) - H(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})
+\label{eq:new-old-like-diff}\\
+&amp;\ge Q(\boldsymbol{\theta}^{new}|\boldsymbol{\theta}^{old}) - Q(\boldsymbol{\theta}^{old}|\boldsymbol{\theta}^{old})
+\label{eq:entropy-aux}
+\end{align}
+\end{spreadlines}
+$$
+The Python code block below (see lines <a href="#161">161&ndash;210</a>)  shows that, after the M step, the incomplete-data log-likelihood indeed increases by as much as the evidence lower bound and the KL divergence between the new and old responsibilities. Note that I fix the values of $mu_k$ so that convergence does not occur in one trial.</p>
+<div class="highlight" language="python"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">compute_cross_entropy</span><span class="p">(</span><span class="n">old_responsibilities</span><span class="p">,</span> <span class="n">new_responsibilities</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">##extract responsibility columns and then compute cross-entropy, \sum_x P(x)*log(Q(x)), for each cell value</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_colummns_old</span> <span class="o">=</span> <span class="nf">old_responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;resp_mixture&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">resp_colummns_new</span> <span class="o">=</span> <span class="nf">new_responsibilities.filter</span><span class="p">(</span><span class="n">like</span> <span class="o">=</span> <span class="s">&#39;resp_mixture&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="o">-</span><span class="nf">np.sum</span><span class="p">(</span><span class="n">resp_colummns_old.values</span> <span class="o">*</span> <span class="nf">np.log</span><span class="p">(</span><span class="n">resp_colummns_new.values</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">return</span> <span class="n">entropy</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#data given to researcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">binom_mixture_data</span> <span class="o">=</span> <span class="n">[1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#initial guesses for E step </span>
+</span></span><span class="line"><span class="cl"><span class="n">mu_fixed</span> <span class="o">=</span> <span class="n">[0.5</span><span class="p">,</span> <span class="m">0.5</span><span class="n">]</span> <span class="c1">#mixture probabilities </span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">[0.6</span><span class="p">,</span> <span class="m">0.8</span><span class="n">]</span> <span class="c1">#success probabilities</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#First iteration of EM algorithm </span>
+</span></span><span class="line"><span class="cl"><span class="n">old_responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span> <span class="c1">#E step</span>
+</span></span><span class="line"><span class="cl"><span class="n">estimates</span> <span class="o">=</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">)</span> <span class="c1"># M step </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#Second iteration of EM algorithm  (only E step)</span>
+</span></span><span class="line"><span class="cl"><span class="n">new_responsibilities</span> <span class="o">=</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates[</span><span class="s">&#39;p_new&#39;</span><span class="n">]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#amount that lower bound increased by after M step: increase in lower bound  + KL divergence </span>
+</span></span><span class="line"><span class="cl"><span class="c1">##1) Increase in lower bound </span>
+</span></span><span class="line"><span class="cl"><span class="n">optimized_lower_bound</span> <span class="o">=</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates[</span><span class="s">&#39;p_new&#39;</span><span class="n">]</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="n">expectation_lower_bound</span> <span class="o">=</span> <span class="nf">compute_lower_bound</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">lower_bound_increase</span> <span class="o">=</span> <span class="n">optimized_lower_bound</span> <span class="o">-</span> <span class="n">expectation_lower_bound</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##2) KL divergence between new and old responsibilities </span>
+</span></span><span class="line"><span class="cl"><span class="n">entropy</span> <span class="o">=</span> <span class="nf">compute_entropy</span><span class="p">(</span><span class="n">responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">cross_entropy</span> <span class="o">=</span> <span class="nf">compute_cross_entropy</span><span class="p">(</span><span class="n">old_responsibilities</span> <span class="o">=</span> <span class="n">old_responsibilities</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                      <span class="n">new_responsibilities</span> <span class="o">=</span> <span class="n">new_responsibilities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                      
+</span></span><span class="line"><span class="cl"><span class="n">KL_divergence</span> <span class="o">=</span> <span class="o">-</span><span class="n">entropy</span> <span class="o">+</span> <span class="n">cross_entropy</span>
+</span></span><span class="line"><span class="cl"><span class="n">inc_lower_bound_plus_KL</span> <span class="o">=</span> <span class="nf">np.round</span><span class="p">(</span><span class="n">lower_bound_increase</span> <span class="o">+</span> <span class="n">KL_divergence</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#amount that incomplete-data log-likelihood increases </span>
+</span></span><span class="line"><span class="cl"><span class="n">new_incomplete_like</span> <span class="o">=</span> <span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">estimates[</span><span class="s">&#39;p_new&#39;</span><span class="n">]</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="n">old_incomplete_like</span> <span class="o">=</span> <span class="nf">compute_incomplete_log_like</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">binom_mixture_data</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_fixed</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">incomplete_like_increase</span> <span class="o">=</span> <span class="nf">np.round</span><span class="p">(</span><span class="n">new_incomplete_like</span> <span class="o">-</span> <span class="n">old_incomplete_like</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Increase in evidence lower bound + cross-entropy = &#39;</span><span class="p">,</span> <span class="n">inc_lower_bound_plus_KL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="s">&#39;Increase in incomplete-data log-likelihood:&#39;</span><span class="p">,</span> <span class="n">incomplete_like_increase</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code class='python-code'>Increase in evidence lower bound + cross-entropy =  1.91468
+Increase in incomplete-data log-likelihood: 1.91468
+</code></pre>
+<h3 id="m-step-math">Computation of New Parameter Estimates</h3>
+<p>Ending with the computation of the new parameter estimates, I will now show how the M step obtains new parameter values, $\boldsymbol{\theta}^{new}$. As shown in Equation \ref{eq:lower-bound-expected}, the new parameter estimates are obtained by maximizing the expected complete-data log-likelihood, $\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))$. Therefore, to obtain new parameter values, I will compute the partial derivatives of $\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))$ with respect to each parameter in $\boldsymbol{\theta}^{old} = [\mu_k, p_k]$. As a reference, I repeat the expanded version of the expected complete-data log-likelihood in Equation \ref{eq:lower-bound} below:</p>
+<p>$$
+\begin{align}
+\mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})} \log (L (\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z})) &amp;= \sum_{n=1}^{10} \sum_{k=1}^2\gamma(z_{nk})\big(\log(\mu_k^{old}) + x_n\log(p_k^{old}) + (1 - x_n)\log(1 - p_k^{old})\big).
+\tag{\ref{eq:lower-bound-exp}$\phantom{i}$ revisited}
+\end{align}
+$$</p>
+<p>For clarity, I have superscripted each parameter with $^{old}$ because new parameter estimates are always obtained with the old values.</p>
+<p>Beginning with the probability of selecting each $k$ coin, $\mu_k$, I compute the corresponding partial derivative of the expected complete-data log-likelihood below.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\partial \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))}{\partial \mu_k^{old}} &amp;= \frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{\mu_k^{old}} \nonumber \\
+\text{Set partial derivative} \quad &amp;= 0 \nonumber \\
+0 &amp;=  \frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{\mu_k^{old}}
+\label{eq:mu-inadmissible}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>In looking at Equation \ref{eq:mu-inadmissible}, it is impossible to obtain a solution for $\mu_k$. Thankfully, this problem can be fixed by constraining the optimization problem with a Lagrange multiplier, $\lambda$ (for an explanation, see <a href="#https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/lagrange-multipliers-and-constrained-optimization/v/lagrange-multiplier-example-part-1">Lagrange multipliers</a>). Specifically, we constrain the $mu_k$ values to sum to one and then set the derivatives equal to each and include the Lagrange multiplier in the partial derivative of the constraint.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\sum_k^2 \mu_k^{old} &amp;= 1 \nonumber \\
+\sum_k^2 \mu_k^{old} - 1 &amp;= 0 \nonumber \\
+\frac{\partial \text{ }  \sum_k^2 \mu_k^{old} - 1}{\partial \text{ } \mu_k^{old}} &amp;= 1 \nonumber \\
+\frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{\mu_k^{old}} &amp;= \lambda (1)  \label{eq:constrained-opt} \\
+\text{Include summation over}\quad &amp; k \text{ and solve for} \quad \lambda\\
+\frac{\sum_{n = 1}^{10} \sum_{k = 1}^2\gamma(z_{nk})}{\sum_{k = 1}^2 \mu_k^{old}} &amp;= \lambda  \nonumber \\
+\sum_{n = 1}^{10} \sum_{k = 1}^2\gamma(z_{nk}) &amp;= \underbrace{\sum_{k = 1}^2 \mu_k^{old}}_{= 1}  \lambda  \nonumber \\
+\lambda &amp;= \sum_{n = 1}^{10} \sum_{k = 1}^2\gamma(z_{nk}) = N
+\label{eq:lambda-sol}
+\end{align}
+\end{spreadlines}
+$$
+Note that adding the responsibilities across all $n$ data points and all $k$ mixtures gives the total number of data points, $\sum_{n = 1}^{10} \sum_{k = 1}^2\gamma(z_{nk}) = N$.</p>
+<p>We can then plug in the the solution for $\lambda$ (Equation \ref{eq:lambda-sol}) into Equation \ref{eq:constrained-opt} to obtain the solution for $\mu_k$ shown below in Equation \ref{eq:mu-solution}. Intuitively, the probability of each $k$ coin is obtained by dividing the effective number of data points, $N_k$, by the total number of data points, $N$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{\mu_k} &amp;= N  \nonumber \\
+\mu_k = \frac{\sum_{n = 1}^{10} \gamma(z_{nk})}{N} &amp;= \frac{N_k}{N}
+\label{eq:mu-solution}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Ending with the probability of heads for each $k$ coin, $p_k$, I compute the corresponding partial derivative of the expected complete-data log-likelihood below. As shown in Equation \ref{eq:mixture-prob}, the value of $p_k$ that optimizes the lower bound and the incomplete-data log-likelihood is obtained by dividing the sum of flips that result in heads weighted by the corresponding responsibility by the effective number of data points associated with the $k$ coin, $N_k$.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\partial \mathbb{E}_{P(\mathbf{z}|\mathbf{x}, \boldsymbol{\theta}^{old})}\log (L(\boldsymbol{\theta}^{old}|\mathbf{x},\mathbf{z}))}{\partial p_k^{old}} &amp;= \sum_{n = 1}^{10} \gamma(z_{nk})\Bigg(\frac{x_n}{p_k^{old}} - \frac{1 - x_n}{1 - p_k^{old}}\Bigg) \nonumber \\
+&amp;= \sum_{n = 1}^{10} \gamma(z_{nk})\Bigg(\frac{x_n (1 - p_k^{old} - \big(p_k^{old}(1 - x_n)\big)}{p_k^{old}(1 - p_k^{old})}\Bigg) \nonumber \\
+&amp;= \sum_{n = 1}^{10} \gamma(z_{nk})\Bigg(\frac{x_n - x_n p_k^{old} - p_k^{old} + x_np_k^{old})}{p_k^{old}(1 - p_k^{old})}\Bigg) \nonumber \\
+\text{Set partial derivative}\phantom{sp} &amp; = 0 \nonumber \\
+0 &amp;= \sum_{n = 1}^{10} \gamma(z_{nk})\Bigg(\frac{x_n - p_k^{old}}{p_k^{old}(1 - p_k^{old})}\Bigg) \nonumber \\
+&amp;=  \sum_{n = 1}^{10} \gamma(z_{nk}) (x_n - p_k^{old}) \nonumber \\
+p_k^{old} &amp;= \frac{\sum_{n = 1}^{10} x_n \gamma(z_{nk})}{\sum_{n = 1}^{10} \gamma(z_{nk})} = \frac{\sum_{n = 1}^{10} x_n \gamma(z_{nk})}{N_k} = p_k^{new}
+\label{eq:mixture-prob}
+\end{align}
+\end{spreadlines}
+$$</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>In conclusion, the expectation-maximization (EM) algorithm provides a method for indirectly optimizing the incomplete-data log-likelihood. To work with the incomplete-data log-likelihood, the EM algorithm uses a lower-bounding function in the E step that can be used to obtain responsibilities. The responsibilities are then used in the M step to optimize the lower-bounding function and obtain new parameter estimates. By optimizing the lower-bounding function, the incomplete-data log-likelihood increases by at least as much as the lower-bounding function, thus necessitating another E step. The E and M steps repeat until the parameter values stop updating.</p>
+<h1 id="references">References</h1>
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+<section class="hugo-cite-bibliography">
+  <dl>
+    
+
+      <div id="bishop2006">
+
+          
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Book"
+      data-type="book"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Bishop</span>,&#32; 
+    <meta itemprop="givenName" content="C. M." />
+    C.   </span>&#32;
+    (<span itemprop="datePublished">2006</span>).
+  &#32;<span itemprop="name">
+    <i>Pattern recognition and machine learning</i></span>.
+  &#32;
+  <span itemprop="publisher"
+             itemtype="http://schema.org/Organization"
+             itemscope="">
+    <span itemprop="name">Springer New York</span></span>.&#32;Retrieved from&#32;
+  <a href="bit.ly/411YnEq"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">bit.ly/411YnEq</a></span>
+
+
+
+
+
+
+</dd>
+
+      </div>
+
+      <div id="do2008">
+
+          
+
+
+
+
+
+
+
+
+
+
+<span itemscope
+      itemtype="https://schema.org/Article"
+      data-type="article"><span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Do</span>,&#32; 
+    <meta itemprop="givenName" content="Chuong B" />
+    C.   </span>&#32;&amp;&#32;<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <span itemprop="familyName">Batzoglou</span>,&#32; 
+    <meta itemprop="givenName" content="Serafim" />
+    S.   </span>
+  &#32;
+    (<span itemprop="datePublished">2008</span>).
+  &#32;<span itemprop="name">What is the expectation maximization algorithm?</span>.<i>
+    <span itemprop="about">Nature Biotechnology</span>,&#32;26(8)</i>,&#32;<span itemprop="pagination">897–899</span>.
+  <a href="https://doi.org/10.1038/nbt1406"
+     itemprop="identifier"
+     itemtype="https://schema.org/URL">https://doi.org/10.1038/nbt1406</a></span>
+
+
+
+
+
+
+</dd>
+
+      </div>
+  </dl>
+</section>
+
+
+
+<h1 id="jensen">Appendix A: Proof of Jensen&rsquo;s Inequality</h1>
+<p>Jensen&rsquo;s inequality applies to convex and concave functions. Beginning with convex functions, we can use the first-order condition to prove Jensen&rsquo;s inequality, which is shown below in Equation \ref{eq:first-order-convex}:</p>
+<p>$$
+\begin{align}
+f(x) &amp;\ge f(c) + f(c)(x-c).
+\label{eq:first-order-convex}
+\end{align}
+$$
+Given that this definition holds for all $c$, we can set $c = \mathbb{E}[f(x)]$, which gives</p>
+<p>$$
+\begin{align}
+f(x) &amp;\ge f(\mathbb{E}[x]) + f(\mathbb{E}[x])(x - \mathbb{E}[x]).
+\label{eq:first-order-convex-exp}
+\end{align}
+$$</p>
+<p>We can then take the expectation of Equation \ref{eq:first-order-convex-exp}, which results in Jensen&rsquo;s inequality in Equation \ref{eq:jensen-proof}.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbb{E}[f(x)] &amp;\ge \underbrace{\mathbb{E}[f(\mathbb{E}[x])]}_{=f(\mathbb{E}[x]} + \mathbb{E}[f(\mathbb{E}[x])]\underbrace{(\mathbb{E}[x] - \mathbb{E}[x])}_{= 0}. \\
+\mathbb{E}[f(x)] &amp; \ge f(\mathbb{E}[x])
+\label{eq:jensen-proof}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>For concave functions, we simply change the direction of the inequality in Equation \ref{eq:first-order-convex} to obtain Jensen&rsquo;s inequality for concave functions below (Equation \ref{eq:jensen-concave-proof}).</p>
+<p>$$
+\begin{align}
+f(\mathbb{E}[x]) \ge \mathbb{E}[f(x)]
+\label{eq:jensen-concave-proof}
+\end{align}
+$$</p>
+<h1 id="kl-divergence-proof">Appendix B: Proof that KL Divergence is Always Non-Negative</h1>
+<p>As explained in section on the <a href="#kl-divergence">KL divergence and entropy</a>, the KL divergence  measures the difference between two probability distributions, $P(\mathbf{x})$ and $Q(\mathbf{x})$, by computing the sum of weighted logarithmic ratios, as shown below in a repetition of Equation \ref{eq:kl-divergence}. Note that I flip the fraction inside the logarithm to obtain the negative (or reverse) KL divergence in Equation \ref{eq:rev-kl}</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+KL(P\|Q) &amp;= \sum_{\mathbf{x}} P(\mathbf{x}) \log\Bigg(\frac{P(\mathbf{x})}{Q(\mathbf{x})}\Bigg).
+\tag{\ref{eq:kl-divergence}$\phantom{s}$revisited} \\
+-KL(P\|Q) &amp;= -\sum_{\mathbf{x}} P(\mathbf{x}) \log\Bigg(\frac{Q(\mathbf{x})}{P(\mathbf{x})}\Bigg).
+\label{eq:rev-kl}
+\end{align}
+\end{spreadlines}
+$$</p>
+<p>Because the negative logarithm causes the KL divergence to become convex, we can use Jensen&rsquo;s inequality to transform the KL divergence into an inequality by moving the summation inside the logarithm (Equation \ref{eq:kl-inequality}). From this point onward, it becomes clear that the KL diverence is always greater than or equal to zero (Equation \ref{eq:kl-proof}).</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+-KL(P\|Q) &amp; \ge -\log\Bigg(\sum_{\mathbf{x}} P(\mathbf{x}) \frac{Q(\mathbf{x})}{P(\mathbf{x})}\Bigg) \label{eq:kl-inequality} \\
+&amp; \ge \log(\underbrace{Q(\mathbf{x})}_{=1}) \nonumber \\
+&amp; \ge \log(1)\cdot-1 \nonumber \\
+KL(P\|Q)&amp; \ge 0
+\label{eq:kl-proof}
+\end{align}
+\end{spreadlines}
+$$</p>
+<h1 id="gibbs">Appendix C: Proof of Gibbs&rsquo; Inequality</h1>
+<p>Gibbs&rsquo; inequality states that the cross-entropy, $- P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)$, is greater than or equal to the entropy, $- P(\mathbf{x}) \log\big(P(\mathbf{x})\big)$ (see Equation \ref{eq:gibb-inequality-proof}). Gibbs&rsquo; inequality can be easily proven using the fact that the KL divergence is always greater than or equal to zero.</p>
+<p>$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+KL(P\|Q) &amp;\ge 0 \nonumber \\
+\sum_{\mathbf{x}} P(\mathbf{x}) \log\big(P(\mathbf{x})\big) - \sum_{\mathbf{x}} P(\mathbf{x}) \log\big(Q(\mathbf{x})\big) &amp;\ge 0 \nonumber \\
+{- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}  &amp;\ge {- \sum_{\mathbf{x}}  P(\mathbf{x}) \log\big(Q(\mathbf{x})\big)}
+\label{eq:gibb-inequality-proof}
+\end{align}
+\end{spreadlines}
+$$</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>It should also be noted that maximum likelihood estimation can result in singularities with Gaussian mixture models. In short, if the estimate for a $k^{th}$ mixture&rsquo;s mean, $\mu_k$, happens to exactly match the value of an individual $n$ value, $x_n$, then the mixture in question can become &lsquo;stuck&rsquo; on this data point with all the other data points being modelled by the other mixtures. With the mixture fixed on the one data point, the variance of the mixture will decrease to zero and the log-likelihood will increase to infinity.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>The first value in Equation \ref{eq:kl-divergence-exp} is technically the negative entropy. Because entropy (and cross-entropy) compute information/surprise, it makes conceptual sense to represent them as positive values. Unfortunately, the term $\sum_{\mathbf{x}} P(\mathbf{x}) \log(P(\mathbf{x}))$ returns negative values. To reflect the conceptualization that entropy computes information, a negative sign is included to multiply the negative value returned by $\sum_{\mathbf{x}} P(\mathbf{x}) \log(P(\mathbf{x}))$ into a positive value.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+    </div>
+
+
+    <div class = 'comments'>
+    <script src="https://giscus.app/client.js"
+        data-repo="sciarraseb/HugoWebsite"
+        data-repo-id="R_kgDOIwrh4A"
+        data-category="Comments"
+        data-category-id="DIC_kwDOIwrh4M4CT1kX"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="https://cdn.jsdelivr.net/gh/sciarraseb/giscus@8cdfe5ff92c061ae8f8f3528299a0d5610530e8c/styles/themes/cobalt.css"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+    </div>
+
+  </div>
+
+  
+    <div class = 'toc_scroll'>
+      <div class = 'toc_container'>
+        <nav class="tableContents">
+          <span>Table of Contents</span>
+        </nav>
+      </div>
+    </div>
+    <button id="toc_button"><i class="fas fa-circle-right"></i></button>
+    <button id="toc_button_bottom"><i class="fas fa-circle-down"></i></button>
+
+
+  
+
+
+
+
+</div>
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="/js/mathjax_config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0-alpha.1/es5/tex-mml-chtml.js"></script>
+
+
+
+
+        </main><footer class="site-footer">
+  
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <script src="/js/external_links.js"></script>
+   <script src="/js/number_sections.js"></script>
+   <script src="/js/table_contents.js"></script>
+   <script src="/js/number_tables.js"></script>
+   <script src="/js/number_figures.js"></script>
+   <script src="/js/codefold.js"></script> 
+
+</footer>
+
+
+
+
+
+      </div>
+
+
+    </body>
+
+</html>
+

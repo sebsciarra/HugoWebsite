@@ -30,7 +30,7 @@ window.MathJax = {
 
   linebreaks: {                  // options for when overflow is linebreak
       inline: true,                   // true for browser-based breaking of inline equations
-      width: '100%',                  // a fixed size or a percentage of the container width
+      width: '90%',                  // a fixed size or a percentage of the container width
       lineleading: 2,                // the default lineleading in em units
       LinebreakVisitor: null,         // The LinebreakVisitor to use
   },
@@ -39,9 +39,9 @@ window.MathJax = {
 
   startup: {
     ready() {
-                  const {CommonWrapper} = MathJax._.output.common.Wrapper;
+      const {CommonWrapper} = MathJax._.output.common.Wrapper;
       const {LineBBox} = MathJax._.output.common.LineBBox;
-
+       const {ChtmlMtable} = MathJax._.output.chtml.Wrappers.mtable;
       const Configuration = MathJax._.input.tex.Configuration.Configuration;
       const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
       new CommandMap('sections', {
@@ -65,26 +65,17 @@ window.MathJax = {
           }
         },
       });
-      Object.assign(CommonWrapper.prototype, {
-        invalidateBBox(bubble = true) {
-          if (this.bboxComputed || this._breakCount >= 0) {
-            this.bboxComputed = false;
-            this.lineBBox = [];
-            this._breakCount = -1;
-            if (this.parent && bubble) {
-              this.parent.invalidateBBox();
-            }
-          }
-        },
-        _getLineBBox: CommonWrapper.prototype.getLineBBox,
-        getLineBBox(i) {
-          if (!this.lineBBox[i] && !this.breakCount) {
-            const obox = this.getOuterBBox();
-            this.lineBBox[i] = LineBBox.from(obox, this.linebreakOptions.lineleading);
-          }
-          return this._getLineBBox(i);
+      Object.assign(ChtmlMtable.prototype, {
+        adjustWideTable() {
+          const attributes = this.node.attributes;
+          if (attributes.get('width') !== 'auto') return;
+          const [pad, align] = this.getPadAlignShift(attributes.get('side'));
+          const W = Math.max(this.containerWidth / 10, this.containerWidth - pad - (align === 'center' ? pad : 0));
+          this.naturalWidth() > W && this.adjustColumnWidths(W);
         }
       });
+
+
 
       Configuration.create(
         'sections', {handler: {macro: ['sections']}}
