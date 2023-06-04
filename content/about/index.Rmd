@@ -26,7 +26,9 @@ tags: []
   </div>
 </div>
 
-I'm Sebastian Sciarra and I am currently a PhD candidate in the Industrial-Organizational Psychology program at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation. 
+
+
+I'm Sebastian Sciarra and I recently obtained my PhD in Industrial-Organizational Psychology at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation. 
 
 
 ## Organization of Blog

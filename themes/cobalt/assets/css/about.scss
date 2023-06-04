@@ -14,6 +14,7 @@
 
 @import 'navbar';
 @import 'figures';
+@import 'responsive';
 
 .blog_post {
   padding: 0;
@@ -23,13 +24,6 @@
 }
 
 
-
-.blog_title {
-  color: var(--hover-color);
-  background: white;
-  font-size: 1.75rem;
-  text-align: left;
-}
 
 .blog_summary{
   font-weight: bold;
@@ -144,8 +138,6 @@ a[href*="/about"] {
    color: var(--about-color);
 }
 
-@import 'responsive';
-
 
 
 /*prevent white dot from appearing at top*/
@@ -159,6 +151,9 @@ a[href*="/about"] {
 
 .figNote{
   line-height: 1;
+  width: 75%;
 }
+
+
 
 
