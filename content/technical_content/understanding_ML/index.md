@@ -2,7 +2,7 @@
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
 draft: true
 summary: '' 
-date: "2023-07-12"
+date: "2023-07-15"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -15,6 +15,25 @@ tags: []
 
 
 
+Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the EM algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the [EM algorithm](https://sebastiansciarra.com/technical_content/em/). Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeably, I use the `reticulate` package made for R and create a conda environment to use Python (see lines <a href="#1">1--12</a> below).
+
+```r 
+library(reticulate)
+
+#create and use conda environment
+conda_create(envname = 'blog_posts',  python_version = '3.10.11')
+use_condaenv(condaenv = 'blog_posts')
+
+#install packages in conda environment
+py_packages <- c('numpy', 'pandas', 'scipy')
+conda_install(envname = 'blog_posts', packages = py_packages)
+
+#useful for checking what packages are loaded
+py_list_packages(envname = 'blog_posts', type = 'conda')
+```
+
+
+# Introduction 
 In supervised machine learning, the goal is to predict. Whether the focus is to predict churn rates (among employes and/or customers), regions with high potential for growth, or something as innocuous as fruit fly behaviour, supervised machine learning can be used to solve these problems. Although a near endless number of models can be deployed to predict a given outcome, it is important that data scientists not rely on trial and error to find effective models and, instead, make purposeful decisions. To do so, it important that that data scientists understand the game of machine learning. 
 
 To explain the game of supervised machine learning, I will do so in six parts. First, I will provide a necessary background by presenting a formal model of learning. Second, I will provide a theoretical framework for understanding the game of supervised machine learning. Third, I will introduce the 'players' (i.e., bias, variance, and noise) of supervised machine learning by decomposing squared error. Fourth, I will explain the behaviours of bias, variance, and noise by presenting the bias-variance tradeoff. Fifth, I will explain the rules of supervised machine learning and how to succeed, Sixth, and last, I will provide an overview of situations where the rules of supervised machine learning cannot be applied. 
@@ -25,17 +44,18 @@ To provide the context of supervised machine learning, I begin with a formal mod
 
 ## Learning Context
 
-In this section, I will present the learning context. Consider an example where a tourist arrives in a new country and wants to learn how to identify a good wine without opening the bottle. Given her experience with wine, she decides to use two features: 1) the weather that occurred for the particular year the wine was produced and 2) the winemaking quality. Both features are ranked on a 1--10 scale (where 1 indicates poor weather/winemaking quality and 10 indicates excellent weather/winemaking quality). To determine the effectiveness of this approach, she decides to taste the wines of several vineyards and, for each wine, rate the quality of the weather during the year, the winemaking quality, and then taste each wine and provide a rating (1--10 scale). After collecting the data, the tourist plans to take a subset of the data to train her models. In more formal terms, there are three components that would be considered as learning inputs: 
+In this section, I will present the learning context. Consider an example where a tourist arrives in a new country and wants to learn how to identify a good wine without opening the bottle. Given her experience with wine, she decides to use two features: 1) the weather that occurred for the particular year the wine was produced and 2) the winemaking quality. Both features are ranked on a 1--10 scale (where 1 indicates poor weather/winemaking quality and 10 indicates excellent weather/winemaking quality). To determine the effectiveness of this approach, she decides to taste the wines of several vineyards and, for each wine, rate the quality of the weather during the year, the winemaking quality, and then taste each wine and provide a rating (1--10 scale). After collecting the data, the tourist plans to take a subset of the data to train her models. In more formal terms, there are two components that would be considered as learning inputs: 
 
 1) *Feature space* ($\mathbf{X}$): the set of features used for prediction. In the current example, the features of weather ($\mathbf{x}_1$) and winemaking quality ($\mathbf{x}_2$) for each wine are stored in a matrix, $\mathbf{X} = \[\mathbf{x}_1, \mathbf{x}_2\]$, with each row being an observation such that $\mathbf{x} = {x_1, x_2}$. Mathematically, we can represent the feature space as $\mathbf{X} = \[1, 10\]^2$. 
 2) *Outcome space* ($\mathbf{Y}$): the set of variables being predicted. Because there is only one outcome variable of the wine quality ratings, the outcome space is simply a vector, $\mathbf{y}_1$. Given that wine quality ratings range from 1 to 10, the outcome space can be represented as $\mathbf{Y} = \[1, 10\]$. 
-3) *Training set* ($\mathbf{S}$): the data used to train models, which consists of feature vector/outcome pairs, $\mathbf{x}_m, y_m$, such that $\mathbf{S} = ((\mathbf{x}_1, y_1), ... ,(\mathbf{x}_m, y_m))$).
+
+Together, the feature and outcome spaces comprise the data collected by the tourist such that, for each $m$ wine, there is a feature vector/outcome pair, $\mathbf{x}_m, y_m$.
 
 Importantly, the tourist does not and never assumes *realizability*: That the features of weather and winemaking quality completely predict wine quality ratings. Instead, she assumes that, for a given pair of weather and winemaking quality values, there is a distribution of plausible wine ratings, which introduces stochasticity (randomness). Dropping the realizability assumption in the current example is certainly intuitive. Wine quality is affected by many factors outside of weather and winemaking quality such as soil quality, altitude, and age of the vines. Importantly, even if the tourist were to collect data for all the variables that affect wine quality, realizability (i.e., a one-to-one mapping between the predictors and and the outcome) would not occur because of the aforementioned stochasticity (randomness) and measurement error.[^1]
 
-[^1]: Although unlikely with directly observable variables (or manifest variables) such as altitude, measuring a variable such as winemaking quality is likely to incur error because it is not directly observable; it is a latent variable that must be approximated using indicators (e.g., cleanliness of winemaking procedure, treatment of grapes, winemaker's motives, etc.). 
+[^1]: Although measurement error is unlikely with directly observable variables (or manifest variables) such as altitude, measurement error is likely be incurred when measuring a variable such as winemaking quality because it is not directly observable; it is a latent variable that must be approximated using indicators (e.g., cleanliness of winemaking procedure, treatment of grapes, winemaker's motives, etc.). 
 
-To reflect the uncertainty follows from dropping realizability (also known as *agnostic learning*), the tourist assumes a joint distribution over the feature and outcome spaces. In contrast to the realizability setting where there is a one-to-one mapping function between the feature and outcome spaces, $f: \mathbf{X} \rightarrow \mathbf{Y}$, a probabilistic relation between the feature and outcome spaces is specified. Specifically, I assume a joint distribution over the feature and outcome spaces, $\mathcal{D}(\mathbf{X}, \mathbf{Y})$, such that a distribution of possible outcomes exists for any given set of feature values, $\mathcal{D}((x, y)|x)$. By conceptualizing the feature-outcome space as probabilistic, the tourist can account for measurement error and stochasticity. 
+To reflect the uncertainty that follows from dropping realizability (also known as *agnostic learning*), the tourist assumes a joint distribution over the feature and outcome spaces. In contrast to the realizability setting where there is a one-to-one mapping function between the feature and outcome spaces, $f: \mathbf{X} \rightarrow \mathbf{Y}$, a probabilistic relation between the feature and outcome spaces is specified. Specifically, I assume a joint distribution over the feature and outcome spaces, $\mathcal{D}(\mathbf{X}, \mathbf{Y})$, such that a distribution of possible outcomes exists for any given set of feature values, $\mathcal{D}((x, y)|x)$. By conceptualizing the feature-outcome space as probabilistic, the tourist can account for measurement error and stochasticity. 
 
 
 ## Learning Model 
@@ -63,9 +83,10 @@ Although generalization is not directly computable, one solution is to compute l
 
 $$
 \begin{align}
-\lim_{n \rightarrow \infty} \frac{\sum_{i=1}^n (f(\mathbf{x}_i) - y_i)^2}{n} &= L_{\mathcal{D}}(f). 
+\lim_{n \rightarrow \infty} \frac{\sum\_{i=1}^n (f(\mathbf{x}_i) - y_i)^2}{n} &= L\_{\mathcal{D}}(f). 
 \end{align}
 $$
+
 Therefore, to obtain an approximation of the generalization error, loss can be computed on a sample, which is often called the *empirical loss* and represented as 
 
 $$
@@ -88,7 +109,10 @@ f^\ast &= \underset{f}{\arg\min} \ Ls(f),
 \end{align}
 $$
 
-where $f^\ast$ is function in the set of all possible functions, $f$, that obtains the lowest empirical loss. In the current example, because empirical risk minimization occurs over the set of all possible functions, $f^*$ is, therefore, the best possible function and is often called the *Bayes decision function*. Because we assume agnostic learning (i.e., that no function can perfectly predict the outcome), the Bayes decision function will have nonzero loss, which is often called the *Bayes risk*. 
+where $f^\ast$ is function in the set of all possible functions, $f$, that obtains the lowest empirical loss. 
+
+Two points deserve mention with respect to $f^\ast$. First, it is often called the *empirical risk minimizer* because it obtains the lowest empirical loss. Second, in the current example, because empirical risk minimization occurs over the set of all possible functions, $f^*$, then the best possible function will inevitably exist in this set. The best possible function (i.e., the function with the lowest generalization error) is often called the *Bayes decision function*. Because we assume agnostic learning (i.e., that no function can perfectly predict the outcome), the Bayes decision function will have nonzero loss, which is often called the *Bayes risk*.
+
 
 # Theory for Understanding the 'Game' of Machine Learning
 
@@ -132,7 +156,7 @@ $$
 \mathbf{y} &= \mathbf{Xw} + \mathbf{e}, \text { where}
 \label{eq:outcome-generate} \\\\
 \mathbf{X} &= \[\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_1^2, \mathbf{x}_2^2, \mathbf{x}_1\mathbf{x}_2\], \nonumber \\\\
-\mathbf{w} &= \[0.3 ,  0.1 ,  0.07, -0.1 ,  0.1\], \text{ and} \nonumber\\\\
+\mathbf{w} &= \[0.3 ,  0.1 ,  0.07, -0.1 ,  0.1\], \text{ and} \nonumber \\\\
 \mathbf{e} &\sim \mathcal{N}(\mu = 0, \sigma = 1.5). \nonumber 
 \end{align}
 \end{spreadlines}
@@ -170,6 +194,7 @@ $$
 \end{align}
 \end{spreadlines}
 $$
+
 With the outcome variable of wine quality being scaled, the population regression coefficients can also be scaled by first computing a scaling factor (Equation \ref{eq:scaling}) and then multiplying the old regression weights by the scaling factor (Equation \ref{eq:scaled-weights}).
 
 $$
@@ -181,7 +206,7 @@ $$
 &=  0.33 \nonumber \\\\
 \mathbf{w}_{scaled} &= \mathbf{w}(0.33)  
 \label{eq:scaled-weights} \\\\
-&= [0.10, 0.03, 0.02, -0.03,  0.03] \nonumber
+&= [0.10, 0.03, 0.02, -0.03,  0.03] \tag{eq:scaled-values}
 \end{align}
 \end{spreadlines}
 $$
@@ -315,11 +340,11 @@ def create_covariance_matrix(sd, rho):
   return cov_matrix
 
 
-def generate_mult_trunc_normal(cov_matrix, mu, sd, rho, sample_size):
+def generate_mult_trunc_normal(cov_matrix, mu, sd, rho, sample_size, seed = 27):
 
   #generate predictors
   data_mult_trunc_normal = generate_trunc_predictors(mu = mu, sd = sd, cov_matrix = cov_matrix, 
-                                                     sample_size = sample_size)
+                                                     sample_size = sample_size, seed = 27)
                                                      
   #generate outcome variable
   data_mult_trunc_normal = compute_outcome_variable(data = data_mult_trunc_normal)
@@ -354,7 +379,8 @@ data_gen_error = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd
 
 ## Approximation Error: The Result of Having to Constrain Empirical Loss Minimization 
 
-To obtain an approximation of a function's ability to make accurate predictions on unseen data (i.e., generalization), the strong law of large numbers indicated that, with sufficient sample size, the performance on sample data would be sufficient. As a corollary, empirical risk minimization then suggested that the best possible could be identified by determining the function that obtained the lowest empirical loss. Unfortunately, empirical risk minimization inevitably fails when optimizing over over all possible functions. 
+To obtain an approximation of a function's ability to make accurate predictions on unseen data (i.e., generalization), the strong law of large numbers indicated that, with sufficient sample size, the performance on sample data would be sufficient. As a corollary, empirical risk minimization then suggested that the best possible function could be identified by determining the function that obtained the lowest empirical loss. Unfortunately, empirical risk minimization inevitably fails when optimizing over over all possible functions. 
+
 
 ### Overfitting: The Failure of Empirical Risk Minimization 
 
@@ -401,8 +427,8 @@ def gen_poly_reg_eq(poly_order, include_interactions = False):
   
   #compute polynomial terms for predictors
   weather_pred = ' + '.join(['np.power(weather, {})'.format(ord_value) for ord_value in range(1, poly_order+1)])
-  winemaking_quality_pred = ' + '.join(['np.power(winemaking_quality, {})'.format(ord_value) for ord_value in range(1,
-                            poly_order+1)])
+  winemaking_quality_pred = ' + '.join(['np.power(winemaking_quality, {})'.format(ord_value) 
+                            for ord_value in range(1,poly_order+1)])
                             
   # Compute all two-way interactions between weather and winemaking_quality
   if include_interactions and poly_order > 1:
@@ -438,30 +464,12 @@ def compute_all_emp_gen_errors(data_emp_loss, data_gen_error, poly_order_range, 
   
   #convert dictionnary to dataframe and then compute polynomial orders by using row indexes
   df_emp_gen_errors = pd.DataFrame(all_emp_gen_errors)
-  poly_orders = pd.Series(df_emp_gen_errors.index.values + 1, name = "poly_order")
+  poly_orders =pd.Series([poly_order for poly_order in poly_order_range], name = "poly_order")
   
   #concatenate poly_orders and dataframe to create complete dataframe
   df_emp_gen_errors = pd.concat([poly_orders, df_emp_gen_errors], axis = 1)
   
   return df_emp_gen_errors
-
-
-def compute_bayes_risk(data):
-  
-  # Feature columns
-  predictors = data[["weather", "winemaking_quality"]]
-  feature_cols = pd.concat(objs=[predictors, predictors**2, predictors.prod(axis=1)], axis=1)
-  
-  # Intercept 
-  intercept = np.mean(data["wine_quality"]) - np.sum(provide_weights() * compute_rescaling_factor() * np.mean(feature_cols, axis=0))
-  
-  # Compute predictions for wine quality
-  test_pred = intercept + np.dot(a=feature_cols, b=provide_weights() * compute_rescaling_factor())
-  
-  # Compute mean squared error
-  bayes_risk = mean_squared_error(y_true = data['wine_quality'], y_pred = test_pred)
-  
-  return bayes_risk
 ```
 
 If empirical risk minimization is followed, then the function with the highest polynomial order would be chosen as the function with the lowest generalization error. Figure \ref{fig:emp-loss} shows that empirical loss decreases almost linearly as polynomial order increases. The Python code block below computes and plots empirical loss for each polynomial model up to the ninth order. 
@@ -469,10 +477,16 @@ If empirical risk minimization is followed, then the function with the highest p
 ```r {language=python}
 import plotnine as pt
 
+emp_sample_size = 150
+
+#data used to compute empirical loss 
+data_emp_loss = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
+                                             rho = rho_weather_winemaking, sample_size = emp_sample_size)
+                                             
 #compute empirical loss and generalization error for polynomial models up to ninth order
 df_emp_gen_errors = compute_all_emp_gen_errors(data_emp_loss = data_emp_loss, data_gen_error = data_gen_error,
                                            include_interactions = True, poly_order_range=range(1, 10))
-
+  
 #set inplace = False to keep gen_error in original data frame
 df_emp_loss = df_emp_gen_errors.drop("gen_error", axis=1, inplace = False)
 
@@ -569,11 +583,13 @@ Although overfitting is inevitable when all possible functions are considered, i
 
 $$
 \begin{align}
-f_\mathcal{F} = \underset{\mathcal{f \in F}}{\arg \min} \ L_s(f), 
+f_\mathcal{F} =  \underset{\mathcal{f \in F}}{\arg \min} \ L_s(f), 
 \end{align}
 $$
 
-where $\mathcal{F}$ represents the constrained set of functions. Returning to the wine example, the tourist may have knowledge that only polynomial functions up to the fifth order should be considered. With respect to the interactions, the tourist decides to omit them because they introduce complexity exponentially with polynomial order; that is, they grow exponentially in number as a function of polynomial order. Thus, the restricted set of functions over which the tourist will optimize empirical loss is 
+where $\mathcal{F}$ represents the constrained set of functions.
+
+Returning to the wine example, the tourist may have knowledge that allows her to constrain the set of function over which to optimize empirical loss. Specifically, she will only consider polynomial functions up to the fifth order and omit the two-way interaction terms because of how introduce complexity in an exponential way with respect polynomial order; that is, they grow exponentially in number as a function of polynomial order. Thus, the restricted set of functions over which the tourist will optimize empirical loss is 
 
 
 $$
@@ -582,7 +598,8 @@ f \in \mathcal{F}:f(\mathbf{x}_i) &= \text{int} + \bigg(\sum\_{p=1}^{P} w\_{p_1}
 \label{eq:constrained-functions}
 \end{align}
 $$
-where $P = 5$. Figure \ref{eq:constrained-erm} shows the empirical loss and generalization error as a function of polynomial order with constrained empirical risk minimization. Across all polynomial orders, empirical loss provides a close approximation of generalization error. 
+
+where $P = 5$. Figure \ref{fig:constrained-erm} below shows the empirical loss and generalization error as a function of polynomial order with constrained empirical risk minimization (see Python clode block below for corresponding code). Across all polynomial orders, empirical loss provides a close approximation of generalization error. Thus, the tourist has prevented the occurrence of overfitting by implementing constrained risk minimization. As an aside, a proof of the learning success of constrained empirical risk minimization can be found in [Section 2.3.1](https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/understanding-machine-learning-theory-algorithms.pdf#page=94) of Shalev-Schwartz and Ben-David (2004). 
 
 ```r {language=python}
 #compute empirical loss and generalization error for polynomial models up to fifth order
@@ -624,7 +641,7 @@ contrained_erm_plot.save("images/constrained_erm_plot.png", width = 8, height = 
 <div class="figure">
   <div class="figDivLabel">
     <caption>
-      <span class = 'figLabel'>Figure \ref{fig:overfit-plot}<span> 
+      <span class = 'figLabel'>Figure \ref{fig:constrained-erm}<span> 
     </caption>
   </div>
    <div class="figTitle">
@@ -633,51 +650,233 @@ contrained_erm_plot.save("images/constrained_erm_plot.png", width = 8, height = 
     <img src="images/constrained_erm_plot.png" width="80%" height="80%"> 
   
   <div class="figNote">
-  <span><em>Note. </em>The dark blue line indicates the generalization error and the light blue line indicates the empirical loss.  Note that mean squared error is used as the error metric (see Equation \ref{eq:mean-sq-error}) and polynomial models are constructed from Equation \ref{eq:constrained-functions}. </span> 
+  <span><em>Note. </em>The dark blue line indicates the generalization error and the light blue line indicates the empirical loss.  Across all polynomial orders, empirical loss provides a close approximation of generalization error. Note that mean squared error is used as the error metric (see Equation \ref{eq:mean-sq-error}) and polynomial models are constructed from Equation \ref{eq:constrained-functions}. </span> 
   </div>
 </div>
 
+In using constrained empirical risk minimization, the tourist can select the empirical risk minimizer and accurate predict wine quality for unseen data. With constrained empirical risk minimization optimization, an upper limit is placed on the complexity of functions, and, to the extent that complexity is limited, the incidence of overfitting will be reduced. As an aside, other methods such as regularized regression (for a review, see) and bagging (see [here](https://towardsdatascience.com/ensemble-methods-bagging-boosting-and-stacking-c9214a10a205)) can be used to combat overfitting. Although constrained empirical risk minimization appears is a solution, it is by no means a perfect solution, as will be discussed in the next section.
 
-#### A Learning Model for Validation and Deployment
 
-### The Inevitable Error of 
+#### Model Selection in Practice: Train, Validate, and Test
+
+Before proceeding to discuss the limitations of constrained empirical risk minimization, a discussion regarding model selection in practice is apropos. Up to this point, I used two data sets to compute empirical loss and generalization error, with the data set for generalization error being considerably large in order to obtain an accurate estimate. Given that I generated the data with Python functions, I could easily use two different data sets for computing empirical loss and generalization error. Unfortunately, the privilege of generating data with functions does exist in practice: Data must be collected and are, therefore, finite. 
+
+Although data are finite in practice, practitioners still want to accomplish three goals of developing models, comparing them, and then estimating how well the best model performs on unseen data (i.e., generalization error). Importantly, practitioners want to accomplish each goal and prevent overfitting. To do so, they split the data into three parts to accomplish each goal:
+
+1) *Training set*: data used to develop models and obtain parameter estimates. 
+2) *Validation set*: data used to obtain estimate of each model's generalization error so that models can be compared. Because validation data is new (with respect to the training data), overfitting is unlikely, and so the model that obtains the lowest validation error is assumed to be the best model. 
+3) *Test set*: data serves as a last check that the best model identified using the validation set is indeed the best model. Because many models may be compared using the validation set, it is conceivable that one model may outperform all the other ones by overfitting on patterns/noise specific to the validation set. To ensure this is not the case, empirical loss is computed on the test set. 
+
+Three points deserve mention with respect to model selection in practice. First, more refined approaches exist for model selection such as cross validation (see [Section 7.10](https://hastie.su.domains/Papers/ESLII.pdf#page=260) in Haste et al. (2017)) and [bagging](https://medium.com/towards-data-science/ensemble-methods-bagging-boosting-and-stacking-c9214a10a205). Second, the way in which data are trained, validated, and tested should resemble how the model will be used after deployment. For example, if a model will be used to make predictions one month into the future, it should be trained, validated, and tested such that training data do not include data points within one month of when predictions will be made. Third, deciding each sets sample size is an important decision, and a good dicussion on this issue can be found [here](https://stackoverflow.com/questions/13610074/is-there-a-rule-of-thumb-for-how-to-divide-a-dataset-into-training-and-validatio). 
+
+### The Irreducible Error That Results From Constrained Empirical Risk Minimization: Approximation Error
+
+Although constrained empirical risk minimization reduces the incidence of overfitting, it is not without its limitations. By constraining the set of functions over which to optimize empirical loss, it is unlikely that the best possible function (i.e., Bayes decision function) will exist in the constrained set. Figure \ref{fig:approx-error} depicts the set of all functions and the constrained set of functions, $\mathcal{F}$. Although the Bayes decision function, $f^\ast$, exists in the set of all functions, it does not exist in the constrained set of functions. Thus, the best function in the constrained set of functions will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting *approximation error* (see Equation \ref{eq:approx-error} below). 
+
+$$
+\begin{align}
+\text{Approximation error} \hspace{0.25cm} &=  L_D(f_{\mathcal{F}}) - L_D(f^\ast) 
+\label{eq:approx-error}
+\end{align}
+$$
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:approx-error}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Constrained Empirical Risk Minimization Results in Approximation Error</span>
+  </div>
+    <img src="images/approx_error.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting $\textit{approximation error}$ (see Equation \ref{eq:approx-error} below). </span> 
+  </div>
+</div>
+
+Returning to the wine example with the tourist, approximation error can be obtained by calculating the difference between the Bayes decision function and the constrained empirical risk minimizer. Beginning with the Bayes decision function, the scaled population regression weights from Equation \ref{eq:scaled-values} can be used to compute predictions. The difference between the predictions and actual wine quality values are used to compute the Bayes risk (or generalization error of the Bayes decision function). Ending with the constrained empirical risk minimizer, Figure \ref{fig:constrained-erm} indicated that the polynomial function with order of two resulted in the lowest generalization error. The Python code block below constructs a function for computing the Bayes risk. 
+
+
+```r {language=python}
+def compute_bayes_risk(data):
+  
+  # Feature columns
+  predictors = data[["weather", "winemaking_quality"]]
+  feature_cols = pd.concat(objs=[predictors, predictors**2, predictors.prod(axis=1)], axis=1)
+  
+  # Intercept 
+  intercept = np.mean(data["wine_quality"]) - np.sum(provide_weights() * compute_rescaling_factor() * np.mean(feature_cols, axis=0))
+  
+  # Compute predictions for wine quality
+  test_pred = intercept + np.dot(a=feature_cols, b=provide_weights() * compute_rescaling_factor())
+  
+  # Compute mean squared error
+  bayes_risk = mean_squared_error(y_true = data['wine_quality'], y_pred = test_pred)
+  
+  return bayes_risk
+```
+
+The Python code block below computes the approximation error by calculating the difference between the Bayes risk and the generalization error of the constrained empirical risk minimizer. Note that I generated another large data set to get a close approximation of the best possible function in the constrained set (i.e., get the best possible parameter estimates for the second-order polynomial model with no interactions).
+
+```r {language=python}
+best_in_class_sample_size = 1e4
+
+#use large data set to obtain a close approximation of the best possible estimates for the second-order 
+#polynomial model (without interactions)
+data_best_in_class = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
+                                             rho = rho_weather_winemaking, sample_size = best_in_class_sample_size, seed=7)
+                                             
+#Bayes risk 
+bayes_risk = compute_bayes_risk(data = data_gen_error)
+
+#compute empirical loss and generalization error for polynomial models up to fifth order
+constrained_erm = compute_all_emp_gen_errors(data_emp_loss = data_best_in_class, 
+                                             data_gen_error = data_gen_error,
+                                             include_interactions = False, 
+                                             poly_order_range=range(2, 3))
+                                             
+#compute approximation error
+approx_error = constrained_erm["gen_error"][0] - bayes_risk
+
+print('Approximation error:', np.round(a = approx_error, decimals = 5))
+```
+<pre><code class='python-code'>Approximation error: 0.00016
+</code></pre>
 
 
 ## Estimation Error: The Result of Having Limited Amount of Data
 
+In constraining empirical risk minimization, the empirical risk minimizer is only guaranteed to be found to the extent that sample size is large. Given that large sample sizes cannot always be obtained in practice, then empirical risk minimizer, $f_\mathcal{F}$, is unlikely to result. Instead, analysis of the obtained sample will result in some imperfect estimation of $f_\mathcal{F}$, which I will call the *sample risk minimizer* and denote as $\hat{f}_n$. As shown below in Equation \ref{eq:estim-error}, estimation error can be obtained by computing the difference in generalization error between the constrained empirical risk minimizer and the sample risk minimizer. 
 
+$$
+\begin{align}
+\text{Estimation error}  \hspace{0.25cm} &=  L_D(\hat{f}_n) - L_D(f\_{\mathcal{F}}) 
+\label{eq:estim-error}
+\end{align}
+$$
+
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:approx-error}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Constrained Empirical Risk Minimization Results in Approximation Error</span>
+  </div>
+    <img src="images/estimation_error.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting approximation error (see Equation \ref{eq:approx-error} below). Unfortunately, $f_\mathcal{F}$, can only be found to the extent that a very large data set is obtained. Because practitioners often have limited data, only an estimated version of $f_\mathcal{F}$ will be obtained, $\hat{f}_n$, which I call the \emph{sample risk minimizer}. Because the sample risk is an imperfect estimate of $f_\mathcal{F}$, it will necessarily have greater generalization error that is often called $\textit{estimation error}$.</span> 
+  </div>
+</div>
+
+
+Returning to the wine example, estimation error can be computed as a function of sample size. Figure \ref{fig:est-error} below 
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:est-error}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Estimation Error as a Function of Sample Size</span>
+  </div>
+    <img src="images/est_error_plot.png" width="100%" height="100%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting approximation error (see Equation \ref{eq:approx-error} below). Unfortunately, $f_\mathcal{F}$, can only be found to the extent that a very large data set is obtained. Because practitioners often have limited data, only an estimated version of $f_\mathcal{F}$ will be obtained, $\hat{f}_n$, which I call the \emph{sample risk minimizer}. Because the sample risk is an imperfect estimate of $f_\mathcal{F}$, it will necessarily have greater generalization error that is often called $\textit{estimation error}$.</span> 
+  </div>
+</div>
+
+
+```r {language=python}
+import functools 
+import plotnine as pt
+
+
+def compute_sample_risk_gen_error(sample_size, data_best_in_class , data_gen_error, 
+                                  poly_order_range=range(1, 5)): 
+  
+  # Use random_state to ensure reproducibility and prevent resampling from adding noise to estimates
+  gen_errors = compute_all_emp_gen_errors(data_emp_loss = data_best_in_class.sample(n=sample_size, random_state=27),
+                                          data_gen_error = data_gen_error,
+                                          include_interactions = False,
+                                          poly_order_range = poly_order_range)['gen_error']
+                                          
+  # Return generalization error of sample risk minimizer
+  return gen_errors.min()
+
+
+# Fix the arguments except for sample_size and then use map to vectorize over sample size values
+compute_sample_risk_gen_error_partial = functools.partial(compute_sample_risk_gen_error,
+                                                          data_best_in_class = data_best_in_class,
+                                                          data_gen_error = data_gen_error,
+                                                          poly_order_range = range(1, 5))
+
+# Call the partial function with est_sample_sizes
+#est_sample_sizes = range(5, 1000)
+#est_gen_errors = list(map(compute_sample_risk_gen_error_partial, est_sample_sizes))
+
+df_est_error = pd.read_csv("est_error.csv")
+#df_est_error = pd.DataFrame(data = {"sample_size": np.array(est_sample_sizes), 
+#                                    "sample_min_gen_error": est_gen_errors})
+```
+
+```r 
+library(ggforce)
+library(latex2exp)
+
+#create long version of df_est_error where function (bayes, constrained minimizer, or sample minimizer) is a
+#categorical variable
+py$df_est_error["bayes_risk"] <- py$bayes_risk
+py$df_est_error["constr_min"] <- py$constrained_erm$gen_error
+
+df_est_error_long <- py$df_est_error %>%
+  pivot_longer(cols = sample_min_gen_error:constr_min, names_to = "function_type", values_to = "gen_error",
+               names_ptypes = factor())
+
+df_est_error_long$function_type <- factor(x = df_est_error_long$function_type, 
+                                          levels = c("sample_min_gen_error", "constr_min", "bayes_risk"))
+                                                   
+                                                   
+labels <- c(TeX('Sample risk minimizer, $\\hat{f}_n$'),
+            TeX('Constrained risk minimizer, $f_F$'), 
+            TeX('Bayes decision function, $f^\\ast$'))
+
+
+line_color <-  setNames(c("blue", "#2171B5", "#9ECAE1"), levels(df_est_error_long$function_type))
+linetypes <-  setNames(c(1, 4, 2), levels(df_est_error_long$function_type))
+
+zoom_plot <- ggplot(data = df_est_error_long, mapping = aes(x = sample_size, y = gen_error, 
+                                               group = function_type, 
+                                               color = function_type, 
+                                               linetype = function_type)) + 
+ geom_line(size = 0.7) +
+ scale_color_manual(name = "Function Type", values = line_color, labels = labels)  +
+  scale_linetype_manual(name = "Function Type", values = linetypes, labels = labels)+
+  labs(x = "Sample Size", y = "Generalization Error (Mean Squared Error)", 
+       color = "Function Type") +
+  facet_zoom(ylim = c(.243, .244), zoom.size = 0.75)  + 
+  theme_classic(base_family = "Helvetica") + 
+  theme(legend.text.align = 0) #left align text
+
+ggsave(plot = zoom_plot, filename = 'images/est_error_plot.png', width = 12, height = 6)
+```
 
 ## Optimization Error: The Result of Imperfect Optimization
 
 
-```r {language=python}
-import pandas as pd
-import tensorflow as tf
-import numpy as np
+# The 'Players' in Machine Learning: Bias, Variance, and Noise
 
-x_range = (2, 4)  # Range for x-coordinate
-y_range = (2, 4)  # Range for y-coordinate
-num_data_points = 1000000
-square_data = pd.DataFrame()
+# How the 'Players' of Machine Learning Behave: The Bias-Variance Tradeoff
 
+# Using the Bias-Variance Tradeoff to Develop Rules of Machine Learning
 
-#Generate random values for each coordinate independently
-tf.random.set_seed(27)
-square_data['x_values'] = tf.random.uniform(shape = [num_data_points], minval = x_range[0], maxval = x_range[1], dtype = tf.float32)
-square_data['y_values'] = tf.random.uniform(shape = [num_data_points], minval = y_range[0], maxval = y_range[1], dtype = tf.float32)
-
-square_data['x_values'] = np.random.uniform(low = x_range[0], high = x_range[1], size = num_data_points) 
-square_data['y_values'] = np.random.uniform(low = y_range[0], high = y_range[1], size = num_data_points) 
-
-
-#Print label 
-lower_range = 2.3
-upper_range = 3.7
-
-mask = np.all((square_data.values <= upper_range) & (square_data.values >= lower_range), axis=1)
-np.sum(mask)
-```
-
-
+# The Non-Universality of the Rules of Machine Learning
 
 
