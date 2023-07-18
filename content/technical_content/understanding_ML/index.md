@@ -1,8 +1,8 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
-draft: true
+draft: false
 summary: '' 
-date: "2023-07-15"
+date: "2023-07-18"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -32,11 +32,25 @@ conda_install(envname = 'blog_posts', packages = py_packages)
 py_list_packages(envname = 'blog_posts', type = 'conda')
 ```
 
+I use the following Python modules for this whitepaper. 
+
+```r {language=python}
+from trun_mvnt import trun_mvnt as tvm
+import numpy as np
+import pandas as pd
+import sklearn
+import scipy
+from sklearn.metrics import mean_squared_error
+import statsmodels.formula.api as smf
+from functools import partial
+import plotnine as pt
+```
 
 # Introduction 
+
 In supervised machine learning, the goal is to predict. Whether the focus is to predict churn rates (among employes and/or customers), regions with high potential for growth, or something as innocuous as fruit fly behaviour, supervised machine learning can be used to solve these problems. Although a near endless number of models can be deployed to predict a given outcome, it is important that data scientists not rely on trial and error to find effective models and, instead, make purposeful decisions. To do so, it important that that data scientists understand the game of machine learning. 
 
-To explain the game of supervised machine learning, I will do so in six parts. First, I will provide a necessary background by presenting a formal model of learning. Second, I will provide a theoretical framework for understanding the game of supervised machine learning. Third, I will introduce the 'players' (i.e., bias, variance, and noise) of supervised machine learning by decomposing squared error. Fourth, I will explain the behaviours of bias, variance, and noise by presenting the bias-variance tradeoff. Fifth, I will explain the rules of supervised machine learning and how to succeed, Sixth, and last, I will provide an overview of situations where the rules of supervised machine learning cannot be applied. 
+To explain the game of supervised machine learning, I will do so in six parts. First, I will provide a necessary background by presenting a formal model of learning. Second, I will provide a general framework for understanding the game of supervised machine learning. Third, I will introduce the 'players' (i.e., bias, variance, and noise) of supervised machine learning by decomposing squared error. Fourth, I will explain the behaviours of bias, variance, and noise by presenting the bias-variance tradeoff. Fifth, I will explain the rules of supervised machine learning and how to succeed, Sixth, and last, I will provide an overview of situations where the rules of supervised machine learning cannot be applied. 
 
 # A Formal Model of Learning 
 
@@ -114,13 +128,13 @@ where $f^\ast$ is function in the set of all possible functions, $f$, that obtai
 Two points deserve mention with respect to $f^\ast$. First, it is often called the *empirical risk minimizer* because it obtains the lowest empirical loss. Second, in the current example, because empirical risk minimization occurs over the set of all possible functions, $f^*$, then the best possible function will inevitably exist in this set. The best possible function (i.e., the function with the lowest generalization error) is often called the *Bayes decision function*. Because we assume agnostic learning (i.e., that no function can perfectly predict the outcome), the Bayes decision function will have nonzero loss, which is often called the *Bayes risk*.
 
 
-# Theory for Understanding the 'Game' of Machine Learning
+# A General Framework for Understanding the 'Game' of Machine Learning
 
-In the sections that follow, I will provide a theoretical framework for understanding how three types of error inevitably emerge in the formal model of learning presented above. Importantly, these three types of error can be conceptualized as components of generalization error. For each type of error, I will provide Python code that simulates it. 
+In the sections that follow, I will provide a general framework for understanding how three types of error inevitably emerge in the formal model of learning presented above. This framework is often called excess risk decomposition (). For a lecture on excess risk decomposition, see [Bloomberg - Lecture 5](https://www.youtube.com/watch?time_continue=1472&v=YA_CE9jat4I&embeds_referring_euri=https%3A%2F%2Fbloomberg.github.io%2F&source_ve_path=MjM4NTE&feature=emb_title). Importantly, these three types of error can be conceptualized as components of generalization error. For each type of error, I will provide Python code that simulates it. 
 
-In order to simulate type of error with Python code, a data set is first required. Therefore, before explaining each type of error I will first provide a brief overview for the data generation procedure in the wine assessment example. 
+In order to simulate each type of error with Python code, a data set is first required. Therefore, before explaining each type of error, I will first provide an overview of the data generation procedure for the wine assessment example. 
 
-## Preamble: Data Generation Procedure
+## Preamble: Data Generation Procedure{#data-generation}
 
 In the wine assessment example, there two features and one outcome. For the features, the tourist collected data on weather and winemaking quality and computed composite scores for each feature on a 1--10 scale. For the outcome, the tourist tasted each wine and similarly calculated composite scores for wine quality on a 1--10 scale (1 indicates a poor wine and 10 indicates an excellent wine). To simulate these data, I will assume agnostic learning and, therefore, use a joint distribution over the feature and outcome spaces, with the features of weather ($\mathbf{x}_1$) and winemaking quality ($\mathbf{x}_2$) being normally distributed such that
 
@@ -206,7 +220,7 @@ $$
 &=  0.33 \nonumber \\\\
 \mathbf{w}_{scaled} &= \mathbf{w}(0.33)  
 \label{eq:scaled-weights} \\\\
-&= [0.10, 0.03, 0.02, -0.03,  0.03] \tag{eq:scaled-values}
+&= [0.10, 0.03, 0.02, -0.03,  0.03] \label{eq:scaled-values}
 \end{align}
 \end{spreadlines}
 $$
@@ -229,13 +243,6 @@ git clone https://github.com/ralphma1203/trun_mvnt.git
 The Python code block below (lines <a href="#2">2--108</a>) defines the functions that generate the data for the wine example such that there are two features (`weather`, `winemaking_quality`) and one outcome variable (`wine_quality`). The outcome variable is created using Equation \ref{eq:outcome-generate} and then scaled using Equation \ref{eq:rescale}. 
 
 ```r {language=python}
-from trun_mvnt import trun_mvnt as tvm
-import numpy as np
-import pandas as pd
-import sklearn
-import scipy
-               
-
 def compute_rescaling_factor(new_upper_limit = 10, new_lower_limit = 1):
   
   old_lower_limit = np.dot(a = provide_weights(), b = np.array([1, 10, 1, 100, 10])) - 3*(1.5)
@@ -248,6 +255,7 @@ def compute_rescaling_factor(new_upper_limit = 10, new_lower_limit = 1):
   rescaling_factor = new_scale_range / (old_upper_limit - old_lower_limit)
   
   return(rescaling_factor)
+
 
 def rescale_outcome_variable(data, new_lower_limit = 1, new_upper_limit = 10):
   
@@ -365,10 +373,10 @@ sd = [1.2, 1.7]
 #population correlation
 rho_weather_winemaking =  0.35 
 cov_matrix = create_covariance_matrix(sd = sd, rho =  rho_weather_winemaking)
-emp_sample_size = 225
+emp_sample_size = 150
 gen_sample_size = 1e4
 
-#data used to compute empirical loss 
+#data used to compute empirical loss; note seed = 27 by default
 data_emp_loss = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
                                              rho = rho_weather_winemaking, sample_size = emp_sample_size)
                                              
@@ -407,11 +415,6 @@ $$
 where $f(\mathbf{x}\_i)$ represents the predicted wine quality value for $i^{th}$ wine, which is the sum of an intercept ($\text{int}$), the weighted sum of the corresponding $i^{th}$ weather ($x_{1_i}$) and winemaking quality ($x_{2_i}$), and the weighted sum of all possible two-way corresponding interactions. Note that, in Equation \ref{eq:all-functions}, interactions are only computed if the specified polynomial order is greater than or equal to 2, $\mathbb{I}_({P \ge 2)}$. The Python code block below contains functions that compute the generalization error and empirical loss (using mean squared error; see Equation \ref{eq:mean-sq-error}) for each polynomial model with an order in the specified range. 
 
 ```r {language=python}
-from sklearn.metrics import mean_squared_error
-import statsmodels.formula.api as smf
-from functools import partial
-
-
 def compute_emp_gen_error(equation, data_emp_loss, data_gen_error):
   
   model = smf.ols(data = data_emp_loss, formula = equation).fit()
@@ -475,10 +478,6 @@ def compute_all_emp_gen_errors(data_emp_loss, data_gen_error, poly_order_range, 
 If empirical risk minimization is followed, then the function with the highest polynomial order would be chosen as the function with the lowest generalization error. Figure \ref{fig:emp-loss} shows that empirical loss decreases almost linearly as polynomial order increases. The Python code block below computes and plots empirical loss for each polynomial model up to the ninth order. 
 
 ```r {language=python}
-import plotnine as pt
-
-emp_sample_size = 150
-
 #data used to compute empirical loss 
 data_emp_loss = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
                                              rho = rho_weather_winemaking, sample_size = emp_sample_size)
@@ -748,20 +747,19 @@ print('Approximation error:', np.round(a = approx_error, decimals = 5))
 
 ## Estimation Error: The Result of Having Limited Amount of Data
 
-In constraining empirical risk minimization, the empirical risk minimizer is only guaranteed to be found to the extent that sample size is large. Given that large sample sizes cannot always be obtained in practice, then empirical risk minimizer, $f_\mathcal{F}$, is unlikely to result. Instead, analysis of the obtained sample will result in some imperfect estimation of $f_\mathcal{F}$, which I will call the *sample risk minimizer* and denote as $\hat{f}_n$. As shown below in Equation \ref{eq:estim-error}, estimation error can be obtained by computing the difference in generalization error between the constrained empirical risk minimizer and the sample risk minimizer. 
+In constraining empirical risk minimization, the empirical risk minimizer is only guaranteed to be found to the extent that sample size is large. Given that large sample sizes cannot always be obtained in practice, then the empirical risk minimizer, $f_\mathcal{F}$, is unlikely to result. Instead, analysis of the obtained sample will result in some imperfect estimation of $f_\mathcal{F}$, which I will call the *sample risk minimizer* and denote as $\hat{f}\_n$. Figure \ref{fig:est-error-concept} below shows that, as a result of having a limited sample size, the sample risk minimizer, $\hat{f}\_n$, results in a generalization error that is greater than that of the constrained empirical risk minimizer, $f_\mathcal{F}$. The extent to which the generalization error of the sample risk minimizer is greater than that of the constrained empirical risk minimizer is often called *estimation error*, and is represented below in Equation \ref{eq:est-error}:
 
 $$
 \begin{align}
 \text{Estimation error}  \hspace{0.25cm} &=  L_D(\hat{f}_n) - L_D(f\_{\mathcal{F}}) 
-\label{eq:estim-error}
+\label{eq:est-error}
 \end{align}
 $$
-
 
 <div class="figure">
   <div class="figDivLabel">
     <caption>
-      <span class = 'figLabel'>Figure \ref{fig:approx-error}<span> 
+      <span class = 'figLabel'>Figure \ref{fig:est-error-concept}<span> 
     </caption>
   </div>
    <div class="figTitle">
@@ -770,12 +768,12 @@ $$
     <img src="images/estimation_error.png" width="80%" height="80%"> 
   
   <div class="figNote">
-  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting approximation error (see Equation \ref{eq:approx-error} below). Unfortunately, $f_\mathcal{F}$, can only be found to the extent that a very large data set is obtained. Because practitioners often have limited data, only an estimated version of $f_\mathcal{F}$ will be obtained, $\hat{f}_n$, which I call the \emph{sample risk minimizer}. Because the sample risk is an imperfect estimate of $f_\mathcal{F}$, it will necessarily have greater generalization error that is often called $\textit{estimation error}$.</span> 
+  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting approximation error (see Equation \ref{eq:approx-error} below). Unfortunately, $f_\mathcal{F}$, can only be found to the extent that a very large data set is obtained. Because practitioners often have limited data, only an estimated version of $f_\mathcal{F}$ will be obtained, $\hat{f}_n$, which I call the $\textit{aproximation error}$. Because the sample risk is an imperfect estimate of $f_\mathcal{F}$, it will necessarily have greater generalization error that is often called $\textit{estimation error}$.</span> 
   </div>
 </div>
 
 
-Returning to the wine example, estimation error can be computed as a function of sample size. Figure \ref{fig:est-error} below 
+Returning to the wine example, Figure \ref{fig:est-error} below shows that, with limited sample size, the sample risk minimizer will always have greater generalization error than the constrained empirical risk minimizer. Note that the left hand plot represents a zoomed version of the right hand plot between the y-axis values of .243 and .2475. The difference in generalization error between the sample risk minimizer ($\hat{f}_n$, blue line) and the constrained empirical risk minimizer ($\hat{f}\_\mathcal{F}$; medium blue line) constitutes estimation error (see Equation \ref{eq:est-error}). The difference in generalization error between the constrained empirical risk minimizer ($\hat{f}\_\mathcal{F}$; medium blue line) and the Bayes decision function constitutes approximation error (see Equation \ref{eq:approx-error}). Importantly, the x-axis only represents the sample size used to obtain the sample risk minimizer ($\hat{f}_n$); recall that the constrained empirical risk minimizer ($\hat{f}_n$, blue line) was obtained with a very large data set (technically, an infinitely large data) and the Bayes decision function ($f^\ast$) represents the true data-generating function.  
 
 <div class="figure">
   <div class="figDivLabel">
@@ -784,21 +782,20 @@ Returning to the wine example, estimation error can be computed as a function of
     </caption>
   </div>
    <div class="figTitle">
-    <span>Estimation Error as a Function of Sample Size</span>
+    <span>Generalization Error of Sample Risk Minimizer, $L_D(\hat{F}_n)$, is Always Greater Than That of Constrained Empirical Risk Minimizer, $f_\mathcal{F}$</span>
   </div>
-    <img src="images/est_error_plot.png" width="100%" height="100%"> 
+    <img src="images/est_error_plot.png" width="80%" height="80%"> 
   
   <div class="figNote">
-  <span><em>Note. </em>The Bayes decision function, $f^\ast$, exists in the set of all functions, but it does not exist in the constrained set of functions, $\mathcal{F}$. Thus, the best function in the constrained set of functions, $f_\mathcal{F}$, will have a generalization error greater than that of the Bayes decision function, with the difference between the two functions constituting approximation error (see Equation \ref{eq:approx-error} below). Unfortunately, $f_\mathcal{F}$, can only be found to the extent that a very large data set is obtained. Because practitioners often have limited data, only an estimated version of $f_\mathcal{F}$ will be obtained, $\hat{f}_n$, which I call the \emph{sample risk minimizer}. Because the sample risk is an imperfect estimate of $f_\mathcal{F}$, it will necessarily have greater generalization error that is often called $\textit{estimation error}$.</span> 
+  <span><em>Note. </em>The left hand plot represents a zoomed version of the right hand plot between the y-axis values of .243 and .2475. The difference in generalization error between the sample risk minimizer ($\hat{f}_n$, blue line) and the constrained empirical risk minimizer ($\hat{f}\_\mathcal{F}$; medium blue line) constitutes estimation error (see Equation \ref{eq:est-error}). The difference in generalization error between the constrained empirical risk minimizer ($\hat{f}\_\mathcal{F}$; medium blue line) and the Bayes decision function constitutes approximation error (see Equation \ref{eq:approx-error}). Importantly, the x-axis only represents the sample size used to obtain the sample risk minimizer ($\hat{f}_n$); recall that the constrained empirical risk minimizer ($\hat{f}_n$, blue line) was obtained with a very large data set (technically, an infinitely large data) and the Bayes decision function ($f^\ast$) represents the true data-generating function. </span> 
   </div>
 </div>
 
 
+To construct Figure \ref{fig:est-error} above, I implemented a two-step method. First, I used a large data set (`data_best_in_class`) to identify the constrained empirical risk minimizer, $f\_\mathcal{F}$, from the (constrained) set of functions defined in Equation \ref{eq:constrained-functions} (see Python code block above). Briefly, only polynomial functions of weather and winemaking quality were allowed to predict wine quality in the constrained set of functions. Second, to obtain each sample risk minimizer, $\hat{f}_n$, I sampled data (without replacement) from the same large data set used to obtain the constrained empirical risk minimizer and then extracted the lowest generalization error value from the function in the constrained set (see Equation \ref{eq:constrained-functions} and Python code block below). Note that I also computed the Bayes risk, $L_D(f^\ast)$, for reference. Importantly, generalization error for each function was computed using another large data set (`data_gen_error`).  
+
+
 ```r {language=python}
-import functools 
-import plotnine as pt
-
-
 def compute_sample_risk_gen_error(sample_size, data_best_in_class , data_gen_error, 
                                   poly_order_range=range(1, 5)): 
   
@@ -819,17 +816,22 @@ compute_sample_risk_gen_error_partial = functools.partial(compute_sample_risk_ge
                                                           poly_order_range = range(1, 5))
 
 # Call the partial function with est_sample_sizes
-#est_sample_sizes = range(5, 1000)
-#est_gen_errors = list(map(compute_sample_risk_gen_error_partial, est_sample_sizes))
+est_sample_sizes = range(5, 1000)
+est_gen_errors = list(map(compute_sample_risk_gen_error_partial, est_sample_sizes))
 
-df_est_error = pd.read_csv("est_error.csv")
-#df_est_error = pd.DataFrame(data = {"sample_size": np.array(est_sample_sizes), 
-#                                    "sample_min_gen_error": est_gen_errors})
+#Create data frame
+pd_est_error = pd.DataFrame({"sample_size": np.array(est_sample_sizes), 
+                             "sample_risk_gen_error": est_gen_errors})
+                             
+#Create .csv file
+pd_est_error.to_csv("est_error_.csv")
 ```
+
 
 ```r 
 library(ggforce)
 library(latex2exp)
+library(ggbrace)
 
 #create long version of df_est_error where function (bayes, constrained minimizer, or sample minimizer) is a
 #categorical variable
@@ -837,38 +839,235 @@ py$df_est_error["bayes_risk"] <- py$bayes_risk
 py$df_est_error["constr_min"] <- py$constrained_erm$gen_error
 
 df_est_error_long <- py$df_est_error %>%
-  pivot_longer(cols = sample_min_gen_error:constr_min, names_to = "function_type", values_to = "gen_error",
+  pivot_longer(cols = "sample_risk_gen_error":"constr_min", names_to = "function_type", values_to = "gen_error",
                names_ptypes = factor())
 
 df_est_error_long$function_type <- factor(x = df_est_error_long$function_type, 
-                                          levels = c("sample_min_gen_error", "constr_min", "bayes_risk"))
+                                          levels = c("sample_risk_gen_error", "constr_min", "bayes_risk"))
                                                    
-                                                   
+
 labels <- c(TeX('Sample risk minimizer, $\\hat{f}_n$'),
-            TeX('Constrained risk minimizer, $f_F$'), 
-            TeX('Bayes decision function, $f^\\ast$'))
+            TeX('Constrained risk minimizer, $f_\u2131$'), 
+            TeX('Bayes decision function, $f^*$'))
 
 
 line_color <-  setNames(c("blue", "#2171B5", "#9ECAE1"), levels(df_est_error_long$function_type))
-linetypes <-  setNames(c(1, 4, 2), levels(df_est_error_long$function_type))
+linetypes <-  setNames(c(1, 1, 1), levels(df_est_error_long$function_type))
 
-zoom_plot <- ggplot(data = df_est_error_long, mapping = aes(x = sample_size, y = gen_error, 
+#create data set for braces that show estimation and approximation error. 
+##see https://stackoverflow.com/questions/45221783/ggforce-facet-zoom-labels-only-on-zoomed-example
+brace_x_start <- which.min(py$df_est_error$sample_risk_gen_error[1:250]) #find minimum value in first 250 values
+brace_x_end <- brace_x_start + 50
+
+data_brace_approx_error <- data.frame("x" = c(brace_x_start, brace_x_end), 
+                                   "y" = c(py$constrained_erm$gen_error, py$bayes_risk), 
+                                   "zoom" = T)
+
+data_brace_est_error <- data.frame("x" = c(brace_x_start, brace_x_end), 
+                                   "y" = c(py$df_est_error$sample_risk_gen_error[brace_x_start], 
+                                           py$constrained_erm$gen_error), 
+                                   "zoom" = T)
+                                   
+label_approx_error <- "Approximation error, $L_D(f_\u2131) - L_D(f^*)$"
+label_est_error <- "Estimation error, $L_D(\\hat{f}_n) - L_D(f_\u2131)$"
+
+est_error_plot <- ggplot(data = df_est_error_long, mapping = aes(x = sample_size, y = gen_error, 
                                                group = function_type, 
                                                color = function_type, 
                                                linetype = function_type)) + 
- geom_line(size = 0.7) +
+ geom_line(size = 1.2) +
  scale_color_manual(name = "Function Type", values = line_color, labels = labels)  +
-  scale_linetype_manual(name = "Function Type", values = linetypes, labels = labels)+
-  labs(x = "Sample Size", y = "Generalization Error (Mean Squared Error)", 
+  scale_linetype_manual(name = "Function Type", values = linetypes, labels = labels) +
+  labs(x = "Sample Size for Obtaining Sample Risk Minimizer", y = "Generalization Error (Mean Squared Error)", 
        color = "Function Type") +
-  facet_zoom(ylim = c(.243, .244), zoom.size = 0.75)  + 
+  facet_zoom(ylim = c(0.243, .2475),  zoom.size = 1.2, zoom.data = zoom)  +
+  
+ #estimation error brace
+ geom_brace(inherit.aes = F, data = data_brace_approx_error,
+            mapping = aes(x = x, y = y,  label=TeX(label_approx_error, output="character")), 
+             color = '#002241', labelsize = 5, rotate = 90, labeldistance = 5, 
+            parse=T) + 
+  
+ #approximation error brace
+ geom_brace(inherit.aes = F, data = data_brace_est_error, 
+            mapping = aes(x = x, y = y,  label=TeX(label_est_error, output="character")), 
+             color = '#002241', labelsize = 5, rotate = 90, labeldistance = 5, 
+            parse = T) + 
+  
   theme_classic(base_family = "Helvetica") + 
-  theme(legend.text.align = 0) #left align text
+  theme(legend.text.align = 0, #left align text
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 15), 
+        axis.title  = element_text(size = 15), 
+        axis.text = element_text(size = 14, color = "#002241"), 
+        text = element_text(color = "#002241"),,
+        axis.line = element_line(color = "#002241"), 
+        axis.ticks = element_line(color =  "#002241")) 
 
-ggsave(plot = zoom_plot, filename = 'images/est_error_plot.png', width = 12, height = 6)
+
+ggsave(plot = est_error_plot, filename = 'images/est_error_plot.png', width = 12, height = 6, dpi = 1000)
 ```
 
+
 ## Optimization Error: The Result of Imperfect Optimization
+
+To understand optimization error, it is first important to understand how regression weights have been obtained thus far. After this, I will explain how optimization error can be introduced by solving for regression weights using a different method by the name of gradient descent.  
+
+Returning to our wine example, the tourist wanted to use weather and winemaking quality to predict wine quality. Together, weather ($\mathbf{x}_1$) and winemaking quality ($\mathbf{x}_2$) constituted the set of features, $\mathbf{X} = \[\mathbf{x}_1^\top, \mathbf{x}_2^\top\]$, with wine quality representing the outcome vector, $\mathbf{y}$. Thus, using $\mathbf{X}$, the tourist wanted to compute predicted values for wine quality such that 
+
+$$
+\begin{align}
+\hat{\mathbf{y}} = \mathbf{Xw}.
+\end{align}
+$$
+
+To obtain accurate predictions for wine quality, the tourist decided to find some set of weights that minimized the mean squared error (see Equation \ref{eq:mean-sq-error}). Mathematically, 
+
+$$
+\begin{align}
+\mathbf{w}_{MSE} &= \underset{\mathbf{w}}{\arg\min} \ \frac{1}{n} \lVert \mathbf{y} - \mathbf{Xw} \rVert^2_2 \nonumber \\\\ 
+&=  \underset{\mathbf{w}}{\arg\min}  \ \frac{1}{n} (\mathbf{y} - \mathbf{Xw})^\top (\mathbf{y} - \mathbf{Xw}) \nonumber \\\\ 
+&=  \underset{\mathbf{w}}{\arg\min}  \ \frac{1}{n} (\mathbf{y}^\top\mathbf{y} - 2\mathbf{w}^\top\mathbf{X}^\top\mathbf{y} + \mathbf{w}^\top\mathbf{X}^\top\mathbf{X}\mathbf{w})
+\end{align}
+$$
+
+To find $\mathbf{w}_{MSE}$, it can be solved for after computing the gradient of the mean squared error with respect to $\mathbf{w}$ and setting it to zero (see below):[^2]
+
+[^2]: Note that, for the formula $\mathbf{w}_{MSE}$ in Equation \ref{eq:weight-mse-min} to be computable, the columns of $\mathbf{X}$ must be linearly independent. Linear independence guarantees that $(\mathbf{X}^\top\mathbf{X})^{-1}$ exists and that $\mathbf{w}_{MSE}$ is the best solution. For a more detailed explanation see, [Lecture 5 - Gradient Descent and Least Squares](https://uchicago.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=bbd55a27-0fa6-4855-85f2-adbf01393f3a). Note that, although the lectures uses the sum of squares as the loss function, the conclusions obtained are identical to those obtained with mean squared error. 
+
+$$
+\begin{align}
+\nabla_\mathbf{w} MSE &= \frac{\partial\ MSE}{\partial \ \mathbf{w}} = \frac{1}{n} \frac{\partial}{\partial \ \mathbf{w}} \bigg(\mathbf{y}^\top\mathbf{y} - 2\mathbf{w}^\top\mathbf{X}^\top\mathbf{y} + \mathbf{w}^\top\mathbf{X}^\top\mathbf{X}\mathbf{w}\bigg) \nonumber \\\\ 
+&=\frac{1}{n}\bigg(0 - 2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\mathbf{w}\bigg) \nonumber \\\\ 
+ &= 2\mathbf{X}^\top(\mathbf{Xw} - \mathbf{y}) \\\\
+\text{Set} \nabla_\mathbf{w}  MSE &= 0 \nonumber \\\\ 
+0 &= - 2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\mathbf{w} \nonumber \\\\
+\mathbf{X}^\top\mathbf{y} &= \mathbf{X}^\top\mathbf{X}\mathbf{w} \nonumber \\\\
+\mathbf{w}_{MSE} &= (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
+\tag{eq:weight-mse-min}
+\end{align}
+$$
+
+To show that $\mathbf{w}_{MSE}$ does indeed contain the set of weights that minimizes the mean squared error, I will first compute $\mathbf{w}_{MSE}$ using Equation \ref{eq:weight-mse-min} and then show that it indeed minimizes the mean squared error. Beginning with the computation of $\mathbf{w}_{MSE}$, I compute it using the wine data set I generated in the section on [Data Generation](#data-generation) (see the Python code block between lines ..., which I repeat below). 
+
+```r {language=python}
+#set the population means and SDs for weather and winemaking quality
+mu = [5, 7]
+sd = [1.2, 1.7]
+
+#population correlation
+rho_weather_winemaking =  0.35 
+cov_matrix = create_covariance_matrix(sd = sd, rho =  rho_weather_winemaking)
+emp_sample_size = 225
+gen_sample_size = 1e4
+
+#data used to compute empirical loss; note seed = 27 by default
+data_emp_loss = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
+                                             rho = rho_weather_winemaking, sample_size = emp_sample_size)
+```
+
+The Python code block below computes $\mathbf{w}_{MSE}$ and finds that 
+
+$$
+\begin{align}
+\mathbf{w}_{MSE} &= \[0.73,  1.06, -0.01, -0.10\]
+\end{align}
+$$
+
+```r {language=python}
+def extract_feature_outcome_data(data):
+  
+  #gather necessary components for matrix-matrix multiplications 
+  original_features = data[["weather", "winemaking_quality"]]
+  features = pd.concat(objs = [original_features, original_features**2], axis = 1).to_numpy()
+  outcome = data[["wine_quality"]].to_numpy()
+  
+  return {"features": features, 
+          "outcome": outcome}
+
+
+def compute_weight_min_MSE(data):
+  
+  #gather necessary components for matrix-matrix multiplications 
+  dict_data = extract_feature_outcome_data(data = data)
+  features = dict_data["features"]
+  outcome = dict_data["outcome"]
+  
+  #compute w_MSE = 
+  w_mse = np.linalg.inv(np.transpose(features).dot(features)).dot(np.transpose(features)).dot(outcome)
+  
+  return w_mse.ravel()
+
+
+w_mse = compute_weight_min_MSE(data = data_emp_loss)
+
+print("Best weights:", np.round(a = w_mse, decimals = 2))
+```
+<pre><code class='python-code'>Best weights: [ 0.73  1.06 -0.01 -0.1 ]
+</code></pre>
+
+
+Ending with the visualization of $\mathbf{w}_{MSE}$, I now show that it indeed results in the lowest mean squared error value. To construct a more palatable visualization of the mean squared error function, I only allow the first weight to vary so that the function can be plotted on a 2-dimensional plot. 
+
+ 
+```r {language=python}
+def compute_ind_MSE(data, w_guess):
+ 
+  #gather necessary components for matrix-matrix multiplications 
+  dict_data = extract_feature_outcome_data(data = data)
+  features = dict_data["features"]
+  outcome = dict_data["outcome"]
+  
+  #construct vector of weights
+  #w_initial = np.array([0.1, 0.07, -0.1])
+  w_initial = np.array([1.05928459, -0.01280733, -0.09713313])
+  w_initial =  np.insert(arr = w_initial, obj = 0, values = w_guess)
+  
+  #MSE = 
+  y_trans_y = np.transpose(outcome).dot(outcome)
+  wXy = np.transpose(w_initial).dot(np.transpose(features)).dot(outcome)
+  wXXw = np.transpose(w_initial).dot(np.transpose(features)).dot(features).dot(w_initial)
+  
+  mse = y_trans_y - 2*wXy + wXXw
+  
+  return mse 
+
+
+def compute_all_MSE_loss_values(data, w_guess_list):
+  
+  #return flattened array
+  all_mse_loss_values = np.concatenate([compute_ind_MSE(data, guess) for guess in w_guess_list]).ravel()
+  
+  #create dataframe with guesses and corresponding MSE values
+  df_mse = pd.DataFrame({"w_guess": w_guess_list, 
+                         "mse_value": all_mse_loss_values})
+  
+  return df_mse
+
+
+df_mse_values = compute_all_MSE_loss_values(data = data_emp_loss, w_guess_list = np.arange(start = 0, stop = 3, step= 0.01))
+
+
+df_mse_values["w_guess"][np.argmin(df_mse_values["mse_value"])]
+
+
+(pt.ggplot(data = df_mse_values, mapping = pt.aes(x = "w_guess", y = "mse_value")) + 
+  pt.geom_line() + 
+  pt.scale_x_continuous(name = "w") +
+  pt.theme_classic(base_family = "Helvetica"))
+  
+  
+orignal_features = data_emp_loss[["weather", "winemaking_quality"]]
+features = pd.concat(objs = [original_features, original_features**2], axis = 1).to_numpy()
+outcome = data_emp_loss[["wine_quality"]]
+
+
+w_mse = np.linalg.inv(np.transpose(features).dot(features)).dot(np.transpose(features)).dot(outcome)
+```
+
+
+### A Brief Review of Gradient Descent 
+
 
 
 # The 'Players' in Machine Learning: Bias, Variance, and Noise
