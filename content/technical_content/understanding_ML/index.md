@@ -1,6 +1,6 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
-draft: true
+draft: false
 summary: '' 
 date: "2023-07-19"
 article_type: technical
@@ -933,7 +933,7 @@ $$
 
 To find $\mathbf{w}_{MSE}$, it can be solved for after computing the gradient of the mean squared error with respect to $\mathbf{w}$ and setting it to zero (see below):[^2]
 
-[^2]: Note that, for the formula $\mathbf{w}_{MSE}$ in Equation \ref{eq:weight-mse-min} to be computable, the columns of $\mathbf{X}$ must be linearly independent. Linear independence guarantees that $(\mathbf{X}^\top\mathbf{X})^{-1}$ exists and that $\mathbf{w}_{MSE}$ is the best solution. For a more detailed explanation see, [Lecture 5 - Gradient Descent and Least Squares](https://uchicago.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=bbd55a27-0fa6-4855-85f2-adbf01393f3a). Note that, although the lectures uses the sum of squares as the loss function, the conclusions obtained are identical to those obtained with mean squared error. 
+[^2]: Note that, for the formula $\mathbf{w}\_{MSE}$ in Equation \ref{eq:weight-mse-min} to be computable, the columns of $\mathbf{X}$ must be linearly independent. Linear independence guarantees that $(\mathbf{X}^\top\mathbf{X})^{-1}$ exists and that $\mathbf{w}\_{MSE}$ is the best solution. For a more detailed explanation see, [Lecture 5 - Gradient Descent and Least Squares](https://uchicago.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=bbd55a27-0fa6-4855-85f2-adbf01393f3a). Note that, although the lectures uses the sum of squares as the loss function, the conclusions obtained are identical to those obtained with mean squared error. 
 
 $$
 \begin{align}
@@ -948,7 +948,7 @@ $$
 \end{align}
 $$
 
-To show that $\mathbf{w}_{MSE}$ does indeed contain the set of weights that minimizes the mean squared error, I will first compute $\mathbf{w}_{MSE}$ using Equation \ref{eq:weight-mse-min} and then show that it indeed minimizes the mean squared error. Beginning with the computation of $\mathbf{w}_{MSE}$, I compute it using the wine data set I generated in the section on [Data Generation](#data-generation) (see the Python code block between lines ..., which I repeat below). 
+To show that $\mathbf{w}\_{MSE}$ does indeed contain the set of weights that minimizes the mean squared error, I will first compute $\mathbf{w}\_{MSE}$ using Equation \ref{eq:weight-mse-min} and then show that it indeed minimizes the mean squared error. Beginning with the computation of $\mathbf{w}_{MSE}$, I compute it using the wine data set I generated in the section on [Data Generation](#data-generation) (see the Python code block between lines ..., which I repeat below). 
 
 ```r {language=python}
 #set the population means and SDs for weather and winemaking quality
