@@ -3,11 +3,14 @@
 
 
 window.MathJax = {
+
   section: {
     n: -1,
     useLetters: false,
     letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
+
+
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},
   tex: {
@@ -25,7 +28,8 @@ window.MathJax = {
 
   chtml: {
    mtextInheritFont: true,         // font to use for mtext, if not inheriting (empty means use MathJax fonts)
-   displayOverflow: 'linebreak'
+   displayOverflow: 'linebreak',
+    fontPath: 'https://cdn.jsdelivr.net/npm/%%FONT%%-font@1.0.0-alpha.1/es5/output/fonts/%%FONT%%'
   },
 
   linebreaks: {                  // options for when overflow is linebreak
@@ -34,7 +38,6 @@ window.MathJax = {
       lineleading: 2,                // the default lineleading in em units
       LinebreakVisitor: null,         // The LinebreakVisitor to use
   },
-
 
 
   startup: {
