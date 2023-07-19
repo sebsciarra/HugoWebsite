@@ -1,6 +1,6 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
-draft: false
+draft: true
 summary: '' 
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 article_type: technical
