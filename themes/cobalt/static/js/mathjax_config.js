@@ -10,6 +10,9 @@ window.MathJax = {
     letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
 
+   output: {
+    fontPath: 'https://cdn.jsdelivr.net/npm/%%FONT%%-font@1.0.0-alpha.1/es5/output/fonts/%%FONT%%'
+  },
 
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},
