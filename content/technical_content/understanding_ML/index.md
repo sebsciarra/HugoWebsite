@@ -1,6 +1,6 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
-draft: true
+draft: true 
 summary: '' 
 date: "2023-07-18"
 article_type: technical
