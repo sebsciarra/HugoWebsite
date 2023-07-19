@@ -1,6 +1,6 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules   " 
-draft: true 
+draft: true
 summary: '' 
 date: "2023-07-18"
 article_type: technical
@@ -940,11 +940,11 @@ $$
 \nabla_\mathbf{w} MSE &= \frac{\partial\ MSE}{\partial \ \mathbf{w}} = \frac{1}{n} \frac{\partial}{\partial \ \mathbf{w}} \bigg(\mathbf{y}^\top\mathbf{y} - 2\mathbf{w}^\top\mathbf{X}^\top\mathbf{y} + \mathbf{w}^\top\mathbf{X}^\top\mathbf{X}\mathbf{w}\bigg) \nonumber \\\\ 
 &=\frac{1}{n}\bigg(0 - 2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\mathbf{w}\bigg) \nonumber \\\\ 
  &= 2\mathbf{X}^\top(\mathbf{Xw} - \mathbf{y}) \\\\
-\text{Set} \nabla_\mathbf{w}  MSE &= 0 \nonumber \\\\ 
+\text{Set } \nabla_\mathbf{w}  MSE &= 0 \nonumber \\\\ 
 0 &= - 2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\mathbf{w} \nonumber \\\\
 \mathbf{X}^\top\mathbf{y} &= \mathbf{X}^\top\mathbf{X}\mathbf{w} \nonumber \\\\
 \mathbf{w}_{MSE} &= (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
-\tag{eq:weight-mse-min}
+\label{eq:weight-mse-min}
 \end{align}
 $$
 
