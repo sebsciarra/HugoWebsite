@@ -1995,7 +1995,7 @@ plot_bias_var.save("images/plot_bias_var.png", width = 10, height = 6, dpi = 100
 
 # Using the Bias-Variance Tradeoff to Develop Rules of Supervised Machine Learning
 
-With an understanding of the behaviour of bias, variance, and noise, it is now possible to deduce rules of supervised machine learning.
+With an understanding of the behaviour of bias, variance, and noise, it is now possible to deduce rules of supervised machine learning. In Figure \ref{fig:bias-var-rules}, I show the pattern of empirical loss (light blue line) and generalization error (dark blue line) as a function of the sample size used for model development.  
 
 
 <div class="figure">
