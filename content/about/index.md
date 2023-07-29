@@ -31,13 +31,13 @@ tags: []
 I'm Sebastian Sciarra and I recently obtained my PhD in Industrial-Organizational Psychology at the University of Guelph. I am largely interested in statistics, coding, and machine learning, and have used my time as a graduate student learning a variety of topics in these areas while completing my dissertation. 
 
 
-## Organization of Blog
+## Concent of Whitepapers
 
-I have set up this blog to contain the following three types of content: 
+I have set up whitepapers to contain the following three types of content: 
 
-1) <a href="/technical_content">Technical Content</a>: posts dive into the fundamentals of an analysis and explain the necessary calculus and algebra.
-2) <a href="/coding_tricks">Coding Demonstrations & Tricks</a>: posts contain demonstrations of algorithms and analyses and/or contain  useful pieces of code I have come across or constructed (whether in R, Python, SQL, Javascript, CSS, etc.). 
-3) <a href="/simulation_exps">Simulation Experiments</a>: posts show how an analysis works under varying conditions use simulations. 
+1) <a href="/technical_content">Technical Content</a>: papers dive into the fundamentals of an analysis and explain the necessary calculus and algebra.
+2) <a href="/coding_tricks">Coding Demonstrations & Tricks</a>: papers contain demonstrations of algorithms and analyses and/or contain  useful pieces of code I have come across or constructed (whether in R, Python, SQL, Javascript, CSS, etc.). 
+3) <a href="/simulation_exps">Simulation Experiments</a>: papers show how an analysis works under varying conditions using simulations. 
 
 I have also set up the <a href="/mlresources">ML Resources</a> page as a running list of useful resources I have come across and continue to use.
 

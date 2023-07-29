@@ -852,7 +852,7 @@ bayes_risk = compute_bayes_risk(data = data_gen_error)
 #compute empirical loss and generalization error for polynomial models up to fifth order
 constrained_erm = compute_all_emp_gen_errors(data_emp_loss = data_best_in_class, 
                                              data_gen_error = data_gen_error,
-                                             include_interactions = False, 
+                                             include_interactions = False,  
                                              poly_order_range=range(2, 3))
                                              
 #compute approximation error
