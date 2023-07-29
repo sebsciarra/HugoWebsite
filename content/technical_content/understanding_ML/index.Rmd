@@ -1995,7 +1995,7 @@ plot_bias_var.save("images/plot_bias_var.png", width = 10, height = 6, dpi = 100
 
 # Using the Bias-Variance Tradeoff to Develop Rules of Supervised Machine Learning
 
-With an understanding of the behaviour of bias, variance, and noise, it is now possible to deduce rules of supervised machine learning. In Figure \ref{fig:bias-var-rules}, I show the pattern of empirical loss (light blue line) and generalization error (dark blue line) as a function of the sample size used for model development.  
+With an understanding of the behaviour of bias, variance, and noise, it is now possible to deduce rules of supervised machine learning. In Figure \ref{fig:bias-var-rules}, I show two general patterns of empirical loss (light blue line) and generalization error (dark blue line) as a function of the sample size used for model development.  
 
 
 <div class="figure">
@@ -2007,7 +2007,7 @@ With an understanding of the behaviour of bias, variance, and noise, it is now p
    <div class="figTitle">
     <span>Depiction of the Bias-Variance Tradeoff</span>
   </div>
-    <img src="images/plot_bias_var_rules.png" width="80%" height="80%"> 
+    <img src="images/plot_high_variance.png" width="80%" height="80%"> 
   
   <div class="figNote">
   <span><em>Note. </em></span> 
@@ -2016,33 +2016,68 @@ With an understanding of the behaviour of bias, variance, and noise, it is now p
 
 
 ```{python supervised-ml-rules, echo=T, eval=F,  class_name = 'python-code', results = 'hold', hlopts=list(language = 'python')}
-#1) Generate CDFs
+#create data set for pattern of empirical loss and generalization error that occurs with 
+#high variance
+##high variance
 training_sample_size = np.linspace(start = 1, stop = 1000, num = 1000)
 
-satiation_value_gen_error = 0.5
-satiation_point_gen_error = 250
-
-satiation_value_emp_loss = 0.495
-satiation_point_emp_loss = 150
-
-
-a_gen_error = np.log(1 - satiation_value_gen_error)/-satiation_point_gen_error
-a_emp_loss = np.log(1 - satiation_value_emp_loss)/-satiation_point_emp_loss
-
+#plateau point
 M = 0.5
-#curve generalization error 
-curve_gen_error = -M*(1 - np.exp(-a_gen_error*training_sample_size)) + 1
-curve_emp_loss = M*(1 - np.exp(-a_emp_loss*training_sample_size)) 
+
+#satiation points and values (point at which curve reaches satiation value)
+satiation_value_gen_error_high_var = 0.4
+satiation_point_gen_error_high_var = 250
+
+satiation_value_emp_loss_high_var = 0.15
+satiation_point_emp_loss_high_var = 250
+
+##high bias
+satiation_value_gen_error_high_bias = 0.4
+satiation_point_gen_error_high_bias = 250
+
+satiation_value_emp_loss_high_bias = 0.37
+satiation_point_emp_loss_high_bias = 175
+
+#growth rate parameter value that curve reaches satiation value bu satiation point
+a_gen_error_high_var = np.log(1 - satiation_value_gen_error_high_var)/-satiation_point_gen_error_high_var
+a_emp_loss_high_var = np.log(1 - satiation_value_emp_loss_high_var)/-satiation_point_emp_loss_high_var
+
+a_gen_error_high_bias = np.log(1 - satiation_value_gen_error_high_bias)/-satiation_point_gen_error_high_bias
+a_emp_loss_high_bias = np.log(1 - satiation_value_emp_loss_high_bias)/-satiation_point_emp_loss_high_bias
+
+
+##high variance
+curve_gen_error_high_var = -M*(1 - np.exp(-a_gen_error_high_var*training_sample_size)) + 1
+curve_emp_loss_high_var = M*(1 - np.exp(-a_emp_loss_high_var*training_sample_size)) 
+
+##high bias 
+curve_gen_error_high_bias = -M*(1 - np.exp(-a_gen_error_high_bias*training_sample_size)) + 1
+curve_emp_loss_high_bias = M*(1 - np.exp(-a_emp_loss_high_bias*training_sample_size)) 
+
 
 df_emp_gen_error_curve = pd.DataFrame({'training_sample_size': training_sample_size,
-                                       'gen_error': curve_gen_error, 
-                                       'emp_loss': curve_emp_loss})
+                                       'gen_error_high_var': curve_gen_error_high_var, 
+                                       'emp_loss_high_var': curve_emp_loss_high_var,
+                                       'gen_error_high_bias': curve_gen_error_high_bias, 
+                                       'emp_loss_high_bias': curve_emp_loss_high_bias})
 
+cols_to_expand = df_emp_gen_error_curve.columns[1:5]
 df_emp_gen_error_curve_long = df_emp_gen_error_curve.melt(id_vars = 'training_sample_size', 
-                                                          value_vars = ['gen_error', 'emp_loss'], 
+                                                          value_vars = cols_to_expand,
                                                           var_name = "error_type", 
                                                           value_name = 'error_value')
-                         
+
+# Define the regular expression pattern to match the second underscore and everything after it
+pattern = r'^([^_]+_[^_]+)_(.*)$'
+
+# Split each element using regular expressions
+split_cols = df_emp_gen_error_curve_long['error_type'].str.extract(pattern)
+
+#Create two new columns 
+df_emp_gen_error_curve_long["error_type"] = split_cols[0]
+df_emp_gen_error_curve_long["problem"] = split_cols[1]
+
+#Relevel error_type column 
 error_type_releveled = ["gen_error", "emp_loss"]
                                                           
 df_emp_gen_error_curve_long["error_type"] = df_emp_gen_error_curve_long['error_type'].astype('category').cat.reorder_categories(error_type_releveled)
@@ -2053,57 +2088,77 @@ df_emp_gen_error_curve_long["error_type"] = df_emp_gen_error_curve_long['error_t
 #import Python data set 
 df_emp_gen_error_curve_long <- py$df_emp_gen_error_curve_long
 
-#data sets for plot
-# Add a circle on top of the ggplot object at x=3, y=0.5 with a white interior
-df_circle_high_variance = data.frame('x' = 130, 'y' = 0.3)
-df_circle_high_bias = data.frame('x' = 830, 'y' = 0.42)
+df_emp_gen_error_curve_long$problem <- factor(
+  x = df_emp_gen_error_curve_long$problem, 
+  labels = c("bold(A:~Error~Patterns~Caused~by~High~Variance~(Overfitting))",
+             "bold(B:~Error~Patterns~Caused~by~High~Bias~(Underfitting))"))
+  
+  
+#text dataframe
+df_text_high_var = data.frame(
+  "label" = c(TeX(input = "$\\textbf{High\\phantom{.}Variance\\phantom{.}(Overfitting)}$", 
+                  output = "character"),
+              TeX(input = "$\\uparrow$data", output = "character"),
+              TeX(input = "$\\downarrow$complexity", output = "character"), 
+              TeX(input = "$\\uparrow$regularization", output = "character")),
+  "x" = c(230, 37, 90, 115),
+  "y" = c(0.63, .56, .49, .42), 
+  "problem" = factor("bold(A:~Error~Patterns~Caused~by~High~Variance~(Overfitting))"))
 
 #text dataframe
-df_text = data.frame("label" = c(TeX(input = "$\\textbf{Case} \\phantom{.} \\textbf{1}$", output = "character"),
-                                 TeX(input = "$\\uparrow$Bias", output = "character"), 
-                                 TeX(input = "$\\textbf{Case} \\phantom{.} \\textbf{2}$", output = "character"), 
-                                 TeX(input = "$\\uparrow$Variance", output = "character")),
-                      "x" = c(60, 47, 800, 825),
-                      "y" = c(0.35, 0.28, 0.35, 0.28))
+df_text_high_bias = data.frame(
+  "label" = c(TeX(input = "$\\textbf{High\\phantom{.}Bias\\phantom{.}(Underfitting)}$", 
+                  output = "character"),
+              TeX(input = "$\\uparrow$features", output = "character"),
+              TeX(input = "$\\uparrow$complexity", output = "character"), 
+              TeX(input = "$\\downarrow$regularization", output = "character")),
+  "x" = c(205, 67, 90, 115),
+  "y" = c(0.63, .56, .49, .42),
+  "problem" =  factor("bold(B:~Error~Patterns~Caused~by~High~Bias~(Underfitting))"))
 
+
+df_text_merged <- rbind(df_text_high_var, df_text_high_bias)
 
 color_palette <-c('gen_error' = '#002241', 
                   'emp_loss' ='#9ECAE1')
 
-
-#import python data sets 
+#high variance plot 
 plot_bias_var_rules <- ggplot(data = df_emp_gen_error_curve_long, 
        mapping = aes(x = training_sample_size, y = error_value, 
-                      group = error_type, color = error_type)) + 
-                            
-  geom_point(inherit.aes = F, data = df_circle_high_variance, 
-              mapping = aes(x=x, y=y), shape = 1, color =  "#002241", size = 70) + 
-
-  geom_point(inherit.aes = F, data = df_circle_high_bias, 
-                mapping = aes(x=x, y=y), shape = 1, color =  "#002241",  size = 70) + 
+                      group = error_type, color = error_type)) +
+  
+  #data aesthetics 
   geom_line(size = 1) +
-  geom_hline(yintercept = 0.40, color = "#002241", linetype = "dashed")  +
-   geom_text(inherit.aes = F, data = df_text, 
-             mapping=aes(x=x, y=y, label=label),
-              size=6, color="#002241", parse=T) + 
+  geom_hline(yintercept = 0.3, color = "#002241", linetype = "dashed")  +
+  geom_text(inherit.aes = F, data = df_text_merged, 
+            mapping = aes(x = x, y = y, label = label),
+             size = 6, color = "#002241", parse = T) + 
+  facet_wrap(facets =  ~ problem, nrow = 2, ncol = 1, labeller = label_parsed) +
 
-  scale_y_continuous(name = 'Mean Squared Error')+
-  scale_x_continuous(name = "Sample Size for Empirical Loss")  +
+  #scale aesthetics 
+  scale_y_continuous(name = 'Mean Squared Error', breaks = 0.3, labels = expression(epsilon)) +
+  scale_x_continuous(name = "Sample Size", labels = NULL) + 
   scale_color_manual(name = "Function Type", 
                      values = color_palette, 
                     labels = c(emp_loss = 'Empirical Loss', gen_error = 'Generalization Error')) +
+  
   #custom styling
   theme_classic(base_family = 'Helvetica', base_size = 14) + 
-  theme(legend.text = element_text(size = 14),
+  theme(#legend.text = element_text(size = 14),
         legend.title = element_text(size = 15), 
         axis.title  = element_text(size = 15), 
-        axis.text = element_text(size = 14, color = "#002241"), 
+        axis.text = element_text( color = "#002241"), 
         text = element_text(color = "#002241"),
         axis.line = element_line(color = "#002241"), 
-        axis.ticks = element_line(color =  "#002241"))
+        axis.ticks = element_blank(), 
+        axis.text.y = element_text(size = 20), 
+        strip.text = element_text(size = 17, color = "#002241", hjust = 0),
+        strip.background = element_blank(), 
+        panel.spacing.y =  unit(x = 3, units = 'cm'))
 
 
-ggsave(filename = "images/plot_bias_var_rules.png", plot = plot_bias_var_rules, width = 10, height = 6, dpi = 1000)
+#save plot
+ggsave(filename = "images/plot_bias_var_rules.png", plot = plot_bias_var_rules, width = 10, height = 12, dpi = 300)
 ```
 
 

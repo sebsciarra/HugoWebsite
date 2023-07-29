@@ -137,6 +137,7 @@ compute_sample_risk_emp_gen_error_partial = functools.partial(compute_sample_ris
                                                               target_poly_order = 4,
                                                               poly_order_range = range(4, 4))
 
+compute_sample_risk_emp_gen_error(100, data_emp_loss, data_gen_error, target_poly_order = 5, poly_order_range=range(1, 9))
 
 emp_sample_size = 1e4
 #data used to compute empirical loss; note seed = 27 by default
