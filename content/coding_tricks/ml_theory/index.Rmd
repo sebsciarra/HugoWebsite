@@ -1,0 +1,242 @@
+---
+title: "Coding and Visualizing the Rules of Supervised Machine Learning"
+summary: '' 
+draft: true
+date: "2023-05-03"
+article_type: coding
+output:
+  bookdown::html_document2:
+     keep_md: true
+always_allow_html: true
+header-includes: 
+bibFile: content/coding_tricks/em_demo/refs.json    
+tags: []
+---   
+
+
+```{r package_loading_1, include=F}
+#load packages   
+library(easypackages) 
+packages <- c('devtools','tidyverse', 'reticulate', 'RColorBrewer')
+libraries(packages)  
+
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
+# knitr hook to use Hugo highlighting options
+knitr::knit_hooks$set(
+  source = function(x, options) {
+  hlopts <- options$hlopts
+    paste0(
+      "```", "r ",
+      if (!is.null(hlopts)) {
+      paste0("{",
+        glue::glue_collapse(
+          glue::glue('{names(hlopts)}={hlopts}'),
+          sep = ","
+        ), "}"
+        )
+      },
+      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
+    )
+  }
+)
+
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
+
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
+       
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
+
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
+
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
+
+#use_virtualenv("EM_post")
+options(reticulate.autocomplete = TRUE)
+
+#create and use conda environment
+#conda_create(envname = 'blog_posts',  python_version = '3.10.11')
+use_condaenv(condaenv = 'blog_posts')
+
+#install packages in conda environment
+#py_packages <- c('numpy', 'pandas', 'scipy')
+#conda_install(envname = 'blog_posts', packages = py_packages)
+
+#useful for checking what packages are loaded
+#py_list_packages(envname = 'blog_posts', type = 'conda')
+
+#pandoc content/coding_tricks/em_demo/refs.bib -t csljson -o content/coding_tricks/em_demo/refs.json
+
+```
+
+
+Two points require mentioning before beginning this demonstration post on the expectation-maximization (EM) algorithm. First, given that this post focuses on providing demonstrations of the EM algorithm, any readers seeking a deeper understanding of this algorithm can consult my technical post on the [EM algorithm](https://sebastiansciarra.com/technical_content/em/). Second, Python and R code are used throughout this post such that objects created in Python are brought into R for plotting. To use Python and R interchangeably, I use the `reticulate` package made for R and create a conda environment to use Python (see lines <a href="#1">1--12</a> below).
+
+```{r python-r-setup, eval=F, echo=T} 
+library(reticulate)
+
+#create and use conda environment
+conda_create(envname = 'blog_posts',  python_version = '3.10.11')
+use_condaenv(condaenv = 'blog_posts')
+
+#install packages in conda environment
+py_packages <- c('numpy', 'pandas', 'scipy')
+conda_install(envname = 'blog_posts', packages = py_packages)
+
+#useful for checking what packages are loaded
+py_list_packages(envname = 'blog_posts', type = 'conda')
+```
+
+
+
+
+```{python training-gen-error-rules, echo=T, eval=F,  class_name = 'python-code', results = 'hold', hlopts=list(language = 'python')}
+#1) Compute empirical loss as a function of training sample size 
+# Fix the arguments except for sample_size and then use map to vectorize over sample size values
+def compute_sample_risk_emp_gen_error(sample_size, data_emp_loss, data_gen_error, 
+                                      target_poly_order, poly_order_range): 
+  
+  # Use random_state to ensure reproducibility and prevent resampling from adding noise to estimates
+  gen_errors = compute_all_emp_gen_errors(data_emp_loss = data_emp_loss.sample(n=sample_size, random_state=27),
+                                          data_gen_error = data_gen_error,
+                                          include_interactions = False,
+                                          poly_order_range = poly_order_range)
+                                          
+  #create index column 
+  gen_errors.set_index("poly_order", inplace = True)
+                                          
+  # Return generalization error of sample risk minimizer
+  return gen_errors.loc[target_poly_order]
+
+
+# Fix the arguments except for sample_size and then use map to vectorize over sample size values
+compute_sample_risk_emp_gen_error_partial = functools.partial(compute_sample_risk_emp_gen_error,
+                                                              data_emp_loss = data_emp_loss,
+                                                              data_gen_error = data_gen_error,
+                                                              target_poly_order = 4,
+                                                              poly_order_range = range(4, 4))
+
+
+emp_sample_size = 1e4
+#data used to compute empirical loss; note seed = 27 by default
+data_emp_loss = generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, sd = sd, 
+                                           rho = rho_weather_winemaking, sample_size = emp_sample_size, 
+                                           seed=42)
+
+
+# Call the partial function with est_sample_sizes
+import multiprocessing as mp
+num_cores = mp.cpu_count()
+sample_sizes_emp_gen = range(9, 1000)
+
+start_time = time.time()
+with concurrent.futures.ThreadPoolExecutor(max_workers = num_cores - 1) as executor:
+    df_emp_gen_errors = pd.DataFrame(data = executor.map(compute_sample_risk_gen_error_partial, sample_sizes_emp_gen))
+end_time = time.time()
+
+end_time - start_time #1397.7656648159027
+
+df_emp_gen_errors.insert(loc = 0, column = "sample_size", value = np.array(sample_sizes_emp_gen))
+
+
+#convert to long format 
+df_emp_gen_errors_long = df_emp_gen_errors.melt(id_vars = 'sample_size', 
+                                                value_vars = ["emp_loss", "gen_error"], 
+                                                var_name = "function", value_name = "error_value")
+
+#reordered levels of of component column 
+func_releveled = ["gen_error", "emp_loss"]
+df_emp_gen_errors_long['function'] = df_emp_gen_errors_long['function'].astype('category').cat.reorder_categories(func_releveled)
+
+
+# Define color palette for each error type
+color_palette = {'gen_error': '#002241', 
+                 'emp_loss': '#9ECAE1'}
+                 
+                 
+plot_emp_gen_loss = (pt.ggplot(data = df_emp_gen_errors_long, 
+           mapping = pt.aes(x = "sample_size", y = "error_value", 
+                            group = "function", color = "function")) + 
+  pt.geom_line(size = 1) + 
+  pt.scale_x_continuous(name = "Sample Size Used for Empirical Loss") + 
+  pt.scale_y_continuous(name="Error (Mean Squared Error)", limits = [0.15, 0.4], 
+                         breaks = np.arange(0, 1.6, 0.5)) + 
+  pt.geom_hline(yintercept=0.24) + 
+                         
+  #add custom colour palette + change legend labels
+  pt.scale_color_manual(name = "Function",
+                        values = color_palette, 
+                        labels = {'gen_error': 'Generalization error', 
+                                  'emp_loss': 'Empirical loss'}) + 
+  
+  #custom styling
+  pt.theme_classic(base_family = 'Helvetica', base_size = 14) + 
+  pt.theme(legend_text = pt.element_text(size = 14),
+           legend_title = pt.element_text(size = 15), 
+           axis_title  = pt.element_text(size = 15), 
+           axis_text = pt.element_text(size = 14, color = "#002241"), 
+           text = pt.element_text(color = "#002241"),
+           axis_line = pt.element_line(color = "#002241"), 
+           axis_ticks = pt.element_line(color =  "#002241"),
+           axis_ticks_minor_x = pt.element_blank())
+)
+        
+
+
+compute_sample_risk_emp_gen_error(500, data_emp_loss, data_gen_error, 4, range(4, 5))
+compute_bayes_risk(data=data_gen_error)
+```
+
+# References
+
+
+{{< bibliography cited >}}
+
+
+
+```{python binom-mixture-function, echo=F, eval=F, hlopts=list(language = 'python'), tidy=F}
+def generate_binomial_mixture(num_components, size, p, mix):
+  """
+  Generate data according to a mixture of binomials.
+  Parameters:
+      - num_components (int): Number of mixture components
+      - size (int or tuple of ints): Size of the generated data
+      - p (list or array): List or array of probabilities of success for each binomial distribution
+      - mix (list or array): List or array of mixing coefficients for each component
+  Returns:
+      - data (ndarray): Generated data according to the mixture of binomials
+  """
+  assert num_components == len(p), "Number of components must match the length of the probability list."
+  assert num_components == len(mix), "Number of components must match the length of the mixing coefficient list."
+  assert sum(mix) == 1, "Mixture probabilities sum to 1"
+  
+  # Generate data for each binomial distribution 
+  binomial_mixture_data = np.random.binomial(n=1, p=p, size=(size, num_components))
+  
+  # Compute dot product between mixture values and binomial mixture data. If dot product >= 0.5, value = 1, else, value = 0. 
+  binomial_mixture_data = (np.dot(binomial_mixture_data, mix) >= 0.5).astype(int)
+  
+  return binomial_mixture_data
+
+```

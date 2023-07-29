@@ -79,22 +79,15 @@
 }
 
 
-/* Media Queries */
-/* Media Queries */
-//@media (max-width: 1350px) {
-//
-//  .figure {
-//    max-width: 25rem;
-//    min-width: 25rem;
-//  }
-//
-//  .figDivLabel {
-//    max-width: 25rem;
-//  }
-//
-//}
-//
-//
+
+
+/*pseudocode */
+.pseudocode {
+  white-space: pre;
+  text-align: center;
+  line-height: 2;
+}
+
 @media (max-width: 450px){
 
  .figure {
@@ -105,4 +98,5 @@
 
 
 }
+
 

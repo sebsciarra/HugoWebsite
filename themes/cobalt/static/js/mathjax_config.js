@@ -1,7 +1,6 @@
 
 //see https://github.com/mathjax/MathJax/issues/3013
 
-
 window.MathJax = {
 
   section: {
@@ -10,13 +9,17 @@ window.MathJax = {
     letters: "AABCDEFGHIJKLMNOPQRSTUVWXYZ"
   },
 
-
+ output: {
+    fontPath: 'https://cdn.jsdelivr.net/npm/%%FONT%%-font@1.0.0-alpha.1/es5/output/fonts/%%FONT%%'
+  },
 
   loader: {load: ['[tex]/tagformat', '[tex]/mathtools', 'output/chtml']},
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']], //allow inline math
-    displayMath: [['$$','$$']],
+    displaymath: [['$$','$$'], ['\\[','\\]']],
     tagSide: 'right', //location of equation numbers
+    processEscapes: true,
+    processEnvironments: true,
     tags: 'all',
     packages: {'[+]': ['tagformat', 'sections', 'autoload-all', 'mathtools']},
     tagformat: {
@@ -28,9 +31,9 @@ window.MathJax = {
 
   chtml: {
    mtextInheritFont: true,         // font to use for mtext, if not inheriting (empty means use MathJax fonts)
-   displayOverflow: 'linebreak',
-    fontPath: 'https://cdn.jsdelivr.net/npm/%%FONT%%-font@1.0.0-alpha.1/es5/output/fonts/%%FONT%%'
-  },
+   displayOverflow: 'linebreak'
+   },
+
 
   linebreaks: {                  // options for when overflow is linebreak
       inline: true,                   // true for browser-based breaking of inline equations
@@ -87,4 +90,7 @@ window.MathJax = {
     }
   }
 };
+
+
+
 
