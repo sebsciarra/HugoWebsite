@@ -67,8 +67,9 @@
     {{ .Site.Params.description }}
   {{- end -}}">
 
+  <meta name="image" property="og:image" content="{{ .Params.imgThumbnail }}">
 
-  <meta name="image" property="og:image" content="https://sebastiansciarra.com/technical_content/understanding_ml/images/est_error_plot2.png">
+
 
  <!--title attribute contains title of page. Note that $ signs are used to indicate to Hugo that you are looking in the global scope
  the link tag is created in the last line. Note that safeHTML should only be used with links that you trust-->
