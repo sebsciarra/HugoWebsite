@@ -342,7 +342,7 @@ display: none;
 </div>
 
 
-<p>Four points require mentioning before beginning this whitepaper. First, I created a Python package that contains all the functions provided in this whitepaper that are needed to demonstrate propositions of supervised machine learning theories. The package is called <code>smltheory</code> and can be installed from the Python Package Index (PyPI) using the code in the Bash code block below (see line <a href="#1">1</a>).</p>
+<p>Five points require mentioning before beginning this whitepaper. First, I created a Python package that contains all the functions provided in this whitepaper that are needed to demonstrate propositions of supervised machine learning theories. The package is called <code>smltheory</code> and can be installed from the Python Package Index (PyPI) using the code in the Bash code block below (see line <a href="#1">1</a>).</p>
 <pre class="r" language="bash"><code>pip install smltheory</code></pre>
 <p>Second, although I provide the source code for Python functions in this whitepaper where appropriate, the functions can be easily used by installing the <code>smltheory</code> package and prefixing each function with <code>smltheory</code> (or with the desired shorthand; I use <code>sml</code> to represent <code>smltheory</code>) so that the function is used from the loaded package.</p>
 <p>Third, I used Python and R code throughout this whitepaper and often imported objects created in Python into R for creating plots. To use Python and R coinjointly, I used the <code>reticulate</code> package made for R and created a conda environment to use Python (see lines <a href="#2">2–13</a> below). Note that I installed the necessary packages in the conda environment.</p>
@@ -375,7 +375,7 @@ import smltheory as sml</code></pre>
 <pre class="r" language="python"><code>sml.version(&#39;smltheory&#39;)</code></pre>
 <pre><code class="python-code">&#39;0.1.10&#39;
 </code></pre>
-<div id="introduction" class="section level1" number="1">
+<div id="intro" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>In supervised machine learning, a game is played with the goal of maximizing the ability to predict. Whether the focus is to predict churn rates (among employees and/or customers), regions with high potential for growth, or something as innocuous as fruit fly behaviour, supervised machine learning can be used to solve these problems. Although a nearly infinite number of models can be deployed to predict a given outcome, it is important that data scientists not rely on trial and error to find effective models and, instead, make purposeful decisions. To do so, it important that data scientists understand the game in supervised machine learning.</p>
 <p>To understand the game of supervised machine learning, I will use the excess risk decomposition framework to situate the commonly known entities of bias, variance, and noise. Because excess risk decomposition is seldom presented in tandem with bias, variance, and noise, I hope to provide a deeeper understanding of both topics by presenting them together.</p>

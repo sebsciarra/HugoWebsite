@@ -17,7 +17,7 @@ tags: []
 
 
 
-Four points require mentioning before beginning this whitepaper. First, I created a Python package that contains all the functions provided in this whitepaper that are needed to demonstrate propositions of supervised machine learning theories. The package is called `smltheory` and can be installed from the Python Package Index (PyPI) using the code in the Bash code block below (see line <a href="#1">1</a>). 
+Five points require mentioning before beginning this whitepaper. First, I created a Python package that contains all the functions provided in this whitepaper that are needed to demonstrate propositions of supervised machine learning theories. The package is called `smltheory` and can be installed from the Python Package Index (PyPI) using the code in the Bash code block below (see line <a href="#1">1</a>). 
 
 ```r {language=bash}
 pip install smltheory
@@ -77,7 +77,7 @@ sml.version('smltheory')
 
 
 
-# Introduction 
+# Introduction{#intro}
 
 In supervised machine learning, a game is played with the goal of maximizing the ability to predict. Whether the focus is to predict churn rates (among employees and/or customers), regions with high potential for growth, or something as innocuous as fruit fly behaviour, supervised machine learning can be used to solve these problems. Although a nearly infinite number of models can be deployed to predict a given outcome, it is important that data scientists not rely on trial and error to find effective models and, instead, make purposeful decisions. To do so, it important that data scientists understand the game in supervised machine learning.
 
