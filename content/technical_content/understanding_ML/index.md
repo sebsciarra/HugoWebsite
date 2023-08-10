@@ -1,15 +1,14 @@
 ---
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules" 
 draft: false
-summary: "Supervised machine learning can be conceptualized as a game where the goal is to maximize predictive power. In this paper, I use the excess risk decomposition framework to provide a setup for the game of supervised machine learning. I then decompose mean squared error loss into bias (squared), variance, and noise and introduce these components as 'players' of the game. The bias-variance tradeoff is then used to explain the behaviours of bias, variance, and noise and to synthesize two rules for the game of machine learning. The paper ends with a discussion of boundary conditions on these rules of supervised machine learning. Given the considerable amount of Python in this post, I created the smltheory package to facilitate learning of concepts."
+summary: "Supervised machine learning can be conceptualized as a game where the goal is to maximize predictive power. In this paper, I use the excess risk decomposition framework to provide a setup for the game of supervised machine learning. I then decompose mean squared error loss into bias (squared), variance, and noise and introduce these components as 'players' of the game. The bias-variance tradeoff is then used to explain the behaviours of bias (squared), variance, and noise and to synthesize two rules for the game of machine learning. The paper ends with a discussion of boundary conditions on these rules of supervised machine learning. Given the considerable amount of Python code in this post, I created the smltheory package to help readers navigate the code and facilitate their learning of concepts."
 date: "2023-08-09"
 article_type: technical
 output:
   bookdown::html_document2:
      keep_md: true
 always_allow_html: true
-header-includes: 
-  - \usepackage{algpseudocode}
+header-includes:  
 bibFile: content/technical_content/understanding_ML/refs.json    
 tags: []
 ---   
@@ -735,7 +734,7 @@ Moreover, in looking at Figure \ref{fig:approx-error}, it is also apparent that 
    <div class="figTitle">
     <span>Constrained Empirical Risk Minimization Results in Approximation Error</span>
   </div>
-    <img src="images/app_error_diagram.png"
+    <img src="images/app_error_Diagram.png"
     .png" width="80%" height="80%"> 
   
   <div class="figNote">
@@ -1560,7 +1559,7 @@ Figure \ref{fig:opt-error} below shows the generalization error of optimization 
    <div class="figTitle">
     <span>Depiction of Optimization Error: The Difference in Generalization Error Between the Optimization and Sample Risk Minimizers</span>
   </div>
-    <img src="images/opt_error_plot2.png" width="80%" height="80%"> 
+    <img src="images/Opt_error_plot2.png" width="80%" height="80%"> 
   
   <div class="figNote">
   <span><em>Note. </em>The left hand plot represents a zoomed version of the right hand plot between the y-axis values of 0.23 and 0.29. The difference in generalization error between the optimization risk minimizer ($\tilde{f}_s$, dark blue line) and the sample risk minimizer ($\hat{f}_s$; medium blue line) constitutes optimization error (see Equation \ref{eq:opt-error}). Importantly, the x-axis represents the sample size used to obtain the sample risk minimizer ($\hat{f}_s$) and, because the constrained empirical risk minimizer, $f_\mathcal{F}$, and the Bayes decision function, $f^\ast$, represent theoretical ideal functions, they are unaffected by these sample sizes and remain constant across the x-axis.</span> 
@@ -1803,7 +1802,8 @@ With bias and variance having opposite relations with model complexity, a tradeo
 
 One last point must be mentioned with respect to noise. Noise remains constant as model complexity increases. In Figure \ref{fig:bias-var-plot}, the light blue line shows the behaviour of noise as model complexity increases. Noise represents the generalization error of the Bayes decision function; that is, the difference between the population model and the obtained outcome values. Because there is only one Bayes decision function and one population model, they are not affected from the polynomial model used to analyze the data. Thus, noise is constant across model complexity. If noise is too high, it could suggest data cleaning is needed and/or too many errors have been incurred in data collection. 
 
-For the interested reader, I will provide the code for generating 
+For the interested reader, I will provide the code for generating in a future [demonstration](https://sebastiansciarra.com/coding_tricks/) post. 
+
 <div class="figure">
   <div class="figDivLabel">
     <caption>
@@ -2020,7 +2020,7 @@ First, the bias-variance tradeoff disappears with exceedingly complex functions 
    <div class="figTitle">
     <span>Double Descent Curve for Generalization Error/Test Risk</span>
   </div>
-    <img src="images/plot_double_descent.png" width="80%" height="80%"> 
+    <img src="images/Plot_double_descent.png" width="80%" height="80%"> 
   <div class="figNote">
      <span><em>Note. </em> The incomplete-data log-likelihood is shown in red, $\ln p(\mathbf{x}, \theta)$. The first evidence lower bound is shown in blue, $\mathcal{L}(q, \theta)$, and the second evidence lower bound is shown in green. From "Reconciling modern machine-learning practice and the classical bias–variance trade-off," by M. Belkin et al., 2019, <em>Proceedings of the National Academy of Sciences</em>, <em>116</em>(32), p. 15850 (<a href="http://dx.doi.org/10.1073/pnas.1903070116">http://dx.doi.org/10.1073/pnas.1903070116</a>).</span> 
   </div>
