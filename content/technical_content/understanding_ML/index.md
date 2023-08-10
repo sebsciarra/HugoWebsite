@@ -15,8 +15,6 @@ tags: []
 
 
 
-<meta name="image" property="og:image" content="[https://sebastiansciarra.com/technical_content/understanding_ml/images/est_error_plot2.png]">
-
 Five points require mentioning before beginning this whitepaper. First, I created a Python package that contains all the functions provided in this whitepaper that are needed to demonstrate propositions of supervised machine learning theories. The package is called `smltheory` and can be installed from the Python Package Index (PyPI) using the code in the Bash code block below (see line <a href="#1">1</a>). 
 
 ```r {language=bash}
