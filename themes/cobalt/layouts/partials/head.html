@@ -65,14 +65,14 @@
 
 
   <!-- Uses homepage description from config.toml (i.e., Seb's portfolio website) on homepage if the page has no description content explicitly listed.
-  Otherwise, it uses the Site's parameter desription in the source documentation-->
+  Otherwise, it uses the Site's parameter desription in the source documentation
   <meta name="description" content="
   {{- with .Page.Description -}}
     {{ . }}
   {{- else -}}
     {{ .Site.Params.description }}
   {{- end -}}">
-
+-->
 
 
 
