@@ -2,7 +2,7 @@
 title: "The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules" 
 draft: false
 summary: "Supervised machine learning can be conceptualized as a game where the goal is to maximize predictive power. In this paper, I use the excess risk decomposition framework to provide a setup for the game of supervised machine learning. I then decompose mean squared error loss into bias (squared), variance, and noise and introduce these components as 'players' of the game. The bias-variance tradeoff is then used to explain the behaviours of bias (squared), variance, and noise and to synthesize two rules for the game of machine learning. The paper ends with a discussion of boundary conditions on these rules of supervised machine learning. Given the considerable amount of Python code in this post, I created the smltheory package to help readers navigate the code and facilitate their learning of concepts."
-date: "2023-08-09"
+date: "2023-08-10"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -10,8 +10,11 @@ output:
 always_allow_html: true
 header-includes:  
 bibFile: content/technical_content/understanding_ML/refs.json    
+imgThumbnail: "https://sebastiansciarra.com/technical_content/understanding_ml/images/est_error_plot2.png"
 tags: []
 ---   
+
+
 
 
 

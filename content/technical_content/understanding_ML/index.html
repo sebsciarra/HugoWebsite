@@ -9,6 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+
+<meta name="date" content="2023-08-10" />
+
 <title>The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules</title>
 
 <script>/*! jQuery v3.6.0 | (c) OpenJS Foundation and other contributors | jquery.org/license */
@@ -334,7 +337,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">The Game of Supervised Machine Learning: Understanding the Setup, Players, and Rules</h1>
-<h4 class="date">2023-08-09</h4>
+<h4 class="date">2023-08-10</h4>
 
 </div>
 
@@ -365,7 +368,7 @@ import sklearn
 from sklearn.metrics import mean_squared_error
 import statsmodels.formula.api as smf
 from functools import partial
-import plotnine as pt
+import plotnine as pt 
 import concurrent.futures
 import smltheory as sml</code></pre>
 <p>Make sure that version 0.1.10 of <code>smltheory</code> is loaded (see lines <a href="#25">25–26</a> below).</p>
@@ -464,7 +467,7 @@ f^\ast &amp;= \underset{f}{\arg\min} \ Ls(f),
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
-\rho_{\mathbf{x}\_1, \mathbf{x}\_2} &amp;= .35  \text{ and} \\\\
+\rho_{\mathbf{x}\_1, \mathbf{x}\_2} &amp;= .35  \text{ and} \\\\  
 \boldsymbol{\Sigma} &amp;= \begin{bmatrix}
 \boldsymbol{\sigma}^2_1  &amp; \rho_{\mathbf{x}\_1, \mathbf{x}\_2} \boldsymbol{\sigma}\_1\boldsymbol{\sigma}\_2 \\\\
 \rho_{\mathbf{x}\_1, \mathbf{x}\_2} \boldsymbol{\sigma}\_1\boldsymbol{\sigma}\_2 &amp;\boldsymbol{\sigma}^2_2
@@ -520,7 +523,7 @@ f^\ast &amp;= \underset{f}{\arg\min} \ Ls(f),
 \label{eq:scaling} \\\\
 &amp;= \frac{10 - 1}{15.50 - (-12.13)}  \nonumber \\\\
 &amp;=  0.33 \nonumber \\\\
-\mathbf{w}_{scaled} &amp;= \mathbf{w}(0.33)
+\mathbf{w}_{scaled} &amp;= \mathbf{w}(0.33)  
 \label{eq:scaled-weights} \\\\
 &amp;= [0.10, 0.03, 0.02, -0.03,  0.03] \label{eq:scaled-values}
 \end{align}
@@ -558,7 +561,7 @@ def compute_old_scale_range():
 
 
 def compute_rescaling_factor(new_upper_limit=10, new_lower_limit=1):
-
+  
     old_scale_range = compute_old_scale_range()
     new_scale_range = new_upper_limit - new_lower_limit
 
@@ -585,7 +588,7 @@ def create_covariance_matrix(sd, rho):
 
 def generate_trunc_predictors(mu, cov_matrix, sample_size,
                               lower_limits=1, upper_limits=10, seed=27):
-
+    
     # Upper and lower limits for variables
     lower_limits = np.repeat(lower_limits, len(mu))
     upper_limits = np.repeat(upper_limits, len(mu))
@@ -616,7 +619,7 @@ def compute_outcome_variable(data):
 
 
 def rescale_outcome_variable(data, new_lower_limit=1, new_upper_limit=10):
-
+    
     rescaling_factor = compute_rescaling_factor(new_upper_limit=new_upper_limit,
                                                 new_lower_limit=new_lower_limit)
     old_lower_limit = np.dot(a=provide_weights(), b=np.array([1, 10, 1, 100, 10])) - 3 * 1.5
@@ -629,7 +632,7 @@ def rescale_outcome_variable(data, new_lower_limit=1, new_upper_limit=10):
 
 
 def generate_mult_trunc_normal(cov_matrix, mu, sample_size, seed=27):
-
+    
     # generate predictors
     data_mult_trunc_normal = generate_trunc_predictors(mu=mu, cov_matrix=cov_matrix,
                                                        sample_size=sample_size, seed=seed)
@@ -647,17 +650,17 @@ mu = [5, 7]
 sd = [1.2, 1.7]
 
 #population correlation
-rho_weather_winemaking =  0.35
+rho_weather_winemaking =  0.35 
 cov_matrix = sml.create_covariance_matrix(sd = sd, rho =  rho_weather_winemaking)
 sample_size_emp_loss = 250
 sample_size_gen_error = 1e4
 
 #data used to compute empirical loss; note seed = 27 by default
-data_emp_loss = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu,
+data_emp_loss = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, 
                 sample_size = sample_size_emp_loss, seed = 27)
-
-#data used to compute generalization error
-data_gen_error = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu,
+                                          
+#data used to compute generalization error 
+data_gen_error = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, 
                  sample_size = sample_size_gen_error, seed = 21)</code></pre>
 <p>Because of the long processing time needed to generate the above data sets, I provide the data sets in the <code>smltheory</code> package and show how they can be obtained in the Python code block below (see lines <a href="#151">151–155</a> below).</p>
 <pre class="r" language="python"><code>#data for empirical loss
@@ -689,7 +692,7 @@ f \in \mathcal{O}:f(\mathbf{x}_i) &amp;= \text{int} + \bigg(\sum\_{p=1}^{P} w\_{
 \]</span></p>
 <p>where <span class="math inline">\(f(\mathbf{x}\_i)\)</span> represents the predicted wine quality value for the <span class="math inline">\(i^{th}\)</span> wine, which is the sum of an intercept (<span class="math inline">\(\text{int}\)</span>), the weighted sum of the corresponding <span class="math inline">\(i^{th}\)</span> weather (<span class="math inline">\(x_{1_i}\)</span>) and winemaking quality (<span class="math inline">\(x_{2_i}\)</span>), and the weighted sum of all possible two-way interactions. Note that, in Equation <span class="math inline">\(\ref{eq:all-functions}\)</span>, interactions are only computed if the specified polynomial order is greater than or equal to 2, <span class="math inline">\(\mathbb{I}\_({P \ge 2)}\)</span>. The Python code block below (lines <a href="#151">156–217</a>) contains functions that compute the generalization error and empirical loss (using mean squared error; see Equation <span class="math inline">\(\ref{eq:mean-sq-error}\)</span>) for each polynomial model with an order in the specified range.</p>
 <pre class="r" language="python"><code>def gen_poly_reg_eq(poly_order, include_interactions=False):
-
+    
     # compute polynomial terms for predictors
     weather_pred = &#39; + &#39;.join([&#39;np.power(weather, {})&#39;.format(ord_value) for ord_value in range(1, poly_order + 1)])
     winemaking_quality_pred = &#39; + &#39;.join([&#39;np.power(winemaking_quality, {})&#39;.format(ord_value)
@@ -712,10 +715,10 @@ f \in \mathcal{O}:f(\mathbf{x}_i) &amp;= \text{int} + \bigg(\sum\_{p=1}^{P} w\_{
     equation = &quot;wine_quality ~ {}&quot;.format(predictors)
 
     return equation
-
+  
 
 def compute_emp_gen_error(equation, data_emp_loss, data_gen_error):
-
+    
     import numpy as np
     model = smf.ols(data=data_emp_loss, formula=equation).fit()
     y_test = model.predict(data_gen_error)
@@ -761,24 +764,24 @@ data_poly_emp_loss = data_emp_gen_errors.drop(&quot;gen_error&quot;, axis=1, inp
 
 #create empirical loss plot
 emp_plot = (
-    pt.ggplot(data = data_poly_emp_loss,
-              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;emp_loss&quot;)) +
-    pt.geom_line(size=1, color = &quot;#9ECAE1&quot;) +
-    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) +
-    pt.scale_y_continuous(name = &quot;Error Value (Mean Squared Error)&quot;) + # breaks=range(0, 601, 100)) +
-    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
-    pt.theme(text = pt.element_text(color = &quot;#002241&quot;),
+    pt.ggplot(data = data_poly_emp_loss, 
+              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;emp_loss&quot;)) + 
+    pt.geom_line(size=1, color = &quot;#9ECAE1&quot;) + 
+    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) + 
+    pt.scale_y_continuous(name = &quot;Error Value (Mean Squared Error)&quot;) + # breaks=range(0, 601, 100)) + 
+    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
+    pt.theme(text = pt.element_text(color = &quot;#002241&quot;), 
              axis_line = pt.element_line(color = &quot;#002241&quot;),
-             axis_ticks = pt.element_line(color = &quot;#002241&quot;),
+             axis_ticks = pt.element_line(color = &quot;#002241&quot;), 
              axis_text = pt.element_text(color = &quot;#002241&quot;))
 )
-
+        
 #save as .png
 emp_plot.save(&quot;images/plot_emp_loss.png&quot;, width = 8, height = 6, dpi = 1000)</code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:emp-loss}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:emp-loss}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -791,38 +794,38 @@ emp_plot.save(&quot;images/plot_emp_loss.png&quot;, width = 8, height = 6, dpi =
 </div>
 <p>If generalization error is examined, however, then the conclusion of empirical risk minimization to use the highest-order polynomial model results in a highly undesirable outcome. Figure <span class="math inline">\(\ref{fig:overfit-plot}\)</span> shows that, while empirical loss decreases as a model’s polynomial order increases, generalization error suddenly increases exponentially after the sixth polynomial order. Specifically, while empirical loss remains below 1 across all polynomial orders, generalization error goes from a value of approximately 2.41 at the sixth polynomial order to a value of approximately 1389.20 at the ninth polynomial order. Thus, although the most complex polynomial model results in the lowest empirical loss, it results in the highest generalization error, and so would perform the least well if used to make predictions on new data. The Python code block below (lines <a href="#242">242–270</a>) computes and plots the empirical loss and generalization error for each polynomial model up to the ninth order.</p>
 <pre class="r" language="python"><code>#convert to long format
-data_emp_gen_errors_long = data_emp_gen_errors.melt(id_vars = &quot;poly_order&quot;,
-                                                  value_vars = [&#39;emp_loss&#39;, &#39;gen_error&#39;],
-                                                  var_name = &quot;error_type&quot;,
+data_emp_gen_errors_long = data_emp_gen_errors.melt(id_vars = &quot;poly_order&quot;, 
+                                                  value_vars = [&#39;emp_loss&#39;, &#39;gen_error&#39;], 
+                                                  var_name = &quot;error_type&quot;, 
                                                   value_name = &quot;error_value&quot;)
 
 # Define color palette for each error type
 color_palette = {&#39;emp_loss&#39;: &#39;#9ECAE1&#39;, &#39;gen_error&#39;: &#39;#002241&#39;}
 
 overfitting_plot = (
-    pt.ggplot(data = data_emp_gen_errors_long,
-              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;error_value&quot;,
-                             factor = &quot;error_type&quot;, color = &quot;error_type&quot;)) +
-    pt.geom_line(size=1) +
-    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) +
-    pt.scale_y_continuous(name = &quot;Error Value (Mean Squared Error)&quot;,
-                          breaks=range(0, 1501, 250), limits = [0, 1501]) +
-    pt.labs(color = &quot;Error Type&quot;) +
-    pt.scale_color_manual(values = color_palette,
-                          labels = {&#39;emp_loss&#39;: &#39;Empirical Loss&#39;, &#39;gen_error&#39;: &#39;Generalization Error&#39;}) +
-    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
-    pt.theme(text = pt.element_text(color = &quot;#002241&quot;),
+    pt.ggplot(data = data_emp_gen_errors_long, 
+              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;error_value&quot;, 
+                             factor = &quot;error_type&quot;, color = &quot;error_type&quot;)) + 
+    pt.geom_line(size=1) + 
+    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) + 
+    pt.scale_y_continuous(name = &quot;Error Value (Mean Squared Error)&quot;, 
+                          breaks=range(0, 1501, 250), limits = [0, 1501]) + 
+    pt.labs(color = &quot;Error Type&quot;) + 
+    pt.scale_color_manual(values = color_palette, 
+                          labels = {&#39;emp_loss&#39;: &#39;Empirical Loss&#39;, &#39;gen_error&#39;: &#39;Generalization Error&#39;}) + 
+    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
+    pt.theme(text = pt.element_text(color = &quot;#002241&quot;), 
              axis_line = pt.element_line(color = &quot;#002241&quot;),
-             axis_ticks = pt.element_line(color = &quot;#002241&quot;),
+             axis_ticks = pt.element_line(color = &quot;#002241&quot;), 
              axis_text = pt.element_text(color = &quot;#002241&quot;))
 )
-
+        
 #save as .png
 overfitting_plot.save(&quot;images/overfitting_curve.png&quot;, width = 8, height = 6, dpi = 1000)</code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:overfit-plot}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:overfit-plot}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -853,44 +856,44 @@ f \in \mathcal{F}:f(\mathbf{x}_i) &amp;= \text{int} + \bigg(\sum\_{p=1}^{P} w\_{
 \]</span></p>
 <p>where <span class="math inline">\(P = 5\)</span>. Figure <span class="math inline">\(\ref{fig:constrained-erm}\)</span> below shows the empirical loss and generalization error as a function of polynomial order with constrained empirical risk minimization (see Python clode block below [lines <a href="#266">271–305</a> ] for corresponding code). Across all polynomial orders, empirical loss provides a close approximation of generalization error. Thus, the tourist has prevented the occurrence of overfitting by implementing constrained risk minimization. As an aside, a proof of the learning success of constrained empirical risk minimization can be found in <a href="https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/understanding-machine-learning-theory-algorithms.pdf#page=94">Section 2.3.1</a> of {{&lt; cite “shalev-shwartz2014” &gt;}}.</p>
 <pre class="r" language="python"><code>#compute empirical loss and generalization error for polynomial models up to fifth order
-data_emp_gen_errors = sml.compute_all_emp_gen_errors(data_emp_loss = data_emp_loss,
+data_emp_gen_errors = sml.compute_all_emp_gen_errors(data_emp_loss = data_emp_loss, 
                       data_gen_error = data_gen_error,
-                      include_interactions = False,
+                      include_interactions = False, 
                       poly_order_range=range(1, 6))
 
 #convert to long format
-data_emp_gen_errors_long = data_emp_gen_errors.melt(id_vars = &quot;poly_order&quot;,
-                           value_vars = [&#39;emp_loss&#39;, &#39;gen_error&#39;],
-                           var_name = &quot;error_type&quot;,
+data_emp_gen_errors_long = data_emp_gen_errors.melt(id_vars = &quot;poly_order&quot;, 
+                           value_vars = [&#39;emp_loss&#39;, &#39;gen_error&#39;], 
+                           var_name = &quot;error_type&quot;, 
                            value_name = &quot;error_value&quot;)
 
 # Define color palette for each error type
 color_palette = {&#39;emp_loss&#39;: &#39;#9ECAE1&#39;, &#39;gen_error&#39;: &#39;#002241&#39;}
 
 constrained_erm_plot = (
-    pt.ggplot(data = data_emp_gen_errors_long,
-              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;error_value&quot;,
-                             factor = &quot;error_type&quot;, color = &quot;error_type&quot;)) +
-    pt.geom_line(size=1) +
-    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) +
+    pt.ggplot(data = data_emp_gen_errors_long, 
+              mapping=pt.aes(x = &quot;poly_order&quot;, y = &quot;error_value&quot;, 
+                             factor = &quot;error_type&quot;, color = &quot;error_type&quot;)) + 
+    pt.geom_line(size=1) + 
+    pt.scale_x_continuous(name = &quot;Polynomial Order&quot;, breaks = range(1, 10)) + 
     pt.scale_y_continuous(name = &quot;Error Value (Mean Squared Error)&quot;,
-                          limits = [0.2, 0.28]) +
-    pt.labs(color = &quot;Error Type&quot;) +
-    pt.scale_color_manual(values = color_palette,
+                          limits = [0.2, 0.28]) + 
+    pt.labs(color = &quot;Error Type&quot;) + 
+    pt.scale_color_manual(values = color_palette, 
                           labels = {&#39;emp_loss&#39;: &#39;Empirical Loss&#39;, &#39;gen_error&#39;: &#39;Generalization Error&#39;}) +
-    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
-    pt.theme(text = pt.element_text(color = &quot;#002241&quot;),
+    pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
+    pt.theme(text = pt.element_text(color = &quot;#002241&quot;), 
              axis_line = pt.element_line(color = &quot;#002241&quot;),
-             axis_ticks = pt.element_line(color = &quot;#002241&quot;),
+             axis_ticks = pt.element_line(color = &quot;#002241&quot;), 
              axis_text = pt.element_text(color = &quot;#002241&quot;))
 )
-
+        
 #save as .png
 constrained_erm_plot.save(&quot;images/constrained_erm_plot.png&quot;, width = 8, height = 6, dpi = 1000)</code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:constrained-erm}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:constrained-erm}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -927,7 +930,7 @@ Moreover, in looking at Figure <span class="math inline">\(\ref{fig:approx-error
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:approx-error}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:approx-error}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -941,7 +944,7 @@ Moreover, in looking at Figure <span class="math inline">\(\ref{fig:approx-error
 </div>
 <p>To compute approximation error, I calculate the difference between the generalization errors of the Bayes decision function and the constrained empirical risk minimizer. Beginning with the Bayes decision function, the scaled population regression weights from Equation <span class="math inline">\(\ref{eq:scaled-values}\)</span> can be used to compute predictions. The difference between the predictions and actual wine quality values are used to compute the Bayes risk (or generalization error of the Bayes decision function). The Python code block below (lines <a href="#306">306–339</a>) constructs a function for computing the Bayes risk.</p>
 <pre class="r" language="python"><code>def generate_bayes_features(data):
-
+  
     # Feature columns
     predictors = data[[&quot;weather&quot;, &quot;winemaking_quality&quot;]]
     bayes_features = pd.concat(objs=[predictors, predictors**2, predictors.prod(axis=1)], axis=1)
@@ -977,22 +980,22 @@ def compute_bayes_risk(data):
 <p>Ending with the constrained empirical risk minimizer, Figure <span class="math inline">\(\ref{fig:constrained-erm}\)</span> indicated that the second-order polynomial model resulted in the lowest generalization error. To get the best possible parameter estimates for the second-order polynomial model (with no interactions), I generated another large data set (<code>data_best_in_class</code>; see Python code block containing lines <a href="#340">340–345</a>). As with previous data sets, <code>data_best_in_class</code> can be obtained from the <code>smltheory</code> package.</p>
 <pre class="r" language="python"><code>sample_size_best_in_class = 1e4
 
-#use large data set to obtain a close approximation of the best possible estimates for the second-order
+#use large data set to obtain a close approximation of the best possible estimates for the second-order 
 #polynomial model (without interactions)
-data_best_in_class = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu,
+data_best_in_class = sml.generate_mult_trunc_normal(cov_matrix = cov_matrix, mu = mu, 
                      sample_size = sample_size_best_in_class, seed=7)</code></pre>
 <p>The Python code block below (lines <a href="#334">346–361</a>) computes the approximation error by calculating the difference between the Bayes risk and the generalization error of the constrained empirical risk minimizer.</p>
 <pre class="r" language="python"><code>data_best_in_class = sml.get_data_best_in_class()
 
-#Bayes risk
+#Bayes risk 
 bayes_risk = sml.compute_bayes_risk(data = data_gen_error)
 
 #compute empirical loss and generalization error for polynomial models up to fifth order
 constrained_erm = sml.compute_all_emp_gen_errors(data_emp_loss = data_best_in_class,
                                              data_gen_error = data_gen_error,
-                                             include_interactions = False,
+                                             include_interactions = False,  
                                              poly_order_range=range(2, 3))
-
+                                             
 #compute approximation error
 approx_error = constrained_erm[&quot;gen_error&quot;][0] - bayes_risk
 
@@ -1003,7 +1006,7 @@ print(&#39;Approximation error:&#39;, np.round(a = approx_error, decimals = 5))<
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:app-error}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:app-error}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1014,62 +1017,62 @@ print(&#39;Approximation error:&#39;, np.round(a = approx_error, decimals = 5))<
 <span><em>Note. </em>The left hand plot represents a magnified version of the right hand plot between the y-axis values of .230 and .234. The difference in generalization error between the Bayes decision function (<span class="math inline">\(f^\ast\)</span>, light blue line) and the constrained empirical risk minimizer (<span class="math inline">\(\hat{f}_\mathcal{F}\)</span>; medium blue line) constitutes approximation error (see Equation <span class="math inline">\(\ref{eq:approx-error}\)</span>). Importantly, both functions do not vary across the x-axis because the x-axis represents the sample size used for model development, and both functions’ generalization errors are not affected by the sample size used for model development.</span>
 </div>
 </div>
-<pre class="r"><code>#create long version of data_est_error where function type (bayes or sample minimizer) is
+<pre class="r"><code>#create long version of data_est_error where function type (bayes or sample minimizer) is 
 #a categorical variable
-data_app_error &lt;- data.frame(&quot;sample_size&quot; = 5:1000,
-                           &quot;bayes_risk&quot; =  py$bayes_risk,
+data_app_error &lt;- data.frame(&quot;sample_size&quot; = 5:1000, 
+                           &quot;bayes_risk&quot; =  py$bayes_risk, 
                            &quot;constr_min&quot; = py$constrained_erm$gen_error)
 
 data_app_error_long &lt;- data_app_error %&gt;%
   pivot_longer(cols = &quot;bayes_risk&quot;:&quot;constr_min&quot;, names_to = &quot;function_type&quot;, values_to = &quot;gen_error&quot;,
                names_ptypes = factor())
 
-data_app_error_long$function_type &lt;- factor(x = data_app_error_long$function_type,
+data_app_error_long$function_type &lt;- factor(x = data_app_error_long$function_type, 
                                           levels = c(&quot;constr_min&quot;, &quot;bayes_risk&quot;))
-
-labels &lt;- c(TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;),
+ 
+labels &lt;- c(TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;), 
             TeX(&#39;Bayes decision function, $f^*$&#39;))
 
 
 line_color &lt;-  setNames(c(&quot;#2171B5&quot;, &quot;#9ECAE1&quot;), levels(data_app_error_long$function_type))
 
-#create data set for braces that show estimation and approximation error.
+#create data set for braces that show estimation and approximation error. 
 ##see https://stackoverflow.com/questions/45221783/ggforce-facet-zoom-labels-only-on-zoomed-example
-data_brace_app_error &lt;- data.frame(&quot;x&quot; = c(250, 300),
-                                   &quot;y&quot; = c(py$constrained_erm$gen_error, py$bayes_risk),
+data_brace_app_error &lt;- data.frame(&quot;x&quot; = c(250, 300), 
+                                   &quot;y&quot; = c(py$constrained_erm$gen_error, py$bayes_risk), 
                                    &quot;zoom&quot; = T)
 
 label_app_error &lt;- &quot;Approximation error, $\\epsilon_{app}$&quot;
 
-app_error_plot &lt;- ggplot(data = data_app_error_long, mapping = aes(x = sample_size, y = gen_error,
-                                               group = function_type,
-                                               color = function_type)) +
+app_error_plot &lt;- ggplot(data = data_app_error_long, mapping = aes(x = sample_size, y = gen_error, 
+                                               group = function_type, 
+                                               color = function_type)) + 
  geom_line(linewidth = 1.2) +
  scale_color_manual(name = &quot;Function Type&quot;, values = line_color, labels = labels)  +
- labs(x = &quot;Sample Size for Model Development&quot;,
-      y = &quot;Generalization Error (Mean Squared Error)&quot;,
+ labs(x = &quot;Sample Size for Model Development&quot;, 
+      y = &quot;Generalization Error (Mean Squared Error)&quot;, 
       color = &quot;Function Type&quot;) +
   scale_y_continuous(limits = c(0.22, 0.250)) +
   facet_zoom(ylim = c(0.23, .234),  zoom.size = 1.2, zoom.data = zoom)  +
-
+  
  #approximation error brace
- geom_brace(inherit.aes = F, data = data_brace_app_error,
-            mapping = aes(x = x, y = y,  label=TeX(label_app_error, output=&quot;character&quot;)),
+ geom_brace(inherit.aes = F, data = data_brace_app_error, 
+            mapping = aes(x = x, y = y,  label=TeX(label_app_error, output=&quot;character&quot;)), 
             color = &#39;#002241&#39;, labelsize = 6, rotate = 90, labeldistance = 5,
-            parse = T) +
-
-  theme_classic(base_family = &quot;Helvetica&quot;) +
+            parse = T) + 
+  
+  theme_classic(base_family = &quot;Helvetica&quot;) + 
   theme(legend.text.align = 0, #left align text
-        legend.position = &#39;bottom&#39;,
-        legend.direction = &#39;vertical&#39;,
-        legend.justification = &#39;left&#39;,
+        legend.position = &#39;bottom&#39;, 
+        legend.direction = &#39;vertical&#39;, 
+        legend.justification = &#39;left&#39;, 
         legend.text = element_text(size = 16),
         legend.title = element_text(size = 18),
-        axis.title  = element_text(size = 15),
-        axis.text = element_text(size = 14, color = &quot;#002241&quot;),
+        axis.title  = element_text(size = 15), 
+        axis.text = element_text(size = 14, color = &quot;#002241&quot;), 
         text = element_text(color = &quot;#002241&quot;),,
-        axis.line = element_line(color = &quot;#002241&quot;),
-        axis.ticks = element_line(color =  &quot;#002241&quot;))
+        axis.line = element_line(color = &quot;#002241&quot;), 
+        axis.ticks = element_line(color =  &quot;#002241&quot;)) 
 
 ggsave(plot = app_error_plot, filename = &#39;images/app_error_plot.png&#39;, width = 12, height = 6, dpi = 1000)</code></pre>
 </div>
@@ -1085,7 +1088,7 @@ ggsave(plot = app_error_plot, filename = &#39;images/app_error_plot.png&#39;, wi
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:est-error-concept}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:est-error-concept}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1100,7 +1103,7 @@ ggsave(plot = app_error_plot, filename = &#39;images/app_error_plot.png&#39;, wi
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:est-error}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:est-error}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1114,7 +1117,7 @@ ggsave(plot = app_error_plot, filename = &#39;images/app_error_plot.png&#39;, wi
 <p>To construct Figure <span class="math inline">\(\ref{fig:est-error}\)</span> above, I followed three steps. First, I used a large data set (<code>data_best_in_class</code>) to identify the constrained empirical risk minimizer, <span class="math inline">\(f\_\mathcal{F}\)</span>, from the (constrained) set of functions defined in Equation <span class="math inline">\(\ref{eq:constrained-functions}\)</span> (see Python code block above [lines <a href="#340">340–359</a>]). Briefly, only polynomial functions up to the fifth order of weather and winemaking quality were allowed to predict wine quality in the constrained set of functions. Second, to obtain each sample risk minimizer, <span class="math inline">\(\hat{f}_s\)</span>, I sampled data (without replacement) from the same large data set used to obtain the constrained empirical risk minimizer (i.e., <code>data_best_in_class</code>) and then extracted the lowest generalization error value from the function in the constrained set (see Equation <span class="math inline">\(\ref{eq:constrained-functions}\)</span> and Python code block below [lines <a href="#419">420–444</a>]).<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Third, I computed the Bayes risk, <span class="math inline">\(L_D(f^\ast)\)</span>. Importantly, to obtain an accurate estimation of each function’s generalization error, I computed mean squared error on another large data set (<code>data_gen_error</code>). The R code block below (lines <a href="#445">446–511</a>) contains the code for creating Figure <span class="math inline">\(\ref{fig:est-error}\)</span>.</p>
 <pre class="r" language="python"><code>def compute_sample_risk_gen_error(sample_size, data_best_in_class, data_gen_error,
                                   poly_order_range=range(1, 6)):
-
+   
     # Use random_state to ensure reproducibility and prevent resampling from adding noise to estimates
     gen_errors = compute_all_emp_gen_errors(data_emp_loss=data_best_in_class.sample(n=sample_size, random_state=27),
                                             data_gen_error=data_gen_error,
@@ -1123,7 +1126,7 @@ ggsave(plot = app_error_plot, filename = &#39;images/app_error_plot.png&#39;, wi
 
     # Return generalization error of sample risk minimizer
     return gen_errors.min()
-
+  
 # Fix the arguments except for sample_size and then use map to vectorize over sample size values
 compute_sample_risk_gen_error_partial = functools.partial(sml.compute_sample_risk_gen_error,
                                                           data_best_in_class = data_best_in_class,
@@ -1135,7 +1138,7 @@ est_sample_sizes = range(5, 1000)
 est_gen_errors = list(map(compute_sample_risk_gen_error_partial, est_sample_sizes))
 
 #Create data frame
-data_est_error = pd.DataFrame({&quot;sample_size&quot;: np.array(est_sample_sizes),
+data_est_error = pd.DataFrame({&quot;sample_size&quot;: np.array(est_sample_sizes), 
                              &quot;sample_risk_gen_error&quot;: est_gen_errors})</code></pre>
 <p>Because of the long computing time needed to compute the generalization error of each sample risk minimizer, I provide the data set that contains these generalization errors in the <code>smltheory</code> package, which can be obtained using the <code>get_data_est_error()</code> function (see line <a href="#445">445</a> below).</p>
 <pre class="r" language="python"><code>data_est_error = sml.get_data_est_error()</code></pre>
@@ -1151,57 +1154,57 @@ data_est_error_long &lt;- data_est_error %&gt;%
   pivot_longer(cols = &quot;sample_risk_gen_error&quot;:&quot;constr_min&quot;, names_to = &quot;function_type&quot;, values_to = &quot;gen_error&quot;,
                names_ptypes = factor())
 
-data_est_error_long$function_type &lt;- factor(x = data_est_error_long$function_type,
+data_est_error_long$function_type &lt;- factor(x = data_est_error_long$function_type, 
                                           levels = c(&quot;sample_risk_gen_error&quot;, &quot;constr_min&quot;, &quot;bayes_risk&quot;))
-
+                                                   
 #legend labels
 labels &lt;- c(TeX(&#39;Sample risk minimizer, $\\hat{f}_s$&#39;),
-            TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;),
+            TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;), 
             TeX(&#39;Bayes decision function, $f^*$&#39;))
 
 
 line_color &lt;-  setNames(c(&quot;blue&quot;, &quot;#2171B5&quot;, &quot;#9ECAE1&quot;), levels(data_est_error_long$function_type))
 
-#create data set for braces that show estimation and approximation error.
+#create data set for braces that show estimation and approximation error. 
 ##see https://stackoverflow.com/questions/45221783/ggforce-facet-zoom-labels-only-on-zoomed-example
 brace_x_start &lt;- which.min(data_est_error$sample_risk_gen_error[1:900]) #find minimum value in first 250 values
 brace_x_end &lt;- brace_x_start -50
 
-data_brace_est_error &lt;- data.frame(&quot;x&quot; = c(brace_x_start, brace_x_end),
-                                   &quot;y&quot; = c(data_est_error$sample_risk_gen_error[brace_x_start],
-                                           py$constrained_erm$gen_error),
+data_brace_est_error &lt;- data.frame(&quot;x&quot; = c(brace_x_start, brace_x_end), 
+                                   &quot;y&quot; = c(data_est_error$sample_risk_gen_error[brace_x_start], 
+                                           py$constrained_erm$gen_error), 
                                    &quot;zoom&quot; = T)
-
+                                   
 label_est_error &lt;- &quot;Estimation error, $\\epsilon_{est}$&quot;
 
-est_error_plot &lt;- ggplot(data = data_est_error_long, mapping = aes(x = sample_size, y = gen_error,
-                                               group = function_type,
-                                               color = function_type)) +
+est_error_plot &lt;- ggplot(data = data_est_error_long, mapping = aes(x = sample_size, y = gen_error, 
+                                               group = function_type, 
+                                               color = function_type)) + 
  geom_line(linewidth = 1.2) +
  scale_color_manual(name = &quot;Function Type&quot;, values = line_color, labels = labels)  +
-  labs(x = &quot;Sample Size for Obtaining Sample Risk Minimizer&quot;, y = &quot;Generalization Error (Mean Squared Error)&quot;,
+  labs(x = &quot;Sample Size for Obtaining Sample Risk Minimizer&quot;, y = &quot;Generalization Error (Mean Squared Error)&quot;, 
        color = &quot;Function Type&quot;) +
   facet_zoom(ylim = c(0.23, .236),  zoom.size = 1.2, zoom.data = zoom)  +
-
+  
  #estimation error brace
  geom_brace(inherit.aes = F, data = data_brace_est_error,
-            mapping = aes(x = x, y = y,  label=TeX(label_est_error, output=&quot;character&quot;)),
+            mapping = aes(x = x, y = y,  label=TeX(label_est_error, output=&quot;character&quot;)), 
              color = &#39;#002241&#39;, labelsize = 6, rotate = 270, labeldistance = 5,
-            parse=T) +
-
-  theme_classic(base_family = &quot;Helvetica&quot;) +
+            parse=T) + 
+  
+  theme_classic(base_family = &quot;Helvetica&quot;) + 
   theme(legend.text.align = 0, #left align text
-        legend.position = &#39;bottom&#39;,
-        legend.direction = &#39;vertical&#39;,
-        legend.justification = &#39;left&#39;,
+        legend.position = &#39;bottom&#39;, 
+        legend.direction = &#39;vertical&#39;, 
+        legend.justification = &#39;left&#39;, 
         legend.text = element_text(size = 16),
         legend.title = element_text(size = 18),
-        legend.margin = margin(t = 1, unit = &quot;cm&quot;),
-        axis.title  = element_text(size = 18),
-        axis.text = element_text(size = 15, color = &quot;#002241&quot;),
+        legend.margin = margin(t = 1, unit = &quot;cm&quot;), 
+        axis.title  = element_text(size = 18), 
+        axis.text = element_text(size = 15, color = &quot;#002241&quot;), 
         text = element_text(color = &quot;#002241&quot;),,
-        axis.line = element_line(color = &quot;#002241&quot;),
-        axis.ticks = element_line(color =  &quot;#002241&quot;))
+        axis.line = element_line(color = &quot;#002241&quot;), 
+        axis.ticks = element_line(color =  &quot;#002241&quot;)) 
 
 #save plot
 ggsave(plot = est_error_plot, filename = &#39;images/est_error_plot.png&#39;, width = 12, height = 9, dpi = 1000)</code></pre>
@@ -1254,7 +1257,7 @@ mu = [5, 7]
 sd = [1.2, 1.7]
 
 #population correlation
-rho_weather_winemaking =  0.35
+rho_weather_winemaking =  0.35 
 cov_matrix = create_covariance_matrix(sd = sd, rho =  rho_weather_winemaking)
 sample_size_emp_loss = 250
 
@@ -1271,7 +1274,7 @@ data_emp_loss = sml.get_data_emp_loss()</code></pre>
 \end{align}
 \]</span></p>
 <pre class="r" language="python"><code>def extract_feature_outcome_data(data, sample_size=10, sample_data=False, poly_order=2):
-
+    
     if sample_data:
         data = data.sample(n=sample_size, random_state=27)
 
@@ -1287,7 +1290,7 @@ data_emp_loss = sml.get_data_emp_loss()</code></pre>
 
 
 def compute_weight_min_mse(data, poly_order=2):
-
+    
     # gather necessary components for matrix-matrix multiplications
     dict_data = extract_feature_outcome_data(data=data, poly_order=poly_order)
     features = dict_data[&quot;features&quot;]
@@ -1297,7 +1300,7 @@ def compute_weight_min_mse(data, poly_order=2):
     w_mse = np.linalg.inv(np.transpose(features).dot(features)).dot(np.transpose(features)).dot(outcome)
 
     return w_mse.ravel()
-
+  
 w_mse = sml.compute_weight_min_mse(data = data_emp_loss)
 
 print(&quot;Best weights:&quot;, np.round(a = w_mse, decimals = 2))</code></pre>
@@ -1305,7 +1308,7 @@ print(&quot;Best weights:&quot;, np.round(a = w_mse, decimals = 2))</code></pre>
 </code></pre>
 <p>Ending with the visualization of <span class="math inline">\(\mathbf{w}_{MSE}\)</span>, I now show that it indeed results in the lowest mean squared error value. To construct a more palatable visualization of the mean squared error (i.e., using two dimensions), I only allow the first weight to vary (<span class="math inline">\(w_1\)</span>) and fix the values of the remaining three weights. Thus, the x-axis shows the values for the first weight and the y-axis represents the mean squared error value. I construct this plot using the Python code block below (see lines <a href="#558">558–618</a>) and show it in Figure <span class="math inline">\(\ref{fig:mse-plot}\)</span>. When the first regression weight value (<span class="math inline">\(w_1\)</span>) is 0.64, the lowest mean squared error value is obtained, and this matches with the result in Equation <span class="math inline">\(\ref{eq:mse-min}\)</span> of using the closed-form solution in Equation <span class="math inline">\(\ref{eq:weight-mse-min}\)</span>.</p>
 <pre class="r" language="python"><code>def compute_ind_mse(data, w_guess, poly_order=2):
-
+    
     # gather necessary components for matrix-matrix multiplications
     dict_data = extract_feature_outcome_data(data=data, poly_order=poly_order)
     features = dict_data[&quot;features&quot;]
@@ -1329,7 +1332,7 @@ print(&quot;Best weights:&quot;, np.round(a = w_mse, decimals = 2))</code></pre>
 
 
 def compute_all_mse_loss_values(data, w_guess_list):
-
+    
     # return flattened array
     all_mse_loss_values = np.array([compute_ind_mse(data, guess) for guess in w_guess_list])
 
@@ -1349,26 +1352,26 @@ w_mse1 = data_mse_values.iloc[np.argmin(data_mse_values[&quot;mse_value&quot;])]
 values_to_insert = np.concatenate((np.array([0]), w_mse1[&#39;w_guess&#39;].to_numpy()))
 
 
-mse_plot = (pt.ggplot(data = data_mse_values, mapping = pt.aes(x = &quot;w_guess&quot;, y = &quot;mse_value&quot;)) +
-  pt.geom_line(size = 1, color = &quot;#002241&quot;) +
+mse_plot = (pt.ggplot(data = data_mse_values, mapping = pt.aes(x = &quot;w_guess&quot;, y = &quot;mse_value&quot;)) + 
+  pt.geom_line(size = 1, color = &quot;#002241&quot;) + 
   pt.geom_point(data = w_mse1, size = 2) +
-  pt.scale_x_continuous(breaks = np.insert(arr = np.arange(1, 3, 0.5), obj = [0, 1],
+  pt.scale_x_continuous(breaks = np.insert(arr = np.arange(1, 3, 0.5), obj = [0, 1], 
                         values = values_to_insert)) +
-  pt.labs(x = &quot;Weight Value (w₁)&quot;, y = &quot;Mean Squared Error&quot;) +
+  pt.labs(x = &quot;Weight Value (w₁)&quot;, y = &quot;Mean Squared Error&quot;) + 
   pt.annotate(geom = &#39;text&#39;, x=w_mse1[&#39;w_guess&#39;], y=w_mse1[&#39;mse_value&#39;] + 2e3,
                       label=&quot;$w_{MSE}$&quot;, color=&quot;#002241&quot;) +
-  pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
-  pt.theme(text = pt.element_text(color = &quot;#002241&quot;),
+  pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
+  pt.theme(text = pt.element_text(color = &quot;#002241&quot;), 
            axis_line = pt.element_line(color = &quot;#002241&quot;),
            axis_ticks = pt.element_line(color = &quot;#002241&quot;),
            axis_ticks_minor_x = pt.element_blank()))
 
-#save plot
+#save plot     
 mse_plot.save(&quot;images/mse_plot.png&quot;, width = 8, height = 6, dpi = 1000)</code></pre>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:mse-plot}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:mse-plot}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1388,11 +1391,11 @@ mse_plot.save(&quot;images/mse_plot.png&quot;, width = 8, height = 6, dpi = 1000
     \caption{Gradient Descent}
     \begin{algorithmic}
     \REQUIRE{Function for computing loss function, $\ell_{MSE}$ (see Equation $\ref{eq:mse-matrix}$)}
-    \INPUT{Initial guess for weights $\mathbf{w}^{(0)}$}
+    \INPUT{Initial guess for weights $\mathbf{w}^{(0)}$} 
     \PROCEDURE{gradientDescent}{$K, \epsilon, \tau$}
       \STATE{$k = 0$}
-     \WHILE{$k &lt; K$ \AND $\lVert \mathbf{w}^{(k)} - \mathbf{w}^{(k+1)} \rVert^2_2 &lt; \epsilon$}
-      \STATE{$\mathbf{w}^{(k+1)} = \mathbf{w}^{(k)} - \tau \nabla_{\mathbf{w}}\ell_{MSE}(\mathbf{w}^{(k)})$.}
+     \WHILE{$k &lt; K$ \AND $\lVert \mathbf{w}^{(k)} - \mathbf{w}^{(k+1)} \rVert^2_2 &lt; \epsilon$} 
+      \STATE{$\mathbf{w}^{(k+1)} = \mathbf{w}^{(k)} - \tau \nabla_{\mathbf{w}}\ell_{MSE}(\mathbf{w}^{(k)})$.} 
       \STATE{$k \mathrel{+}= 1$}
       \STATE{$k \mathrel{+}= 1$}
      \ENDWHILE
@@ -1403,7 +1406,7 @@ mse_plot.save(&quot;images/mse_plot.png&quot;, width = 8, height = 6, dpi = 1000
 <p>In the gradient descent algorithm, weights are updated by travelling in the negative gradient direction until either the squared norm (i.e., square of sum of squared differences) is less than than some error value (<span class="math inline">\(\epsilon\)</span>) or <span class="math inline">\(K\)</span> iterations are reached. Importantly, the step size (<span class="math inline">\(\tau\)</span>) controls how much the algorithm moves in the negative gradient direction. Although outside the scope of the current discussion, the step size value must not be too small or too large; if too small, too much time will be needed to reach the trough and, if too large, the trough may never be reached because the algorithm will jump around too much.</p>
 <p>The Python code block below (lines <a href="#619">619–681</a>) contains functions necessary for computing gradient descent.</p>
 <pre class="r" language="python"><code>def compute_gradient(features, outcome, weights, num_samples):
-
+    
     # Compute predictions (Xw using current weights
     predictions = np.dot(features, weights)
 
@@ -1418,7 +1421,7 @@ mse_plot.save(&quot;images/mse_plot.png&quot;, width = 8, height = 6, dpi = 1000
 
 def gradient_descent(data, initial_weights, learning_rate=0.01, num_iterations=1000, poly_order=2,
                      epsilon=1e-20, expedite_algorithm=False, return_log=False):
-
+   
     dict_data = extract_feature_outcome_data(data=data, poly_order=poly_order)
     features = dict_data[&quot;features&quot;]
     outcome = dict_data[&quot;outcome&quot;]
@@ -1469,7 +1472,7 @@ def gradient_descent(data, initial_weights, learning_rate=0.01, num_iterations=1
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:gradient-plot}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:gradient-plot}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1499,25 +1502,25 @@ data_gradient_weights_plot[&quot;latex_math&quot;] = [&quot;${}^{}$&quot;.format
 data_gradient_weights_plot[&quot;latex_math&quot;].iloc[-1]  = data_gradient_weights_plot[&quot;latex_math&quot;].iloc[-1] + &quot; = $w_{MSE}$&quot;
 
 
-gradient_plot = (pt.ggplot(data = data_mse_values, mapping = pt.aes(x = &quot;w_guess&quot;, y = &quot;mse_value&quot;)) +
-  pt.geom_line(size = 1, color = &quot;#002241&quot;) +
-  pt.geom_point(size = 2, data = data_gradient_weights_plot, mapping = pt.aes(x = &quot;w1&quot;, y = &quot;mse_value&quot;)) +
-  pt.geom_text(data=data_gradient_weights_plot,
+gradient_plot = (pt.ggplot(data = data_mse_values, mapping = pt.aes(x = &quot;w_guess&quot;, y = &quot;mse_value&quot;)) + 
+  pt.geom_line(size = 1, color = &quot;#002241&quot;) + 
+  pt.geom_point(size = 2, data = data_gradient_weights_plot, mapping = pt.aes(x = &quot;w1&quot;, y = &quot;mse_value&quot;)) + 
+  pt.geom_text(data=data_gradient_weights_plot, 
                mapping=pt.aes(x = &quot;w1&quot;, y = &quot;mse_value&quot;, label = &quot;latex_math&quot;),
-               nudge_y = [2.5e3, 2e3, 1.5e3, 2e3],
-               nudge_x = [0.05, 0.05, 0.05, 0.2],
+               nudge_y = [2.5e3, 2e3, 1.5e3, 2e3],  
+               nudge_x = [0.05, 0.05, 0.05, 0.2], 
                size = 10, color = &quot;#002241&quot;) +
-
-  pt.scale_x_continuous(limits = [0, 2.5],
+  
+  pt.scale_x_continuous(limits = [0, 2.5], 
                         breaks = np.insert(arr = np.arange(1, 2.50, 0.5), obj = 0, values = 0.64)) +
-  pt.labs(x = &quot;Weight Value (w₁)&quot;, y = &quot;Mean Squared Error&quot;) +
-  pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
-  pt.theme(text = pt.element_text(color = &quot;#002241&quot;),
+  pt.labs(x = &quot;Weight Value (w₁)&quot;, y = &quot;Mean Squared Error&quot;) + 
+  pt.theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
+  pt.theme(text = pt.element_text(color = &quot;#002241&quot;), 
            axis_line = pt.element_line(color = &quot;#002241&quot;),
-           axis_ticks = pt.element_line(color = &quot;#002241&quot;),
+           axis_ticks = pt.element_line(color = &quot;#002241&quot;), 
            axis_ticks_minor_x = pt.element_blank()))
 
-#save plot
+#save plot     
 gradient_plot.save(&quot;images/gradient_plot.png&quot;, width = 8, height = 6, dpi = 1000)</code></pre>
 </div>
 <div id="creating-optimization-error-by-limiting-the-number-of-gradient-descent-iterations" class="section level3" number="3.4.3">
@@ -1534,7 +1537,7 @@ gradient_plot.save(&quot;images/gradient_plot.png&quot;, width = 8, height = 6, 
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:opt-error-diagram}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:opt-error-diagram}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1551,11 +1554,11 @@ gradient_plot.save(&quot;images/gradient_plot.png&quot;, width = 8, height = 6, 
     \caption{Limited Gradient Descent}
     \begin{algorithmic}
     \REQUIRE{Function for computing loss function, $\ell_{MSE}$ (see Equation $\ref{eq:mse-matrix}$)}
-    \INPUT{Initial guess for weights $\mathbf{w}^{(0)}$, $K = 100$, $\epsilon = 1e-20$, $\tau = 0.005$}
+    \INPUT{Initial guess for weights $\mathbf{w}^{(0)}$, $K = 100$, $\epsilon = 1e-20$, $\tau = 0.005$} 
     \PROCEDURE{gradientDescent}{$K, \epsilon, \tau$}
       \STATE{$k = 0$}
-     \WHILE{$k &lt; K$ \AND $\lVert \mathbf{w}^{(k)} - \mathbf{w}^{(k+1)} \rVert^2_2 &lt; \epsilon$}
-     \STATE{$\mathbf{w}^{(k+1)} = \mathbf{w}^{(k)} - \tau \nabla_{\mathbf{w}}\ell_{MSE}(\mathbf{w}^{(k)})$.}
+     \WHILE{$k &lt; K$ \AND $\lVert \mathbf{w}^{(k)} - \mathbf{w}^{(k+1)} \rVert^2_2 &lt; \epsilon$} 
+     \STATE{$\mathbf{w}^{(k+1)} = \mathbf{w}^{(k)} - \tau \nabla_{\mathbf{w}}\ell_{MSE}(\mathbf{w}^{(k)})$.} 
      \STATE{$k \mathrel{+}= 1$}
       \ENDWHILE
     \ENDPROCEDURE
@@ -1565,7 +1568,7 @@ gradient_plot.save(&quot;images/gradient_plot.png&quot;, width = 8, height = 6, 
 <p>The Python code block below (lines <a href="#720">720–771</a>) contains the functions needed to compute the generalization error of optimization risk minimizers.</p>
 <pre class="r" language="python"><code>def determine_best_polynomial_model(data_sample, data_gen_error,
                                     poly_order_range=range(1, 6)):
-
+   
     # Use random_state to ensure reproducibility and prevent resampling from adding noise to estimates
     df_all_emp_gen_errors = compute_all_emp_gen_errors(data_emp_loss=data_sample,
                                                        data_gen_error=data_gen_error,
@@ -1579,7 +1582,7 @@ gradient_plot.save(&quot;images/gradient_plot.png&quot;, width = 8, height = 6, 
 
 
 def compute_opt_gen_error(opt_weights, poly_order, data_gen_error):
-
+    
     # gather necessary components for matrix-matrix multiplications
     dict_data = extract_feature_outcome_data(data=data_gen_error, poly_order=poly_order)
     features = dict_data[&quot;features&quot;]
@@ -1593,7 +1596,7 @@ def compute_opt_gen_error(opt_weights, poly_order, data_gen_error):
 
 
 def get_opt_risk_min(sample_size, data_best_in_class, data_gen_error, num_iterations=100):
-
+  
     # Step 1: Using empirical risk minimization to determine the polynomial model order that results in the lowest
     # empirical loss
     data_sample = data_best_in_class.sample(n=sample_size, random_state=27)
@@ -1620,19 +1623,19 @@ def get_opt_risk_min(sample_size, data_best_in_class, data_gen_error, num_iterat
 get_opt_risk_min_partial = functools.partial(get_opt_risk_min,
                                              data_best_in_class = data_best_in_class,
                                              data_gen_error = data_gen_error)
-
+                                                
 # Call the partial function with est_sample_sizes
 start_time = time.time()
 
 opt_sample_sizes = range(5, 1000)
 with concurrent.futures.ThreadPoolExecutor(max_workers = 3) as executor:
     opt_gen_errors = list(executor.map(get_opt_risk_min_partial, opt_sample_sizes))
-
+    
 end_time = time.time()
-end_time - start_time #468.67104387283325 seconds
+end_time - start_time #468.67104387283325 seconds 
 
 #Create data frame
-data_opt_error = pd.DataFrame({&quot;sample_size&quot;: np.array(opt_sample_sizes),
+data_opt_error = pd.DataFrame({&quot;sample_size&quot;: np.array(opt_sample_sizes), 
                              &quot;opt_gen_error&quot;: opt_gen_errors}</code></pre>
 <p>Because of the long processing time needed to compute the generalization error of each optimization risk minimizer, I provide the data set that contains these generalization errors in the <code>smltheory</code> package, which can be obtained using the <code>get_data_opt_error_fast()</code> function (see lines <a href="#790">790</a> below).</p>
 <pre class="r" language="python"><code>data_opt_error = sml.get_data_opt_error()</code></pre>
@@ -1640,7 +1643,7 @@ data_opt_error = pd.DataFrame({&quot;sample_size&quot;: np.array(opt_sample_size
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:opt-error}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:opt-error}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1663,61 +1666,61 @@ data_est_error_long &lt;- data_est_error %&gt;%
   pivot_longer(cols = &quot;sample_risk_gen_error&quot;:&quot;opt_gen_error&quot;, names_to = &quot;function_type&quot;, values_to = &quot;gen_error&quot;,
                names_ptypes = factor())
 
-data_est_error_long$function_type &lt;- factor(x = data_est_error_long$function_type,
+data_est_error_long$function_type &lt;- factor(x = data_est_error_long$function_type, 
                                           levels = c(&quot;opt_gen_error&quot;, &quot;sample_risk_gen_error&quot;, &quot;constr_min&quot;,
                                                      &quot;bayes_risk&quot;))
-
+                                                   
 labels &lt;- c(TeX(&#39;Optimization risk minimizer, $\\tilde{f}_s$&#39;),
             TeX(&#39;Sample risk minimizer, $\\hat{f}_s$&#39;),
-            TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;),
+            TeX(&#39;Constrained risk minimizer, $f_\u2131$&#39;), 
             TeX(&#39;Bayes decision function, $f^*$&#39;))
 
 line_color &lt;-  setNames(c(&quot;#002241&quot;, &quot;blue&quot;, &quot;#2171B5&quot;, &quot;#9ECAE1&quot;), levels(data_est_error_long$function_type))
 
-#create data set for braces that show estimation and approximation error.
+#create data set for braces that show estimation and approximation error. 
 ##see https://stackoverflow.com/questions/45221783/ggforce-facet-zoom-labels-only-on-zoomed-example
-##negative optimization error
+##negative optimization error 
 brace_x_start &lt;- which.min(data_est_error$opt_gen_error[400:500])+400 #find minimum value in first 250 values
 brace_x_end &lt;- brace_x_start + 50
 
 
 data_brace_opt_error &lt;- data.frame(&quot;x&quot; = c(brace_x_start, brace_x_end),
-                                   &quot;y&quot; = c(data_est_error$opt_gen_error[brace_x_start],
-                                           data_est_error$sample_risk_gen_error[brace_x_end]),
+                                   &quot;y&quot; = c(data_est_error$opt_gen_error[brace_x_start], 
+                                           data_est_error$sample_risk_gen_error[brace_x_end]), 
                                    &quot;zoom&quot; = T)
 
 label_opt_error &lt;- &quot;Optimization error, $\\epsilon_{opt}$&quot;
 
 
-opt_error_plot &lt;- ggplot(data = data_est_error_long, mapping = aes(x = sample_size, y = gen_error,
-                                               group = function_type,
-                                               color = function_type)) +
+opt_error_plot &lt;- ggplot(data = data_est_error_long, mapping = aes(x = sample_size, y = gen_error, 
+                                               group = function_type, 
+                                               color = function_type)) + 
  geom_line(linewidth = 1.2) +
  scale_color_manual(name = &quot;Function Type&quot;, values = line_color, labels = labels)  +
- labs(x = &quot;Sample Size for Obtaining Sample and Optimization Risk Minimizers&quot;,
-      y = &quot;Generalization Error (Mean Squared Error)&quot;,
+ labs(x = &quot;Sample Size for Obtaining Sample and Optimization Risk Minimizers&quot;, 
+      y = &quot;Generalization Error (Mean Squared Error)&quot;, 
       color = &quot;Function Type&quot;) +
   facet_zoom(ylim = c(0.23, .27),  zoom.size = 1.2, zoom.data = zoom)  +
-
+  
  #optimization error brace for negative optimization error
  geom_brace(inherit.aes = F, data = data_brace_opt_error,
-            mapping = aes(x = x, y = y,  label=TeX(label_opt_error, output=&quot;character&quot;)),
-             color = &#39;#002241&#39;, labelsize = 6, rotate = 90, labeldistance = 5,
-            parse=T)  +
-
-  theme_classic(base_family = &quot;Helvetica&quot;) +
+            mapping = aes(x = x, y = y,  label=TeX(label_opt_error, output=&quot;character&quot;)), 
+             color = &#39;#002241&#39;, labelsize = 6, rotate = 90, labeldistance = 5, 
+            parse=T)  + 
+  
+  theme_classic(base_family = &quot;Helvetica&quot;) + 
   theme(legend.text.align = 0, #left align text
-        legend.position = &#39;bottom&#39;,
+        legend.position = &#39;bottom&#39;, 
         legend.direction = &#39;vertical&#39;,
-        legend.justification = &#39;left&#39;,
-        legend.margin = margin(t = 1, unit = &quot;cm&quot;),
+        legend.justification = &#39;left&#39;, 
+        legend.margin = margin(t = 1, unit = &quot;cm&quot;), 
         legend.text = element_text(size = 16),
-        legend.title = element_text(size = 18),
-        axis.title  = element_text(size = 18),
-        axis.text = element_text(size = 15, color = &quot;#002241&quot;),
+        legend.title = element_text(size = 18), 
+        axis.title  = element_text(size = 18), 
+        axis.text = element_text(size = 15, color = &quot;#002241&quot;), 
         text = element_text(color = &quot;#002241&quot;),
-        axis.line = element_line(color = &quot;#002241&quot;),
-        axis.ticks = element_line(color =  &quot;#002241&quot;))
+        axis.line = element_line(color = &quot;#002241&quot;), 
+        axis.ticks = element_line(color =  &quot;#002241&quot;)) 
 
 
 ggsave(plot = opt_error_plot, filename = &#39;images/opt_error_plot2.png&#39;, width = 12, height = 9.5)</code></pre>
@@ -1833,7 +1836,7 @@ ggsave(plot = opt_error_plot, filename = &#39;images/opt_error_plot2.png&#39;, w
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-diagram}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-diagram}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1858,7 +1861,7 @@ ggsave(plot = opt_error_plot, filename = &#39;images/opt_error_plot2.png&#39;, w
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-plot}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-plot}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1876,7 +1879,7 @@ ggsave(plot = opt_error_plot, filename = &#39;images/opt_error_plot2.png&#39;, w
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-rules}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:bias-var-rules}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
@@ -1890,7 +1893,7 @@ ggsave(plot = opt_error_plot, filename = &#39;images/opt_error_plot2.png&#39;, w
 <p>Beginning with panel A in Figure <span class="math inline">\(\ref{fig:bias-var-rules}\)</span>, the pattern of generalization error and empirical loss is caused by high bias (or underfitting). In the case were bias is high, the empirical loss and generalization error are both above the target level of error. Because the model cannot even achieve the target error level, <span class="math inline">\(\epsilon\)</span>, on the training data, this is an indication that important patterns are not being modelled. In other words, the model under consideration is underfitting the training data. If a model has high bias, adding more data will not help because the model lacks the parameters to model any additional patterns that may be discovered from the additional data. In order to resolve the problem of high bias, the model’s complexity must be increased, which can be accomplished by decreasing regularization, boosting, kernelization, and adding features.</p>
 <p>Ending with panel B in Figure <span class="math inline">\(\ref{fig:bias-var-rules}\)</span>, the pattern of generalization error and empirical loss is caused by high variance (or overfitting). In the case were variance is high, the empirical loss is below the target level of error, <span class="math inline">\(\epsilon\)</span>, but not the generalization error. Because only the empirical loss is below the targer error level, this is an indication that the model is fitting sample-specific patterns. In other words, the model under consideration is overfitting the training data. To resolve the problem of high variance, two solutions exist. First, more data can be added. By adding more data, the model is exposed to a broader range of patterns, and so may be better able to discern noise from effect, thus reducing the effects of outliers. Second, model complexity can be decreased, which can be accomplished by increasing regularization and boosting.</p>
 <p>For the interested reader, I have provided the Python and R code below (see lines <a href="#860">860–924</a> and lines <a href="#925">925–999</a>, respectively). For a deeper explanation of the function I used to generate the curves for empirical loss and generalization error in Figure <span class="math inline">\(\ref{fig:bias-var-rules}\)</span>, see <a href="https://atrium.lib.uoguelph.ca/server/api/core/bitstreams/8ed1891d-58ca-457b-b0d4-33a015fb2db9/content#page=155">Section 4.1.1.1.3</a> of my doctoral dissertation.</p>
-<pre class="r" language="python"><code>#create data set for pattern of empirical loss and generalization error that occurs with
+<pre class="r" language="python"><code>#create data set for pattern of empirical loss and generalization error that occurs with 
 #high variance
 ##high variance
 training_sample_size = np.linspace(start = 1, stop = 1000, num = 1000)
@@ -1922,23 +1925,23 @@ a_emp_loss_high_bias = np.log(1 - satiation_value_emp_loss_high_bias)/-satiation
 
 ##high variance
 curve_gen_error_high_var = -M*(1 - np.exp(-a_gen_error_high_var*training_sample_size)) + 1
-curve_emp_loss_high_var = M*(1 - np.exp(-a_emp_loss_high_var*training_sample_size))
+curve_emp_loss_high_var = M*(1 - np.exp(-a_emp_loss_high_var*training_sample_size)) 
 
-##high bias
+##high bias 
 curve_gen_error_high_bias = -M*(1 - np.exp(-a_gen_error_high_bias*training_sample_size)) + 1
-curve_emp_loss_high_bias = M*(1 - np.exp(-a_emp_loss_high_bias*training_sample_size))
+curve_emp_loss_high_bias = M*(1 - np.exp(-a_emp_loss_high_bias*training_sample_size)) 
 
 
 data_emp_gen_error_curve = pd.DataFrame({&#39;training_sample_size&#39;: training_sample_size,
-                                       &#39;gen_error_high_var&#39;: curve_gen_error_high_var,
+                                       &#39;gen_error_high_var&#39;: curve_gen_error_high_var, 
                                        &#39;emp_loss_high_var&#39;: curve_emp_loss_high_var,
-                                       &#39;gen_error_high_bias&#39;: curve_gen_error_high_bias,
+                                       &#39;gen_error_high_bias&#39;: curve_gen_error_high_bias, 
                                        &#39;emp_loss_high_bias&#39;: curve_emp_loss_high_bias})
 
 cols_to_expand = data_emp_gen_error_curve.columns[1:5]
-data_emp_gen_error_curve_long = data_emp_gen_error_curve.melt(id_vars = &#39;training_sample_size&#39;,
+data_emp_gen_error_curve_long = data_emp_gen_error_curve.melt(id_vars = &#39;training_sample_size&#39;, 
                                                           value_vars = cols_to_expand,
-                                                          var_name = &quot;error_type&quot;,
+                                                          var_name = &quot;error_type&quot;, 
                                                           value_name = &#39;error_value&#39;)
 
 # Define the regular expression pattern to match the second underscore and everything after it
@@ -1947,84 +1950,84 @@ pattern = r&#39;^([^_]+_[^_]+)_(.*)$&#39;
 # Split each element using regular expressions
 split_cols = data_emp_gen_error_curve_long[&#39;error_type&#39;].str.extract(pattern)
 
-#Create two new columns
+#Create two new columns 
 data_emp_gen_error_curve_long[&quot;error_type&quot;] = split_cols[0]
 data_emp_gen_error_curve_long[&quot;problem&quot;] = split_cols[1]
 
-#Relevel error_type column
+#Relevel error_type column 
 error_type_releveled = [&quot;gen_error&quot;, &quot;emp_loss&quot;]
-
+                                                          
 data_emp_gen_error_curve_long[&quot;error_type&quot;] = data_emp_gen_error_curve_long[&#39;error_type&#39;].astype(&#39;category&#39;).cat.reorder_categories(error_type_releveled)</code></pre>
-<pre class="r"><code>#import Python data set
+<pre class="r"><code>#import Python data set 
 data_emp_gen_error_curve_long &lt;- py$data_emp_gen_error_curve_long
 data_emp_gen_error_curve_long$problem &lt;- factor(
-  x = data_emp_gen_error_curve_long$problem,
+  x = data_emp_gen_error_curve_long$problem, 
   labels = c(&quot;bold(A:~Error~Patterns~Caused~by~High~Bias~(Underfitting))&quot;,
              &quot;bold(B:~Error~Patterns~Caused~by~High~Variance~(Overfitting))&quot;))
-
-
+  
+  
 #text dataframe
 data_text_high_bias = data.frame(
-  &quot;label&quot; = c(TeX(input = &quot;$\\textbf{High\\phantom{.}Bias\\phantom{.}(Underfitting)}$&quot;,
+  &quot;label&quot; = c(TeX(input = &quot;$\\textbf{High\\phantom{.}Bias\\phantom{.}(Underfitting)}$&quot;, 
                   output = &quot;character&quot;),
               TeX(input = &quot;$\\uparrow$features&quot;, output = &quot;character&quot;),
-              TeX(input = &quot;$\\uparrow$complexity&quot;, output = &quot;character&quot;),
+              TeX(input = &quot;$\\uparrow$complexity&quot;, output = &quot;character&quot;), 
               TeX(input = &quot;$\\downarrow$regularization&quot;, output = &quot;character&quot;)),
   &quot;x&quot; = c(205, 67, 90, 115),
   &quot;y&quot; = c(0.63, .56, .49, .42),
   &quot;problem&quot; =  factor(&quot;bold(A:~Error~Patterns~Caused~by~High~Bias~(Underfitting))&quot;))
 
 data_text_high_var = data.frame(
-  &quot;label&quot; = c(TeX(input = &quot;$\\textbf{High\\phantom{.}Variance\\phantom{.}(Overfitting)}$&quot;,
+  &quot;label&quot; = c(TeX(input = &quot;$\\textbf{High\\phantom{.}Variance\\phantom{.}(Overfitting)}$&quot;, 
                   output = &quot;character&quot;),
               TeX(input = &quot;$\\uparrow$data&quot;, output = &quot;character&quot;),
-              TeX(input = &quot;$\\downarrow$complexity&quot;, output = &quot;character&quot;),
+              TeX(input = &quot;$\\downarrow$complexity&quot;, output = &quot;character&quot;), 
               TeX(input = &quot;$\\uparrow$regularization&quot;, output = &quot;character&quot;)),
   &quot;x&quot; = c(230, 37, 90, 115),
-  &quot;y&quot; = c(0.63, .56, .49, .42),
+  &quot;y&quot; = c(0.63, .56, .49, .42), 
   &quot;problem&quot; = factor(&quot;bold(B:~Error~Patterns~Caused~by~High~Variance~(Overfitting))&quot;))
 
 data_text_merged &lt;- rbind(data_text_high_var, data_text_high_bias)
 
 #colors
-color_palette &lt;-c(&#39;gen_error&#39; = &#39;#002241&#39;,
+color_palette &lt;-c(&#39;gen_error&#39; = &#39;#002241&#39;, 
                   &#39;emp_loss&#39; =&#39;#9ECAE1&#39;)
 
 
 #plot
-plot_bias_var_rules &lt;- ggplot(data = data_emp_gen_error_curve_long,
-       mapping = aes(x = training_sample_size, y = error_value,
+plot_bias_var_rules &lt;- ggplot(data = data_emp_gen_error_curve_long, 
+       mapping = aes(x = training_sample_size, y = error_value, 
                       group = error_type, color = error_type)) +
-
-  #data aesthetics
+  
+  #data aesthetics 
   geom_line(linewidth = 1) +
   geom_hline(yintercept = 0.3, color = &quot;#002241&quot;, linetype = &quot;dashed&quot;)  +
-  geom_text(inherit.aes = F, data = data_text_merged,
+  geom_text(inherit.aes = F, data = data_text_merged, 
             mapping = aes(x = x, y = y, label = label),
-             size = 6, color = &quot;#002241&quot;, parse = T) +
-
+             size = 6, color = &quot;#002241&quot;, parse = T) + 
+  
   #panel aesthetics
   facet_wrap(facets =  ~ problem, nrow = 2, ncol = 1, labeller = label_parsed, scales = &#39;free&#39;) +
 
-  #scale aesthetics
+  #scale aesthetics 
   scale_y_continuous(name = &#39;Mean Squared Error&#39;, breaks = 0.3, labels = expression(epsilon)) +
-  scale_x_continuous(name = &quot;Sample Size&quot;, labels = NULL) +
-  scale_color_manual(name = &quot;Function Type&quot;,
-                     values = color_palette,
+  scale_x_continuous(name = &quot;Sample Size&quot;, labels = NULL) + 
+  scale_color_manual(name = &quot;Function Type&quot;, 
+                     values = color_palette, 
                     labels = c(emp_loss = &#39;Empirical Loss&#39;, gen_error = &#39;Generalization Error&#39;)) +
-
+  
   #custom styling
-  theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) +
+  theme_classic(base_family = &#39;Helvetica&#39;, base_size = 14) + 
   theme(legend.text = element_text(size = 14),
-        legend.title = element_text(size = 15),
-        axis.title  = element_text(size = 15),
-        axis.text = element_text(size = 14, color = &quot;#002241&quot;),
+        legend.title = element_text(size = 15), 
+        axis.title  = element_text(size = 15), 
+        axis.text = element_text(size = 14, color = &quot;#002241&quot;), 
         text = element_text(color = &quot;#002241&quot;),
-        axis.line = element_line(color = &quot;#002241&quot;),
-        axis.ticks = element_blank(),
-        axis.text.y = element_text(size = 20),
+        axis.line = element_line(color = &quot;#002241&quot;), 
+        axis.ticks = element_blank(), 
+        axis.text.y = element_text(size = 20), 
         strip.text = element_text(size = 17, color = &quot;#002241&quot;, hjust = 0),
-        strip.background = element_blank(),
+        strip.background = element_blank(), 
         panel.spacing.y =  unit(x = 3, units = &#39;cm&#39;))
 
 
@@ -2038,7 +2041,7 @@ ggsave(filename = &quot;images/plot_bias_var_rules.png&quot;, plot = plot_bias_v
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
-  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:plot-double-descent}&lt;span&gt;
+  &lt;span class = &#39;figLabel&#39;&gt;Figure \ref{fig:plot-double-descent}&lt;span&gt; 
 &lt;/caption&gt;</code></pre>
 </div>
 <div class="figTitle">
