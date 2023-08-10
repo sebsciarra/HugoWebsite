@@ -1762,6 +1762,280 @@ $$
 \end{spreadlines}
 $$
 
+## Situating Bias, Variance, and Noise in the Excess Risk Decomposition Setup
+
+With the mean squared error function decomposing into the sum of bias(squared), variance, and noise (see Equation \ref{eq:exp-decomp}), I will now present this decomposition in the excess risk decomposition setup. In Figure \ref{fig:bias-var-diagram} below, the set of all functions is contained in the large rectangle and the constrained set of functions, $\mathcal{F}$, is contained in the smaller circle. As a reminder, the constrained set of functions must be considered, $\mathcal{F}$, to prevent overfitting and reduce the computational burden of finding a model with low generalization error (for a review, see section on [Constrained Empirical Risk Minimization](#constrained-erm)). 
+
+To present bias, variance, and noise within the excess risk decomposition setup, three points must be made. First, Bayes risk (panel A) corresponds to the same error defined by noise (panel B). With both the Bayes risk and noise, the error being defined corresponds to the generalization error of the Bayes decision function (i.e., the difference between the best possible prediction, $f^\ast(\mathbf{x})$, and the actual obtained value, $y$). 
+
+Second, the gap between approximation error (panel A) and bias squared (panel B) decreases as sample size increases (see medium blue text in Figure \ref{fig:bias-var-diagram}). As shown in panel A, approximation error represents the difference in generalization error between the Bayes decision function, $f^\ast$, and the constrained empirical risk minimizer, $f_\mathcal{F}$ (i.e., the best function in the constrained set of $\mathcal{F}$). As shown in panel B, bias (squared) represents the difference in generalization error between the Bayes decision function, $f^\ast$, and the average sample risk minimizer, $\hat{f}$. With limited sample size, $\hat{f}$ will always have greater generalization error than $f_\mathcal{F}$. Thus, bias (squared) will always be larger than approximation error with limited sample size. As sample size approaches infinity, however, $\hat{f}$ will become  $f_\mathcal{F}$. Thus, bias (squared) will become equivalent to approximation error with an infinite sample size. 
+ 
+Third, and similar to bias, the gap between the sum of estimation and optimization error (panel A) and variance (panel B) similarly decreases as sample size increases (see medium blue text in Figure \ref{fig:bias-var-diagram}). As shown in panel A, estimation error represents the difference in generalization error between the constrained empirical risk minimizer, $f_\mathcal{F}$, and the sample risk minimizer, $\hat{f}\_s$. As shown in panel B, variance represents the difference between the average sample risk minimizer, $\bar{f}$, and any given individual sample risk minimizer, $\hat{f}\_s$. With limited sample size, $\hat{f}$ will always have greater generalization error than $f_\mathcal{F}$. Thus, variance will always be smaller than estimation error with limited sample size. As sample size approaches infinity, however, $\hat{f}$ will become  $f_\mathcal{F}$. Thus, variance will become equivalent to estimation error with an infinite sample size. 
+
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:bias-var-diagram}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Depicting Bias, Variance, and Noise in the Excess Decomposition Setup</span>
+  </div>
+    <img src="images/bias_var_diagram.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em>Panel A: Excess risk decomposition setup. Bayes risk is the generalization error of the Bayes decision function, and represents the difference between the output of the Bayes decision function, $f^\ast$, and the obtained outcome values, $y$. Approximation error represents the difference between the outputs of the constrained empirical risk minimizer, $f^\mathcal{F}$, and the Bayes decision function, $f^\ast$. Estimation error represents the difference between the outputs of the sample risk minimizer, $\hat{f}_s$, and the constrained empirical risk minimizer,  $f^\mathcal{F}$. Optimization error represents the difference between the optimization risk minimizer, $\tilde{f}_s$, and the sample risk minimizer, $\hat{f}_s$. Panel B: Decomposition of mean squared error. Noise is equivalent to the Bayes risk. Bias squared represents the difference between the outputs of the Bayes decision function, $f^\ast$, and the average sample risk minimizer, $\bar{f}$. Variance represents the difference between the  average sample risk minimizer, $\bar{f}$, and the individual sample or optimization risk minimizer, $\hat{f}_s$, $\tilde{f}_s$, respectively. Note that, to the extent that sample size is large, bias (squared) and variance, respectively, become equivalenet to approximation error and the sum of estimation error and optimization error.</span> 
+  </div>
+</div>
+
+
+# How the 'Players' of Machine Learning Behave: The Bias-Variance Tradeoff
+
+Up until this point, I have provided a setup for the game of supervised machine learning and introduced the players of the game. I used the framework of excess risk decomposition to provide a setup for the game of supervised machine learning and decomposed mean squared error loss into bias (squared), variance, and noise, which I introduced as the 'players' of the game. In this section, I will describe how bias, variance, and noise behave. 
+
+To understand the behaviour of bias, variance, and noise, I will explain two points that, together, make up the *bias-variance tradeoff*: The opposing behaviours of bias and variance as model complexity increases (see Figure \ref{fig:bias-var-plot}). For the purpose of this conversation, I will define model complexity as the number of parameters in a model. Thus, a sixth-order polynomial model would be considered more complex than a first-order polynomial model.
+
+First, bias (squared) decreases as model complexity increases. In Figure \ref{fig:bias-var-plot}, the blue line shows the behaviour of bias (squared) as model complexity increases. When an overly simple model such as a first-order polynomial model is used, it will lead to *underfitting*: When a model does not capture important features that predict the outcome. In the wine example, wine quality was set as the outcome of a second-order polynomial model of weather and winemaking quality (along with an interaction term; see Equation \ref{eq:outcome-generate}). With a first-order polynomial model, the effect of the second-order predictors and the interaction will not be captured, and so, on average, the model's predictions will err relative to the predictions of the population-generating model (i.e., the Bayes decision function). As model complexity increases, however, the effects of features previously uncaptured by simple models will be modelled. As a result of increasing complexity, predictions will, on average, converge to those of the Bayes decision function. 
+
+Second, and opposite to bias, variance increases as model complexity increases. In Figure \ref{fig:bias-var-plot}, the medium blue line shows the behaviour of variance as model complexity increases. When an overly complex model such as a sixth-order polynomial model is used, the excessive number of parameters will model sample-specific patterns that, in reality, have no effect on the outcome variable. In other words, an overly complex model will overfit the data. In the wine example, wine quality was only set to be the outcome of a second-order polynomial model of weather and winemaking quality (along with an interaction term; see Equation \ref{eq:outcome-generate}). With a sixth-order polynomial model, weight values for features raised beyond the second order will be influenced by sample specific patterns. Given that sampling error causes considerable variability in sample-specific patterns, then the predictions of a sixth-order polynomial model on any given sample will, on average, differ considerably from the predictions of the average sixth-order polynomial model. As model complexity decreases, however, fewer parameters will exist, and so sample-specific patterns will be less likely to affect weights and, therefore, variance will decrease.
+
+With bias and variance having opposite relations with model complexity, a tradeoff emerges. That is, an optimization problem emerges whereby variance tends to increase as bias decreases. Returning to the wine example, if the tourist focuses solely on reducing bias, then variance will increase exponentially, causing the generalization error (i.e., dark blue line of mean squared error in Figure \ref{fig:bias-var-plot}) to be considerably high. Conversely, if the tourist focuses solely on reducing variance, then bias will increase exponentially and cause generalization error (i.e., dark blue line of mean squared error in Figure \ref{fig:bias-var-plot}). Thus, to obtain a model with desirable generalization error, an optimum must be identified whereby bias must be decreased without increasing variance too much. 
+
+One last point must be mentioned with respect to noise. Noise remains constant as model complexity increases. In Figure \ref{fig:bias-var-plot}, the light blue line shows the behaviour of noise as model complexity increases. Noise represents the generalization error of the Bayes decision function; that is, the difference between the population model and the obtained outcome values. Because there is only one Bayes decision function and one population model, they are not affected from the polynomial model used to analyze the data. Thus, noise is constant across model complexity. If noise is too high, it could suggest data cleaning is needed and/or too many errors have been incurred in data collection. 
+
+For the interested reader, I will provide the code for generating in a future [demonstration](https://sebastiansciarra.com/coding_tricks/) post. 
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:bias-var-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Depiction of the Bias-Variance Tradeoff</span>
+  </div>
+    <img src="images/plot_bias_var.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em>Bias (blue line) squared decreases as model complexity increases. With simple models, effects that impact the outcome are not captured, and so bias (squared) will be high because models will, on average, err in their predictions. As model complexity increases, however, the effects of effects previously uncaptured by simple models will be modelled. Variance increases as model complexity increases. With an overly complex model such as a sixth-order polynomial model is used, the excessive number of parameters will model sample-specific patterns that, in reality, have no effect on the outcome variable. Given that sampling error causes considerable variability in sample-specific patterns, then the predictions of a sixth-order polynomial model on any given sample will, on average, differ considerably from the predictions of the average sixth-order polynomial model. As model complexity decreases, however, fewer parameters will exist, and so sample-specific patterns will be less likely to affect weights and, therefore, variance will decrease.    </span> 
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+# Using the Bias-Variance Tradeoff to Develop Rules of Supervised Machine Learning{#rules-ml}
+
+With an understanding of the behaviour of bias, variance, and noise, it is now possible to deduce rules of supervised machine learning. In Figure \ref{fig:bias-var-rules}, I show two general patterns of empirical loss (light blue line) and generalization error (dark blue line) as a function of sample size. Before explaining each panel in Figure \ref{fig:bias-var-rules}, three points need to be mentioned. First, empirical loss is always lower than generalization error because models are effectively always influenced by sample-specific features in the training data (for an example see Figure \ref{fig:constrained-erm}. Second, to represent the common practice of designing models to meet some benchmark level of error, I used the dashed horizontal line in each panel to specify some target amount of generalization error, $\epsilon$. Third, text on each plot describes the solution for each problem.
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:bias-var-rules}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Rules of Supervised Machine Learning for Solving Situations with High Bias and High Variance</span>
+  </div>
+    <img src="images/plot_bias_var_rules.png" width="80%" height="80%"> 
+  
+  <div class="figNote">
+  <span><em>Note. </em> Text on each panel indicates the solution or rule for each problem. Panel A: The pattern of empirical loss and generalization caused by high bias. Empirical loss and generalization remain above the target error ($\epsilon$) because the model is too simple and cannot model patterns that affect the outcome. Because the model cannot even achieve the target error level ($\epsilon$) on the training data, this is an indication that important patterns are not being modelled. In order to resolve the problem of high bias, the model's complexity must be increased, which can be accomplished by decreasing regularization, boosting, kernelization, and adding features. Panel B: The pattern of empirical loss and generalization caused by high variance. Because only the empirical loss is below the targer error level ($\epsilon$), this is an indication that the model is overfitting sample-specific patterns. Overfitting can be solved by either adding more data and/or decreasing model complexity by, for instance, increasing regularization or boosting.</em></span> 
+  </div>
+</div>
+
+Beginning with panel A in Figure \ref{fig:bias-var-rules}, the pattern of generalization error and empirical loss is caused by high bias (or underfitting). In the case were bias is high, the empirical loss and generalization error are both above the target level of error. Because the model cannot even achieve the target error level, $\epsilon$, on the training data, this is an indication that important patterns are not being modelled. In other words, the model under consideration is underfitting the training data. If a model has high bias, adding more data will not help because the model lacks the parameters to model any additional patterns that may be discovered from the additional data. In order to resolve the problem of high bias, the model's complexity must be increased, which can be accomplished by decreasing regularization, boosting, kernelization, and adding features. 
+
+Ending with panel B in Figure \ref{fig:bias-var-rules}, the pattern of generalization error and empirical loss is caused by high variance (or overfitting). In the case were variance is high, the empirical loss is below the target level of error, $\epsilon$, but not the generalization error. Because only the empirical loss is below the targer error level, this is an indication that the model is fitting sample-specific patterns. In other words, the model under consideration is overfitting the training data. To resolve the problem of high variance, two solutions exist. First, more data can be added. By adding more data, the model is exposed to a broader range of patterns, and so may be better able to discern noise from effect, thus reducing the effects of outliers. Second, model complexity can be decreased, which can be accomplished by increasing regularization and boosting.  
+
+
+For the interested reader, I have provided the Python and R code below (see lines <a href="#860">860--924</a>  and lines <a href="#925">925--999</a>, respectively). For a deeper explanation of the function I used to generate the curves for empirical loss and generalization error in Figure \ref{fig:bias-var-rules}, see [Section 4.1.1.1.3](https://atrium.lib.uoguelph.ca/server/api/core/bitstreams/8ed1891d-58ca-457b-b0d4-33a015fb2db9/content#page=155) of my doctoral dissertation. 
+
+
+```r {language=python}
+#create data set for pattern of empirical loss and generalization error that occurs with 
+#high variance
+##high variance
+training_sample_size = np.linspace(start = 1, stop = 1000, num = 1000)
+
+#plateau point
+M = 0.5
+
+#satiation points and values (point at which curve reaches satiation value)
+satiation_value_gen_error_high_var = 0.4
+satiation_point_gen_error_high_var = 250
+
+satiation_value_emp_loss_high_var = 0.15
+satiation_point_emp_loss_high_var = 250
+
+##high bias
+satiation_value_gen_error_high_bias = 0.4
+satiation_point_gen_error_high_bias = 250
+
+satiation_value_emp_loss_high_bias = 0.37
+satiation_point_emp_loss_high_bias = 175
+
+#growth rate parameter value that curve reaches satiation value bu satiation point
+a_gen_error_high_var = np.log(1 - satiation_value_gen_error_high_var)/-satiation_point_gen_error_high_var
+a_emp_loss_high_var = np.log(1 - satiation_value_emp_loss_high_var)/-satiation_point_emp_loss_high_var
+
+a_gen_error_high_bias = np.log(1 - satiation_value_gen_error_high_bias)/-satiation_point_gen_error_high_bias
+a_emp_loss_high_bias = np.log(1 - satiation_value_emp_loss_high_bias)/-satiation_point_emp_loss_high_bias
+
+
+##high variance
+curve_gen_error_high_var = -M*(1 - np.exp(-a_gen_error_high_var*training_sample_size)) + 1
+curve_emp_loss_high_var = M*(1 - np.exp(-a_emp_loss_high_var*training_sample_size)) 
+
+##high bias 
+curve_gen_error_high_bias = -M*(1 - np.exp(-a_gen_error_high_bias*training_sample_size)) + 1
+curve_emp_loss_high_bias = M*(1 - np.exp(-a_emp_loss_high_bias*training_sample_size)) 
+
+
+data_emp_gen_error_curve = pd.DataFrame({'training_sample_size': training_sample_size,
+                                       'gen_error_high_var': curve_gen_error_high_var, 
+                                       'emp_loss_high_var': curve_emp_loss_high_var,
+                                       'gen_error_high_bias': curve_gen_error_high_bias, 
+                                       'emp_loss_high_bias': curve_emp_loss_high_bias})
+
+cols_to_expand = data_emp_gen_error_curve.columns[1:5]
+data_emp_gen_error_curve_long = data_emp_gen_error_curve.melt(id_vars = 'training_sample_size', 
+                                                          value_vars = cols_to_expand,
+                                                          var_name = "error_type", 
+                                                          value_name = 'error_value')
+
+# Define the regular expression pattern to match the second underscore and everything after it
+pattern = r'^([^_]+_[^_]+)_(.*)$'
+
+# Split each element using regular expressions
+split_cols = data_emp_gen_error_curve_long['error_type'].str.extract(pattern)
+
+#Create two new columns 
+data_emp_gen_error_curve_long["error_type"] = split_cols[0]
+data_emp_gen_error_curve_long["problem"] = split_cols[1]
+
+#Relevel error_type column 
+error_type_releveled = ["gen_error", "emp_loss"]
+                                                          
+data_emp_gen_error_curve_long["error_type"] = data_emp_gen_error_curve_long['error_type'].astype('category').cat.reorder_categories(error_type_releveled)
+```
+
+```r 
+#import Python data set 
+data_emp_gen_error_curve_long <- py$data_emp_gen_error_curve_long
+data_emp_gen_error_curve_long$problem <- factor(
+  x = data_emp_gen_error_curve_long$problem, 
+  labels = c("bold(A:~Error~Patterns~Caused~by~High~Bias~(Underfitting))",
+             "bold(B:~Error~Patterns~Caused~by~High~Variance~(Overfitting))"))
+  
+  
+#text dataframe
+data_text_high_bias = data.frame(
+  "label" = c(TeX(input = "$\\textbf{High\\phantom{.}Bias\\phantom{.}(Underfitting)}$", 
+                  output = "character"),
+              TeX(input = "$\\uparrow$features", output = "character"),
+              TeX(input = "$\\uparrow$complexity", output = "character"), 
+              TeX(input = "$\\downarrow$regularization", output = "character")),
+  "x" = c(205, 67, 90, 115),
+  "y" = c(0.63, .56, .49, .42),
+  "problem" =  factor("bold(A:~Error~Patterns~Caused~by~High~Bias~(Underfitting))"))
+
+data_text_high_var = data.frame(
+  "label" = c(TeX(input = "$\\textbf{High\\phantom{.}Variance\\phantom{.}(Overfitting)}$", 
+                  output = "character"),
+              TeX(input = "$\\uparrow$data", output = "character"),
+              TeX(input = "$\\downarrow$complexity", output = "character"), 
+              TeX(input = "$\\uparrow$regularization", output = "character")),
+  "x" = c(230, 37, 90, 115),
+  "y" = c(0.63, .56, .49, .42), 
+  "problem" = factor("bold(B:~Error~Patterns~Caused~by~High~Variance~(Overfitting))"))
+
+data_text_merged <- rbind(data_text_high_var, data_text_high_bias)
+
+#colors
+color_palette <-c('gen_error' = '#002241', 
+                  'emp_loss' ='#9ECAE1')
+
+
+#plot
+plot_bias_var_rules <- ggplot(data = data_emp_gen_error_curve_long, 
+       mapping = aes(x = training_sample_size, y = error_value, 
+                      group = error_type, color = error_type)) +
+  
+  #data aesthetics 
+  geom_line(linewidth = 1) +
+  geom_hline(yintercept = 0.3, color = "#002241", linetype = "dashed")  +
+  geom_text(inherit.aes = F, data = data_text_merged, 
+            mapping = aes(x = x, y = y, label = label),
+             size = 6, color = "#002241", parse = T) + 
+  
+  #panel aesthetics
+  facet_wrap(facets =  ~ problem, nrow = 2, ncol = 1, labeller = label_parsed, scales = 'free') +
+
+  #scale aesthetics 
+  scale_y_continuous(name = 'Mean Squared Error', breaks = 0.3, labels = expression(epsilon)) +
+  scale_x_continuous(name = "Sample Size", labels = NULL) + 
+  scale_color_manual(name = "Function Type", 
+                     values = color_palette, 
+                    labels = c(emp_loss = 'Empirical Loss', gen_error = 'Generalization Error')) +
+  
+  #custom styling
+  theme_classic(base_family = 'Helvetica', base_size = 14) + 
+  theme(legend.text = element_text(size = 14),
+        legend.title = element_text(size = 15), 
+        axis.title  = element_text(size = 15), 
+        axis.text = element_text(size = 14, color = "#002241"), 
+        text = element_text(color = "#002241"),
+        axis.line = element_line(color = "#002241"), 
+        axis.ticks = element_blank(), 
+        axis.text.y = element_text(size = 20), 
+        strip.text = element_text(size = 17, color = "#002241", hjust = 0),
+        strip.background = element_blank(), 
+        panel.spacing.y =  unit(x = 3, units = 'cm'))
+
+
+#save plot
+ggsave(filename = "images/plot_bias_var_rules.png", plot = plot_bias_var_rules, width = 10, height = 12, dpi = 1000)
+```
+
+
+# Boundary Conditions on the Rules of Machine Learning
+
+Although the previous sections showed a tradeoff between bias and variance and showed that rules could be deduced from this tradeoff, these rules are, unfortunately, not universal. In perusing recent papers, I found (at least) two boundary conditions exist on the rules of supervised machine learning presented in Figure \ref{fig:bias-var-rules}. 
+
+First, the bias-variance tradeoff disappears with exceedingly complex functions (for great introductions, see {{< citePara "belkin2019;neal2019;dar2021" >}}). I have reprinted Figure \ref{fig:plot-double-descent} from {{< cite "belkin2019" >}} to show a more accurate depiction of the relation between generalization error and model complexity known as the double descent curve. Before explaining the double descent curve in Figure \ref{fig:plot-double-descent}, three points must be made with respect to terminology. First, and beginning with the x-axis, the capacity of $\mathcal{H}$ can be conceptualized as the complexity of a function $f$ for the purpose of this discussion. Second, *test risk* is synonymous with generalization error and *training risk* is synonymous with empirical loss (whether the loss be on a training, validation, or test set). Third, and last, the *interpolation threshold* represents the point at which the complexity of the function is sufficient enough such that it achieves zero loss on the training data. After the interpolation threshold, functions can be said to be *over-parameterized* and, before the threshold, functions can be said to be *under-parameterized*. Returning to Figure \ref{fig:plot-double-descent}, the test risk curve follows a U-shaped curve as in the traditional bias-variance explanation (or "classical" regime; see Figure \ref{fig:bias-var-plot}), but then decreases exponentially as the capacity of $\mathcal{F}$ (i.e., model complexity) increases past the interpolation threshold. Thus, the bias-variance tradeoff ceases to be a tradeoff after the point which a function has sufficient number of parameters to achieve zero error on training data. Some examples of of the bias-variance tradeoff violations have occurred with neural networks and decision trees (see {{< citePara "belkin2019" >}}).
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:plot-double-descent}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Double Descent Curve for Generalization Error/Test Risk</span>
+  </div>
+    <img src="images/Plot_double_descent.png" width="80%" height="80%"> 
+  <div class="figNote">
+     <span><em>Note. </em> The incomplete-data log-likelihood is shown in red, $\ln p(\mathbf{x}, \theta)$. The first evidence lower bound is shown in blue, $\mathcal{L}(q, \theta)$, and the second evidence lower bound is shown in green. From "Reconciling modern machine-learning practice and the classical bias–variance trade-off," by M. Belkin et al., 2019, <em>Proceedings of the National Academy of Sciences</em>, <em>116</em>(32), p. 15850 (<a href="http://dx.doi.org/10.1073/pnas.1903070116">http://dx.doi.org/10.1073/pnas.1903070116</a>).</span> 
+  </div>
+</div>
+
+Second, the rules of supervised machine learning presented in the previous [section](#rules-ml) appear to be dependent on the specific loss functions, as bias-variance tradeoffs and bias-variance-noise decompositions do not always occur with other loss functions. For example, although a bias-variance decomposition occurs with mean absolute error, there appears to be no bias-variance tradeoff with this loss function {{< cite "gao2021" see also >}}.[^6]  With respect to margin loss functions (e.g., logistic, hinge, exponential), a bias-variance decomposition only occurs with strictly convex gradient-symmetric loss functions {{< cite "wood2022" >}}. As one final example, {{< cite "james2003" >}} found 
+
+
+[^6]: See {{< cite "robeson2023" >}} for a different and arguable more useful decomposition of mean absolute error.
+
+# Conclusion
+
+In this paper, supervised machine learning was conceptualized as a game with the goal of maximizing predictive ability. To understand the game being played in supervised machine learning, I provided a setup, the players, and the rules of the game. Excess risk decomposition was used to provide a setup for the game. The players of bias (squared), variance, and noise were obtained by decomposing the mean squared error loss function. Finally, two rules of supervised machine learning were deduced using the bias variance tradeoff. I then ended the paper with a discussion on boundary conditions for the rules of supervised machine learning. 
 
 # References
 
