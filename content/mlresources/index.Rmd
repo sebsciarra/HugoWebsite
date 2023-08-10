@@ -25,6 +25,7 @@ This is a list of useful resources I have stumbled upon while completing my diss
 
 ## Textbooks
 
+* [Python Packages](https://py-pkgs.org/welcome): excellent book for writing Python packages. 
 * [Matrix Algebra Useful for Statistics](https://books.google.ca/books?id=zR-ZDgAAQBAJ&dq=matrix+algebra+useful+for+statistics&lr=): great resource for learning linear algebra.
 * [Introducing Python: Modern Computing in Simple Packages](https://www.amazon.ca/Introducing-Python-Modern-Computing-Packages/dp/1492051365): useful for gaining basic knowledge of Python.
 * [Learning SQL Generate, Manipulate, and Retrieve Data](https://www.oreilly.com/library/view/learning-sql-3rd/9781492057604/): great resource for gaining SQL knowledge. 
