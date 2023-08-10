@@ -8,7 +8,7 @@ output:
   bookdown::html_document2:
      keep_md: true
 always_allow_html: true
-header-includes: 
+header-includes:  
 bibFile: content/technical_content/understanding_ML/refs.json    
 tags: []
 ---   
@@ -808,7 +808,7 @@ Moreover, in looking at Figure \ref{fig:approx-error}, it is also apparent that 
    <div class="figTitle">
     <span>Constrained Empirical Risk Minimization Results in Approximation Error</span>
   </div>
-    <img src="images/app_error_diagram.png"
+    <img src="images/app_error_Diagram.png"
     .png" width="80%" height="80%"> 
   
   <div class="figNote">
