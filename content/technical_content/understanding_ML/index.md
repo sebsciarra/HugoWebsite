@@ -10,7 +10,7 @@ output:
 always_allow_html: true
 header-includes:  
 bibFile: content/technical_content/understanding_ML/refs.json    
-imgThumbnail: "https://sebastiansciarra.com/technical_content/understanding_ml/images/est_error_plot2.png"
+imgThumbnail: "https://sebastiansciarra.com/technical_content/understanding_ml/images/plot_bias_var_rules.png"
 tags: []
 ---   
 
