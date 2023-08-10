@@ -1872,7 +1872,8 @@ With bias and variance having opposite relations with model complexity, a tradeo
 
 One last point must be mentioned with respect to noise. Noise remains constant as model complexity increases. In Figure \ref{fig:bias-var-plot}, the light blue line shows the behaviour of noise as model complexity increases. Noise represents the generalization error of the Bayes decision function; that is, the difference between the population model and the obtained outcome values. Because there is only one Bayes decision function and one population model, they are not affected from the polynomial model used to analyze the data. Thus, noise is constant across model complexity. If noise is too high, it could suggest data cleaning is needed and/or too many errors have been incurred in data collection. 
 
-For the interested reader, I will provide the code for generating 
+For the interested reader, I will provide the code for generating in a future [demonstration](https://sebastiansciarra.com/coding_tricks/) post. 
+
 <div class="figure">
   <div class="figDivLabel">
     <caption>
