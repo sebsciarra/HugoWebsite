@@ -2231,7 +2231,7 @@ First, the bias-variance tradeoff disappears with exceedingly complex functions 
    <div class="figTitle">
     <span>Double Descent Curve for Generalization Error/Test Risk</span>
   </div>
-    <img src="images/plot_double_descent.png" width="80%" height="80%"> 
+    <img src="images/Plot_double_descent.png" width="80%" height="80%"> 
   <div class="figNote">
      <span><em>Note. </em> The incomplete-data log-likelihood is shown in red, $\ln p(\mathbf{x}, \theta)$. The first evidence lower bound is shown in blue, $\mathcal{L}(q, \theta)$, and the second evidence lower bound is shown in green. From "Reconciling modern machine-learning practice and the classical bias–variance trade-off," by M. Belkin et al., 2019, <em>Proceedings of the National Academy of Sciences</em>, <em>116</em>(32), p. 15850 (<a href="http://dx.doi.org/10.1073/pnas.1903070116">http://dx.doi.org/10.1073/pnas.1903070116</a>).</span> 
   </div>
