@@ -23,6 +23,7 @@ tags: []
 # Probability Mass Functions: The Probability of Observing Each Possible Outcome Given One Set of Parameter Values
 
 Consider an example where a researcher obtains a coin and believes it to be unbiased, $P(\theta) = P(head) = 0.50$. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a `1` for heads and `0` for tails. Thus, a vector of 10 observed scores is obtained, $\mathbf{y} \in \\{0, 1 \\}^{n}$, where $n = 10$. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, $P(\mathbf{y}|\theta, n)$. Thus, the outcome of interest is the number of heads, $h$, where $\\{h|0 \le h \le10\\}$. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, $h \sim B(n, h)$. To compute the probability of obtaining any given number of heads, the *binomial function* shown below in Equation \ref{eq:prob-mass-function} can be used:
+
 $$
 \begin{align}
 P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
@@ -34,12 +35,14 @@ where ${n \choose h}$ gives the total number of ways in which $h$ heads (or succ
 As an example, the probability of obtaining four heads ($h=4$) in 10 coin flips ($n = 10$) is calculated below. 
 
 $$
+\begin{spreadlines}{0.5em}
 \begin{align}
 P(h = 4|\theta = 0.50, n = 10) &= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \nonumber \\\\
 &= \frac{10!}{4! (10 - 4)!}(0.50)^{4}(1-0.50)^{(10-4)} \nonumber \\\\
 &= 210(0.5)^{10}\nonumber \\\\
 &= 0.205 \nonumber
 \end{align}
+\end{spreadliness}
 $$
 Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of $(0.5)^{10}$ of occurring. Altogether, four heads have a probability of .205 of occurring given a probability of heads of .50 and 10 coin flips. 
 
@@ -461,7 +464,7 @@ Given the striking resemblance between the binomial function in Equation \ref{eq
 \begin{spreadlines}{0.5em}
 \begin{align*}
 (\theta + 1 -\theta)^n &= \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h} \\\\ \nonumber
-1 &= \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h} \qquad\qquad _\square   \nonumber 
+1 &= \sum^n_{h=0} {n \choose h} \theta^h(1-\theta)^{n-h} \qquad\qquad _\blacksquare   \nonumber 
 \end{align*}
 \end{spreadlines}
 
@@ -531,7 +534,7 @@ $$
 \begin{align}
  \int_0^1 L(\theta|h, n) \phantom{c} d\theta &= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\ 
 &= \frac{n!}{(n + 1)!} \nonumber \\\\ 
-&= \frac{1}{n+1} \qquad\qquad _\square 
+&= \frac{1}{n+1} \qquad\qquad _\blacksquare 
 \label{eq:likelihood-proof}  
 \end{align} 
 \end{spreadlines}
@@ -644,7 +647,7 @@ Therefore, the original integration limits of 0 to $\infty$ of $s$ and $t$ produ
 \Gamma(x)\Gamma(y) &= \int_0^1 \int_0^\infty u^{x+y-1} e^{-u} v^{x-1} (1 - v)^{y-1} \,du\,dv \\\\
 &=  \int_0^\infty  u^{x+y-1} e^{-u}\text{ } du \int_0^1v^{x-1} (1 - v)^{y-1} \,dv \\\\
 &=  \Gamma(x + y)\mathrm{B}(x,y) \\\\
-\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)} \qquad\qquad _\square 
+\mathrm{B}(x,y) &= \frac{\Gamma(x)\Gamma(y)}{ \Gamma(x + y)} \qquad\qquad _\blacksquare 
 \end{align*}
 \end{spreadlines}
 
@@ -704,7 +707,7 @@ $$
 \begin{align*}
 \int u \text{ }dv &= 0 - 0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}  \\\\
 &= \alpha  \int^\infty_0t^{\alpha - 1} e^{-t}  \\\\
-&= \alpha \Gamma(\alpha) \qquad\qquad _\square
+&= \alpha \Gamma(\alpha) \qquad\qquad _\blacksquare
 \end{align*} 
 \end{spreadlines}
 $$
@@ -740,7 +743,7 @@ $$
 \Gamma(x) = (x-1)(x-2)(x-3)...(x-n)\Gamma(x-n)  \\\\
 =(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
 =(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
-=(x-1)! \qquad\qquad _\square
+=(x-1)! \qquad\qquad _\blacksquare
 \end{align*}
 \end{spreadlines}
 $$
@@ -748,11 +751,13 @@ $$
 # Appendix E: Proof of Binomial Theorem  {#proof-binomial}
 
 The binomial theorem provided below in Equation \ref{eq:binomial2} states that 
+
 $$
 (x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.
 \label{eq:binomial2}
 $$
 I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where $n=1$ so that I can later generalize the proof with a larger number of $n+1$.  In the base case, the binomial theorem is proven such that 
+
 $$
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -762,6 +767,7 @@ x + y &= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\\\
 \end{spreadlines}
 $$
 Now, I will prove the binomial theorem with $n + 1$. Thus, 
+
 $$
 (x + y)^{n+1} = \sum^{n+1}_{k=0} {n+1 \choose k} x^{n+1-k}y^k.
 \label{eq:binomial-induction}
@@ -799,7 +805,7 @@ $$
 \begin{align*}
 &=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
 &= {n+1 \choose 0} x^{n+1-0}y^0 + {n+1 \choose n+1} x^{n+1-(n+1)}y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
-&= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\square
+&= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\blacksquare
 \end{align*}
 \end{spreadlines}
 $$

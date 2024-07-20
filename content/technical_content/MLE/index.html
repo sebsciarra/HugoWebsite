@@ -344,8 +344,8 @@ display: none;
 
 <div id="probability-mass-functions-the-probability-of-observing-each-possible-outcome-given-one-set-of-parameter-values" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Probability Mass Functions: The Probability of Observing Each Possible Outcome Given One Set of Parameter Values</h1>
-<p>Consider an example where a researcher obtains a coin and believes it to be unbiased, <span class="math inline">\(P(\theta) = P(head) = 0.50\)</span>. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a <code>1</code> for heads and <code>0</code> for tails. Thus, a vector of 10 observed scores is obtained, <span class="math inline">\(\mathbf{y} \in \\{0, 1 \\}^{n}\)</span>, where <span class="math inline">\(n = 10\)</span>. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, <span class="math inline">\(P(\mathbf{y}|\theta, n)\)</span>. Thus, the outcome of interest is the number of heads, <span class="math inline">\(h\)</span>, where <span class="math inline">\(\\{h|0 \le h \le10\\}\)</span>. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, <span class="math inline">\(h \sim B(n, h)\)</span>. To compute the probability of obtaining any given number of heads, the <em>binomial function</em> shown below in Equation <span class="math inline">\(\ref{eq:prob-mass-function}\)</span> can be used:
-<span class="math display">\[
+<p>Consider an example where a researcher obtains a coin and believes it to be unbiased, <span class="math inline">\(P(\theta) = P(head) = 0.50\)</span>. To test this hypothesis, the researcher intends to flip the coin 10 times and record the result as a <code>1</code> for heads and <code>0</code> for tails. Thus, a vector of 10 observed scores is obtained, <span class="math inline">\(\mathbf{y} \in \\{0, 1 \\}^{n}\)</span>, where <span class="math inline">\(n = 10\)</span>. Before collecting the data to test their hypothesis, the researcher would like to get an idea of the probability of observing any given number of heads given that the coin is unbiased and there are 10 coin flips, <span class="math inline">\(P(\mathbf{y}|\theta, n)\)</span>. Thus, the outcome of interest is the number of heads, <span class="math inline">\(h\)</span>, where <span class="math inline">\(\\{h|0 \le h \le10\\}\)</span>. Because the coin flips have a dichotomous outcome and the result of any given flip is independent of all the other flips, the probability of obtaining any given number of heads will be distributed according to a binomial distribution, <span class="math inline">\(h \sim B(n, h)\)</span>. To compute the probability of obtaining any given number of heads, the <em>binomial function</em> shown below in Equation <span class="math inline">\(\ref{eq:prob-mass-function}\)</span> can be used:</p>
+<p><span class="math display">\[
 \begin{align}
 P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 \label{eq:prob-mass-function}
@@ -354,12 +354,14 @@ P(h|\theta, n) = {n \choose h}(\theta)^{h}(1-\theta)^{(n-h)},
 where <span class="math inline">\({n \choose h}\)</span> gives the total number of ways in which <span class="math inline">\(h\)</span> heads (or successes) can be obtained in a series of <span class="math inline">\(n\)</span> attempts (i.e., coin flips) and <span class="math inline">\((\theta)^{h}(1-\theta)^{(n-h)}\)</span> gives the probability of obtaining a given number of <span class="math inline">\(h\)</span> heads and <span class="math inline">\(n-h\)</span> tails in a given set of <span class="math inline">\(n\)</span> flips. Thus, the binomial function (Equation <span class="math inline">\(\ref{eq:prob-mass-function}\)</span>) has an underlying intuition: To compute the probability of obtaining a specific number of <span class="math inline">\(h\)</span> heads given <span class="math inline">\(n\)</span> flips and a certain <span class="math inline">\(\theta\)</span> probability of success, the probability of obtaining <span class="math inline">\(h\)</span> heads in a given set of <span class="math inline">\(n\)</span> coin flips, <span class="math inline">\((\theta)^{h}(1-\theta)^{(n-h)}\)</span>, is multiplied by the total number of ways in which <span class="math inline">\(h\)</span> heads can be obtained in <span class="math inline">\(n\)</span> coin flips, <span class="math inline">\({n \choose h}\)</span>.</p>
 <p>As an example, the probability of obtaining four heads (<span class="math inline">\(h=4\)</span>) in 10 coin flips (<span class="math inline">\(n = 10\)</span>) is calculated below.</p>
 <p><span class="math display">\[
+\begin{spreadlines}{0.5em}
 \begin{align}
 P(h = 4|\theta = 0.50, n = 10) &amp;= {10 \choose 4}(0.50)^{4}(1-0.50)^{(10-4)}   \nonumber \\\\
 &amp;= \frac{10!}{4! (10 - 4)!}(0.50)^{4}(1-0.50)^{(10-4)} \nonumber \\\\
 &amp;= 210(0.5)^{10}\nonumber \\\\
 &amp;= 0.205 \nonumber
 \end{align}
+\end{spreadliness}
 \]</span>
 Thus, there are 210 possible ways of obtaining four heads in a series of 10 coin flips, with each way having a probability of <span class="math inline">\((0.5)^{10}\)</span> of occurring. Altogether, four heads have a probability of .205 of occurring given a probability of heads of .50 and 10 coin flips.</p>
 <p>In order to calculate the probability of obtaining each possible number of heads in a series of 10 coin flips, the binomial function (Equation <span class="math inline">\(\ref{eq:prob-mass-function}\)</span>) can be computed for each number of heads, <span class="math inline">\(h\)</span>. The resulting probabilities of obtaining each number of heads can then be plotted to produce a <em>probability mass function</em>: A distribution that gives the probability of obtaining each possible value of a discrete random variable<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> (see Figure <span class="math inline">\(\ref{fig:prob-mass-binom}\)</span>). Importantly, probability mass functions have two conditions: 1) the probability of obtaining each value is non-negative and 2) the sum of all probabilities is one. The R code block below (see lines <a href="#1">1–65</a>) produces a probability mass function for the current binomial example.</p>
@@ -770,7 +772,7 @@ One nice feature of the gamma function is that it can be stated as a factorial (
 \begin{align}
 \int_0^1 L(\theta|h, n) \phantom{c} d\theta &amp;= \frac{n!}{h!(n-h)!}\frac{h!(n-h)!}{(n + 1)!} \nonumber \\\\
 &amp;= \frac{n!}{(n + 1)!} \nonumber \\\\
-&amp;= \frac{1}{n+1} \qquad\qquad _\square
+&amp;= \frac{1}{n+1} \qquad\qquad _\blacksquare
 \label{eq:likelihood-proof}  
 \end{align}
 \end{spreadlines}
@@ -917,7 +919,7 @@ Therefore, Equation <span class="math inline">\(\ref{eq:gamma-int-parts}\)</span
 \begin{align*}
 \int u \text{ }dv &amp;= 0 - 0 - \int^\infty_0(-e^{-t}) \alpha t^{\alpha - 1}  \\\\
 &amp;= \alpha  \int^\infty_0t^{\alpha - 1} e^{-t}  \\\\
-&amp;= \alpha \Gamma(\alpha) \qquad\qquad _\square
+&amp;= \alpha \Gamma(\alpha) \qquad\qquad _\blacksquare
 \end{align*}
 \end{spreadlines}
 \]</span>
@@ -950,20 +952,20 @@ Therefore, <span class="math inline">\(\Gamma(x)\)</span> expands to <span class
 \Gamma(x) = (x-1)(x-2)(x-3)...(x-n)\Gamma(x-n)  \\\\
 =(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
 =(x-1)(x-2)(x-3)...(1)\Gamma(1) \\\\
-=(x-1)! \qquad\qquad _\square
+=(x-1)! \qquad\qquad _\blacksquare
 \end{align*}
 \end{spreadlines}
 \]</span></p>
 </div>
 <div id="proof-binomial" class="section level1" number="10">
 <h1><span class="header-section-number">10</span> Appendix E: Proof of Binomial Theorem</h1>
-<p>The binomial theorem provided below in Equation <span class="math inline">\(\ref{eq:binomial2}\)</span> states that
-<span class="math display">\[
+<p>The binomial theorem provided below in Equation <span class="math inline">\(\ref{eq:binomial2}\)</span> states that</p>
+<p><span class="math display">\[
 (x + y)^n = \sum^n_{k=0} {n \choose k} x^{n-k}y^k.
 \label{eq:binomial2}
 \]</span>
-I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where <span class="math inline">\(n=1\)</span> so that I can later generalize the proof with a larger number of <span class="math inline">\(n+1\)</span>. In the base case, the binomial theorem is proven such that
-<span class="math display">\[
+I will prove the binomial theorem using induction. Thus, I will first prove the binomial theorem in a base where <span class="math inline">\(n=1\)</span> so that I can later generalize the proof with a larger number of <span class="math inline">\(n+1\)</span>. In the base case, the binomial theorem is proven such that</p>
+<p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
 x + y &amp;= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\\\
@@ -971,8 +973,8 @@ x + y &amp;= {1 \choose 0} x^{1-0}y^0 + {1 \choose 1} x^{1-1}y^1 \\\\
 \end{align*}
 \end{spreadlines}
 \]</span>
-Now, I will prove the binomial theorem with <span class="math inline">\(n + 1\)</span>. Thus,
-<span class="math display">\[
+Now, I will prove the binomial theorem with <span class="math inline">\(n + 1\)</span>. Thus,</p>
+<p><span class="math display">\[
 (x + y)^{n+1} = \sum^{n+1}_{k=0} {n+1 \choose k} x^{n+1-k}y^k.
 \label{eq:binomial-induction}
 \]</span>
@@ -1005,7 +1007,7 @@ Now I, respectively, remove <span class="math inline">\(k = 0\)</span> and <span
 \begin{align*}
 &amp;=x^{n+1} + y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
 &amp;= {n+1 \choose 0} x^{n+1-0}y^0 + {n+1 \choose n+1} x^{n+1-(n+1)}y^{n+1} + \sum^n_{k=1} {n+1 \choose k} x^{n+1-k}y^k \\\\
-&amp;= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\square
+&amp;= \sum^{n+1}_{k=0} {n+1 \choose k}x^{n-k+1}y^k \quad\quad _\blacksquare
 \end{align*}
 \end{spreadlines}
 \]</span></p>

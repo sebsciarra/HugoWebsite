@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/279692083_383784514_1525909844.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_131037196_404834042.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_1406922409_2736963511.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_797149971_1086684626.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_332714801_956756373.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_1347156481_2001177293.mp4'
+file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_1733944848_710711895.mp4'

@@ -1,0 +1,45 @@
+<!-- https://dev.to/hi_artem/add-a-video-to-your-hugo-website-104 -->
+<div class="animation">
+  <center>
+     <div class="animDivLabel">
+       <caption>
+    <span class='animLabel'>Animation  \ref{anim:{{ .Get 1 }}}<span>
+       </caption>
+    </div>
+
+
+    <div class="animTitle">
+      <span>{{ .Get 2 }}</span>
+    </div>
+
+    <div id="player-wrapper" class="{{ .Get 1 }}"></div>
+
+    <div class="animNote">
+  <span><em>Note. </em>{{ .Get 3}}</span>
+  </div>
+  </center>
+</div>
+
+
+
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"
+>
+</script>
+
+<script>
+  var playerElement = document.getElementsByClassName("{{ .Get 1 }}")[0];
+
+  var player = new Clappr.Player({
+    source: {{ .Get 0 }},
+    mute: true,
+    height: 360,
+    width: 640,
+  });
+
+
+  // Attach the player and plugin
+  player.attachTo(playerElement);
+
+</script>

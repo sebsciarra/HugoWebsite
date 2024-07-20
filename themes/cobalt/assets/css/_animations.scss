@@ -1,0 +1,72 @@
+
+
+.animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin: 0 auto;
+  max-width: 45rem;
+  height: auto;
+}
+
+.animLabel{
+  position: relative;
+  display: flex;
+  color: var(--navbar-color);
+  font-weight: bold;
+}
+
+
+.animTitle{
+  text-align: left;
+  color: var(--navbar-color);
+  padding-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.animNote{
+  position: relative;
+  font-size: 9pt;
+  display: flex;
+  line-height: 1.5;
+  padding-top: 0.5rem;
+}
+
+
+
+.animLabel::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  top: -0.5rem;
+  left: -1rem;
+  border-top: 1.5px solid var(--hover-color);
+  border-left: 1.5px solid var(--hover-color);
+}
+
+.animNote{
+  text-align: left;
+}
+
+.animNote::before {
+  display: block;
+  content: "";
+  width: 6.75rem;
+  height: 2.25rem;
+  position: absolute;
+  bottom: -0.5rem;
+  right: -1rem;
+  border-bottom: 1.5px solid var(--hover-color);
+  border-right: 1.5px solid var(--hover-color);
+}
+
+mjx-break::after {
+  content: "" !important;
+  white-space: pre-wrap;}
+
+
