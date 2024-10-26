@@ -1,0 +1,131 @@
+---
+title: "Understanding Metrics of Classification Peformance Through Simulations" 
+draft: false
+summary: 'Explanation of post' 
+date: "2023-03-08"
+article_type: simulation
+output:
+  bookdown::html_document2:
+     keep_md: true
+always_allow_html: true
+header-includes: 
+  - \usepackage{amsmath}
+bibFile: content/technical_content/MLE_EM_algorithms/biblio.json    
+tags: []
+---   
+
+
+```{r package_loading_1, include=F}
+#load packages   
+library(easypackages) 
+packages <- c('devtools','tidyverse', 'RColorBrewer', 'parallel', 'data.table', 'kableExtra', 'ggtext', 'egg', 'shiny',
+               'knitr', 'RefManageR', 'gluedown', 'formatR')
+libraries(packages)  
+
+#use_python(python = "/usr/local/bin/python3.9")
+
+knitr::opts_chunk$set(comment = NA, echo = TRUE, eval = TRUE, warning = FALSE)
+# knitr hook to use Hugo highlighting options
+knitr::knit_hooks$set(
+  source = function(x, options) {
+  hlopts <- options$hlopts
+    paste0(
+      "```", "r ",
+      if (!is.null(hlopts)) {
+      paste0("{",
+        glue::glue_collapse(
+          glue::glue('{names(hlopts)}={hlopts}'),
+          sep = ","
+        ), "}"
+        )
+      },
+      "\n", glue::glue_collapse(x, sep = "\n"), "\n```\n"
+    )
+  }
+)
+
+chunk_class <- function(before, options, envir) {
+    class_name = options$class_name
+
+    
+    if (!is.null(before)) { 
+      
+        lines <- unlist(strsplit(x = before, split = "\n")) #separate lines of code at \n
+        n <- length(lines)  #determines numbers of lines
+        
+        #if (line_numbers) { 
+           res <- paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+                            
+                            #paste0("<pre><code class='", class_name, "'>", before, "</code></pre>")
+        #}
+        
+       
+          
+          #res <- paste0("<pre>", paste0("<span class='line-number'>", 1:n,
+                            #"</span><code class ='", class_name, "'>", lines, "</code>"), "</pre>")
+    }
+        return(res)
+    
+}
+
+knitr::knit_hooks$set(output = chunk_class, preserve = TRUE)
+
+#knitr::knit_hooks$set(output = function(x, options) { 
+#  paste(c("<pre><code class = 'r-code'>",
+#        gsub('^## Error', '**Error**', x),
+#        '</pre></code>'), collapse = '\n')
+#})
+
+```
+
+
+
+1. Introduce four foundational metrics of classification performnce (true positive rate, true negative rate, positive predictive value, and )
+
+
+2. Compare three models of classification and give brief review on each one. 
+
+1) Elastic Net
+2) SVM
+3) Random forest  
+
+
+# References
+
+
+{{< bibliography cited >}}
+
+# Appendix A: Proof That the Binomial Function is a Probability Mass Function  {#proof-pmf}
+
+To prove that the binomial function is a probability mass function, two outcomes must be shown: 1) all probability values are non-negative and 2) the sum of all probabilities is 1. 
+
+For the first condition, the impossibility of negative values occurring in the binomial function becomes obvious when individually considering the binomial coefficient, $n \choose k$, and the binomial factors, $p^k (1-p)^{n-k}$. With respect to the binomial coefficient, $n \choose k$, it is always nonnegative because it is the product of two non-negative numbers; the number of trials, $n$, and the number of successes can never be negative. With respect to the binomial factors, the resulting value is always nonnegative because all the term are nonnegative; in addition to the number of trials and successes ($n, k$, respectively),  the probability of success and failure are also always nonnegative ($p, k \in \[0,1\]$). Therefore, probabilities can be conceptualized as the product of a nonnegative binomial coefficient and a nonnegative binomial factor, and so is alwasys nonnegative. 
+
+For the second condition, the equality stated below in Equation \ref{eq:binomial-sum-one} must be proven: 
+
+\begin{align}
+1 = \sum^n_{k=0} {n \choose k} \theta^k(1-\theta)^{n-k}.  
+\label{eq:binomial-sum-one}
+\end{align}
+
+Importantly, it can be proven that all probabilities sum to one by using the binomial theorem, which states below in Equation \ref{eq:binomial} that 
+
+\begin{align}
+(a + b)^n =  \sum^n_{k=0} {n \choose k} a^k(b)^{n-k}. 
+\label{eq:binomial}
+\end{align}
+
+Given the striking resemblance between the binomial function in Equation \ref{eq:binomial-sum-one} and the binomial theorem in Equation \ref{eq:binomial-sum-one}, it is possible to restate the binomial theorem with respect to the variables in the binomial function. Specifically, we can let $a = p$ and $b = 1-p$, which returns the proof as shown below: 
+
+\begin{spreadlines}{0.5em}
+\begin{align*}
+(p + 1 -p)^n &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k} \\\\ \nonumber
+1 &= \sum^n_{k=0} {n \choose k} p^k(1-p)^{n-k}   \nonumber 
+\end{align*}
+\end{spreadlines}
+
+
+For a proof of the binomial theorem, see [Appendix E](#proof-binomial). 
+
+
+
