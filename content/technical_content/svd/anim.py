@@ -141,9 +141,6 @@ def add_standard_basis(self, remove_elements_at_end=False):
     # endregion 
 
 
-
-
-
 def add_non_standard_basis(self, remove_elements_at_end=False):
     
 
@@ -1680,6 +1677,555 @@ class eigenvectorMatrix(LinearTransformationScene):
 
         # endregion 
         
+
+
+import cv2
+from PIL import Image, ImageOps
+from dataclasses import dataclass
+
+@dataclass
+class VideoStatus:
+    time: float = 0
+    videoObject: cv2.VideoCapture = None
+    def __deepcopy__(self, memo):
+        return self
+
+class VideoMobject(ImageMobject):
+    '''
+    Following a discussion on Discord about animated GIF images.
+    Modified for videos
+    Parameters
+    ----------
+    filename
+        the filename of the video file
+    imageops
+        (optional) possibility to include a PIL.ImageOps operation, e.g.
+        PIL.ImageOps.mirror
+    speed
+        (optional) speed-up/slow-down the playback
+    loop
+        (optional) replay the video from the start in an endless loop
+    https://discord.com/channels/581738731934056449/1126245755607339250/1126245755607339250
+    2023-07-06 Uwe Zimmermann & Abulafia
+    2024-03-09 Uwe Zimmermann
+    '''
+    def __init__(self, filename=None, imageops=None, speed=1.0, loop=False, **kwargs):
+        self.filename = filename
+        self.imageops = imageops
+        self.speed    = speed
+        self.loop     = loop
+        self._id = id(self)
+        self.status = VideoStatus()
+        self.status.videoObject = cv2.VideoCapture(filename)
+
+        self.status.videoObject.set(cv2.CAP_PROP_POS_FRAMES, 1)
+        ret, frame = self.status.videoObject.read()
+
+        if ret:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)            
+            img = Image.fromarray(frame)
+
+            if imageops != None:
+                img = imageops(img)
+        else:
+            img = Image.fromarray(np.uint8([[63, 0, 0, 0],
+                                        [0, 127, 0, 0],
+                                        [0, 0, 191, 0],
+                                        [0, 0, 0, 255]
+                                        ]))
+        super().__init__(img, **kwargs)
+        if ret:
+            self.add_updater(self.videoUpdater)
+
+    def videoUpdater(self, mobj, dt):
+        if dt == 0:
+            return
+        
+        status = self.status
+        status.time += 1000*dt*mobj.speed
+
+        self.status.videoObject.set(cv2.CAP_PROP_POS_MSEC, status.time)
+
+        ret, frame = self.status.videoObject.read()
+
+        if (ret == False) and self.loop:
+            status.time = 0
+            self.status.videoObject.set(cv2.CAP_PROP_POS_MSEC, status.time)
+            ret, frame = self.status.videoObject.read()
+
+        if ret:
+            frame = cv2.cvtColor(src=frame, code=cv2.COLOR_BGR2RGB)         
+            img = Image.fromarray(frame)
+
+            if mobj.imageops != None:
+                img = mobj.imageops(img)
+            mobj.pixel_array = change_to_rgba_array(
+                np.asarray(img), mobj.pixel_array_dtype
+            )
+
+
+class svd_anim_proof(Scene):
+    def construct(self):
+       
+        # region 0) Add video 
+        video1 = VideoMobject(
+            filename=r"/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/svd.mp4",
+            speed=1.0
+        ).scale_to_fit_width(10).center().shift(0.55 * UP)
+
+        v1 = Group(video1, SurroundingRectangle(video1, color='#33c304'))
+        self.add(v1)
+
+        # endregion 
+
+        # region 1) Add matrix 
+        matrix = MathTex(
+            r"\mathbf{A} = \begin{bmatrix} 2 & 1 & 1 \\  0 & 2 & 3 \end{bmatrix}", 
+            font_size=28)
+        
+        # Move the expression to a fixed location
+        matrix.center().shift(3 * DOWN)
+        self.add(matrix)
+
+        self.wait(10)
+
+        # endregion 
+
+        # region 2) Add basis vector x 
+        matrix_label_x = (MathTex(
+            r"\begin{array}{ccc}\begin{matrix}" + 
+            r"\hspace{0.75cm} \mathbf{b_{x}} &  \phantom{\mathbf{b_{y}}} " + 
+            r"& \phantom{\mathbf{b_z}} \end{matrix} \\ " +
+            r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+            r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+            r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}", 
+            font_size=28))
+        
+        matrix_label_x.center().shift(3 * DOWN)
+        # add custom colouring
+        # self.add(index_labels(matrix_label_x[0]))  # help determine what index values to colour
+        matrix_label_x[0][0:2].set_color("#4EF716")
+        
+        self.play(Transform(matrix, matrix_label_x))
+        self.wait(2)
+        self.moving_mobjects = []  
+        # endregion 
+
+        # region 3) Add basis vector y
+        matrix_label_y = (MathTex(
+            r"\begin{array}{ccc}\begin{matrix}" + 
+            r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+            r"& \phantom{\mathbf{b_z}}  \end{matrix} \\ " +
+            r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+            r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+            r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}", 
+            font_size=28))
+        
+        matrix_label_y.center().shift(3 * DOWN)
+        # add custom colouring
+        # self.add(index_labels(matrix_label_y[0]))  # help determine what index values to colour
+        matrix_label_y[0][0:2].set_color("#4EF716")
+        matrix_label_y[0][2:4].set_color("#FB699D")
+
+        self.play(Transform(matrix_label_x, matrix_label_y))
+
+        self.wait(2)
+        self.moving_mobjects = []  
+        # endregion 
+
+        # region 4) Add basis vector y
+        matrix_label_z = (MathTex(
+            r"\begin{array}{ccc}\begin{matrix}" + 
+            r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+            r"&  \mathbf{b_{z}} \end{matrix} \\ " +
+            r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+            r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+            r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}", 
+            font_size=28))
+        
+        matrix_label_z.center().shift(3 * DOWN)
+        # add custom colouring
+        # self.add(index_labels(matrix_label_z[0]))  # help determine what index values to colour
+        matrix_label_z[0][0:2].set_color("#4EF716")
+        matrix_label_z[0][2:4].set_color("#FB699D")
+        matrix_label_z[0][4:6].set_color("#52aafa")
+
+
+        self.play(Transform(matrix_label_x, matrix_label_z))
+
+        self.wait(2)
+        self.moving_mobjects = []  
+        self.remove(matrix, matrix_label_y, matrix_label_x)
+        # endregion 
+        
+        # region 5) Move equation and video 
+        mat_copy = matrix_label_z.copy()
+        mat_copy.shift(3*LEFT)
+
+        self.play(Transform(v1, v1.copy().scale_to_fit_width(2).to_corner(UL + 0.15*DOWN)), 
+                  Transform(mobject=matrix_label_z, 
+                            target_mobject=mat_copy, 
+                            replace_mobject_with_target_in_scene=True)) 
+        self.remove(matrix_label_z)
+        self.wait(2)
+
+        # endregion 
+
+        # region 6) Expand equation 
+        matrix_svd_label = (MathTex(
+                    r"\begin{array}{ccc}\begin{matrix}" + 
+                    r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+                    r"&  \mathbf{b_{z}} \end{matrix} \\ " +
+                    r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+                    r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+                    r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}" + 
+                    r"= \mathbf{U \Sigma V^\top}", 
+                    font_size=28))
+        
+        matrix_svd_label.center().shift(3 * DOWN + 3*LEFT)
+        # add custom colouring
+        # self.add(index_labels(matrix_svd_label[0]))  # help determine what index values to colour
+        matrix_svd_label[0][0:2].set_color("#4EF716")
+        matrix_svd_label[0][2:4].set_color("#FB699D")
+        matrix_svd_label[0][4:6].set_color("#52aafa")
+
+        self.play(Transform(mobject=mat_copy, 
+                            target_mobject=matrix_svd_label, 
+                            replace_mobject_with_target_in_scene=True)) 
+
+        self.wait(1)
+        # endregion 
+
+        # region 7) Add V^t to equation 
+        matrix_svd_v_t = (MathTex(
+                    r"\begin{array}{ccc}\begin{matrix}" + 
+                    r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+                    r"&  \mathbf{b_{z}} \end{matrix} \\ " +
+                    r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+                    r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+                    r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}" + 
+                    r"= \mathbf{U \Sigma V^\top}" + 
+                    r"= \mathbf{U \Sigma} \underbrace{\begin{bmatrix} -0.23 & -0.57 & -0.79 \\" + 
+                    r"-0.96 & 0.01 & 0.27 \\ 0.14 & -0.82 & 0.55 \end{bmatrix}}_{\text{Rotation}}",
+                    font_size=28))
+        
+        matrix_svd_v_t.center().shift(3 * DOWN + 1.5*LEFT)
+        # add custom colouring
+        # self.add(index_labels(matrix_svd_v_t[0]))  # help determine what index values to colour
+        matrix_svd_v_t[0][0:2].set_color("#4EF716")
+        matrix_svd_v_t[0][2:4].set_color("#FB699D")
+        matrix_svd_v_t[0][4:6].set_color("#52aafa")
+    
+        self.play(Transform(mobject=matrix_svd_label, 
+                            target_mobject=matrix_svd_v_t, 
+                            replace_mobject_with_target_in_scene=True)) 
+
+        self.wait(2)
+
+        # endregion 
+        
+        # region 8) Add video + wiggle V^t + add video 
+        video1 = VideoMobject(
+            filename=r"/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/svd_piecemeal.mp4",
+            speed=1.0
+        ).scale_to_fit_width(9.75).center().shift(0.72 * UP  + 0.75*RIGHT)
+
+        v2 = Group(video1, SurroundingRectangle(video1, color='#33c304'))
+        self.add(v2)
+
+        self.play(Wiggle(mobject=matrix_svd_v_t[0][19:21]), 
+                  Wiggle(mobject=matrix_svd_v_t[0][24:69]))
+        self.wait(2.5)
+        # endregion 
+
+        # region 9) Add sigma + play transformation 
+        matrix_svd_sigma = (MathTex(
+            r"\begin{array}{ccc}\begin{matrix}" + 
+            r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+            r"&  \mathbf{b_{z}} \end{matrix} \\ " +
+            r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+            r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+            r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}" + 
+            r"= \mathbf{U \Sigma V^\top}" + 
+            r"= \mathbf{U} \underbrace{\begin{bmatrix} 3.95 & 0 & 0 \\" + 
+            r"0 & 1.84 & 0 \end{bmatrix}}_{\text{Stretch + dim. change}}" + 
+            r"\underbrace{\begin{bmatrix} -0.23 & -0.57 & -0.79 \\" + 
+            r"-0.96 & 0.01 & 0.27 \\ 0.14 & -0.82 & 0.55 \end{bmatrix}}_{\text{Rotation}}",
+            font_size=28))
+        
+        matrix_svd_sigma.center().shift(3 * DOWN + 1*LEFT)
+        # add custom colouring
+        # self.add(index_labels(matrix_svd_sigma[0]))  # help determine what index values to colour
+        matrix_svd_sigma[0][0:2].set_color("#4EF716")
+        matrix_svd_sigma[0][2:4].set_color("#FB699D")
+        matrix_svd_sigma[0][4:6].set_color("#52aafa")
+    
+        self.play(Transform(mobject=matrix_svd_v_t, 
+                            target_mobject=matrix_svd_sigma, 
+                            replace_mobject_with_target_in_scene=True)) 
+
+        self.wait(1)
+
+        self.play(Wiggle(mobject=matrix_svd_sigma[0][18:19]), 
+                  Wiggle(mobject=matrix_svd_sigma[0][23:37]))
+        
+        self.wait(7)
+        # endregion 
+
+        # region 10) Add U + play transformation 
+        matrix_svd_u = (MathTex(
+            r"\begin{array}{ccc}\begin{matrix}" + 
+            r"\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} " + 
+            r"&  \mathbf{b_{z}} \end{matrix} \\ " +
+            r"\mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}" + 
+            r"& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}" + 
+            r"\hspace{0.1cm} & 3 \end{bmatrix} \end{array}" + 
+            r"= \mathbf{U \Sigma V^\top}" + 
+            r"= \underbrace{\begin{bmatrix} -0.46 & -0.89 & \\ -0.89 & 0.46 \end{bmatrix}}_{\text{Rotation}}" + 
+            r" \underbrace{\begin{bmatrix} 3.95 & 0 & 0 \\" + 
+            r"0 & 1.84 & 0 \end{bmatrix}}_{\text{Stretch + dim. change}}" + 
+            r"\underbrace{\begin{bmatrix} -0.23 & -0.57 & -0.79 \\" + 
+            r"-0.96 & 0.01 & 0.27 \\ 0.14 & -0.82 & 0.55 \end{bmatrix}}_{\text{Rotation}}",
+            font_size=28))
+        
+        matrix_svd_u.center().shift(3 * DOWN + 0.5*LEFT)
+        # add custom colouring
+        # self.add(index_labels(matrix_svd_u[0]))  # help determine what index values to colour
+        matrix_svd_u[0][0:2].set_color("#4EF716")
+        matrix_svd_u[0][2:4].set_color("#FB699D")
+        matrix_svd_u[0][4:6].set_color("#52aafa")
+    
+        self.play(Transform(mobject=matrix_svd_sigma, 
+                            target_mobject=matrix_svd_u, 
+                            replace_mobject_with_target_in_scene=True)) 
+
+        self.wait(1)
+
+        self.play(Wiggle(mobject=matrix_svd_u[0][17:18]), 
+                  Wiggle(mobject=matrix_svd_u[0][22:42]))
+        
+        self.wait(2)
+        # endregion 
+
+        # region 11) Wiggle each basis vector 
+        self.play(Wiggle(mobject=matrix_svd_u[0][0:2]))
+        self.wait(0.5)
+
+        self.play(Wiggle(mobject=matrix_svd_u[0][2:4]))
+        self.wait(0.5)
+
+        self.play(Wiggle(mobject=matrix_svd_u[0][4:6]))
+        self.wait(1.25)
+        # endregion 
+
+        # region 12) Bring videos side by side 
+        self.play(Transform(v1, v1.copy().scale_to_fit_width(6).to_corner(UL + 0.15*DOWN)),
+                  Transform(v2, v2.copy().scale_to_fit_width(6).to_corner(UR + 0.15*DOWN)))
+
+        self.wait(1.5)
+
+
+class svd(ThreeDScene):
+    def construct(self):
+        # Set up axes
+        axes = ThreeDAxes(x_range=[-7, 7, 1], 
+                          x_length=14)
+        
+        self.set_camera_orientation(phi= 75* DEGREES, theta=-45 * DEGREES)
+
+        # region 1) Create basis vectors and apply transformation 
+
+        # Define a vector in 3D
+        
+        basis_x = Vector([1, 0, 0], color='#4EF716')
+        basis_y = Vector([0, 1, 0], color='#FB699D')
+        basis_z = Vector([0, 0, 1], color='#52aafa')
+
+        basis_vectors = VGroup(basis_x, basis_y, basis_z)
+
+        # Define a 3x3 transformation matrix for scaling and rotating
+        transformation_matrix = [[2, 1, 1],  # Scaling along x-axis
+                                 [0, 2, 3],  # No change along y-axis
+                                 [0, 0, 0]]  # No change along z-axis
+        
+        # Display the initial vector
+        self.play(Create(axes), Create(basis_x), Create(basis_y), Create(basis_z))
+        self.wait(1)
+
+        # Apply the transformation matrix
+        self.play(ApplyMatrix(transformation_matrix, basis_vectors))
+        self.wait(1.5)
+
+        # remove and replace basis vectors so they scale appropriately 
+        anim_remove_basis = FadeOut(basis_vectors)
+
+        new_basis_x = Vector(direction=[2, 0, 0], color='#4EF716')
+        new_basis_y = Vector(direction=[1, 2, 0], color='#FB699D')
+        new_basis_z = Vector(direction=[1, 3, 0], color='#52aafa')
+        new_basis = VGroup(new_basis_x, new_basis_y, new_basis_z)
+
+        create_basis = Create(new_basis)
+
+        self.move_camera(phi=0 * DEGREES, theta= -90 * DEGREES, 
+                         added_anims=[anim_remove_basis, create_basis], 
+                         run_time=2)
+        self.wait(1.5)
+        # endregion 
+
+        # region 2) Show basis vector x 
+        basis_x_text = (MathTex(
+            r"\mathbf{b}_x = \begin{bmatrix} 2 \\ 0 \end{bmatrix}", 
+            font_size=34, color='#4EF716'))
+                     
+        basis_x_text.move_to(new_basis_x.get_end() + np.array([0.2, -0.6, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_x, basis_x_text)
+        
+        self.wait(2)
+
+        # endregion 
+
+        # region 3) Show basis vector y 
+        basis_y_text = (MathTex(
+            r"\mathbf{b}_y = \begin{bmatrix} 1 \\ 2 \end{bmatrix}", 
+            font_size=34, color='#FB699D'))
+                     
+        basis_y_text.move_to(new_basis_y.get_end() + np.array([0.7, -0.5, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_y, basis_y_text)
+        
+        self.wait(3)
+
+        # endregion 
+
+        # region 4) Show basis vector z
+        basis_z_text = (MathTex(
+            r"\mathbf{b}_z = \begin{bmatrix} 1 \\ 3 \end{bmatrix}", 
+            font_size=34, color='#52aafa'))
+                     
+        basis_z_text.move_to(new_basis_z.get_end() + np.array([0.75, 0, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_z, basis_z_text)
+        
+        self.wait(2)
+
+        # endregion 
+
+class svd_piecemeal(ThreeDScene):
+    def construct(self): 
+        # Set up axes
+        axes = ThreeDAxes(x_range=[-7, 7, 1], 
+                          x_length=14)
+        
+        self.set_camera_orientation(phi= 75* DEGREES, theta=-135 * DEGREES)
+
+        # region 1) Create basis vectors and apply Vt 
+
+        # Define a vector in 3D
+        
+        basis_x = Vector([1, 0, 0], color='#4EF716')
+        basis_y = Vector([0, 1, 0], color='#FB699D')
+        basis_z = Vector([0, 0, 1], color='#52aafa')
+
+        basis_vectors = VGroup(basis_x, basis_y, basis_z)
+
+        # Define a 3x3 transformation matrix for scaling and rotating
+        V_t = [[-0.23382221, -0.56600304, -0.79054901],
+               [-0.96252753,  0.01988155,  0.2704542 ],
+               [ 0.13736056, -0.82416338,  0.54944226]]
+        
+        # Display the initial vector
+        self.play(Create(axes), Create(basis_x), Create(basis_y), Create(basis_z))
+        self.wait(1)
+
+        # Apply the transformation matrix
+        self.play(ApplyMatrix(V_t, basis_vectors))
+        self.wait(2.5)
+        # endregion 
+
+        # region 2) Apply sigma transformation 
+        sigma = [[3.95009846, 0, 0], 
+                 [0, 1.84301986, 0], 
+                 [0, 0, 0]]
+        
+        self.play(ApplyMatrix(sigma, basis_vectors))
+        self.wait(1.5)
+
+
+        new_basis_x = Vector(direction=[-0.92362075, -1.77395735, 0], color='#4EF716')
+        new_basis_y = Vector(direction=[-2.23576774, 0.03664209, 0], color='#FB699D')
+        new_basis_z = Vector(direction=[-3.12274643, 0.49845246, 0], color='#52aafa')
+        new_basis = VGroup(new_basis_x, new_basis_y, new_basis_z)
+
+        create_basis = Create(new_basis)
+
+        # remove and replace basis vectors so they scale appropriately 
+        anim_remove_basis = FadeOut(basis_vectors)
+
+        self.move_camera(phi=0 * DEGREES, theta= -90 * DEGREES, 
+                         added_anims=[anim_remove_basis, create_basis], 
+                         run_time=2)
+
+        self.wait(4.5)
+
+        # endregion  
+
+        # region 3) Apply U
+        U = [[-0.46181038, -0.88697868],
+             [-0.88697868,  0.46181038]]
+        
+        self.play(ApplyMatrix(U, new_basis))
+        self.wait(1.5)
+
+        # endregion 
+
+
+        # region 4) Show basis vector x 
+        basis_x_text = (MathTex(
+            r"\mathbf{b}_x = \begin{bmatrix} 2 \\ 0 \end{bmatrix}", 
+            font_size=34, color='#4EF716'))
+                     
+        basis_x_text.move_to(new_basis_x.get_end() + np.array([0.2, -0.6, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_x, basis_x_text)
+        
+        self.wait(2)
+
+        # endregion 
+
+        # region 5) Show basis vector y 
+        basis_y_text = (MathTex(
+            r"\mathbf{b}_y = \begin{bmatrix} 1 \\ 2 \end{bmatrix}", 
+            font_size=34, color='#FB699D'))
+                     
+        basis_y_text.move_to(new_basis_y.get_end() + np.array([0.7, -0.5, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_y, basis_y_text)
+        
+        self.wait(3)
+
+        # endregion 
+
+        # region 6) Show basis vector z
+        basis_z_text = (MathTex(
+            r"\mathbf{b}_z = \begin{bmatrix} 1 \\ 3 \end{bmatrix}", 
+            font_size=34, color='#52aafa'))
+                     
+        basis_z_text.move_to(new_basis_z.get_end() + np.array([0.75, 0, 0]))  # Slightly above the end of the vector
+        
+        # Add the vector and label to the scene
+        self.add(new_basis_z, basis_z_text)
+        
+        self.wait(2)
+
+        # endregion 
+
+
 
 
 

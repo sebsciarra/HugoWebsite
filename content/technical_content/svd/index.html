@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-07-20" />
+<meta name="date" content="2024-10-26" />
 
 <title>The Theory, Meaning, and Applications of the Singular Value Decomposition</title>
 
@@ -337,7 +337,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">The Theory, Meaning, and Applications of the Singular Value Decomposition</h1>
-<h4 class="date">2024-07-20</h4>
+<h4 class="date">2024-10-26</h4>
 
 </div>
 
@@ -356,15 +356,15 @@ conda_install(envname = &#39;blog_posts&#39;, packages = py_packages, pip=T)
 #useful for checking what packages are loaded
 py_list_packages(envname = &#39;blog_posts&#39;, type = &#39;conda&#39;)</code></pre>
 <p>Second, the Python packages and modules in the Python code block are needed to run all the Python code in this paper (see lines <a href="#15">15–24</a> below).</p>
-<p>Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in this GitHub repository.</p>
+<p>Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in <a href="#">this GitHub repository</a>.</p>
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 </div>
-<div id="beginning-with-fundamentals-a-necessary-review-of-linear-algebra" class="section level1" number="2">
+<div id="fundamentals" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Beginning With Fundamentals: A Necessary Review of Linear Algebra</h1>
 <div id="basis-vectors-standard-and-non-standard-bases" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Basis Vectors: Standard and Non-Standard Bases</h2>
-<p>Basis vectors can be understood as the coordinates used to define some <em>n</em>-dimension space, <span class="math inline">\(\mathbb{R}^n\)</span>. Beginning with the familiar standard basis vectors—that is, vectors with only one non-zero element equivalent to one such that, across the vector components, only component is every one—are often used to define <em>n</em>-dimension spaces. As an example, consider a two-dimensional space, <span class="math inline">\(\mathbb{R}^2\)</span>. To span <span class="math inline">\(\mathbb{R}^2\)</span> (i.e., define any vector in <span class="math inline">\(\mathbb{R}^2\)</span>), the standard basis vectors of <span class="math inline">\(\mathbf{e}\_{e\_x} = \[1, 0\]\)</span> and <span class="math inline">\(\mathbf{b}\_{e\_y}= \[0, 1\]\)</span> can be used, and these vectors can be combined to form the basis matrix shown below in Equation <span class="math inline">\(\ref{eq:standardMatrix}\)</span>:</p>
+<p>Basis vectors can be understood as the coordinates used to define some <em>n</em>-dimension space, <span class="math inline">\(\mathbb{R}^n\)</span>. Beginning with the familiar standard basis vectors—that is, vectors with only one non-zero element equivalent to one—are often used to define <em>n</em>-dimensional spaces. As an example, consider a two-dimensional space, <span class="math inline">\(\mathbb{R}^2\)</span>. To span <span class="math inline">\(\mathbb{R}^2\)</span> (i.e., define any vector in <span class="math inline">\(\mathbb{R}^2\)</span>), the standard basis vectors of <span class="math inline">\(\mathbf{b}\_{e\_x} = \[1, 0\]\)</span> and <span class="math inline">\(\mathbf{b}\_{e\_y}= \[0, 1\]\)</span> can be used, and these vectors can be combined to form the basis matrix shown below in Equation <span class="math inline">\(\ref{eq:standardMatrix}\)</span>:</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -378,7 +378,7 @@ py_list_packages(envname = &#39;blog_posts&#39;, type = &#39;conda&#39;)</code><
 \]</span>
 Note that each column of <span class="math inline">\(\mathbf{B}_e\)</span> represents a basis vector.</p>
 <p>If <span class="math inline">\(\mathbf{b}\_{e\_x}\)</span> is multiplied by one and <span class="math inline">\(\mathbf{b}\_{e\_y}\)</span> is multiplied by two, the vector <span class="math inline">\(\mathbf{g}_e = \[1, 2\]\)</span> is obtained, and this is shown below in Animation <span class="math inline">\(\ref{anim:standardBasis}\)</span>.</p>
-<p>{{&lt; insert-video “media/videos/anim/480p15/standardBasis.mp4” “standardBasis” “Coordinates of Vector <span class="math inline">\(\mathbf{g}_e\)</span> in Standard Basis (Equation <span class="math inline">\(\ref{eq:standardBasis}\)</span>” “Using the standard basis vectors of <span class="math inline">\(\mathbf{b}_{e_x} = [1, 0]\)</span> and <span class="math inline">\(\mathbf{b}_{e_y} = [0, 1]\)</span>, the pink vector (<span class="math inline">\(\mathbf{g}\)</span>) has coordinates defined by <span class="math inline">\(\mathbf{g}_e = [2, 1]\)</span>.”&gt;}}</p>
+<p>{{&lt; insert-video “media/videos/anim/480p15/standardBasis.mp4” “standardBasis” “Coordinates of Vector <span class="math inline">\(\mathbf{g}_e\)</span> in Standard Basis (Equation <span class="math inline">\(\ref{eq:standardMatrix}\)</span>)” “Using the standard basis vectors of <span class="math inline">\(\mathbf{b}_{e_x} = [1, 0]\)</span> and <span class="math inline">\(\mathbf{b}_{e_y} = [0, 1]\)</span>, the pink vector (<span class="math inline">\(\mathbf{g}\)</span>) has coordinates defined by <span class="math inline">\(\mathbf{g}_e = [2, 1]\)</span>.”&gt;}}</p>
 <p>Importantly, outside from the standard basis vectors being familiar and simple, there isn’t always a strong justification for using them in applied settings. Thus, non-standard basis vectors are often used in applied settings. As an example of non-standard basis vectors, consider defining <span class="math inline">\(\mathbb{R}^2\)</span> with basis vectors <span class="math inline">\(\mathbf{b}\_{n\_x} = \[0, 1\]\)</span> and <span class="math inline">\(\mathbf{b}\_{n\_y} = \[1, 2\]\)</span>, which are defined as a matrix below in Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span>:</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
@@ -396,7 +396,7 @@ Note that each column of <span class="math inline">\(\mathbf{B}_e\)</span> repre
 </div>
 <div id="translating-between-standard-and-non-standard-basis-vectors" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Translating Between Standard and Non-Standard Basis Vectors</h2>
-<p>Although it may not look it, the non-standard basis vectors of Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span> do indeed span <span class="math inline">\(\mathbb{R}^2\)</span>; that is, they can define any vector in <span class="math inline">\(\mathbb{R}^2\)</span>. In fact, because any set of <em>n</em> non-linearly dependent vectors will span any <em>n</em>-dimension space, an essentially infinite number of <em>n</em> basis vector sets can be used to span any <em>n</em>-dimension space.</p>
+<p>Although it may not look it, the non-standard basis vectors of Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span> do indeed span <span class="math inline">\(\mathbb{R}^2\)</span>; that is, they can define any vector in <span class="math inline">\(\mathbb{R}^2\)</span>. In fact, because any set of <em>n</em> non-linearly dependent vectors will span any <em>n</em>-dimension space, an infinite number of <em>n</em> basis vector sets can be used to span any <em>n</em>-dimension space.</p>
 <p>With an infinite number of basis vector sets being able to define a space, it is likely that users may want to translate between basis vectors. Thus, in this section, I will show how to translate from standard to non-standard basis vectors (from the previous section) and vice-versa. As a recap, I have reprinted the standard (Equation <span class="math inline">\(\ref{eq:standardMatrix}\)</span>) and non-standard (Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span>) basis vectors below in their matrix form (<span class="math inline">\(\mathbf{B}_e\)</span> and <span class="math inline">\(\mathbf{B}_n\)</span>, respectively):</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
@@ -420,17 +420,26 @@ Note that each column of <span class="math inline">\(\mathbf{B}_e\)</span> repre
 \end{align}
 \end{spreadlines}
 \]</span></p>
-<p>Beginning with a translation from a standard basis to a non-standard basis, recall the vector of <span class="math inline">\(\mathbf{g}_e = \[1, 2\]\)</span> defined in the standard basis. In the non-standard basis, <span class="math inline">\(\mathbf{g}_e\)</span> had coordinates of <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span>. To redefine <span class="math inline">\(\mathbf{g}_e\)</span> in the non-standard basis of Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span> and, thus, obtain <span class="math inline">\(\mathbf{g}_n\)</span>, we need to determine the scalar multiplications of each non-standard basis vector that give the coordinates of <span class="math inline">\(\mathbf{g}_e\)</span>. Mathematically, this can be represented by Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span>, which shows that <span class="math inline">\(\mathbf{g}_n\)</span>, can be obtained pre-multiplying <span class="math inline">\(\mathbf{g}_e\)</span> by the inverse of the basis matrix, <span class="math inline">\(\mathbf{B}_n^{-1}\)</span>.</p>
+<p>Beginning with a translation from a standard basis to a non-standard basis, recall the vector of <span class="math inline">\(\mathbf{g}_e = \[2, 1\]\)</span> defined in the standard basis. In the non-standard basis, <span class="math inline">\(\mathbf{g}_e\)</span> had coordinates of <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span>. To redefine <span class="math inline">\(\mathbf{g}_e\)</span> in the non-standard basis of Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span> and, thus, obtain <span class="math inline">\(\mathbf{g}_n\)</span>, we first define <span class="math inline">\(\mathbf{g}_e\)</span> as some combination of scalar multiplications of each non-standard basis vector in <span class="math inline">\(\mathbf{B}_n\)</span> such that</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
-\mathbf{B}_n \mathbf{g}_n = \mathbf{g}_e  \nonumber \\\\
-\mathbf{g}_n = \mathbf{B}_n^{-1} \mathbf{g}_e
-\label{eq:basisNonBasisSol}
+\mathbf{B}_n \mathbf{g}_n = \mathbf{g}_e  \
+\label{eq:nonBasisMult}
 \end{align}
 \end{spreadlines}
 \]</span>
-Applying Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span> in the Python code block below, we see that the vector defined in the standard basis of <span class="math inline">\(\mathbf{g}_e = \[1, 2\]\)</span> becomes <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span> in the non-standard basis.</p>
+Equation <span class="math inline">\(\ref{eq:nonBasisMult}\)</span> can then be rearranged to solve for <span class="math inline">\(\mathbf{g}_n\)</span> to obtain</p>
+<p><span class="math display">\[
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{g}_n = \mathbf{B}_n^{-1} \mathbf{g}_e
+\label{eq:basisNonBasisSol}
+\end{align}.
+\end{spreadlines}
+\]</span>
+Therefore, pre-multiplying a vector defined in a standard basis (e.g., <span class="math inline">\(\mathbf{g}_e\)</span>) by the inverse of a non-standard basis matrix (e.g., <span class="math inline">\(\mathbf{B}_n\)</span>) returns the non-standard version of the matrix (e.g., <span class="math inline">\(\mathbf{g}_n\)</span>}.</p>
+<p>Applying Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span> in the Python code block below, we see that the vector defined in the standard basis of <span class="math inline">\(\mathbf{g}_e = \[1, 2\]\)</span> becomes <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span> in the non-standard basis.</p>
 <pre class="r" language="python"><code># coordinates of g in standard basis (g_e)
 h = np.array([2, 1]) 
 
@@ -459,11 +468,17 @@ g_n = np.array([1.5, 0.5])
 B_n = np.array([[1, 1], 
                 [0, 2]])
                 
+B_e = np.array([[1, 0], 
+                [0, 1]])
+                
+
+# np.linalg.inv(B_e).dot(g_n)          
+                
 # Tom&#39;s coordinates for g
 B_n.dot(g_n)</code></pre>
 <pre><code class="python-code">array([2., 1.])
 </code></pre>
-<p>To recap, matrix multiplication was used to translate between standard and non-standard basis vectors of two people. Given some vector defined in standard basis coordinates, it can be translated to non-standard basis coordinates by pre-multiplication of the inverse of the non-standard basis matrix (see Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span>). Given another vector defined in a non-standard basis coordinates, it can be redefined in standard basis coordinates by pre-multiplication of the non-standard basis matrix (see Equation <span class="math inline">\(\ref{eq:standardNonStandardSol}\)</span>).</p>
+<p>To recap, matrix multiplication was used to translate between standard and non-standard basis vectors. Given some vector defined in standard basis coordinates, pre-multiplying it by the inverse of a non-standard basis matrix returns the coordinates of this vector in the the non-standard basis (see Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span>). Going the othe way, pre-multiplying a a vector defined in a non-standard basis coordinates by the non-standard bases returns the vector in a standard basis (see Equation <span class="math inline">\(\ref{eq:standardNonStandardSol}\)</span>).</p>
 <div id="using-matrix-multiplication-to-translate-between-non-standard-bases" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Using Matrix Multiplication to Translate Between Non-Standard Bases</h3>
 <p>In this section, I will show how to translate between non-standard bases. One non-standard basis that will be used has been used in previous sections, and I have reprinted it below in Equation <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span>.</p>
@@ -511,7 +526,7 @@ np.linalg.inv(b_m).dot(b_n.dot(g_e))</code></pre>
 <div id="visualizing-matrix-multiplication-as-rotation-andor-stretching-of-basis-vectors" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Visualizing Matrix Multiplication as Rotation and/or Stretching of Basis Vectors</h2>
 <p>In the previous section, matrix multiplication was used to translate between standard and non-standard bases. In each translation of basis vectors, a strong intuition existed for the use of matrix multiplication. Perhaps fittingly, the strong intuition for using matrix multiplication to translate between basis vectors has a similarly intuitive geometry.</p>
-<p>Matrix multiplication transform vectors because it rotates and/or stretches the bases that define the vectors. Thus, if a basis transformed, any vector defined within it will transform in the same manner. As an first example of the geometry of matrix multiplication, I show here how the matrices of the previous section simply stretch one basis vector and, as a consequence, stretch the . As a recap, I provide the basis vectors of the previous sections from Equations <span class="math inline">\(\ref{eq:standardMatrix}\)</span> and <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span>.</p>
+<p>Matrix multiplication transforms vectors because it rotates and/or stretches the bases that define the vectors. As a first example of the geometry of matrix multiplication, I show here how the matrices of the previous section pull the matrix space leftward and compressed it vertically. As a recap, I provide the basis vectors of the previous sections from Equations <span class="math inline">\(\ref{eq:standardMatrix}\)</span> and <span class="math inline">\(\ref{eq:nonStandardBasis}\)</span>.</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -540,7 +555,7 @@ To go from the standard to non-standard basis, Equation <span class="math inline
 \begin{align}
 &amp;= \mathbf{B}_n^{-1} \mathbf{g}_e  \nonumber \\\\
 &amp;= \begin{bmatrix}
-1 &amp; -0.5 \\
+1 &amp; -0.5 \\\\
 0 &amp; 0.5
 \end{bmatrix}
 \begin{bmatrix}
@@ -552,7 +567,7 @@ To go from the standard to non-standard basis, Equation <span class="math inline
 \end{align}
 \end{spreadlines}
 \]</span></p>
-<p>Animation <span class="math inline">\(\ref{anim:basisToNonBasis}\)</span> below shows that the linear transformation applied by <span class="math inline">\(\mathbf{B}^{-1}\)</span> indeed results in the vector <span class="math inline">\(\mathbf{g}\_{n}\)</span> by pulling and compressing the standard basis space leftward. Specifically, the second basis vector of <span class="math inline">\(\mathbf{b}\_{n_y} = \[0, 1\]\)</span> is pulled leftward and compressed to become <span class="math inline">\(\mathbf{b}^{-1}\_{n_x} = \[-0.5, 0.5\]\)</span> (the first basis vector of <span class="math inline">\(\mathbf{b}\_{n_x} = \[1, 0\]\)</span> remains the same). In transforming the space defined by the standard basis vectors, the vector of <span class="math inline">\(\mathbf{g}_e = \[2, 1\]\)</span> becomes <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span>. As discussed previously, the vector <span class="math inline">\(\mathbf{g}_n\)</span> indicates the scalar multiplications that must be applied to the basis vectors of <span class="math inline">\(\mathbf{B}_n\)</span> to obtain the vector <span class="math inline">\(\mathbf{g}_e\)</span>.</p>
+<p>Animation <span class="math inline">\(\ref{anim:basisToNonBasis}\)</span> below shows that the linear transformation applied by <span class="math inline">\(\mathbf{B}^{-1}\)</span> indeed results in the vector <span class="math inline">\(\mathbf{g}\_{n}\)</span> by pulling and compressing the standard basis space leftward. Specifically, the second basis vector of <span class="math inline">\(\mathbf{b}\_{n_y} = \[0, 1\]\)</span> is pulled leftward and compressed to become <span class="math inline">\(\mathbf{b}^{-1}\_{n_x} = \[-0.5, 0.5\]\)</span> (the first basis vector of <span class="math inline">\(\mathbf{b}\_{n_x} = \[1, 0\]\)</span> remains unchanged). In transforming the space defined by the standard basis vectors, the vector of <span class="math inline">\(\mathbf{g}_e = \[2, 1\]\)</span> becomes <span class="math inline">\(\mathbf{g}_n = \[1.5, 0.5\]\)</span>. As discussed previously, the vector <span class="math inline">\(\mathbf{g}_n\)</span> indicates the scalar multiplications that must be applied to the basis vectors of <span class="math inline">\(\mathbf{B}_n\)</span> to obtain the vector <span class="math inline">\(\mathbf{g}_e\)</span>.</p>
 <p>{{&lt; insert-video “media/videos/anim/480p15/transformationExample.mp4” “basisToNonBasis” “Example of the Geometry of Matrix Multiplication from Equation <span class="math inline">\(\ref{eq:basisNonBasisSol}\)</span>)” “The example in this animation shows the geometry of pre-multiplying a vector, <span class="math inline">\(\mathbf{g}_e = [2, 1]\)</span>, by <span class="math inline">\(\mathbf{B}^{-1}_n\)</span>. In this case, the vector space is simply pulled leftward and compressed vertically. Specifically, the second basis vector of <span class="math inline">\(\mathbf{b}_{n_y} = [0, 1]\)</span> is pulled leftward and compressed to become <span class="math inline">\(\mathbf{b}^{-1}_{n_x} = [-0.5, 0.5]\)</span> (the first basis vector of <span class="math inline">\(\mathbf{b}_{n_x} = [1, 0]\)</span> remains the same). In transforming the space defined by the standard basis vectors, the vector of <span class="math inline">\(\mathbf{g}_e = [2, 1]\)</span> becomes <span class="math inline">\(\mathbf{g}_n = [1.5, 0.5]\)</span>.” &gt;}}</p>
 <p>With the example above showing how matrix multiplication transforms vectors by transforming the spaces that define them, I will show the geometry of the following matrices in the sections that follow. Below is a brief summary of the matrices whose geometries I will show and the transformations they apply:</p>
 <ol style="list-style-type: decimal">
@@ -561,7 +576,7 @@ To go from the standard to non-standard basis, Equation <span class="math inline
 <li>Rectangular matrices change dimension space</li>
 <li>Inverse matrices un-rotate basis vectors</li>
 </ol>
-<div id="diagonal-matrices-stretch-basis-vectors" class="section level3" number="2.3.1">
+<div id="diagonal" class="section level3" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Diagonal Matrices Stretch Basis Vectors</h3>
 <p>Animation <span class="math inline">\(\ref{anim:diagonalMatrix}\)</span> below shows that diagonal matrices simply stretch the basis vectors that define a space. In the current example, the matrix of</p>
 <p><span class="math display">\[
@@ -705,9 +720,9 @@ because the resulting vector, <span class="math inline">\(\lambda\mathbf{v}_1\)<
 </div>
 </div>
 </div>
-<div id="proving-the-singular-value-decomposition" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Proving the Singular Value Decomposition</h1>
-<p>Having covered the necessary fundamentals, I will now walk through the proof of the singular value decomposition. First, however, it is important to understand singular value decompositions. In short, any matrix, <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times n}\)</span>, (whether real of complex) can be decomposed such that</p>
+<div id="the-singular-value-decomposition-and-its-visualization" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> The Singular Value Decomposition and its Visualization</h1>
+<p>Having covered the necessary fundamentals, I will introduce the singular value decomposition and its geometry. In short, any matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times p}\)</span> (<span class="math inline">\(\mathbf{A}\)</span> can also be complex) can be decomposed such that</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{A} &amp;= \mathbf{U}\Sigma \mathbf{V}^\top
@@ -716,11 +731,22 @@ because the resulting vector, <span class="math inline">\(\lambda\mathbf{v}_1\)<
 \]</span>
 where each of the three matrices in the decomposition has the following characteristics:</p>
 <ol style="list-style-type: decimal">
-<li><span class="math inline">\(\mathbf{U}\)</span>: left singular vectors of <span class="math inline">\(\mathbf{A}\)</span>, which are the eigenvectors of <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span>. Because symmetric matrices have full sets of orthogonal eigenvectors (see <a href="#full-set">Appendix A3</a>), <span class="math inline">\(\mathbf{U}\)</span> is orthonormal.</li>
-<li><span class="math inline">\(\mathbf{\Sigma}\)</span>: diagonal matrix of <em>singular values</em> that are equivalent to the square roots of the eigenvalues of <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span> (or equivalently of <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>).</li>
-<li><span class="math inline">\(\mathbf{V}\)</span>: right singular vectors of <span class="math inline">\(\mathbf{A}\)</span>, which are the eigenvectors of <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>. Because symmetric matrices have full sets of orthogonal eigenvectors (see <a href="#full-set">Appendix A3</a>), <span class="math inline">\(\mathbf{V}\)</span> is orthonormal.</li>
+<li><span class="math inline">\(\mathbf{U} \in \mathbb{R}^{(n \times n)}\)</span>: left singular vectors of <span class="math inline">\(\mathbf{A}\)</span>, which are the eigenvectors of <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span>. Because symmetric matrices have full sets of orthogonal eigenvectors (see <a href="#full-set">Appendix A3</a>), <span class="math inline">\(\mathbf{U}\)</span> is orthonormal.</li>
+<li><span class="math inline">\(\mathbf{\Sigma} \in \mathbb{R}^{(n \times m)}\)</span>: rectangular matrix with <em>singular values</em> along its diagonal. Singular values equivalent to the square roots of the eigenvalues of <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span> (or equivalently of <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>).</li>
+<li><span class="math inline">\(\mathbf{V} \in \mathbb{R}^{(m \times m)}\)</span>: right singular vectors of <span class="math inline">\(\mathbf{A}\)</span>, which are the eigenvectors of <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>. Because symmetric matrices have full sets of orthogonal eigenvectors (see <a href="#full-set">Appendix A3</a>), <span class="math inline">\(\mathbf{V}\)</span> is orthonormal.</li>
 </ol>
-<p>With a description of the singular value decomposition, I now provide a proof. Consider the symmetric matrix produced by <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>. Because is it symmetric, it has a full orthonormal eigenvectors (see <a href="#full-set">Appendix A3</a>) and so can be re-expressed as</p>
+<p>Applying what I presented previously in the <a href="#fundamentals">fundamentals of linear algebra</a>, the singular value decomposition implies that the linear transformation applied by any matrix can be broken down into three constituent transformations in the following order:</p>
+<ol style="list-style-type: decimal">
+<li>Rotation: <span class="math inline">\(\mathbf{V}^\top\)</span> is an orthogonal (unnormalized version of an orthonormal matrix) matrix and so rotates basis vectors (see section on <a href="#orthonormal">orthonormal matrices</a>). The astute reader will notice that the transpose of an orthogonal matrix is equivalent to its inverse, so <span class="math inline">\(\mathbf{V}^\top\)</span> is more technical an un-rotation of basis vectors.</li>
+<li>Stretching with possible dimension change: because <span class="math inline">\(\mathbf{\Sigma}\)</span> only has nonzero values along its diagonal, these values will stretch basis vectors (see section on <a href="#diagonal">diagonal matrices</a>). The dimension space can also change following a transformation by <span class="math inline">\(\Sigma\)</span>. For example, if the number of rows, <span class="math inline">\(n\)</span>, is less than the number of columns <span class="math inline">\(p\)</span>, then the <span class="math inline">\(p-n\)</span> remaining columns of <span class="math inline">\(\mathbf{\Sigma}\)</span> will contain zeroes that will remove the <span class="math inline">\(p-n\)</span> remaining dimensions of <span class="math inline">\(\mathbf{V}^\top\)</span>.</li>
+<li>Rotation: <span class="math inline">\(\mathbf{U}\)</span> is an orthogonal (unnormalized version of an orthonormal matrix) matrix and thus rotates basis vectors (see section on <a href="#orthonormal">orthonormal matrices</a>).</li>
+</ol>
+<p>Animation <span class="math inline">\(\ref{anim:svdMatrix}\)</span> below provides an geometric visualization of each transformation applied by each matrix of the singular value decomposition. First, it is shown that <span class="math inline">\(\mathbf{A}\)</span> transforms the standard basis vectors such that <span class="math inline">\(\mathbf{b_x}\)</span> becomes <span class="math inline">\([2, 0]\)</span>, <span class="math inline">\(\mathbf{b_y}\)</span> becomes <span class="math inline">\([1, 2]\)</span>, and <span class="math inline">\(\mathbf{b_z}\)</span> becomes <span class="math inline">\([1, 3]\)</span>. The second animation then shows that each standard basis vector lands on its coordinates after three transformations in the order of a rotation, stretching (with a dimension reduction), and a rotation. First, the (transposed) matrix of right singular vectors is orthonormal and so applies a rotation. Second, the matrix of singular values is off-diagonal and so applies a stretching of basis vectors along with a reduction in the dimension (from <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^2\)</span>. Third, and last, the matrix of left singular vectors applies a rotation of the basis vectors.</p>
+<p>{{&lt; insert-video “media/videos/anim/480p15/svd_anim_proof.mp4” “svdMatrix” “Visualization of the Three Transformations That Constitute the Singular Value Decomposition” “An animation of each matrix of the singular valude decomposition of <span class="math inline">\(\mathbf{A}\)</span>. First, it is shown that <span class="math inline">\(\mathbf{A}\)</span> transforms the standard basis vectors such that <span class="math inline">\(\mathbf{b_x}\)</span> becomes <span class="math inline">\([2, 0]\)</span>, <span class="math inline">\(\mathbf{b_y}\)</span> becomes <span class="math inline">\([1, 2]\)</span>, and <span class="math inline">\(\mathbf{b_z}\)</span> becomes <span class="math inline">\([1, 3]\)</span>. The second animation then shows that each standard basis vector lands on its coordinates after three transformations in the order of a rotation, stretching (with possible dimension change), and a rotation. First, the (transposed) matrix of right singular vectors is orthonormal and so applies a rotation. Second, the matrix of singular values is off-diagonal and so applies a stretching of basis vectors along with a reduction in the dimension (from <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^2\)</span>. Third, and last, the matrix of left singular vectors applies a rotation of the basis vectors.”&gt;}}</p>
+</div>
+<div id="proving-the-singular-value-decomposition" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Proving the Singular Value Decomposition</h1>
+<p>With an geometric understanding of the singular value decomposition, I now provide a proof. Consider the symmetric matrix produced by <span class="math inline">\(\mathbf{A}^\top\mathbf{A}\)</span>. Because is it symmetric, it has a full set of orthonormal eigenvectors (see <a href="#full-set">Appendix A3</a>) and so can be re-expressed as</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{A}^\top\mathbf{A} &amp;= \mathbf{V \Lambda V}^\top.
@@ -740,7 +766,7 @@ Equation <span class="math inline">\(\ref{eq:matrixRoot}\)</span> can then repla
 \mathbf{V \Lambda V}^\top &amp;= \mathbf{V \mathbf{\Sigma}^\top \mathbf{\Sigma} V}^\top = \mathbf{A}^\top\mathbf{A}.
 \end{align}
 \]</span>
-Although it may not look it, the singular value decomposition is proven once we consider two truths. First, <span class="math inline">\(\mathbf{V \mathbf{\Sigma}^\top \mathbf{\Sigma} V}^\top\)</span> and $ ^$ are both positive semi-definite matrices (see <a href="#pos-semi">Appendix B</a>). Second, because two positive semi-definite matrices are equivalent to each other, they satisfy the condition of unitary freedom and so there must exist some orthonormal matrix, <span class="math inline">\(\mathbf{U}\)</span>, that can be used to translate between the basis vectors of each matrix (see <a href="#unitary">Appendix C</a>). Mathematically,</p>
+Although it may not look it, the singular value decomposition is proven once we consider two truths. First, <span class="math inline">\(\mathbf{V} \mathbf{\Sigma}^\top\)</span> (or conversely <span class="math inline">\(\mathbf{\Sigma} V}^\top\)</span>) and $ ^$ (or conversely <span class="math inline">\(\mathbf{A}\)</span> are both positive semi-definite matrices (see <a href="#pos-semi">Appendix B</a>). Second, because the matrix product of each positive semi-definite matrix is equivalent, the condition of unitary freedom is satisfied and so there must exist some orthonormal matrix, <span class="math inline">\(\mathbf{U}\)</span>, that can be used to translate between the basis vectors of each matrix (see <a href="#unitary">Appendix C</a>). Mathematically,</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -754,23 +780,23 @@ Although it may not look it, the singular value decomposition is proven once we 
 \end{spreadlines}
 \]</span></p>
 </div>
-<div id="understanding-the-singular-value-decomposition" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Understanding the Singular Value Decomposition</h1>
+<div id="understanding-the-singular-value-decomposition" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Understanding the Singular Value Decomposition</h1>
 <p>In this section, I will provide a deeper explanation of the singular value decomposition by explaining the following three points in turn:</p>
 <ol style="list-style-type: decimal">
 <li>Point 1: The number of nonzero singular values determines the number of eigenvectors that account for variance</li>
 <li>Point 2: The number of right and left singular vectors that account for variance is always equivalent</li>
 <li>Point 3: Left and right singular vectors represent unweighted loadings of people/variables onto principal axes</li>
 </ol>
-<div id="point-1" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Point 1: The Number of Nonzero Singular Values Determines the Number of Eigenvectors That Account for Variance</h2>
+<div id="point-1" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Point 1: The Number of Nonzero Singular Values Determines the Number of Eigenvectors That Account for Variance</h2>
 <p>To understand this point, it is first important to understand that an eigenvalue represents the amount of total variance accounted for by its corresponding eigenvector. Consider a mean-centered matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times n}\)</span> with covariance matrix</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{C} &amp;= \frac{\mathbf{A}^\top\mathbf{A}}{n-1}
 \end{align}
-\]</span>
-and eigenvectors <span class="math inline">\(\mathbf{v}_1, ..., \mathbf{v}_n\)</span>. Importantly, each Two compute the variance accounted for any given eigenvector, <span class="math inline">\(\mathbf{v}_i\)</span>, the projections of the data onto the eigenvector are first needed and then the variance of these projected values are computed. The projected values can be obtained using</p>
+\]</span></p>
+<p>and eigenvectors <span class="math inline">\(\mathbf{v}_1, ..., \mathbf{v}_n\)</span>. Importantly, to compute the variance accounted for any given eigenvector, <span class="math inline">\(\mathbf{v}_i\)</span>, the projections of the data onto the eigenvector are first needed. The projected values can be obtained using</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{y} = \mathbf{Av}_i,
@@ -788,7 +814,7 @@ with the variance of the projected values then being</p>
 \end{align}.
 \end{spreadlines}
 \]</span>
-Because <span class="math inline">\(\mathbf{v}_i\)</span> is an eigenvector of the covariance matrix, <span class="math inline">\(\mathbf{C}\)</span>, the eigenvector equation (Equation <span class="math inline">\(\ref{eq:eigenvector}\)</span>) can be leveraged to substitute and prove that the eigenvalue represent that amount of total variance accounted for by an eigenvector. Note that, because <span class="math inline">\(\mathbf{v}_i\)</span> is a unit vector, <span class="math inline">\(\mathbf{v}_i \mathbf{v}_i = 1\)</span>,</p>
+Because <span class="math inline">\(\mathbf{v}_i\)</span> is an eigenvector of the covariance matrix, <span class="math inline">\(\mathbf{C}\)</span>, the eigenvector equation (Equation <span class="math inline">\(\ref{eq:eigenvector}\)</span>) can be leveraged to simplify Equatin <span class="math inline">\(\ref{eq:eigInter}\)</span> above and prove that an eigenvalue represents that amount of total variance accounted for by an eigenvector. Note that, because <span class="math inline">\(\mathbf{v}_i\)</span> is a unit vector, <span class="math inline">\(\mathbf{v}_i \mathbf{v}_i = 1\)</span>,</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -801,8 +827,8 @@ Because <span class="math inline">\(\mathbf{v}_i\)</span> is an eigenvector of t
 \]</span>
 Given that eigenvalues represent the amount of total variance accounted for by an eigenvector and that singular values are simply square roots of eigenvalues (see Equation \ref{eq:matrixRoot), the number of nonzero singular values, therefore, represents the number of eigenvectors that account for variance.</p>
 </div>
-<div id="point-2-the-number-of-left-and-right-singular-vectors-accounting-for-variance-is-always-equivalent" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Point 2: The Number of Left and Right Singular Vectors Accounting for Variance is Always Equivalent</h2>
+<div id="point-2-the-number-of-left-and-right-singular-vectors-accounting-for-variance-is-always-equivalent" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Point 2: The Number of Left and Right Singular Vectors Accounting for Variance is Always Equivalent</h2>
 <p>Proving that an equal number of left and right singular vectors that account for variance simply results from showing that these vectors have the same set of eigenvalues. Beginning first with the left singular vectors (which are the eigenvectors of <span class="math inline">\(\mathbf{AA}^\top\)</span>), their eigenvalues are equivalent to the squared singular values of <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{E} = \mathbf{\Sigma}^2 = \mathbf{\Sigma}\mathbf{\Sigma}\)</span>.</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
@@ -827,8 +853,8 @@ Likewise, and ending with the right singular vectors (which are the eigenvectors
 \]</span>
 Therefore, given that the left and right singular vectors (which are eigenvectors) have identical corresponding sets of eigenvalues, then, along with <a href="#point-1">Point 1</a> that eigenvalues represent the amount of variance accounted for by eigenvectors, the same number of right and singular vectors account for variance. <span class="math inline">\(\qquad\qquad _\blacksquare\)</span></p>
 </div>
-<div id="point-3-left-and-right-singular-vectors-represent-unweighted-loadings-of-peoplevariables-onto-principal-axes" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Point 3: Left and Right Singular Vectors Represent Unweighted Loadings of People/Variables Onto Principal Axes</h2>
+<div id="point-3-left-and-right-singular-vectors-represent-unweighted-loadings-of-peoplevariables-onto-principal-axes" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Point 3: Left and Right Singular Vectors Represent Unweighted Loadings of People/Variables Onto Principal Axes</h2>
 <p>Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0–100 points), <span class="math inline">\(\mathbf{A}\)</span> (Equation <span class="math inline">\(\ref{eq:wineMatrix}\)</span>), from seven novice drinkers for the following set of five wines: 1) champagne (Ch), 2) cabernet sauvignon (CS), 3) chardonnay (Ch), 4) merlot (M), and 5) rosé (R).</p>
 <p><span class="math display">\[
 \begin{align}
@@ -864,108 +890,43 @@ Lgt \\\\
 <li><em>Celebratory Wine Drinker (Cel)</em>: prefers drinking champagne (Chp) and rosé (R)</li>
 <li><em>Light Wine Drinker (Lgt)</em>: prefers drinking non-sparkling white wine such as chardonnay (Ch)</li>
 </ol>
-<p>In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying types of wine wine drinker. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each <em>p</em> person’s data in a column and each <em>n</em> variable’s data in a row.)</p>
+<p>In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying wine drinker types. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each <em>p</em> person’s data in a column and each <em>n</em> variable’s data in a row.)</p>
 <p>To understand the left and right singular vectors, consider first the set of singular values for <span class="math inline">\(\mathbf{A}\)</span>. The Python code block below (lines <a href="#1">1–</a>) computes the eigenvalues (or squared singular values) of <span class="math inline">\(\mathbf{A}\)</span> and the percentage of total variance accounted for by each eigenvector. Given that over 98% of the total variance can be recovered from using three eigenvectors, it can be argued that there are only three eigenvectors worth considering. In other words, 98% of the total variance in the data can be retained by projecting the original scores onto only three of the five eigenvectors.</p>
-<pre class="r"><code>A &lt;- data.frame(
-  &quot;Cab.Sauv.&quot; = c(94, 88, 84, 22, 28, 28),
-  &quot;Merlot&quot; = c(92, 91, 91, 21, 24, 27),
-  &quot;Malbec&quot; = c(95, 94, 89, 27, 29, 29),
-  &quot;Champagne&quot; = c(32, 33, 24, 93, 88, 89),
-  &quot;Rose&quot; = c(21, 25, 29, 91, 95, 90)
-)
-
-cor(A) %&gt;% round(2)</code></pre>
-<pre><code class>          Cab.Sauv. Merlot Malbec Champagne  Rose
-Cab.Sauv.      1.00   1.00   1.00     -0.98 -1.00
-Merlot         1.00   1.00   1.00     -0.99 -1.00
-Malbec         1.00   1.00   1.00     -0.99 -1.00
-Champagne     -0.98  -0.99  -0.99      1.00  0.98
-Rose          -1.00  -1.00  -1.00      0.98  1.00
-</code></pre>
-<pre class="r"><code># standardize 
-col_sds &lt;- apply(A, 2, sd)
-col_means &lt;- apply(A, 2, mean)
-
-A_center &lt;- A - col_means
-A_sd &lt;-  A_center/col_sds
-
-
-# 1) SVD on raw data set 
-svd_raw &lt;-  svd(x=A)
-
-# percentage total variance accounted for by each eigenvector
-perc_var_raw &lt;-  round((svd_raw$d^2)/sum((svd_raw$d^2))*100, digits = 2)
-
-U_raw &lt;- data.frame(svd_raw$u[ ,1:2])
-colnames(U_raw) &lt;- c(&#39;Din&#39;, &quot;Cel&quot;)
-
-
-# 2) SVD on standardized data set (i.e., PCA)
-svd_sd &lt;- svd(x=A_sd)
-
-# percentage total variance accounted for by each eigenvector
-# Why does all the variance go to first singular vector (i.e., principal component) with standardized data?
-# My thought is that the two PCs as I conceptualized them are being put on opposite ends of a continuum. 
-perc_var_sd &lt;-  round((svd_sd$d^2)/sum((svd_sd$d^2))*100, digits = 2)
-
-U_sd &lt;- data.frame(svd_sd$u[ ,1:2])
-colnames(U_sd) &lt;- c(&#39;Cel&#39;, &quot;Din&quot;)
-
-# 3) Confirmation using PCA
-# Standardize the data
-A_scaled  &lt;- scale(A)
-
-# Perform PCA
-pca_result &lt;- prcomp(x = A_scaled, center = TRUE, scale. = TRUE)
-
-# Print the summary of PCA results
-summary(pca_result)</code></pre>
-<pre><code class>Importance of components:
-                          PC1     PC2     PC3     PC4     PC5
-Standard deviation     2.2302 0.14272 0.06576 0.03192 0.02456
-Proportion of Variance 0.9947 0.00407 0.00086 0.00020 0.00012
-Cumulative Proportion  0.9947 0.99881 0.99968 0.99988 1.00000
-</code></pre>
 <p>As an aside, here we can see that the eigenvalues are indeed the squared singular values (dividing by a scaling constant).</p>
 <pre class="r" language="python"><code>print(&quot;Eigenvalues:&quot;, np.round(eig_values, decimals=3))
 print(&quot;Squared singular values:&quot;, np.round((S**2)/6, decimals=3))</code></pre>
 <p>Given that three of the five eigenvectors can be used to obtain a high-fidelity representation of the data, let’s now consider the reduced versions of the left and right singular vectors. Beginning with the left singular vector, I show it below in its original form</p>
-<pre class="r"><code>U, S, V = np.linalg.svd(A_center)
-perc_sing_vals = np.round(a=(S**2/np.sum(S**2))*100, decimals=4)
-
-
-pd.DataFrame(data=U[ :, : 3], columns=[&#39;Din&#39;, &#39;Lgt&#39;, &#39;Cel&#39;])</code></pre>
 </div>
 </div>
-<div id="applications-of-the-singular-value-decomposition" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Applications of the Singular Value Decomposition</h1>
-<div id="principal-components-analysis" class="section level2" number="5.1">
-<h2><span class="header-section-number">5.1</span> Principal Components Analysis</h2>
+<div id="applications-of-the-singular-value-decomposition" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Applications of the Singular Value Decomposition</h1>
+<div id="principal-components-analysis" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Principal Components Analysis</h2>
 </div>
-<div id="data-reduction" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> Data Reduction</h2>
+<div id="data-reduction" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Data Reduction</h2>
 </div>
-<div id="recommendations" class="section level2" number="5.3">
-<h2><span class="header-section-number">5.3</span> Recommendations</h2>
+<div id="recommendations" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Recommendations</h2>
 </div>
 </div>
-<div id="conclusion" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Conclusion</h1>
+<div id="conclusion" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Conclusion</h1>
 </div>
-<div id="references" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> References</h1>
+<div id="references" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> References</h1>
 <p>{{&lt; bibliography cited &gt;}}</p>
 </div>
-<div id="spectral" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> Appendix A: Proof of Spectral Theorem</h1>
+<div id="spectral" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Appendix A: Proof of Spectral Theorem</h1>
 <p>The spectral theorem has three propositions that I prove in turn:</p>
 <ol style="list-style-type: decimal">
 <li>Symmetric matrices must have at least one eigenvalue (and, therefore, at least one eigenvector).</li>
 <li>For any symmetric matrix <span class="math inline">\(\mathbf{S}\)</span>, all of its eigenvalues are real.</li>
 <li>For any symmetric matrix <span class="math inline">\(\mathbf{S}\)</span>, an orthonormal set of eigenvectors exists that spans the space of <span class="math inline">\(\mathbf{S}\)</span>. In other words, a full set of orthogonal eigenvectors exists.</li>
 </ol>
-<div id="appendix-a1-intuition-for-why-symmetric-matrices-must-have-at-least-one-eigenvalue-and-eigenvector" class="section level2" number="8.1">
-<h2><span class="header-section-number">8.1</span> Appendix A1: Intuition For Why Symmetric Matrices Must Have at Least One Eigenvalue and Eigenvector</h2>
+<div id="one-eig" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Appendix A1: Intuition For Why Symmetric Matrices Must Have at Least One Eigenvalue and Eigenvector</h2>
 <p>To understand why all symmetric matrices have at least one eigenvalue, it is important to first understand how eigenvalues are obtained. To derive an eigenvalue, the equation of</p>
 <p><span class="math display">\[
 \begin{align}
@@ -981,9 +942,9 @@ pd.DataFrame(data=U[ :, : 3], columns=[&#39;Din&#39;, &#39;Lgt&#39;, &#39;Cel&#3
 \label{eq:eigenvalue}
 \end{align}
 \]</span>
-At this point, a brief discussion of determinants is apropos. Geometrically, determinants represent the extent to which the area spanned by a set of basis vectors changes (for an excellent video, see <a href="https://www.youtube.com/watch?v=Ip3X9LOh2dk">3blue1brown</a>). Importantly, if a determinant is zero, then the area spanned by a set of basis vectors goes to zero. In the current case where only one vector is under consideration, a matrix with a zero-value determinant would transform the vector to the origin. Therefore, to solve Equation <span class="math inline">\(\ref{eq:eigenvalue}\)</span> above, we need to find the eigenvalue, <span class="math inline">\(\lambda\)</span>, that, when subtracted from the diagonal of <span class="math inline">\(\mathbf{A}\)</span>, causes <span class="math inline">\(\mathbf{A}\)</span> to have a zero-value determinant.</p>
-<p>Fortunately, the fundamental theorem of algebra guarantees that any square matrix will have at least one eigenvalue (real or complex) if some constant <span class="math inline">\(\lambda\)</span> is subtracted from the diagonal. (for a great explanation, see <a href="https://www.youtube.com/watch?v=shEk8sz1oOw">fundamental theorem of linear algebra</a>; note that this video provides an explanation for there being at least one complex eigenvalue). Because the linked video provides a simple and intuitive explanation for the complex case, I will only provide an explanation I for there being the real-value component of the proof.</p>
-<p>If a square matrix does not have any complex eigenvalues, then it must have a real eigenvalue. To understand why, it is important to realize that the determinant equation is simply a polynomial one. For example, consider the 2x2 matrix</p>
+At this point, a brief discussion of determinants is apropos. Geometrically, determinants represent the extent to which a matrix changes the space spanned by a set of basis vectors changes (for an excellent video, see <a href="https://www.youtube.com/watch?v=Ip3X9LOh2dk">3blue1brown</a>). Importantly, if a matrix has a zero-value determinant, it applies a transformation that converts the space spanned by a set of basis vectors to zero. In the current case where only one vector is under consideration, <span class="math inline">\(\mathbf{v}\)</span>, if the matrix of <span class="math inline">\((\mathbf{A} - \lambda \mathbf{I})\)</span> has a determinant of zero, then <span class="math inline">\(\mathbf{v}\)</span> will go to zero after pre-multiplication (Equation <span class="math inline">\(\ref{eq:eigenvalue}\)</span>). Therefore, to solve Equation <span class="math inline">\(\ref{eq:eigenvalue}\)</span> above, we need to find the eigenvalue, <span class="math inline">\(\lambda\)</span>, that, when subtracted from the diagonal of <span class="math inline">\(\mathbf{A}\)</span>, causes <span class="math inline">\(\mathbf{A}\)</span> to have a zero-value determinant.</p>
+<p>Fortunately, the fundamental theorem of algebra guarantees that any square matrix will have at least one eigenvalue (real or complex) if some constant <span class="math inline">\(\lambda\)</span> is subtracted from the diagonal. Although outside the context of this paper, a great explanation of this proof can be found at <a href="https://www.youtube.com/watch?v=shEk8sz1oOw">fundamental theorem of linear algebra</a>; note that this video provides an explanation for there being at least one complex eigenvalue).</p>
+<p>To provide a basic intuition for why square matrices must have at least one eigenvalue (whether complex or real), it is important to realize that the determinant equation is simply a polynomial one and that polynomial equations always have at least one root (whether complex or real). For example, consider the 2x2 matrix</p>
 <p><span class="math display">\[
 \mathbf{A} = \begin{bmatrix}
 5 - \lambda &amp; 4 \\\\
@@ -1008,11 +969,11 @@ and the eigenvalues are</p>
 \end{align}
 \end{spreadlines}
 \]</span>
-Although the determinant of a 2x2 matrix is a rather simple case, it is important to realize that, when there are no complex roots, the characteristic polynomial will have real roots regardless of its degree. Because the existence of at least eigenvalue is guaranteed for square matrices, then there will be at least one eigenvector that accompanies the eigenvalue.</p>
+Although the determinant of a 2x2 matrix is a rather simple case, it generalizes to larger matrices and more complex polynomial equations. Because the existence of at least eigenvalue is guaranteed for square matrices, then there will be at least one eigenvector that accompanies the eigenvalue.</p>
 </div>
-<div id="appendix-a2-proof-that-all-eigenvalues-of-symmetric-matrices-are-real" class="section level2" number="8.2">
-<h2><span class="header-section-number">8.2</span> Appendix A2: Proof That All Eigenvalues of Symmetric Matrices are Real</h2>
-<p>In the previous section, an argument was provided for why all square matrices must have at least one eigenvalue (and consequently at least one eigenvector). In this section, I will provide a proof that symmetric matrices only have real eigenvalues. As some necessary background, it is first important to have a basic understanding of complex numbers and complex conjugates. A complex number <span class="math inline">\(z\)</span> can be conceptualized as the sum of a real-number, <span class="math inline">\(a\)</span>, and imaginary component, <span class="math inline">\(bi\)</span>, as shown below in Equation <span class="math inline">\(\ref{eq:complexNum}\)</span>:</p>
+<div id="appendix-a2-proof-that-all-eigenvalues-of-symmetric-matrices-are-real" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Appendix A2: Proof That All Eigenvalues of Symmetric Matrices are Real</h2>
+<p>In the previous section, an argument was provided for why all square matrices must have at least one eigenvalue (and consequently at least one eigenvector). In this section, I will provide a proof that symmetric matrices only have real eigenvalues. As some necessary background, it is first important to have a basic understanding of complex numbers and complex conjugates. A complex number, <span class="math inline">\(z\)</span>, can be conceptualized as the sum of a real-number, <span class="math inline">\(a\)</span>, and imaginary component, <span class="math inline">\(bi\)</span>, as shown below in Equation <span class="math inline">\(\ref{eq:complexNum}\)</span>:</p>
 <p><span class="math display">\[
 \begin{align}
 z = a + bi.
@@ -1062,10 +1023,10 @@ Note that the matrix <span class="math inline">\(\mathbf{A}\)</span> has no comp
 \]</span>
 Given that the complex and complex conjugate equations of Equations <span class="math inline">\(\ref{eq:eigComplex}\)</span> and <span class="math inline">\(\ref{eq:eigComplexConj}\)</span>, respectively, are equivalent (note that they are both equivalent to <span class="math inline">\((\mathbf{Av})^\top\bar{\mathbf{v}}\)</span>), any eigenvalue contained within <span class="math inline">\(\lambda\)</span> must then be real.</p>
 </div>
-<div id="full-set" class="section level2" number="8.3">
-<h2><span class="header-section-number">8.3</span> Appendix A3: Proof That Symmetric Matrices Have Full Sets of Orthonormal Eigenvectors</h2>
+<div id="full-set" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Appendix A3: Proof That Symmetric Matrices Have Full Sets of Orthonormal Eigenvectors</h2>
 <p>At this point, I have proven that symmetric matrices have real eigenvalues and that there must be at least one eigenvalue with a corresponding eigenvector. With this information, it can now be proven that symmetric matrices have full sets of orthonormal eigenvectors. That is, when applying the transformation of a symmetric matrix, there exists a set of orthonormal eigenvectors that span the entire space of the symmetric matrix.</p>
-<p>To prove that symmetric matrices have full sets of orthogonal eigenvectors, I show that any symmetric matrix can be diagonalized by an orthonormal matrix. This proof applies the Gram-Schmidt procedure to a symmetric matrix to generate a set of orthonormal vectors that is shown to diagonalize the symmetric matrix. Mathematically then, and central to the spectral theorem, any symmetric matrix <span class="math inline">\(\mathbf{A}\)</span> can be transformed into a diagonal matrix, <span class="math inline">\(\Lambda\)</span>, using a matrix of eigenvectors, <span class="math inline">\(\mathbf{V}\)</span>, such that</p>
+<p>To prove that symmetric matrices have full sets of orthogonal eigenvectors, I show that any symmetric matrix can be diagonalized by an orthonormal matrix. This proof applies the Gram-Schmidt procedure to a symmetric matrix to generate a set of orthonormal vectors that is then shown to diagonalize the symmetric matrix. Mathematically then, and central to the spectral theorem, any symmetric matrix <span class="math inline">\(\mathbf{A}\)</span> can be transformed into a diagonal matrix, <span class="math inline">\(\Lambda\)</span>, using a matrix of eigenvectors, <span class="math inline">\(\mathbf{V}\)</span>, such that</p>
 <p><span class="math display">\[
 \begin{align}
 \Lambda &amp; = \mathbf{V}^{-1}\mathbf{AV},
@@ -1091,7 +1052,7 @@ which is symmetric because</p>
 \end{align*}
 \end{spreadlines}
 \]</span>
-Additionally, and important for the first step of the proof, the first column of <span class="math inline">\(\mathbf{A}\)</span> can be diagonalized because the first column of <span class="math inline">\(\mathbf{P}\)</span> is assumed to be an eigenvector (of which a symmetric must have at least one). Mathematically then, the first column of <span class="math inline">\(mathbf{B}\)</span> follows a diagonal form (i.e., it only has one nonzero value) such that</p>
+Additionally, and important for the first step of this proof, the first column of <span class="math inline">\(\mathbf{A}\)</span> can be diagonalized because the first column of <span class="math inline">\(\mathbf{P}\)</span> is assumed to be an eigenvector, of which there must be at least one for a symmetric matrix (for an explanation, see <a href="#one-eig">Appendix A1</a>). Mathematically then, the first column of <span class="math inline">\(\mathbf{B}\)</span> follows a diagonal form (i.e., it only has one nonzero value) such that</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -1113,8 +1074,8 @@ Because <span class="math inline">\(\mathbf{B}\)</span> is symmetric, the first 
 \vdots \\\\
 0
 \end{bmatrix}
-\end{align*}
 \label{eq:orthonormalInitial}
+\end{align*}
 \end{spreadlines}
 \]</span>
 where <span class="math inline">\(\mathbf{C} \in \mathbb{R}^{(n-1) \times (n-1)}\)</span> and represents the remainder of <span class="math inline">\(\mathbf{B}\)</span>.</p>
@@ -1130,7 +1091,7 @@ where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix. To p
 \mathbf{V} = \mathbf{P}\begin{bmatrix}1 &amp; 0 \nonumber \\\\
 0  &amp;\mathbf{Q} \end{bmatrix}.
 \]</span>
-As with <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(\mathbf{V}\)</span> is also equal to its inverse because it is orthogonal.</p>
+As with <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(\mathbf{V}\)</span> is also equal to its inverse because it is orthogonal (inherited from <span class="math inline">\(\mathbf{Q}\)</span>).</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -1150,7 +1111,7 @@ As with <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inlin
 \end{align*}
 \end{spreadlines}
 \]</span></p>
-<p>Now, the central proof of the spectral theorem can be proven by showing that <span class="math inline">\(\mathbf{V}^{-1}\mathbf{A}\mathbf{V}\)</span> yields a diagonal matrix.</p>
+<p>Now, the central component of the spectral theorem can be proven by showing that <span class="math inline">\(\mathbf{V}^{-1}\mathbf{A}\mathbf{V}\)</span> yields a diagonal matrix.</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align*}
@@ -1210,8 +1171,8 @@ As with <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inlin
 Therefore, symmetric matrices can be fully diagonalized because they must have full sets of eigenvectors that are orthonormal.</p>
 </div>
 </div>
-<div id="pos-semi" class="section level1" number="9">
-<h1><span class="header-section-number">9</span> Appendix B: <span class="math inline">\(AA^\top\)</span> is a Positive Semi-Definite Matrix</h1>
+<div id="pos-semi" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> Appendix B: <span class="math inline">\(AA^\top\)</span> is a Positive Semi-Definite Matrix</h1>
 <p>A positive semi-definite matrix, <span class="math inline">\(\mathbf{P}\)</span>, is one whose product with any nonzero vector, <span class="math inline">\(\mathbf{v}\)</span>, is greater than or equal to zero such that</p>
 <p><span class="math display">\[
 \begin{align}
@@ -1233,15 +1194,15 @@ because <span class="math inline">\(\mathbf{v}^\top\mathbf{A}^\top\)</span> and 
 \end{align}
 \]</span></p>
 </div>
-<div id="unitary" class="section level1" number="10">
-<h1><span class="header-section-number">10</span> Appendix C: Unitary Freedom of Positive Semi-Definite Matrices</h1>
-<p>In this section, I will first state the unitary freedom of positive semi-definite matrices and will then provide an intuitive explanation. In formal terms, given
-<span class="math inline">\(\mathbf{B}, \mathbf{C} \in \mathbb{R}^{m \times n}\)</span>, if</p>
+<div id="unitary" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Appendix C: Unitary Freedom of Positive Semi-Definite Matrices</h1>
+<p>In this section, I will first state the unitary freedom of positive semi-definite matrices and will then provide an intuitive explanation. In formal terms, this property of positive semi-definite matrices states that, given
+<span class="math inline">\(\mathbf{B}, \mathbf{C} \in \mathbb{R}^{m \times n}\)</span> and</p>
 <p><span class="math display">\[
 \begin{align}
-\mathbf{B}^\top\mathbf{B} = \mathbf{C}^\top\mathbf{C}
+\mathbf{B}^\top\mathbf{B} = \mathbf{C}^\top\mathbf{C},
 \label{eq:unitaryFreedom}
-\end{align},
+\end{align}
 \]</span></p>
 <p>then there must exist some orthogonal matrix <span class="math inline">\(\mathbf{Q} \in \mathbb{R}^{m \times n}\)</span> that allows us to go from one positive semi-definite matrix to another. Mathematically then, we can define</p>
 <p><span class="math display">\[
@@ -1253,12 +1214,12 @@ because <span class="math inline">\(\mathbf{v}^\top\mathbf{A}^\top\)</span> and 
 \begin{align}
 \mathbf{B}^\top\mathbf{B} &amp;= \mathbf{QC}^\top\mathbf{QC} \nonumber \\\\
 &amp;= \mathbf{C}^\top \mathbf{Q}^\top \mathbf{QC} \nonumber \\\\
-&amp;=\mathbf{C}^\top\mathbf{C}
-\end{align} \qquad\qquad _\blacksquare
+&amp;=\mathbf{C}^\top\mathbf{C} \qquad\qquad _\blacksquare
+\end{align}
 \]</span></p>
 <p>Although the math above is indeed true, it does not provide an intuitive understanding for why there must exist an orthogonal matrix that allows us to translate between the two matrices. Therefore, I now provide an intuitive explanation for this proof.</p>
-<p>As discussed in the section on <a href="#orthonormal">orthonormal matrices</a>, these matrices preserve lengths and angles. In simpler terms, orthonormal matrices can be used to translate between two sets of basis vectors whose lengths and relative angles are equivalent. Therefore, in looking at Equation <span class="math inline">\(\ref{eq:unitaryFreedom}\)</span>, the basis vectors of <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{C}\)</span> must have identical lengths and angles.</p>
-<p>Beginning with the lengths of <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{C}\)</span>, the lengths are identical because the 2-norm of each basis vector produces the same value. Mathematically,</p>
+<p>As discussed in the section on <a href="#orthonormal">orthonormal matrices</a>, these matrices simple rotate basis vectors and so the vector lengths and angles between them remain unchanged. Therefore, in looking at Equation <span class="math inline">\(\ref{eq:unitaryFreedom}\)</span>, the basis vectors of <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{C}\)</span> must have identical lengths and angles.</p>
+<p>Beginning with the lengths of <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{C}\)</span>, the lengths are identical because the 2-norm of each <span class="math inline">\(i\)</span> basis vector in either matrix produces the outcome value (e.g., <span class="math inline">\(\mathbf{A}_i\)</span>). Mathematically,</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -1266,12 +1227,12 @@ because <span class="math inline">\(\mathbf{v}^\top\mathbf{A}^\top\)</span> and 
 \begin{bmatrix}
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{b}_1 &amp; \rule[.5ex]{5ex}{0.5pt} \\\\
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{b}_2 &amp; \rule[.5ex]{5ex}{0.5pt} \\\\
-&amp;  \\\\
+&amp; \vdots  \\\\
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{b}_n &amp; \rule[.5ex]{5ex}{0.5pt}
 \end{bmatrix}
 \begin{bmatrix}
-\rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} \\\\
-\mathbf{b}_1 &amp; \mathbf{b}_2 &amp;  \mathbf{b}_n \\\\
+\rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp;  \rule[-1ex]{0.5pt}{2.5ex} \\\\
+\mathbf{b}_1 &amp; \mathbf{b}_2 &amp; \cdots &amp;  \mathbf{b}_n \\\\
 \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex}
 \end{bmatrix}
 &amp; = \mathbf{A}
@@ -1279,17 +1240,17 @@ because <span class="math inline">\(\mathbf{v}^\top\mathbf{A}^\top\)</span> and 
 \begin{bmatrix}
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{c}_1 &amp; \rule[.5ex]{5ex}{0.5pt} \\\\
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{c}_2 &amp; \rule[.5ex]{5ex}{0.5pt} \\\\
-&amp;  \\\\
+&amp; \vdots \\\\
 \rule[.5ex]{5ex}{0.5pt} &amp; \mathbf{c}_n &amp; \rule[.5ex]{5ex}{0.5pt}
 \end{bmatrix}
 \begin{bmatrix}
-\rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} \\\\
-\mathbf{c}_1 &amp; \mathbf{c}_2 &amp;  \mathbf{c}_n \\\\
+\rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} \\\\
+\mathbf{c}_1 &amp; \mathbf{c}_2 &amp; \cdots &amp;  \mathbf{c}_n \\\\
 \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex} &amp; \rule[-1ex]{0.5pt}{2.5ex}
 \end{bmatrix}
 &amp; = \mathbf{A}
 \nonumber \\\\
-\lVert \mathbf{b_n} \rVert^2_2 &amp;= \lVert \mathbf{b_n} \rVert^2_2
+\lVert \mathbf{b_i} \rVert^2_2 = \lVert \mathbf{c_i} \rVert^2_2 &amp;= \mathbf{A}_i
 \label{eq:identicalLengths}
 \end{align}.
 \end{spreadlines}
@@ -1322,7 +1283,7 @@ Ending with the relative angles between the basis vectors, consider any two basi
 \end{align}.
 \end{spreadlines}
 \]</span></p>
-<p>To summarize, if two positive semi-definite matrices, <span class="math inline">\(\mathbf{B}, \mathbf{C}\)</span>, satisfy the condition of unitary freedom (Equation <span class="math inline">\(\ref{eq:unitaryFreedom}\)</span>), then the basis vectors of each matrix will have identical lengths and the angles between any two sets of corresponding basis vectors will have identical angles. This equivalence of angles and lengths means that there must exist some orthonormal matrix that can be used to translate between the two positive semi-definite matrices. <span class="math inline">\(\qquad\qquad _\blacksquare\)</span></p>
+<p>To summarize, if two positive semi-definite matrices satisfy the condition of unitary freedom (Equation <span class="math inline">\(\ref{eq:unitaryFreedom}\)</span>), then the basis vectors of each matrix will have identical lengths and the angles between any two sets of corresponding basis vectors will have identical angles. This equivalence of angles and lengths means that there must exist some orthonormal matrix that can be used to translate between the two positive semi-definite matrices. <span class="math inline">\(\qquad\qquad _\blacksquare\)</span></p>
 <script>
     pseudocode.renderClass("pseudocode");
 </script>

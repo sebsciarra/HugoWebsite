@@ -1,9 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/279692083_3898736231_3380977203.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_1733944848_2940107845.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_1950130800_311026274.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_3293958093_2683672504.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_1733944848_4285077797.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_3502423880_1369541903.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_3645984944_534579624.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/media/videos/anim/480p15/partial_movie_files/VectorProjection/159476039_784179552_858700149.mp4'

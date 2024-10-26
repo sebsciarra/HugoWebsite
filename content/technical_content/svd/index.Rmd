@@ -121,17 +121,17 @@ import plotnine as pt
 ```
 
 
-Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in this GitHub repository. 
+Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in [this GitHub repository](#). 
 
 
 # Introduction 
 
 
-# Beginning With Fundamentals: A Necessary Review of Linear Algebra 
+# Beginning With Fundamentals: A Necessary Review of Linear Algebra{#fundamentals}
 
 ## Basis Vectors: Standard and Non-Standard Bases
 
-Basis vectors can be understood as the coordinates used to define some *n*-dimension space, $\mathbb{R}^n$. Beginning with the familiar standard basis vectors---that is, vectors with only one non-zero element equivalent to one such that, across the vector components, only component is every one---are often used to define *n*-dimension spaces. As an example, consider a two-dimensional space, $\mathbb{R}^2$. To span $\mathbb{R}^2$ (i.e., define any vector in $\mathbb{R}^2$), the standard basis vectors of $\mathbf{e}\_{e\_x} = \[1, 0\]$ and $\mathbf{b}\_{e\_y}= \[0, 1\]$ can be used, and these vectors can be combined to form the basis matrix shown below in Equation \ref{eq:standardMatrix}: 
+Basis vectors can be understood as the coordinates used to define some *n*-dimension space, $\mathbb{R}^n$. Beginning with the familiar standard basis vectors---that is, vectors with only one non-zero element equivalent to one---are often used to define *n*-dimensional spaces. As an example, consider a two-dimensional space, $\mathbb{R}^2$. To span $\mathbb{R}^2$ (i.e., define any vector in $\mathbb{R}^2$), the standard basis vectors of $\mathbf{b}\_{e\_x} = \[1, 0\]$ and $\mathbf{b}\_{e\_y}= \[0, 1\]$ can be used, and these vectors can be combined to form the basis matrix shown below in Equation \ref{eq:standardMatrix}: 
 
 
 $$
@@ -150,7 +150,7 @@ Note that each column of $\mathbf{B}_e$ represents a basis vector.
 If $\mathbf{b}\_{e\_x}$ is multiplied by one and $\mathbf{b}\_{e\_y}$ is multiplied by two, the vector $\mathbf{g}_e = \[1, 2\]$ is obtained, and this is shown below in Animation \ref{anim:standardBasis}. 
 
 
-{{< insert-video "media/videos/anim/480p15/standardBasis.mp4" "standardBasis" "Coordinates of Vector $\mathbf{g}_e$ in Standard Basis (Equation \ref{eq:standardBasis}" "Using the standard basis vectors of $\mathbf{b}_{e_x} = [1, 0]$ and $\mathbf{b}_{e_y} = [0, 1]$, the pink vector ($\mathbf{g}$) has coordinates defined by $\mathbf{g}_e = [2, 1]$.">}}
+{{< insert-video "media/videos/anim/480p15/standardBasis.mp4" "standardBasis" "Coordinates of Vector $\mathbf{g}_e$ in Standard Basis (Equation \ref{eq:standardMatrix})" "Using the standard basis vectors of $\mathbf{b}_{e_x} = [1, 0]$ and $\mathbf{b}_{e_y} = [0, 1]$, the pink vector ($\mathbf{g}$) has coordinates defined by $\mathbf{g}_e = [2, 1]$.">}}
 
 
 Importantly, outside from the standard basis vectors being familiar and simple, there isn't always a strong justification for using them in applied settings. Thus, non-standard basis vectors are often used in applied settings. As an example of non-standard basis vectors, consider defining $\mathbb{R}^2$ with basis vectors $\mathbf{b}\_{n\_x} = \[0, 1\]$ and $\mathbf{b}\_{n\_y} = \[1, 2\]$, which are defined as a matrix below in Equation \ref{eq:nonStandardBasis}: 
@@ -175,7 +175,7 @@ To define $\mathbf{g}_e$ in the non-standard basis of Equation \ref{eq:nonStanda
 
 ## Translating Between Standard and Non-Standard Basis Vectors 
 
-Although it may not look it, the non-standard basis vectors of Equation \ref{eq:nonStandardBasis} do indeed span $\mathbb{R}^2$; that is, they can define any vector in $\mathbb{R}^2$. In fact, because any set of *n* non-linearly dependent vectors will span any *n*-dimension space, an essentially infinite number of *n* basis vector sets can be used to span any *n*-dimension space. 
+Although it may not look it, the non-standard basis vectors of Equation \ref{eq:nonStandardBasis} do indeed span $\mathbb{R}^2$; that is, they can define any vector in $\mathbb{R}^2$. In fact, because any set of *n* non-linearly dependent vectors will span any *n*-dimension space, an infinite number of *n* basis vector sets can be used to span any *n*-dimension space. 
 
 With an infinite number of basis vector sets being able to define a space, it is likely that users may want to translate between basis vectors. Thus, in this section, I will show how to translate from standard to non-standard basis vectors (from the previous section) and vice-versa. As a recap, I have reprinted the standard (Equation \ref{eq:standardMatrix}) and non-standard (Equation \ref{eq:nonStandardBasis}) basis vectors below in their matrix form ($\mathbf{B}_e$ and $\mathbf{B}_n$, respectively):
 
@@ -204,17 +204,28 @@ $$
 \end{spreadlines}
 $$
 
-Beginning with a translation from a standard basis to a non-standard basis, recall the vector of $\mathbf{g}_e = \[1, 2\]$ defined in the standard basis. In the non-standard basis, $\mathbf{g}_e$ had coordinates of $\mathbf{g}_n = \[1.5, 0.5\]$. To redefine $\mathbf{g}_e$ in the non-standard basis of Equation \ref{eq:nonStandardBasis} and, thus, obtain $\mathbf{g}_n$, we need to determine the scalar multiplications of each non-standard basis vector that give the coordinates of $\mathbf{g}_e$. Mathematically, this can be represented by Equation \ref{eq:basisNonBasisSol}, which shows that $\mathbf{g}_n$, can be obtained pre-multiplying $\mathbf{g}_e$ by the inverse of the basis matrix, $\mathbf{B}_n^{-1}$. 
+Beginning with a translation from a standard basis to a non-standard basis, recall the vector of $\mathbf{g}_e = \[2, 1\]$ defined in the standard basis. In the non-standard basis, $\mathbf{g}_e$ had coordinates of $\mathbf{g}_n = \[1.5, 0.5\]$. To redefine $\mathbf{g}_e$ in the non-standard basis of Equation \ref{eq:nonStandardBasis} and, thus, obtain $\mathbf{g}_n$, we first define $\mathbf{g}_e$ as some combination of scalar multiplications of each non-standard basis vector in $\mathbf{B}_n$ such that 
 
 $$
 \begin{spreadlines}{0.5em}
 \begin{align}
-\mathbf{B}_n \mathbf{g}_n = \mathbf{g}_e  \nonumber \\\\
-\mathbf{g}_n = \mathbf{B}_n^{-1} \mathbf{g}_e
-\label{eq:basisNonBasisSol}
+\mathbf{B}_n \mathbf{g}_n = \mathbf{g}_e  \
+\label{eq:nonBasisMult}
 \end{align}
 \end{spreadlines}
 $$
+Equation \ref{eq:nonBasisMult} can then be rearranged to solve for $\mathbf{g}_n$ to obtain 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{g}_n = \mathbf{B}_n^{-1} \mathbf{g}_e
+\label{eq:basisNonBasisSol}
+\end{align}.
+\end{spreadlines}
+$$
+Therefore, pre-multiplying a vector defined in a standard basis (e.g., $\mathbf{g}_e$) by the inverse of a non-standard basis matrix (e.g., $\mathbf{B}_n$) returns the non-standard version of the matrix (e.g., $\mathbf{g}_n$}. 
+
 Applying Equation \ref{eq:basisNonBasisSol} in the Python code block below, we see that the vector defined in the standard basis of $\mathbf{g}_e = \[1, 2\]$ becomes $\mathbf{g}_n = \[1.5, 0.5\]$ in the non-standard basis. 
 
 ```{python basisNonBasisCoord, echo=T, eval=T,  class_name = 'python-code', hlopts=list(language = 'python')}
@@ -250,13 +261,19 @@ g_n = np.array([1.5, 0.5])
 B_n = np.array([[1, 1], 
                 [0, 2]])
                 
+B_e = np.array([[1, 0], 
+                [0, 1]])
+                
+
+# np.linalg.inv(B_e).dot(g_n)          
+                
 # Tom's coordinates for g
 B_n.dot(g_n)
 ```
 
 
 
-To recap, matrix multiplication was used to translate between standard and non-standard basis vectors of two people. Given some vector defined in standard basis coordinates, it can be translated to non-standard basis coordinates by pre-multiplication of the inverse of the non-standard basis matrix (see Equation \ref{eq:basisNonBasisSol}). Given another vector defined in a non-standard basis coordinates, it can be redefined in standard basis coordinates by pre-multiplication of the non-standard basis matrix (see Equation \ref{eq:standardNonStandardSol}). 
+To recap, matrix multiplication was used to translate between standard and non-standard basis vectors. Given some vector defined in standard basis coordinates, pre-multiplying it by the inverse of a non-standard basis matrix returns the coordinates of this vector in the the non-standard basis (see Equation \ref{eq:basisNonBasisSol}). Going the othe way, pre-multiplying a a vector defined in a non-standard basis coordinates by the non-standard bases returns the vector in a standard basis (see Equation \ref{eq:standardNonStandardSol}). 
 
 
 ### Using Matrix Multiplication to Translate Between Non-Standard Bases 
@@ -315,7 +332,7 @@ np.linalg.inv(b_m).dot(b_n.dot(g_e))
 
 In the previous section, matrix multiplication was used to translate between standard and non-standard bases. In each translation of basis vectors, a strong intuition existed for the use of matrix multiplication. Perhaps fittingly, the strong intuition for using matrix multiplication to translate between basis vectors has a similarly intuitive geometry. 
 
-Matrix multiplication transform vectors because it rotates and/or stretches the bases that define the vectors. Thus, if a basis transformed, any vector defined within it will transform in the same manner. As an first example of the geometry of matrix multiplication, I show here how the matrices of the previous section simply stretch one basis vector and, as a consequence, stretch the . As a recap, I provide the basis vectors of the previous sections from Equations \ref{eq:standardMatrix} and \ref{eq:nonStandardBasis}.
+Matrix multiplication transforms vectors because it rotates and/or stretches the bases that define the vectors. As a first example of the geometry of matrix multiplication, I show here how the matrices of the previous section pull the matrix space leftward and compressed it vertically. As a recap, I provide the basis vectors of the previous sections from Equations \ref{eq:standardMatrix} and \ref{eq:nonStandardBasis}.
 
 $$
 \begin{spreadlines}{0.5em}
@@ -347,7 +364,7 @@ $$
 \begin{align}
 &= \mathbf{B}_n^{-1} \mathbf{g}_e  \nonumber \\\\
 &= \begin{bmatrix}
-1 & -0.5 \\
+1 & -0.5 \\\\
 0 & 0.5
 \end{bmatrix}
 \begin{bmatrix}
@@ -360,7 +377,7 @@ $$
 \end{spreadlines}
 $$
 
-Animation \ref{anim:basisToNonBasis} below shows that the linear transformation applied by $\mathbf{B}^{-1}$ indeed results in the vector $\mathbf{g}\_{n}$ by pulling and compressing the standard basis space leftward. Specifically, the second basis vector of $\mathbf{b}\_{n_y} = \[0, 1\]$ is pulled leftward and compressed to become $\mathbf{b}^{-1}\_{n_x} = \[-0.5, 0.5\]$ (the first basis vector of $\mathbf{b}\_{n_x} = \[1, 0\]$ remains the same). In transforming the space defined by the standard basis vectors, the vector of $\mathbf{g}_e = \[2, 1\]$ becomes $\mathbf{g}_n = \[1.5, 0.5\]$. As discussed previously, the vector $\mathbf{g}_n$ indicates the scalar multiplications that must be applied to the basis vectors of $\mathbf{B}_n$ to obtain the vector $\mathbf{g}_e$. 
+Animation \ref{anim:basisToNonBasis} below shows that the linear transformation applied by $\mathbf{B}^{-1}$ indeed results in the vector $\mathbf{g}\_{n}$ by pulling and compressing the standard basis space leftward. Specifically, the second basis vector of $\mathbf{b}\_{n_y} = \[0, 1\]$ is pulled leftward and compressed to become $\mathbf{b}^{-1}\_{n_x} = \[-0.5, 0.5\]$ (the first basis vector of $\mathbf{b}\_{n_x} = \[1, 0\]$ remains unchanged). In transforming the space defined by the standard basis vectors, the vector of $\mathbf{g}_e = \[2, 1\]$ becomes $\mathbf{g}_n = \[1.5, 0.5\]$. As discussed previously, the vector $\mathbf{g}_n$ indicates the scalar multiplications that must be applied to the basis vectors of $\mathbf{B}_n$ to obtain the vector $\mathbf{g}_e$. 
 
 {{< insert-video "media/videos/anim/480p15/transformationExample.mp4" "basisToNonBasis" "Example of the Geometry of Matrix Multiplication from Equation \ref{eq:basisNonBasisSol})" "The example in this animation shows the geometry of pre-multiplying a vector, $\mathbf{g}_e = [2, 1]$, by $\mathbf{B}^{-1}_n$. In this case, the vector space is simply pulled leftward and compressed vertically. Specifically, the second basis vector of $\mathbf{b}_{n_y} = [0, 1]$ is pulled leftward and compressed to become $\mathbf{b}^{-1}_{n_x} = [-0.5, 0.5]$ (the first basis vector of $\mathbf{b}_{n_x} = [1, 0]$ remains the same). In transforming the space defined by the standard basis vectors, the vector of $\mathbf{g}_e = [2, 1]$ becomes $\mathbf{g}_n = [1.5, 0.5]$." >}}
 
@@ -373,7 +390,7 @@ With the example above showing how matrix multiplication transforms vectors by t
 4) Inverse matrices un-rotate basis vectors
 
 
-### Diagonal Matrices Stretch Basis Vectors
+### Diagonal Matrices Stretch Basis Vectors{#diagonal}
 
 Animation \ref{anim:diagonalMatrix} below shows that diagonal matrices simply stretch the basis vectors that define a space. In the current example, the matrix of 
 
@@ -550,9 +567,9 @@ because the resulting vector, $\lambda\mathbf{v}_1$ is simply twice the value of
 
 One last important point to note is that only square matrices can have eigenvectors because non-square (or rectangular matrices) change the dimension space (see section on [rectangular matrices](#rectangular)). Because rectangular matrices change the dimension space, it is impossible for any vector to remain on its span.
 
-# Proving the Singular Value Decomposition 
+# The Singular Value Decomposition and its Visualization
  
-Having covered the necessary fundamentals, I will now walk through the proof of the singular value decomposition. First, however, it is important to understand singular value decompositions. In short, any matrix, $\mathbf{A} \in \mathbb{R}^{m \times n}$, (whether real of complex) can be decomposed such that  
+Having covered the necessary fundamentals, I will introduce the singular value decomposition and its geometry. In short, any matrix $\mathbf{A} \in \mathbb{R}^{n \times p}$ ($\mathbf{A}$ can also be complex) can be decomposed such that  
 
 $$
 \begin{align}
@@ -562,12 +579,25 @@ $$
 $$
 where each of the three matrices in the decomposition has the following characteristics: 
 
-1. $\mathbf{U}$: left singular vectors of $\mathbf{A}$, which are the eigenvectors of $\mathbf{A}\mathbf{A}^\top$. Because symmetric matrices have full sets of orthogonal eigenvectors (see [Appendix A3](#full-set)), $\mathbf{U}$ is orthonormal. 
-2. $\mathbf{\Sigma}$: diagonal matrix of *singular values* that are equivalent to the square roots of the eigenvalues of $\mathbf{A}\mathbf{A}^\top$ (or equivalently of $\mathbf{A}^\top\mathbf{A}$).
-3. $\mathbf{V}$: right singular vectors of $\mathbf{A}$, which are the eigenvectors of $\mathbf{A}^\top\mathbf{A}$. Because symmetric matrices have full sets of orthogonal eigenvectors (see [Appendix A3](#full-set)), $\mathbf{V}$ is orthonormal. 
+1. $\mathbf{U} \in \mathbb{R}^{(n \times n)}$: left singular vectors of $\mathbf{A}$, which are the eigenvectors of $\mathbf{A}\mathbf{A}^\top$. Because symmetric matrices have full sets of orthogonal eigenvectors (see [Appendix A3](#full-set)), $\mathbf{U}$ is orthonormal. 
+2. $\mathbf{\Sigma} \in \mathbb{R}^{(n \times m)}$: rectangular matrix with *singular values* along its diagonal. Singular values equivalent to the square roots of the eigenvalues of $\mathbf{A}\mathbf{A}^\top$ (or equivalently of $\mathbf{A}^\top\mathbf{A}$).
+3. $\mathbf{V} \in \mathbb{R}^{(m \times m)}$: right singular vectors of $\mathbf{A}$, which are the eigenvectors of $\mathbf{A}^\top\mathbf{A}$. Because symmetric matrices have full sets of orthogonal eigenvectors (see [Appendix A3](#full-set)), $\mathbf{V}$ is orthonormal. 
+
+Applying what I presented previously in the [fundamentals of linear algebra](#fundamentals), the singular value decomposition implies that the linear transformation applied by any matrix can be broken down into three constituent transformations in the following order: 
+
+1) Rotation: $\mathbf{V}^\top$ is an orthogonal (unnormalized version of an orthonormal matrix) matrix and so rotates basis vectors (see section on [orthonormal matrices](#orthonormal)). The astute reader will notice that the transpose of an orthogonal matrix is equivalent to its inverse, so $\mathbf{V}^\top$ is more technical an un-rotation of basis vectors. 
+2) Stretching with possible dimension change: because $\mathbf{\Sigma}$ only has nonzero values along its diagonal, these values will stretch basis vectors (see section on [diagonal matrices](#diagonal)).  The dimension space can also change following a transformation by $\Sigma$. For example, if the number of rows, $n$, is less than the number of columns $p$, then the $p-n$ remaining columns of $\mathbf{\Sigma}$ will contain zeroes that will remove the $p-n$ remaining dimensions of $\mathbf{V}^\top$.
+3) Rotation: $\mathbf{U}$ is an orthogonal (unnormalized version of an orthonormal matrix) matrix and thus rotates basis vectors (see section on [orthonormal matrices](#orthonormal)).
 
 
-With a description of the singular value decomposition, I now provide a proof. Consider the symmetric matrix produced by $\mathbf{A}^\top\mathbf{A}$. Because is it symmetric, it has a full orthonormal eigenvectors (see [Appendix A3](#full-set)) and so can be re-expressed as 
+Animation \ref{anim:svdMatrix} below provides an geometric visualization of each transformation applied by each matrix of the singular value decomposition. First, it is shown that $\mathbf{A}$ transforms the standard basis vectors such that $\mathbf{b_x}$ becomes $[2, 0]$, $\mathbf{b_y}$ becomes $[1, 2]$, and $\mathbf{b_z}$ becomes $[1, 3]$. The second animation then shows that each standard basis vector lands on its coordinates after three transformations in the order of a rotation, stretching (with a dimension reduction), and a rotation. First, the (transposed) matrix of right singular vectors is orthonormal and so applies a rotation. Second, the matrix of singular values is off-diagonal and so applies a stretching of basis vectors along with a reduction in the dimension (from $\mathbb{R}^3$ to $\mathbb{R}^2$. Third, and last, the matrix of left singular vectors applies a rotation of the basis vectors.
+
+{{< insert-video "media/videos/anim/480p15/svd_anim_proof.mp4" "svdMatrix" "Visualization of the Three Transformations That Constitute the Singular Value Decomposition" "An animation of each matrix of the singular valude decomposition of $\mathbf{A}$. First, it is shown that $\mathbf{A}$ transforms the standard basis vectors such that $\mathbf{b_x}$ becomes $[2, 0]$, $\mathbf{b_y}$ becomes $[1, 2]$, and $\mathbf{b_z}$ becomes $[1, 3]$. The second animation then shows that each standard basis vector lands on its coordinates after three transformations in the order of a rotation, stretching (with possible dimension change), and a rotation. First, the (transposed) matrix of right singular vectors is orthonormal and so applies a rotation. Second, the matrix of singular values is off-diagonal and so applies a stretching of basis vectors along with a reduction in the dimension (from $\mathbb{R}^3$ to $\mathbb{R}^2$. Third, and last, the matrix of left singular vectors applies a rotation of the basis vectors.">}}
+
+
+# Proving the Singular Value Decomposition
+
+With an geometric understanding of the singular value decomposition, I now provide a proof. Consider the symmetric matrix produced by $\mathbf{A}^\top\mathbf{A}$. Because is it symmetric, it has a full set of orthonormal eigenvectors (see [Appendix A3](#full-set)) and so can be re-expressed as 
 
 $$
 \begin{align}
@@ -590,7 +620,7 @@ $$
 \mathbf{V \Lambda V}^\top &= \mathbf{V \mathbf{\Sigma}^\top \mathbf{\Sigma} V}^\top = \mathbf{A}^\top\mathbf{A}.
 \end{align}
 $$
-Although it may not look it, the singular value decomposition is proven once we consider two truths. First, $\mathbf{V \mathbf{\Sigma}^\top \mathbf{\Sigma} V}^\top$ and $ \mathbf{A}^\top\mathbf{A}$ are both positive semi-definite matrices (see [Appendix B](#pos-semi)). Second, because two positive semi-definite matrices are equivalent to each other, they satisfy the condition of unitary freedom and so there must exist some orthonormal matrix, $\mathbf{U}$, that can be used to translate between the basis vectors of each matrix (see [Appendix C](#unitary)). Mathematically, 
+Although it may not look it, the singular value decomposition is proven once we consider two truths. First, $\mathbf{V} \mathbf{\Sigma}^\top$  (or conversely $\mathbf{\Sigma} V}^\top$) and $ \mathbf{A}^\top$ (or conversely $\mathbf{A}$ are both positive semi-definite matrices (see [Appendix B](#pos-semi)). Second, because the matrix product of each positive semi-definite matrix is equivalent, the condition of unitary freedom is satisfied and so there must exist some orthonormal matrix, $\mathbf{U}$, that can be used to translate between the basis vectors of each matrix (see [Appendix C](#unitary)). Mathematically, 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -623,7 +653,8 @@ $$
 \mathbf{C} &= \frac{\mathbf{A}^\top\mathbf{A}}{n-1}
 \end{align}
 $$
-and eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_n$. Importantly, each  Two  compute the variance accounted for any given eigenvector, $\mathbf{v}_i$, the projections of the data onto the eigenvector are first needed and then the variance of these projected values are computed. The projected values can be obtained using 
+
+and eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_n$. Importantly, to compute the variance accounted for any given eigenvector, $\mathbf{v}_i$, the projections of the data onto the eigenvector are first needed. The projected values can be obtained using 
 
 $$
 \begin{align}
@@ -643,7 +674,7 @@ $$
 \end{align}.
 \end{spreadlines}
 $$
-Because $\mathbf{v}_i$ is an eigenvector of the covariance matrix, $\mathbf{C}$, the eigenvector equation (Equation \ref{eq:eigenvector}) can be leveraged to substitute and prove that the eigenvalue represent that amount of total variance accounted for by an eigenvector. Note that, because $\mathbf{v}_i$ is a unit vector, $\mathbf{v}_i \mathbf{v}_i = 1$, 
+Because $\mathbf{v}_i$ is an eigenvector of the covariance matrix, $\mathbf{C}$, the eigenvector equation (Equation \ref{eq:eigenvector}) can be leveraged to simplify Equatin \ref{eq:eigInter} above and prove that an eigenvalue represents that amount of total variance accounted for by an eigenvector. Note that, because $\mathbf{v}_i$ is a unit vector, $\mathbf{v}_i \mathbf{v}_i = 1$, 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -724,12 +755,12 @@ Within the matrix of wine ratings, I created each person's scores to reflect one
 2) *Celebratory Wine Drinker (Cel)*: prefers drinking champagne (Chp) and rosé (R)
 3) *Light Wine Drinker (Lgt)*: prefers drinking non-sparkling white wine such as chardonnay (Ch)
 
-In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying types of wine wine drinker. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each *p* person's data in a column and each *n* variable's data in a row.)
+In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying wine drinker types. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each *p* person's data in a column and each *n* variable's data in a row.)
 
 To understand the left and right singular vectors, consider first the set of singular values for $\mathbf{A}$. The Python code block below (lines <a href="#1">1--</a>) computes the eigenvalues (or squared singular values) of $\mathbf{A}$ and the percentage of total variance accounted for by each eigenvector. Given that over 98% of the total variance can be recovered from using three eigenvectors, it can be argued that there are only three eigenvectors worth considering. In other words, 98% of the total variance in the data can be retained by projecting the original scores onto only three of the five eigenvectors.
 
 
-```{r svd-pca-problem}
+```{r svd-pca-problem, echo=F, eval=F}
 A <- data.frame(
   "Cab.Sauv." = c(94, 88, 84, 22, 28, 28),
   "Merlot" = c(92, 91, 91, 21, 24, 27),
@@ -778,7 +809,6 @@ pca_result <- prcomp(x = A_scaled, center = TRUE, scale. = TRUE)
 
 # Print the summary of PCA results
 summary(pca_result)
-
 ```
 
 
@@ -893,7 +923,7 @@ The spectral theorem has three propositions that I prove in turn:
 3) For any symmetric matrix $\mathbf{S}$, an orthonormal set of eigenvectors exists that spans the space of $\mathbf{S}$. In other words, a full set of orthogonal eigenvectors exists. 
 
 
-## Appendix A1: Intuition For Why Symmetric Matrices Must Have at Least One Eigenvalue and Eigenvector
+## Appendix A1: Intuition For Why Symmetric Matrices Must Have at Least One Eigenvalue and Eigenvector{#one-eig}
 
 To understand why all symmetric matrices have at least one eigenvalue, it is important to first understand how eigenvalues are obtained. To derive an eigenvalue, the equation of 
 
@@ -913,11 +943,11 @@ $$
 \label{eq:eigenvalue}
 \end{align}
 $$
-At this point, a brief discussion of determinants is apropos. Geometrically, determinants represent the extent to which the area spanned by a set of basis vectors changes (for an excellent video, see [3blue1brown](https://www.youtube.com/watch?v=Ip3X9LOh2dk)). Importantly, if a determinant is zero, then the area spanned by a set of basis vectors goes to zero. In the current case where only one vector is under consideration, a matrix with a zero-value determinant would transform the vector to the origin. Therefore, to solve Equation \ref{eq:eigenvalue} above, we need to find the eigenvalue, $\lambda$, that, when subtracted from the diagonal of $\mathbf{A}$, causes $\mathbf{A}$ to have a zero-value determinant. 
+At this point, a brief discussion of determinants is apropos. Geometrically, determinants represent the extent to which a matrix changes the space spanned by a set of basis vectors changes (for an excellent video, see [3blue1brown](https://www.youtube.com/watch?v=Ip3X9LOh2dk)). Importantly, if a matrix has a zero-value determinant, it applies a transformation that converts the space spanned by a set of basis vectors to zero. In the current case where only one vector is under consideration, $\mathbf{v}$, if the  matrix of $(\mathbf{A} - \lambda \mathbf{I})$ has a determinant of zero, then $\mathbf{v}$ will go to zero after pre-multiplication (Equation \ref{eq:eigenvalue}). Therefore, to solve Equation \ref{eq:eigenvalue} above, we need to find the eigenvalue, $\lambda$, that, when subtracted from the diagonal of $\mathbf{A}$, causes $\mathbf{A}$ to have a zero-value determinant. 
 
-Fortunately, the fundamental theorem of algebra guarantees that any square matrix will have at least one eigenvalue (real or complex) if some constant $\lambda$ is subtracted from the diagonal. (for a great explanation, see [fundamental theorem of linear algebra](https://www.youtube.com/watch?v=shEk8sz1oOw); note that this video provides an explanation for there being at least one complex eigenvalue). Because the linked video provides a simple and intuitive explanation for the complex case, I will only provide an explanation  I for there being the real-value component of the proof. 
+Fortunately, the fundamental theorem of algebra guarantees that any square matrix will have at least one eigenvalue (real or complex) if some constant $\lambda$ is subtracted from the diagonal. Although outside the context of this paper,  a great explanation of this proof can be found at [fundamental theorem of linear algebra](https://www.youtube.com/watch?v=shEk8sz1oOw); note that this video provides an explanation for there being at least one complex eigenvalue). 
 
-If a square matrix does not have any complex eigenvalues, then it must have a real eigenvalue. To understand why, it is important to realize that the determinant equation is simply a polynomial one. For example, consider the 2x2 matrix 
+To provide a basic intuition for why square matrices must have at least one eigenvalue (whether complex or real), it is important to realize that the determinant equation is simply a polynomial one and that polynomial equations always have at least one root (whether complex or real). For example, consider the 2x2 matrix 
 
 $$
 \mathbf{A} = \begin{bmatrix}
@@ -945,11 +975,11 @@ $$
 \end{align}
 \end{spreadlines}
 $$
-Although the determinant of a 2x2 matrix is a rather simple case, it is important to realize that, when there are no complex roots, the characteristic polynomial will have real roots regardless of its degree. Because the existence of at least eigenvalue is guaranteed for square matrices, then there will be at least one eigenvector that accompanies the eigenvalue.
+Although the determinant of a 2x2 matrix is a rather simple case, it generalizes to larger matrices and more complex polynomial equations. Because the existence of at least eigenvalue is guaranteed for square matrices, then there will be at least one eigenvector that accompanies the eigenvalue.
 
 ## Appendix A2: Proof That All Eigenvalues of Symmetric Matrices are Real 
 
-In the previous section, an argument was provided for why all square matrices must have at least one eigenvalue (and consequently at least one eigenvector). In this section, I will provide a proof that symmetric matrices only have real eigenvalues. As some necessary background, it is first important to have a basic understanding of complex numbers and complex conjugates. A complex number $z$ can be conceptualized as the sum of a real-number, $a$, and imaginary component, $bi$, as shown below in Equation \ref{eq:complexNum}:
+In the previous section, an argument was provided for why all square matrices must have at least one eigenvalue (and consequently at least one eigenvector). In this section, I will provide a proof that symmetric matrices only have real eigenvalues. As some necessary background, it is first important to have a basic understanding of complex numbers and complex conjugates. A complex number, $z$, can be conceptualized as the sum of a real-number, $a$, and imaginary component, $bi$, as shown below in Equation \ref{eq:complexNum}:
 
 $$ 
 \begin{align}
@@ -1010,7 +1040,7 @@ Given that  the complex and complex conjugate equations of Equations \ref{eq:eig
 
 At this point, I have proven that symmetric matrices have real eigenvalues and that there must be at least one eigenvalue with a corresponding eigenvector. With this information, it can now be proven that symmetric matrices have full sets of orthonormal eigenvectors. That is, when applying the transformation of a symmetric matrix, there exists a set of orthonormal eigenvectors that span the entire space of the symmetric matrix. 
 
-To prove that symmetric matrices have full sets of orthogonal eigenvectors, I show that any symmetric matrix can be diagonalized by an orthonormal matrix. This proof applies the Gram-Schmidt procedure to a symmetric matrix to generate a set of orthonormal vectors that is shown to diagonalize the symmetric matrix. Mathematically then, and central to the spectral theorem, any symmetric matrix $\mathbf{A}$ can be transformed into a diagonal matrix, $\Lambda$, using a matrix of eigenvectors, $\mathbf{V}$, such that 
+To prove that symmetric matrices have full sets of orthogonal eigenvectors, I show that any symmetric matrix can be diagonalized by an orthonormal matrix. This proof applies the Gram-Schmidt procedure to a symmetric matrix to generate a set of orthonormal vectors that is then shown to diagonalize the symmetric matrix. Mathematically then, and central to the spectral theorem, any symmetric matrix $\mathbf{A}$ can be transformed into a diagonal matrix, $\Lambda$, using a matrix of eigenvectors, $\mathbf{V}$, such that 
 
 $$
 \begin{align}
@@ -1042,7 +1072,7 @@ $$
 \end{align*}
 \end{spreadlines}
 $$
-Additionally, and important for the first step of the proof, the first column of $\mathbf{A}$ can be diagonalized because the first column of $\mathbf{P}$ is assumed to be an eigenvector (of which a symmetric must have at least one). Mathematically then, the first column of $mathbf{B}$ follows a diagonal form (i.e., it only has one nonzero value) such that 
+Additionally, and important for the first step of this proof, the first column of $\mathbf{A}$ can be diagonalized because the first column of $\mathbf{P}$ is assumed to be an eigenvector, of which there must be at least one for a symmetric matrix (for an explanation, see [Appendix A1](#one-eig)). Mathematically then, the first column of $\mathbf{B}$ follows a diagonal form (i.e., it only has one nonzero value) such that 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -1066,8 +1096,8 @@ $$
 \vdots \\\\
 0
 \end{bmatrix}
-\end{align*}
 \label{eq:orthonormalInitial}
+\end{align*}
 \end{spreadlines}
 $$
 where $\mathbf{C} \in \mathbb{R}^{(n-1) \times (n-1)}$ and represents the remainder of $\mathbf{B}$.
@@ -1086,7 +1116,7 @@ $$
 \mathbf{V} = \mathbf{P}\begin{bmatrix}1 & 0 \nonumber \\\\
 0  &\mathbf{Q} \end{bmatrix}.
 $$
-As with $\mathbf{B}$, $\mathbf{V}$ is also equal to its inverse because it is orthogonal.
+As with $\mathbf{B}$, $\mathbf{V}$ is also equal to its inverse because it is orthogonal (inherited from $\mathbf{Q}$).
 
 $$
 \begin{spreadlines}{0.5em}
@@ -1108,7 +1138,7 @@ $$
 \end{spreadlines}
 $$
 
-Now, the central proof of the spectral theorem can be proven by showing that $\mathbf{V}^{-1}\mathbf{A}\mathbf{V}$ yields a diagonal matrix. 
+Now, the central component of the spectral theorem can be proven by showing that $\mathbf{V}^{-1}\mathbf{A}\mathbf{V}$ yields a diagonal matrix. 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -1197,14 +1227,14 @@ $$
 
 # Appendix C: Unitary Freedom of Positive Semi-Definite Matrices{#unitary}
 
-In this section, I will first state the unitary freedom of positive semi-definite matrices and will then provide an intuitive explanation. In formal terms, given
-$\mathbf{B}, \mathbf{C} \in \mathbb{R}^{m \times n}$, if 
+In this section, I will first state the unitary freedom of positive semi-definite matrices and will then provide an intuitive explanation. In formal terms, this property of positive semi-definite matrices states that, given
+$\mathbf{B}, \mathbf{C} \in \mathbb{R}^{m \times n}$ and 
 
 $$
 \begin{align}
-\mathbf{B}^\top\mathbf{B} = \mathbf{C}^\top\mathbf{C}
+\mathbf{B}^\top\mathbf{B} = \mathbf{C}^\top\mathbf{C}, 
 \label{eq:unitaryFreedom}
-\end{align},
+\end{align}
 $$
 
 then there must exist some orthogonal matrix $\mathbf{Q} \in \mathbb{R}^{m \times n}$ that allows us to go from one positive semi-definite matrix to another. Mathematically then, we can define 
@@ -1219,15 +1249,15 @@ $$
 \begin{align}
 \mathbf{B}^\top\mathbf{B} &= \mathbf{QC}^\top\mathbf{QC} \nonumber \\\\
 &= \mathbf{C}^\top \mathbf{Q}^\top \mathbf{QC} \nonumber \\\\
-&=\mathbf{C}^\top\mathbf{C} 
-\end{align} \qquad\qquad _\blacksquare
+&=\mathbf{C}^\top\mathbf{C} \qquad\qquad _\blacksquare
+\end{align} 
 $$
 
 Although the math above is indeed true, it does not provide an intuitive understanding for why there must exist an orthogonal matrix that allows us to translate between the two matrices. Therefore, I now provide an intuitive explanation for this proof. 
 
-As discussed in the section on [orthonormal matrices](#orthonormal), these matrices preserve lengths and angles. In simpler terms, orthonormal matrices can be used to translate between two sets of basis vectors whose lengths and relative angles are equivalent. Therefore, in looking at Equation \ref{eq:unitaryFreedom}, the basis vectors of $\mathbf{B}$ and $\mathbf{C}$ must have identical lengths and angles. 
+As discussed in the section on [orthonormal matrices](#orthonormal), these matrices simple rotate basis vectors and so the vector lengths and angles between them remain unchanged. Therefore, in looking at Equation \ref{eq:unitaryFreedom}, the basis vectors of $\mathbf{B}$ and $\mathbf{C}$ must have identical lengths and angles. 
 
-Beginning with the lengths of $\mathbf{B}$ and $\mathbf{C}$, the lengths are identical because the 2-norm of each basis vector produces the same value. Mathematically, 
+Beginning with the lengths of $\mathbf{B}$ and $\mathbf{C}$, the lengths are identical because the 2-norm of each $i$ basis vector in either matrix produces the outcome value (e.g., $\mathbf{A}_i$). Mathematically, 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -1236,12 +1266,12 @@ $$
 \begin{bmatrix}
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{b}_1 & \rule[.5ex]{5ex}{0.5pt} \\\\
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{b}_2 & \rule[.5ex]{5ex}{0.5pt} \\\\
-&  \\\\
+& \vdots  \\\\
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{b}_n & \rule[.5ex]{5ex}{0.5pt}
 \end{bmatrix}
 \begin{bmatrix}
-\rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} \\\\
-\mathbf{b}_1 & \mathbf{b}_2 &  \mathbf{b}_n \\\\
+\rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} &  \rule[-1ex]{0.5pt}{2.5ex} \\\\
+\mathbf{b}_1 & \mathbf{b}_2 & \cdots &  \mathbf{b}_n \\\\
 \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex}
 \end{bmatrix} 
 & = \mathbf{A}
@@ -1249,17 +1279,17 @@ $$
 \begin{bmatrix}
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{c}_1 & \rule[.5ex]{5ex}{0.5pt} \\\\
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{c}_2 & \rule[.5ex]{5ex}{0.5pt} \\\\
-&  \\\\
+& \vdots \\\\
 \rule[.5ex]{5ex}{0.5pt} & \mathbf{c}_n & \rule[.5ex]{5ex}{0.5pt}
 \end{bmatrix}
 \begin{bmatrix}
-\rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} \\\\
-\mathbf{c}_1 & \mathbf{c}_2 &  \mathbf{c}_n \\\\
+\rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} \\\\
+\mathbf{c}_1 & \mathbf{c}_2 & \cdots &  \mathbf{c}_n \\\\
 \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex} & \rule[-1ex]{0.5pt}{2.5ex}
 \end{bmatrix} 
 & = \mathbf{A}
 \nonumber \\\\ 
-\lVert \mathbf{b_n} \rVert^2_2 &= \lVert \mathbf{b_n} \rVert^2_2
+\lVert \mathbf{b_i} \rVert^2_2 = \lVert \mathbf{c_i} \rVert^2_2 &= \mathbf{A}_i
 \label{eq:identicalLengths}
 \end{align}. 
 \end{spreadlines}
@@ -1298,7 +1328,7 @@ $$
 \end{spreadlines}
 $$
 
-To summarize, if two positive semi-definite matrices, $\mathbf{B}, \mathbf{C}$, satisfy the condition of unitary freedom (Equation \ref{eq:unitaryFreedom}), then the basis vectors of each matrix will have identical lengths and the angles between any two sets of corresponding basis vectors will have identical angles. This equivalence of angles and lengths means that there must exist some orthonormal matrix that can be used to translate between the two positive semi-definite matrices. $\qquad\qquad _\blacksquare$
+To summarize, if two positive semi-definite matrices satisfy the condition of unitary freedom (Equation \ref{eq:unitaryFreedom}), then the basis vectors of each matrix will have identical lengths and the angles between any two sets of corresponding basis vectors will have identical angles. This equivalence of angles and lengths means that there must exist some orthonormal matrix that can be used to translate between the two positive semi-definite matrices. $\qquad\qquad _\blacksquare$
 
 <script>
     pseudocode.renderClass("pseudocode");
