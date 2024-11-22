@@ -1,8 +1,8 @@
 ---
 title: "The Theory, Meaning, and Applications of the Singular Value Decomposition" 
-draft: false
+draft: true
 summary: ""
-date: "2024-11-17"
+date: "2024-11-22"
 article_type: technical
 output:
   bookdown::html_document2:
