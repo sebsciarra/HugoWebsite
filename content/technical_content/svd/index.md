@@ -2,7 +2,7 @@
 title: "The Theory, Meaning, and Applications of the Singular Value Decomposition" 
 draft: false
 summary: ""
-date: "2024-10-26"
+date: "2024-11-17"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -30,7 +30,7 @@ conda_create(envname = 'blog_posts',  python_version = '3.10.11')
 use_condaenv(condaenv = 'blog_posts')
 
 #install packages in conda environment
-py_packages <- c('numpy', 'pandas', 'scikit-learn', "plotnine", "statsmodels", "manim")
+py_packages <- c('numpy', 'pandas', 'scikit-learn', "plotnine", "statsmodels", "manim", "factor_analyzer")
 conda_install(envname = 'blog_posts', packages = py_packages, pip=T)
 
 #useful for checking what packages are loaded
@@ -42,7 +42,7 @@ Second, the Python packages and modules in the Python code block are needed to r
 
 
 
-Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in [this GitHub repository](#). 
+Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations given the considerable length of the script. For readers interested in how I created my animations, the source code can be viewed in [this GitHub repository](#). 
 
 
 # Introduction 
@@ -648,34 +648,30 @@ Therefore, given that the left and right singular vectors (which are eigenvector
 
 ## Point 3: Left and Right Singular Vectors Represent Unweighted Loadings of People/Variables Onto Principal Axes
 
-Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0--100 points), $\mathbf{A}$ (Equation \ref{eq:wineMatrix}), from seven novice drinkers for the following set of five wines: 1) champagne (Ch), 2) cabernet sauvignon (CS), 3) chardonnay (Ch), 4) merlot (M), and 5) rosé (R).
+Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0--100 points), $\mathbf{A}$ (Equation \ref{eq:wineMatrix}), from seven novice drinkers for the following set of four wines: 1) cabernet sauvignon (CS), 2) merlot (M), 3) rosé (R), and 4) champagne (Ch).
 
 $$
 \begin{align}
-\mathbf{A} = 
-\begin{array}{cc} 
-\begin{array}{ccc} & & & \text{Chp} & \text{CS} & \text{Ch} & \text{M} & \text{R}\end{array}
-\\\\
-\begin{array}{ccc}
-Cel \\\\
-Din \\\\
-Cel \\\\
-Lgt \\\\
-Din \\\\
-Cel \\\\
-Lgt \\\\
-\end{array}
-\left[
-\begin{array}{ccc}
-92 & 58 & 69 & 65 & 93  \\\\
-65 & 94 & 69 & 93 & 72 \\\\
-95 & 65 & 64 & 58 & 94 \\\\ 
-64 & 61 & 94 & 71 & 60 \\\\ 
-60 & 94 & 65 & 96 & 64 \\\\ 
-92 & 55 & 60 & 58 & 95 \\\\
-62 & 58 & 91 & 58 & 71 \\\\
-\end{array}
-\right]\end{array}
+    \mathbf{A} = 
+    \begin{array}{c}
+        \begin{array}{cccc}
+            \text{CS} & \text{M} & \text{Ch} & \text{R} \\\\
+        \end{array} \\\\
+        \left[
+        \begin{array}{cccc}
+            73 & 76 & 58 & 61 \\\\
+            73 & 71 & 55 & 55 \\\\
+            84 & 88 & 71 & 71 \\\\
+            80 & 80 & 69 & 73 \\\\
+            47 & 49 & 40 & 39 \\\\
+            54 & 49 & 69 & 69 \\\\
+            46 & 46 & 63 & 66 \\\\
+            63 & 61 & 89 & 89 \\\\
+            70 & 67 & 90 & 90 \\\\
+            59 & 58 & 79 & 76 \\\\
+        \end{array}
+        \right]
+    \end{array}
 \end{align}
 $$
 
@@ -683,11 +679,10 @@ Within the matrix of wine ratings, I created each person's scores to reflect one
 
 1) *Dinner Wine Drinker (Din)*: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M)
 2) *Celebratory Wine Drinker (Cel)*: prefers drinking champagne (Chp) and rosé (R)
-3) *Light Wine Drinker (Lgt)*: prefers drinking non-sparkling white wine such as chardonnay (Ch)
 
 In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying wine drinker types. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each *p* person's data in a column and each *n* variable's data in a row.)
 
-To understand the left and right singular vectors, consider first the set of singular values for $\mathbf{A}$. The Python code block below (lines <a href="#1">1--</a>) computes the eigenvalues (or squared singular values) of $\mathbf{A}$ and the percentage of total variance accounted for by each eigenvector. Given that over 98% of the total variance can be recovered from using three eigenvectors, it can be argued that there are only three eigenvectors worth considering. In other words, 98% of the total variance in the data can be retained by projecting the original scores onto only three of the five eigenvectors.
+To understand the left and right singular vectors, consider first the set of singular values for $\mathbf{A}$. The Python code block below (lines <a href="#1">1--</a>) computes the eigenvalues (or squared singular values) of $\mathbf{A}$ and the percentage of total variance accounted for by each eigenvector. Given that over 99% of the total variance can be recovered from using two eigenvectors, it can be argued that there are only two eigenvectors worth considering. In other words, 99% of the total variance in the data can be retained by projecting the original scores onto only two of the four eigenvectors.
 
 
 

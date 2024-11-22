@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-10-26" />
+<meta name="date" content="2024-11-17" />
 
 <title>The Theory, Meaning, and Applications of the Singular Value Decomposition</title>
 
@@ -337,7 +337,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">The Theory, Meaning, and Applications of the Singular Value Decomposition</h1>
-<h4 class="date">2024-10-26</h4>
+<h4 class="date">2024-11-17</h4>
 
 </div>
 
@@ -350,13 +350,13 @@ conda_create(envname = &#39;blog_posts&#39;,  python_version = &#39;3.10.11&#39;
 use_condaenv(condaenv = &#39;blog_posts&#39;)
 
 #install packages in conda environment
-py_packages &lt;- c(&#39;numpy&#39;, &#39;pandas&#39;, &#39;scikit-learn&#39;, &quot;plotnine&quot;, &quot;statsmodels&quot;, &quot;manim&quot;)
+py_packages &lt;- c(&#39;numpy&#39;, &#39;pandas&#39;, &#39;scikit-learn&#39;, &quot;plotnine&quot;, &quot;statsmodels&quot;, &quot;manim&quot;, &quot;factor_analyzer&quot;)
 conda_install(envname = &#39;blog_posts&#39;, packages = py_packages, pip=T)
 
 #useful for checking what packages are loaded
 py_list_packages(envname = &#39;blog_posts&#39;, type = &#39;conda&#39;)</code></pre>
 <p>Second, the Python packages and modules in the Python code block are needed to run all the Python code in this paper (see lines <a href="#15">15–24</a> below).</p>
-<p>Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations. For readers interested in how I created my animations, the source code can be viewed in <a href="#">this GitHub repository</a>.</p>
+<p>Third, although I often include code in papers so that readers can explore concepts, I decided to not include the Python code I used to create mathematical animations given the considerable length of the script. For readers interested in how I created my animations, the source code can be viewed in <a href="#">this GitHub repository</a>.</p>
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 </div>
@@ -855,43 +855,38 @@ Therefore, given that the left and right singular vectors (which are eigenvector
 </div>
 <div id="point-3-left-and-right-singular-vectors-represent-unweighted-loadings-of-peoplevariables-onto-principal-axes" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Point 3: Left and Right Singular Vectors Represent Unweighted Loadings of People/Variables Onto Principal Axes</h2>
-<p>Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0–100 points), <span class="math inline">\(\mathbf{A}\)</span> (Equation <span class="math inline">\(\ref{eq:wineMatrix}\)</span>), from seven novice drinkers for the following set of five wines: 1) champagne (Ch), 2) cabernet sauvignon (CS), 3) chardonnay (Ch), 4) merlot (M), and 5) rosé (R).</p>
+<p>Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0–100 points), <span class="math inline">\(\mathbf{A}\)</span> (Equation <span class="math inline">\(\ref{eq:wineMatrix}\)</span>), from seven novice drinkers for the following set of four wines: 1) cabernet sauvignon (CS), 2) merlot (M), 3) rosé (R), and 4) champagne (Ch).</p>
 <p><span class="math display">\[
 \begin{align}
-\mathbf{A} =
-\begin{array}{cc}
-\begin{array}{ccc} &amp; &amp; &amp; \text{Chp} &amp; \text{CS} &amp; \text{Ch} &amp; \text{M} &amp; \text{R}\end{array}
-\\\\
-\begin{array}{ccc}
-Cel \\\\
-Din \\\\
-Cel \\\\
-Lgt \\\\
-Din \\\\
-Cel \\\\
-Lgt \\\\
-\end{array}
-\left[
-\begin{array}{ccc}
-92 &amp; 58 &amp; 69 &amp; 65 &amp; 93  \\\\
-65 &amp; 94 &amp; 69 &amp; 93 &amp; 72 \\\\
-95 &amp; 65 &amp; 64 &amp; 58 &amp; 94 \\\\
-64 &amp; 61 &amp; 94 &amp; 71 &amp; 60 \\\\
-60 &amp; 94 &amp; 65 &amp; 96 &amp; 64 \\\\
-92 &amp; 55 &amp; 60 &amp; 58 &amp; 95 \\\\
-62 &amp; 58 &amp; 91 &amp; 58 &amp; 71 \\\\
-\end{array}
-\right]\end{array}
+    \mathbf{A} =
+    \begin{array}{c}
+        \begin{array}{cccc}
+            \text{CS} &amp; \text{M} &amp; \text{Ch} &amp; \text{R} \\\\
+        \end{array} \\\\
+        \left[
+        \begin{array}{cccc}
+            73 &amp; 76 &amp; 58 &amp; 61 \\\\
+            73 &amp; 71 &amp; 55 &amp; 55 \\\\
+            84 &amp; 88 &amp; 71 &amp; 71 \\\\
+            80 &amp; 80 &amp; 69 &amp; 73 \\\\
+            47 &amp; 49 &amp; 40 &amp; 39 \\\\
+            54 &amp; 49 &amp; 69 &amp; 69 \\\\
+            46 &amp; 46 &amp; 63 &amp; 66 \\\\
+            63 &amp; 61 &amp; 89 &amp; 89 \\\\
+            70 &amp; 67 &amp; 90 &amp; 90 \\\\
+            59 &amp; 58 &amp; 79 &amp; 76 \\\\
+        \end{array}
+        \right]
+    \end{array}
 \end{align}
 \]</span></p>
 <p>Within the matrix of wine ratings, I created each person’s scores to reflect one of three types of wine drinker:</p>
 <ol style="list-style-type: decimal">
 <li><em>Dinner Wine Drinker (Din)</em>: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M)</li>
 <li><em>Celebratory Wine Drinker (Cel)</em>: prefers drinking champagne (Chp) and rosé (R)</li>
-<li><em>Light Wine Drinker (Lgt)</em>: prefers drinking non-sparkling white wine such as chardonnay (Ch)</li>
 </ol>
 <p>In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying wine drinker types. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each <em>p</em> person’s data in a column and each <em>n</em> variable’s data in a row.)</p>
-<p>To understand the left and right singular vectors, consider first the set of singular values for <span class="math inline">\(\mathbf{A}\)</span>. The Python code block below (lines <a href="#1">1–</a>) computes the eigenvalues (or squared singular values) of <span class="math inline">\(\mathbf{A}\)</span> and the percentage of total variance accounted for by each eigenvector. Given that over 98% of the total variance can be recovered from using three eigenvectors, it can be argued that there are only three eigenvectors worth considering. In other words, 98% of the total variance in the data can be retained by projecting the original scores onto only three of the five eigenvectors.</p>
+<p>To understand the left and right singular vectors, consider first the set of singular values for <span class="math inline">\(\mathbf{A}\)</span>. The Python code block below (lines <a href="#1">1–</a>) computes the eigenvalues (or squared singular values) of <span class="math inline">\(\mathbf{A}\)</span> and the percentage of total variance accounted for by each eigenvector. Given that over 99% of the total variance can be recovered from using two eigenvectors, it can be argued that there are only two eigenvectors worth considering. In other words, 99% of the total variance in the data can be retained by projecting the original scores onto only two of the four eigenvectors.</p>
 <p>As an aside, here we can see that the eigenvalues are indeed the squared singular values (dividing by a scaling constant).</p>
 <pre class="r" language="python"><code>print(&quot;Eigenvalues:&quot;, np.round(eig_values, decimals=3))
 print(&quot;Squared singular values:&quot;, np.round((S**2)/6, decimals=3))</code></pre>
