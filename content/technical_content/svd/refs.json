@@ -311,5 +311,79 @@
     },
     "title": "Bias-variance decompositions for margin losses",
     "type": "article-journal"
+  },
+  {
+    "DOI": "10.1037/met0000200",
+    "author": [
+      {
+        "family": "Auerswald",
+        "given": "Max"
+      },
+      {
+        "family": "Moshagen",
+        "given": "Morten"
+      }
+    ],
+    "container-title": "Psychological Methods",
+    "id": "auerswald2019",
+    "issue": "4",
+    "issued": {
+      "date-parts": [
+        [
+          2019
+        ]
+      ]
+    },
+    "page": "468",
+    "publisher": "American Psychological Association",
+    "title": "How to determine the number of factors to retain in exploratory factor analysis: A comparison of extraction methods under realistic conditions",
+    "title-short": "How to determine the number of factors to retain in exploratory factor analysis",
+    "type": "article-journal",
+    "volume": "24"
+  },
+  {
+    "DOI": "0.1207/S15327906MBR3601_05",
+    "URL": "https://doi.org/10.1207/S15327906MBR3601_05",
+    "author": [
+      {
+        "family": "Browne",
+        "given": "Michael W"
+      }
+    ],
+    "container-title": "Multivariate Behavioral Research",
+    "id": "browne2001",
+    "issue": "1",
+    "issued": {
+      "date-parts": [
+        [
+          2001
+        ]
+      ]
+    },
+    "page": "111-150",
+    "publisher": "Taylor & Francis",
+    "title": "An overview of analytic rotation in exploratory factor analysis",
+    "type": "article-journal",
+    "volume": "36"
+  },
+  {
+    "URL": "bit.ly/40oGrFH",
+    "author": [
+      {
+        "family": "Mulaik",
+        "given": "Stanley A"
+      }
+    ],
+    "id": "mulaik2009",
+    "issued": {
+      "date-parts": [
+        [
+          2009
+        ]
+      ]
+    },
+    "publisher": "CRC press",
+    "title": "Foundations of factor analysis",
+    "type": "book"
   }
 ]

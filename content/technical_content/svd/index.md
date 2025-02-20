@@ -1,8 +1,8 @@
 ---
 title: "The Theory, Meaning, and Applications of the Singular Value Decomposition" 
-draft: true
+draft: false
 summary: ""
-date: "2024-11-22"
+date: "2025-02-20"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -13,7 +13,6 @@ always_allow_html: true
 bibFile: content/technical_content/svd/refs.json    
 imgThumbnail: ""
 tags: []
-
 ---   
 
 
@@ -48,9 +47,18 @@ Third, although I often include code in papers so that readers can explore conce
 # Introduction 
 
 
-# Beginning With Fundamentals: A Necessary Review of Linear Algebra{#fundamentals}
+# A Review of Linear Algebra 
 
-## Basis Vectors: Standard and Non-Standard Bases
+## Some Important Fundamentals {#fundamentals}
+
+In this section, I provide some fundamentals of linear algebra that are necessary for understanding the geometry and underlying meaning of the singular value decomposition and principal component analysis. To this end, I explain the following four points: 
+
+1) Matrices define basis vectors
+2) Matrix-vector multiplication transforms bases by computing weighted vector sums
+3) Dot products are 1-dimensional cases of matrix-vector multiplication
+4) Dot products provide orthogonal projection lengths with normalized vectors
+
+### Matrices Define Basis Vectors 
 
 Basis vectors can be understood as the coordinates used to define some *n*-dimension space, $\mathbb{R}^n$. Beginning with the familiar standard basis vectors---that is, vectors with only one non-zero element equivalent to one---are often used to define *n*-dimensional spaces. As an example, consider a two-dimensional space, $\mathbb{R}^2$. To span $\mathbb{R}^2$ (i.e., define any vector in $\mathbb{R}^2$), the standard basis vectors of $\mathbf{b}\_{e\_x} = \[1, 0\]$ and $\mathbf{b}\_{e\_y}= \[0, 1\]$ can be used, and these vectors can be combined to form the basis matrix shown below in Equation \ref{eq:standardMatrix}: 
 
@@ -71,7 +79,8 @@ Note that each column of $\mathbf{B}_e$ represents a basis vector.
 If $\mathbf{b}\_{e\_x}$ is multiplied by one and $\mathbf{b}\_{e\_y}$ is multiplied by two, the vector $\mathbf{g}_e = \[1, 2\]$ is obtained, and this is shown below in Animation \ref{anim:standardBasis}. 
 
 
-{{< insert-video "media/videos/anim/480p15/standardBasis.mp4" "standardBasis" "Coordinates of Vector $\mathbf{g}_e$ in Standard Basis (Equation \ref{eq:standardMatrix})" "Using the standard basis vectors of $\mathbf{b}_{e_x} = [1, 0]$ and $\mathbf{b}_{e_y} = [0, 1]$, the pink vector ($\mathbf{g}$) has coordinates defined by $\mathbf{g}_e = [2, 1]$.">}}
+{{< insert-video "media/videos/anim/480p15/standardBasis.mp4" "standardBasis" "Coordinates of Vector $\mathbf{g}_e$ in Standard Basis (Equation \ref{eq:standardMatrix})" "Using the standard basis vectors of $\mathbf{b}_{e_x} = [1, 0]$ and $\mathbf{b}_{e_y} = [0, 1]$, the pink vector ($\mathbf{g}$) has coordinates defined by $\mathbf{g}_e = [2, 1]$."
+"media/images/anim/svd/svd0187.png">}}
 
 
 Importantly, outside from the standard basis vectors being familiar and simple, there isn't always a strong justification for using them in applied settings. Thus, non-standard basis vectors are often used in applied settings. As an example of non-standard basis vectors, consider defining $\mathbb{R}^2$ with basis vectors $\mathbf{b}\_{n\_x} = \[0, 1\]$ and $\mathbf{b}\_{n\_y} = \[1, 2\]$, which are defined as a matrix below in Equation \ref{eq:nonStandardBasis}: 
@@ -80,8 +89,8 @@ $$
 \begin{spreadlines}{0.5em}
 \begin{align}
 \mathbf{B}_n = \begin{bmatrix} 
-1 & 0 \\\\
-2 & 1
+0 & 2 \\\\
+1 & 2
 \end{bmatrix}. 
 \label{eq:nonStandardBasis}
 \end{align}
@@ -93,6 +102,229 @@ To define $\mathbf{g}_e$ in the non-standard basis of Equation \ref{eq:nonStanda
 
 {{< insert-video "media/videos/anim/480p15/nonStandardBasis.mp4" "nonStandardBasis" "Coordinates of Vector $\mathbf{g}$ in Non-Standard Basis (Equation \ref{eq:nonStandardBasis}) " "Using the non-standard basis vectors of $\mathbf{b}_{n_x} = [1, 2]$ and $\mathbf{b}_{n_y} = [0, 1]$, the pink vector ($\mathbf{g}$) has coordinates defined by $\mathbf{g}_n = [1.5, 0.5]$." >}}
 
+
+
+
+
+
+
+### Matrix-Vector Multiplication Transforms Bases by Computing Weighted Vector Sums 
+
+With matrices defining basis vectors, this means they can be used to apply transformations. To understand how matrices apply transformations, consider again the non-standard basis of 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{B}_n = \begin{bmatrix} 
+0 & 2 \\\\
+1 & 2
+\end{bmatrix}. 
+\tag{\ref{eq:nonStandardBasis} revisited}
+\end{align}
+\end{spreadlines}
+$$
+
+In post-multiplying $\mathbf{B}_n$ by $\mathbf{g}_n = \[1.5, 0.5\]$, the first basis vector, $\mathbf{b}\_{n_x}$ is multiplied by 1.5 and the second basis vector, $\mathbf{b}\_{n_y}$, is multiplied by 0.5. Each weighted composite is then summed to produce $\mathbf{g}_e$. 
+
+Animation \ref{anim:weightedSum} below shows matrix-vector multiplication transforms bases by computing weighted vector sums. The non-standard basis vectors of $\mathbf{B}_n$ are used to transform $\mathbf{g}_n$ into $\mathbf{g}_e$. This transformation is accomplished by multiplying  $\mathbf{B}_n$'s first basis vector, $\mathbf{b}\_{n_x}$, by 1.5 and it's second basis vector, $\mathbf{b}\_{n_y}$ by 2. The summing of weighted basis vectors is then shown to be equivalent to applying a shearing transformation (as specified by $\mathbf{B}_n$) to the entire matrix space. 
+
+
+$$
+\begin{spreadlines}{0.75em}
+\begin{align}
+\mathbf{B}_e \mathbf{v} &= \begin{bmatrix} 
+0 & 2 \\\\
+1 & 2
+\end{bmatrix} 
+\begin{bmatrix} 
+1.5 \\\\ 0.5
+\end{bmatrix} \label{eq:weighted-sum-ns} \\\\
+&= 1.5 \begin{bmatrix} 
+0 \\\\ 1
+\end{bmatrix}  + 
+0.5 \begin{bmatrix} 
+1 \\\\ 2
+\end{bmatrix} \nonumber \\\\
+&= \begin{bmatrix} 
+2 \\\\ 1
+\end{bmatrix}.
+\end{align}
+\end{spreadlines}
+$$
+
+{{< insert-video "media/videos/anim/480p15/weightedSumMatrix.mp4" "weightedSum" "Geometry of Matrix-Vector Multiplication from Equation \ref{eq:weighted-sum-ns})" "The example in this animation shows that pre-multiplying a vector by a matrix of basis vectors simply involves taking the weighted sum of basis matrices. Specifically, the first basis vector of $\mathbf{B}_n$, $\mathbf{b}_x = [1, 0]$, is multiplied by 1.5 and the second basis vector, $\mathbf{b}_x = [1, 2]$, is multiplied by 0.5. Both weighted basis vectors are then summed to give $\mathbf{g}_e = [2, 1]$." >}}
+
+
+
+
+### Dot Products are 1-Dimensional Cases of Matrix-Vector Multiplication 
+
+Although it may not be obvious, dot products are simply 1-dimensional cases of matrix-vector multiplication. That is, dot products also transform bases by computing weighted vector sums. The only nuance is that the transformations applied by dot products occur in a 1-dimensional space (i.e., a line). To understand the geometry of dot products, consider two vectors of $\mathbf{a} = \[1, 2\]$ and $\mathbf{b} = \[3, 1\]$. In computing the dot product between these vectors, $\mathbf{a}^\top \mathbf{b}$, basis vectors still exist, but they are now 1-dimensional. More specifically, the first basis vector of $\mathbf{b}$, $b_x = 3$, is multiplied by 1 and the second basis vector, $b_y = 1$, is multiplied by 2. I have provided Animation \ref{anim:"dot-product} to clearly explain the geometry of dot products. 
+
+$$
+\begin{spreadlines}{0.75em}
+\begin{align}
+\mathbf{ab} &= \begin{bmatrix} 1 & 2 \end{bmatrix}\begin{bmatrix} 3 \\ \\ 1 \end{bmatrix} \label{eq:dot-product} \\\\
+&= 1(3) + 2(1) \nonumber \\\\
+&= 5 \nonumber
+\end{align}
+\end{spreadlines}
+$$
+
+{{< insert-video "media/videos/anim/480p15/dotProduct.mp4" "dot-product" "Geometry of Dot Product Multiplication from Equation \ref{eq:dot-product}" "Dot products are shown to transform bases into a 1-dimensional space. In this animation, the dot product is shown between the two vectors of $\mathbf{a} = [1, 2]$ and $\mathbf{b} = [3, 1]$. As with matrix-vector multiplication, a transformation still occurs, but it occurs in a 1-dimension space. More specifically, the first basis vector of $\mathbf{b}$, $b_x = 3$, is multiplied by 1 and the second basis vector, $b_y = 1$, is multiplied by 2." >}}
+
+
+
+### Dot Products Provide Orthgonal Projection Lengths With Normalized Vectors {#dot-products}
+
+One focal process of principal component analysis is the computation of *orthogonal projections*: The value of one variable on another basis. In the context of principal component analysis, analysts want to know how scores on one variable translate into scores on another variable that exists in a lower dimension, As it turns out, dot products accomplish this task because the vectors being projected onto are normalized.  That is, when computing orthogonal projections of a vector, $\mathbf{x}$, onto a normalized vector $\mathbf{v}$, $Proj_\mathbf{v}(\mathbf{x})$, the equation is simply that of the dot product: 
+
+$$
+\begin{align}
+Proj_\mathbf{v}(\mathbf{x}) = \mathbf{xv}
+\label{eq:dot-product-proj}
+\end{align}
+$$
+
+To understand how Equation \ref{eq:dot-product-proj} is derived, an understanding of orthogonal projections is necessary. To this end, I provide a visualization below in Figure \ref{fig:proj-plot}. To begin, the task shown in Figure \ref{fig:proj-plot} is to find the value of $\mathbf{x}$ on $\mathbf{v}$. For the purposes of comprehension, $\mathbf{v}$ can be conceptualized as another basis that defines the span of $L=c\mathbf{v}$, and we want to know the orthogonal projection of $\mathbf{x}$ on this basis. The solution to this problem becomes obvious once two facts become evident. First, the orthogonal projection will be some $c$ scalar multiple of  $\mathbf{v}$, $Proj_L(\mathbf{x}) = c\mathbf{x}$. Second, because the projection is orthogonal, then a vector must exist that has a null dot product with the projection. This is indeed the case: $(\mathbf{x} -Proj_L(\mathbf{x}))$ is orthogonal with $\mathbf{v}$. Given these two points, then Equation \ref{eq:proj-eq} below for the orthogonal projection can be obtained. 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+(\mathbf{x} - Proj_L(\mathbf{x}))\mathbf{v} &= 0 \nonumber \\\\
+(\mathbf{x} -c\mathbf{v})\mathbf{v} &= 0 \nonumber \\\\
+\mathbf{x}^\top \mathbf{v} - c\mathbf{v}^\top \mathbf{v} &= 0 \nonumber \\\\
+c &= \frac{\mathbf{x}^\top \mathbf{v}}{\mathbf{v}^\top \mathbf{v}} \label{eq:proj-eq}
+\end{align}
+\end{spreadlines}
+$$
+If the vector being projected onto is normalized, then it has length of 1 (i.e., $\mathbf{v}^\top\mathbf{v}=1$), and simply computing the dot product provides the orthogonal projection (i.e., Equation \ref{eq:dot-product-proj} is obtained). 
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:proj-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Visualization of Vector Projection</span>
+  </div>
+    <img src="images/proj_plot.png" width="80%" height="80%"> 
+  <div class="figNote">
+  <span><em>Note. </em>The process for deriving projections (Equation \ref{eq:proj-eq}) is visualized. The depicted objective is to find the value of $\mathbf{x}$ on $\mathbf{v}$. For the purposes of comprehension, $\mathbf{v}$ can be conceptualized as another basis that defines the span of $L=c\mathbf{v}$, and we want to know the orthogonal projection of $\mathbf{x}$ on this basis. The solution to this problem becomes obvious once two facts become evident. First, the orthogonal projection will be some $c$ scalar multiple of $\mathbf{v}$, $Proj_L(\mathbf{x}) = c\mathbf{x}$. Second, because the projection is orthogonal, then a vector must exist that has a null dot product with the projection. This is indeed the case: $(\mathbf{x} -Proj_L(\mathbf{x}))$ is orthogonal with $\mathbf{v}$. For readers interested in producing this visualization, the Python code is provided below in lines ...</span>
+  </div>
+</div>
+
+
+```r {language=python}
+# Define vectors
+x = np.array([3, 3])
+v = np.array([1, 3])
+
+# scalar multiplier for projection 
+c = v.T.dot(x)/(x.dot(x))
+v_proj = c*x
+
+# Create DataFrame for vectors
+df_vectors = pd.DataFrame({
+    'x_start': [0, 0, v_proj[0], 0],  
+    'y_start': [0, 0, v_proj[1], 0],
+    'x_end': [v[0], x[0], v[0], 2],
+    'y_end': [v[1], x[1], v[1], 2],
+    'label': ['x', 'v', 'x_vproj','v_proj'], 
+    'color': ["#d170c7","#d4bd04", "#33c304","#9DFFFF"]})
+
+
+# Define line span of x (t * x for t in [-2, 2])
+t_values = np.linspace(-5, 5, 100)
+x_span = t_values * x[0]
+y_span = t_values * x[1]
+
+df_line = pd.DataFrame({'x': x_span, 'y': y_span})
+
+# Create a dataframe for tick labels (for easier annotation)
+ticks = range(-5, 6)  # From -5 to 5
+
+df_xticks = pd.DataFrame({
+    "x": [i for i in ticks if i != 0],  # Exclude 0
+    "y": [0] * (len(ticks) - 1),  # Same length after filtering
+    "label": [str(i) for i in ticks if i != 0]  # Exclude 0 from labels
+})
+
+df_yticks = df_xticks.copy()
+df_yticks['x'] = df_xticks['y']
+df_yticks['y'] = df_xticks['x']
+
+# dataframe for annotations 
+df_annotations = pd.DataFrame({
+    "x": [-4, -4, -4, 0.75, 3.25, 1.5, 2, -4, 3.75, 3, 3, 3, 3], 
+    "y": [5, 4, 3, 3.25, 2.75, 0.5, 3.5, 2, 4.25, -2, -3, -4, -5],  
+    "label": [r"$\mathbf{x}^\top = [ 1 \ 3 ]$",  
+              r"$\mathbf{v}^\top = [ 3 \ 3 ]$",
+              r"$Proj_L(\mathbf{x}) = c\mathbf{v}$", 
+              r"$\mathbf{x}$",
+              r"$\mathbf{v}$",
+              r"$Proj_L(\mathbf{x})$",
+              r"$\mathbf{x} - Proj_L(\mathbf{x})$",
+              r"$L = \{c\mathbf{v} | c \in \mathbb{R}\}$", 
+              r"$L$", 
+              r"$(\mathbf{x} - Proj_L(\mathbf{x}))\mathbf{v} = 0 $",
+              r"$(\mathbf{x} - c\mathbf{v})\mathbf{v} = 0$",
+              r"$\mathbf{x}^\top \mathbf{v} - c\mathbf{v}^\top \mathbf{v} = 0$",
+              r"$c = \frac{\mathbf{x}^\top \mathbf{v}}{\mathbf{v}^\top \mathbf{v}}$"],
+    "color": ["#d170c7", "#d4bd04", "#9DFFFF", 
+              "#d170c7", "#d4bd04", "#9DFFFF", "#33c304", "white", "white", 
+              "white", "white" , "white", "white"],  
+    "size": [14]*13})
+
+
+# Create plot
+plot_proj = (pt.ggplot() +
+    
+    # Specify vectors 
+    pt.geom_line(df_line, pt.aes(x='x', y='y'), alpha=0.5, color="white") +  
+    pt.geom_segment(data=df_vectors,
+                    mapping=pt.aes(x='x_start', y='y_start', xend='x_end', yend='y_end'),
+                    arrow=pt.arrow(type="closed", length=0.12, angle=30), 
+                    color=df_vectors['color']) +
+
+    # Add vector labels 
+    pt.geom_text(data=df_annotations,
+                 mapping=pt.aes(x="x", y="y", label="label"),
+                 color=df_annotations['color'], size=df_annotations['size']) +
+
+    pt.geom_hline(yintercept=0, color="white") +  
+    pt.geom_vline(xintercept=0, color="white") +  
+    
+    # Remove default tick labels and minor grid lines
+    pt.scale_x_continuous(limits=(-5, 5), breaks=range(-5, 6), minor_breaks=[]) +    
+    pt.scale_y_continuous(limits=(-5, 5), breaks=range(-5, 6), minor_breaks=[]) +   
+
+    # Manually place x-axis tick labels ON the hline
+    pt.geom_text(df_xticks, pt.aes(x='x', y='y', label='label'), 
+                 color="white", size=10, va="top", nudge_y=-0.1) +  
+
+    # Manually place y-axis tick labels ON the vline
+    pt.geom_text(df_yticks, pt.aes(x='x', y='y', label='label'), 
+                 color="white", size=10, ha="right", nudge_x=-0.1, nudge_y=0) +
+
+    pt.theme_minimal(base_family='Helvetica', base_size=14) +    
+    pt.theme(
+        text=pt.element_text(color="#002241"),
+        plot_background=pt.element_rect(fill="#002241"),  
+        panel_background=pt.element_rect(fill="#002241"),  
+        panel_grid_major=pt.element_line(color="#9DFFFF", size=0.3, alpha=0.5),  
+        axis_title=pt.element_blank(),  # Remove axis titles
+        axis_ticks=pt.element_blank(),  # Remove tick marks
+        axis_text=pt.element_blank(),  # Remove default tick labels
+        legend_position="none"))
+        
+plot_proj.save("images/proj_plot.png", dpi=500, width=8, height=6)
+```
+
+
+
+## Using Matrix-Vector Multiplication to Translate Between Basis Vectors 
 
 ## Translating Between Standard and Non-Standard Basis Vectors 
 
@@ -201,117 +433,22 @@ B_n.dot(g_n)
 To recap, matrix multiplication was used to translate between standard and non-standard basis vectors. Given some vector defined in standard basis coordinates, pre-multiplying it by the inverse of a non-standard basis matrix returns the coordinates of this vector in the the non-standard basis (see Equation \ref{eq:basisNonBasisSol}). Going the othe way, pre-multiplying a a vector defined in a non-standard basis coordinates by the non-standard bases returns the vector in a standard basis (see Equation \ref{eq:standardNonStandardSol}). 
 
 
-### Using Matrix Multiplication to Translate Between Non-Standard Bases 
-
-In this section, I will show how to translate between non-standard bases. One non-standard basis that will be used has been used in previous sections, and I have reprinted it below in Equation \ref{eq:nonStandardBasis}.
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{B}_n = \begin{bmatrix} 
-1 & 0 \\\\
-2 & 1
-\end{bmatrix}. 
-\tag{\ref{eq:nonStandardBasis} revisited}
-\end{align}
-\end{spreadlines}
-$$
-The second non-standard basis matrix that I will use is shown below as $\mathbf{B}_m$ in Equation \ref{eq:nonStandardBasis2}: 
-
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{B}_m = \begin{bmatrix} 
--1 & 0 \\\\
--0.5 & -1
-\end{bmatrix}. 
-\label{eq:nonStandardBasis2}
-\end{align}
-\end{spreadlines}
-$$
-In translating between two non-standard bases, I will show how to translate the vector of $\mathbf{g}_e = [2, 1]$ (defined in standard basis coordinates) from the non-standard basis in Equation \ref{eq:nonStandardBasis} to that of Equation \ref{eq:nonStandardBasis2}. 
-
-
-```r {language=python}
-g_e = np.array([2, 1])
-
-b_n = np.array([[1, 0], 
-                [2, 1]])
 
 
 
 
-b_m = np.array([[-1, 0], 
-                [-0.5, -1]])
-                
-
-np.linalg.inv(b_m).dot(b_n.dot(g_e))
-```
-<pre><code class='python-code'>array([-2., -4.])
-</code></pre>
 
 
-## Visualizing Matrix Multiplication as Rotation and/or Stretching of Basis Vectors
-
-In the previous section, matrix multiplication was used to translate between standard and non-standard bases. In each translation of basis vectors, a strong intuition existed for the use of matrix multiplication. Perhaps fittingly, the strong intuition for using matrix multiplication to translate between basis vectors has a similarly intuitive geometry. 
-
-Matrix multiplication transforms vectors because it rotates and/or stretches the bases that define the vectors. As a first example of the geometry of matrix multiplication, I show here how the matrices of the previous section pull the matrix space leftward and compressed it vertically. As a recap, I provide the basis vectors of the previous sections from Equations \ref{eq:standardMatrix} and \ref{eq:nonStandardBasis}.
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{B}_e = \begin{bmatrix} 
-1 & 0 \\\\
-0 & 1
-\end{bmatrix}. 
-\tag{\ref{eq:standardMatrix} revisited}
-\end{align}
-\end{spreadlines}
-$$
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{B}_n = \begin{bmatrix} 
-1 & 1 \\\\
-0 & 2
-\end{bmatrix}. 
-\tag{\ref{eq:nonStandardBasis} revisited}
-\end{align}
-\end{spreadlines}
-$$
-To go from the standard to non-standard basis, Equation \ref{eq:basisNonBasisSol} is used, which results in the following computation: 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-&= \mathbf{B}_n^{-1} \mathbf{g}_e  \nonumber \\\\
-&= \begin{bmatrix}
-1 & -0.5 \\\\
-0 & 0.5
-\end{bmatrix}
-\begin{bmatrix}
-2 \\ 1
-\end{bmatrix} \nonumber \\\\
-&=\begin{bmatrix}
-1.5 \\ 0.5
-\end{bmatrix}.
-\end{align}
-\end{spreadlines}
-$$
-
-Animation \ref{anim:basisToNonBasis} below shows that the linear transformation applied by $\mathbf{B}^{-1}$ indeed results in the vector $\mathbf{g}\_{n}$ by pulling and compressing the standard basis space leftward. Specifically, the second basis vector of $\mathbf{b}\_{n_y} = \[0, 1\]$ is pulled leftward and compressed to become $\mathbf{b}^{-1}\_{n_x} = \[-0.5, 0.5\]$ (the first basis vector of $\mathbf{b}\_{n_x} = \[1, 0\]$ remains unchanged). In transforming the space defined by the standard basis vectors, the vector of $\mathbf{g}_e = \[2, 1\]$ becomes $\mathbf{g}_n = \[1.5, 0.5\]$. As discussed previously, the vector $\mathbf{g}_n$ indicates the scalar multiplications that must be applied to the basis vectors of $\mathbf{B}_n$ to obtain the vector $\mathbf{g}_e$. 
-
-{{< insert-video "media/videos/anim/480p15/transformationExample.mp4" "basisToNonBasis" "Example of the Geometry of Matrix Multiplication from Equation \ref{eq:basisNonBasisSol})" "The example in this animation shows the geometry of pre-multiplying a vector, $\mathbf{g}_e = [2, 1]$, by $\mathbf{B}^{-1}_n$. In this case, the vector space is simply pulled leftward and compressed vertically. Specifically, the second basis vector of $\mathbf{b}_{n_y} = [0, 1]$ is pulled leftward and compressed to become $\mathbf{b}^{-1}_{n_x} = [-0.5, 0.5]$ (the first basis vector of $\mathbf{b}_{n_x} = [1, 0]$ remains the same). In transforming the space defined by the standard basis vectors, the vector of $\mathbf{g}_e = [2, 1]$ becomes $\mathbf{g}_n = [1.5, 0.5]$." >}}
 
 
-With the example above showing how matrix multiplication transforms vectors by transforming the spaces that define them, I will show the geometry of the following matrices in the sections that follow. Below is a brief summary of the matrices whose geometries I will show and the transformations they apply:
+## Visualizations of Elementary Matrices  
 
-1) Diagonal matrices stretch basis vectors
-2) Orthonormal matrices rotate basis vectors
-3) Rectangular matrices change dimension space
-4) Inverse matrices un-rotate basis vectors
+As explained in the previous section, matrix multiplication transforms bases by computing weighted vector sums. As it turns, there are three fundamental transformations that constitute every possible matrix transformation: 1) Rotation, 2) stretching, and 3) changing dimension. Importantly, each fundamental transformation corresponds to a particular type of matrix, and I will provide visualizations for each of these matrices.  Below is a brief summary of the matrices and their transformations: 
+
+1) Diagonal matrices stretch basis vectors.
+2) Orthonormal matrices rotate basis vector.
+3) Rectangular matrices change the dimension space.
+4) Inverse matrices un-transform basis vectors.
 
 
 ### Diagonal Matrices Stretch Basis Vectors{#diagonal}
@@ -432,7 +569,7 @@ print(math.degrees(original_angle), "\n",
 </code></pre>
 
 
-### Inverse Matrices Un-Transform Basis Vectors
+### Inverse Matrices Un-Transform Basis Vectors{#matrix-inverse}
 
 Animation \ref{anim:inverseMatrix} shows that matrix inverses transform vector spaces in the opposite direction and magnitude of their non-inverted counterparts. In this way, matrix inverses can be conceptualized as un-transforming vector spaces. Within Animation \ref{anim:inverseMatrix}, the space is first transformed using the orthonormal matrix of 
 
@@ -535,7 +672,7 @@ $$
 \label{eq:symRexp}
 \end{align}
 $$
-Because $\Lambda$ is a diagonal matrix (of eigenvalues), it can be square-rooted to obtain
+Because $\Lambda$ is a diagonal matrix (of eigenvalues), it can be square-rooted to obtain the singular values
 
 $$
 \begin{align}
@@ -550,7 +687,7 @@ $$
 \mathbf{V \Lambda V}^\top &= \mathbf{V \mathbf{\Sigma}^\top \mathbf{\Sigma} V}^\top = \mathbf{A}^\top\mathbf{A}.
 \end{align}
 $$
-Although it may not look it, the singular value decomposition is proven once we consider two truths. First, $\mathbf{V} \mathbf{\Sigma}^\top$  (or conversely $\mathbf{\Sigma} V}^\top$) and $ \mathbf{A}^\top$ (or conversely $\mathbf{A}$ are both positive semi-definite matrices (see [Appendix B](#pos-semi)). Second, because the matrix product of each positive semi-definite matrix is equivalent, the condition of unitary freedom is satisfied and so there must exist some orthonormal matrix, $\mathbf{U}$, that can be used to translate between the basis vectors of each matrix (see [Appendix C](#unitary)). Mathematically, 
+Although it may not look it, the singular value decomposition is proven once we consider two truths. First, $\mathbf{V} \mathbf{\Sigma}^\top$  (or conversely $\mathbf{\Sigma V}^\top$) and $\mathbf{A}^\top$ (or conversely $\mathbf{A}$ are both positive semi-definite matrices (see [Appendix B](#pos-semi)). Second, because the matrix product of each positive semi-definite matrix is equivalent, the condition of unitary freedom is satisfied and so there must exist some orthonormal matrix, $\mathbf{U}$, that can be used to translate between the basis vectors of each matrix (see [Appendix C](#unitary)). Mathematically, 
 
 $$
 \begin{spreadlines}{0.5em}
@@ -565,90 +702,23 @@ $$
 \end{spreadlines}
 $$
 
-# Understanding the Singular Value Decomposition 
+# Understanding the Singular Value Decomposition by Synthesizing Principal Component Analysis
 
-In this section, I will provide a deeper explanation of the singular value decomposition by explaining the following three points in turn: 
+In this section, I will provide a deeper explanation of the singular value decomposition by synthesizing the pre-requisites for running a principal component analysis. Briefly, principal component analysis provides a method for mapping some data set of *n* variables onto some lower-dimension subspace consisting of only *m* dimensions. To this end, three objects must be computed to run a principal component analysis: 
 
-1) Point 1: The number of nonzero singular values determines the number of eigenvectors that account for variance 
-2) Point 2: The number of right and left singular vectors that account for variance is always equivalent 
-3) Point 3: Left and right singular vectors represent unweighted loadings of people/variables onto principal axes 
+1) The number of *principal axes*: the number of (lower) *m* dimensions that the original *n* variables can be mapped to.
+2) *Loadings*: correlations between original variables and principal axes. By computing loadings, the meaning of the principal axes can be determined. 
+3) *Principal component scores*: scores of respondents on the principal axes. 
 
 
-## Point 1: The Number of Nonzero Singular Values Determines the Number of Eigenvectors That Account for Variance{#point-1}
+Using the three matrices from the singular value decomposition, I will explain how to compute each of the above objects. 
 
-To understand this point, it is first important to understand that an eigenvalue represents the amount of total variance accounted for by its corresponding eigenvector. Consider a mean-centered matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ with covariance matrix 
+Two points deserve mention. First,  a varimax rotation will be applied to the loadings to render the results more interpretable, thus facilitating an understanding of the singular value decomposition. Note that, although using varimax rotation adds some complexity to the computation of the loadings and principal component scores, it will be explained in the sections that follow. Second, to facilitate learning in this section, I will apply formulas using a generated data of wine drinkers. 
 
-$$
-\begin{align}
-\mathbf{C} &= \frac{\mathbf{A}^\top\mathbf{A}}{n-1}
-\end{align}
-$$
 
-and eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_n$. Importantly, to compute the variance accounted for any given eigenvector, $\mathbf{v}_i$, the projections of the data onto the eigenvector are first needed. The projected values can be obtained using 
+## A Guiding Example: Wine Drinkers {#description}
 
-$$
-\begin{align}
-\mathbf{y} = \mathbf{Av}_i,
-\end{align}
-$$
-with the variance of the projected values then being 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{C}_y &= \frac{\mathbf{y}^\top\mathbf{y}}{n-1} \nonumber \\\\
-&= \frac{(\mathbf{Av}_i)^\top \mathbf{Av}_i}{n-1} \nonumber \\\\
-&= \frac{\mathbf{v}_i^\top\mathbf{A}^\top \mathbf{Av_i}}{n-1} \nonumber \\\\
-&= \mathbf{v}_i^\top \mathbf{C} \mathbf{v}_i 
-\label{eq:eigInter}
-\end{align}.
-\end{spreadlines}
-$$
-Because $\mathbf{v}_i$ is an eigenvector of the covariance matrix, $\mathbf{C}$, the eigenvector equation (Equation \ref{eq:eigenvector}) can be leveraged to simplify Equatin \ref{eq:eigInter} above and prove that an eigenvalue represents that amount of total variance accounted for by an eigenvector. Note that, because $\mathbf{v}_i$ is a unit vector, $\mathbf{v}_i \mathbf{v}_i = 1$, 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\text{Let } \quad \mathbf{C}\mathbf{v}_i &= \lambda \mathbf{v}_i, \nonumber \\\\
-\mathbf{C}_y &= \mathbf{v}_i^\top \lambda \mathbf{v}_i, \nonumber \\\\
-&= \lambda \underbrace{\mathbf{v}_i^\top \mathbf{v}_i}\_{=1} \nonumber \\\\
-&= \lambda \qquad\qquad _\blacksquare
-\end{align}.
-\end{spreadlines}
-$$
-Given that eigenvalues represent the amount of total variance accounted for by an eigenvector and that singular values are simply square roots of eigenvalues (see Equation \ref{eq:matrixRoot), the number of nonzero singular values, therefore, represents the number of eigenvectors that account for variance. 
-
-## Point 2: The Number of Left and Right Singular Vectors Accounting for Variance is Always Equivalent
-
-Proving that an equal number of left and right singular vectors that account for variance simply results from showing that these vectors have the same set of eigenvalues. Beginning first with the left singular vectors (which are the eigenvectors of $\mathbf{AA}^\top$), their eigenvalues are equivalent to the squared singular values of $\mathbf{A}$, $\mathbf{E} = \mathbf{\Sigma}^2 = \mathbf{\Sigma}\mathbf{\Sigma}$.
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{AA}^\top &= \mathbf{U \Sigma V}^\top (\mathbf{U \Sigma V}^\top)^\top \nonumber \\\\
-&= \mathbf{U \Sigma V}^\top \mathbf{V \Sigma}^\top \mathbf{U}^\top \nonumber \\\\
-&= \mathbf{U \Sigma} \mathbf{\Sigma}^\top \mathbf{U}^\top \nonumber \\\\
-&= \mathbf{U} \mathbf{E} \mathbf{U}^\top
-\end{align}
-\end{spreadlines}
-$$
-Likewise, and ending with the right singular vectors (which are the eigenvectors of $\mathbf{X}^\top\mathbf{X}$), their eigenvalues are also equivalent to the squared singular values of $\mathbf{A}$. 
-
-$$
-\begin{spreadlines}{0.5em}
-\begin{align}
-\mathbf{A}^\top \mathbf{A} &=  (\mathbf{U \Sigma V}^\top)^\top\mathbf{U \Sigma V}^\top \nonumber \\\\
-&= \mathbf{V}\mathbf{\Sigma U}^\top \mathbf{U \Sigma}^\top \mathbf{V}^\top \nonumber \\\\
-&= \mathbf{V \Sigma} \mathbf{\Sigma}^\top \mathbf{V}^\top \nonumber \\\\
-&= \mathbf{V} \mathbf{E} \mathbf{V}^\top
-\end{align}
-\end{spreadlines}
-$$
-Therefore, given that the left and right singular vectors (which are eigenvectors) have identical corresponding sets of eigenvalues, then, along with [Point 1](#point-1) that eigenvalues represent the amount of variance accounted for by eigenvectors, the same number of right and singular vectors account for variance.  $\qquad\qquad _\blacksquare$
-
-## Point 3: Left and Right Singular Vectors Represent Unweighted Loadings of People/Variables Onto Principal Axes
-
-Given that an equivalent number of left and right singular vectors account for variance, one logical question centers around whether there is a deeper meaning to the singular vectors. The short answer is yes. To understand the meaning of the left and right singular vectors, consider a data set of wine ratings (0--100 points), $\mathbf{A}$ (Equation \ref{eq:wineMatrix}), from seven novice drinkers for the following set of four wines: 1) cabernet sauvignon (CS), 2) merlot (M), 3) rosé (R), and 4) champagne (Ch).
+Briefly, a data set of 10 wine drinkers' ratings of four wines will be used to explain the meaning of the singular value decomposition. Wine ratings (on a 0--100-point scale) are provided for four wines of 1) cabernet sauvignon (CS), 2) merlot (M), 3) rosé (R), and 4) champagne (Ch).
 
 $$
 \begin{align}
@@ -672,48 +742,786 @@ $$
         \end{array}
         \right]
     \end{array}
+    \label{eq:wineData}
 \end{align}
 $$
 
-Within the matrix of wine ratings, I created each person's scores to reflect one of three types of wine drinker: 
+Importantly, for understanding the relation between singular value decomposition and principal component analysis , I generated the wine ratings such that there are two dimensions of wine drinking:
 
-1) *Dinner Wine Drinker (Din)*: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M)
-2) *Celebratory Wine Drinker (Cel)*: prefers drinking champagne (Chp) and rosé (R)
+1) *Dinner Wine Drinking*: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M).
+2) *Celebratory Wine Drinking*: prefers drinking champagne (Chp) and rosé (R).
 
-In the paragraphs that follow, I will show that the left singular and right singular vectors respectively contain the unweighted loadings of people and variables onto these underlying wine drinker types. (Note that the meanings of the left and right singular vectors swap places if the matrix in question has each *p* person's data in a column and each *n* variable's data in a row.)
+To foreshadow, because of how I generated the data, there will be two principal axes that account for the majority of the variance.
 
-To understand the left and right singular vectors, consider first the set of singular values for $\mathbf{A}$. The Python code block below (lines <a href="#1">1--</a>) computes the eigenvalues (or squared singular values) of $\mathbf{A}$ and the percentage of total variance accounted for by each eigenvector. Given that over 99% of the total variance can be recovered from using two eigenvectors, it can be argued that there are only two eigenvectors worth considering. In other words, 99% of the total variance in the data can be retained by projecting the original scores onto only two of the four eigenvectors.
+The R code block below contains the code I used to generate the wine drinker data.
+
+```r 
+library(tidyverse)
+library(Matrix)
+
+# set means of each variable for dinner and celebratory wine drinkers (dwd, cwd)
+means_dwd = c(81, 82, 68, 69)
+means_cwd = c(63, 61, 83, 83)
+
+sd = rep(x = 3, times=4)
+
+# create covariance matrix
+cor_var_12 <-  .75
+cor_var_34 <-  .75
+
+cor_var_13 <- 0
+cor_var_14 <- cor_var_13
+
+cor_var_23 <- cor_var_13
+cor_var_24 <- cor_var_13
+
+# covariance for dinner wine drinkers
+cov <- diag(sd^2)
+cov[2, 1] <- cor_var_12 * sd[1]^2
+
+cov[3, 1] <- cor_var_13 * sd[1]^2
+cov[3, 2] <- cor_var_23 * sd[1]^2
+
+cov[4, 1] <- cor_var_14 * sd[1]^2
+cov[4, 2] <- cor_var_24 * sd[1]^2
+cov[4, 3] <- cor_var_34 * sd[1]^2
 
 
+# covariance for celebratory wine drinkers
+cov_cwd <- diag(sd^2)
+cov_cwd[4, 3] <- cor_var_12 * sd[1]^2
 
+cov_cwd[3, 1] <- cor_var_13 * sd[1]^2
+cov_cwd[3, 2] <- cor_var_23 * sd[1]^2
 
+cov_cwd[4, 1] <- cor_var_14 * sd[1]^2
+cov_cwd[4, 2] <- cor_var_24 * sd[1]^2
+cov_cwd[2, 1] <- cor_var_34 * sd[1]^2
 
+cov_cwd[upper.tri(cov_cwd)] <- t(cov_cwd)[upper.tri(cov_cwd)]
 
+# Number of samples
+n <- 5
 
-As an aside, here we can see that the eigenvalues are indeed the squared singular values (dividing by a scaling constant). 
+set.seed(27)
+df_dwd = round(MASS::mvrnorm(n = n, mu = means_dwd, Sigma = cov, empirical = T) + rnorm(n = n, mean = 0, sd = 10))
+df_cwd = round(MASS::mvrnorm(n = n, mu = means_cwd, Sigma = cov_cwd, empirical = T) + rnorm(n = n, mean = 0, sd = 10))
 
-```r {language=python}
-print("Eigenvalues:", np.round(eig_values, decimals=3))
-print("Squared singular values:", np.round((S**2)/6, decimals=3))
+df_wine_drinkers <- rbind(df_dwd, df_cwd)
 ```
 
 
-Given that three of the five eigenvectors can be used to obtain a high-fidelity representation of the data, let's now consider the reduced versions of the left and right singular vectors. Beginning with the left singular vector, I show it below in its original form  
+## Determining the Number of Principal Axes {#point-1}
+
+The number of principal component to extract can be determined by using the matrix of singular values, $\mathbf{\Sigma}$. Two points must be explained to understand this point. First, singular values can be converted to eigenvalues. Second, eigenvalues represent the amount of variance (in terms of original variables) accounted for by an eigenvector (also called a *principal axis*). 
+
+Beginning with the first point, singular values can be converted to eigenvalues such that 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\frac{\mathbf{X}^\top \mathbf{X}}{N-1} &= \frac{\mathbf{V\Sigma^\top V}}{N-1} \\\\
+\mathbf{E} &= \frac{\mathbf{\Sigma} ^2}{N-1} 
+\label{eq:singToEig}
+\end{align}
+\end{spreadlines}
+$$
+
+
+Ending with the second point, eigenvalues represent the amount of variance (in terms of the number of original variables) accounted for by eigenvectors. Consider a mean-centered matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ with a covariance matrix 
+
+$$
+\begin{align}
+\mathbf{C} &= \frac{\mathbf{A}^\top\mathbf{A}}{n-1}
+\end{align}
+$$
+
+and eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_n$. Importantly, to compute the variance accounted for by a given eigenvector, $\mathbf{v}_i$, the projections of the data onto the eigenvector are first needed. The projected values can be obtained using 
+
+$$
+\begin{align}
+\mathbf{y} = \mathbf{Av}_i,
+\end{align}
+$$
+
+with the variance of the projected values then being 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{C}_y &= \frac{\mathbf{y}^\top\mathbf{y}}{n-1} \nonumber \\\\
+&= \frac{(\mathbf{Av}_i)^\top \mathbf{Av}_i}{n-1} \nonumber \\\\
+&= \frac{\mathbf{v}_i^\top\mathbf{A}^\top \mathbf{Av_i}}{n-1} \nonumber \\\\
+&= \mathbf{v}_i^\top \mathbf{C} \mathbf{v}_i 
+\label{eq:eigInter}
+\end{align}.
+\end{spreadlines}
+$$
+
+Because $\mathbf{v}_i$ is an eigenvector of the covariance matrix, $\mathbf{C}$, the eigenvector equation (Equation \ref{eq:eigenvector}) can be leveraged to simplify Equation \ref{eq:eigInter} above and prove that an eigenvalue represents that amount of total variance accounted for by an eigenvector. Note that, because $\mathbf{v}_i$ is a unit vector, $\mathbf{v}_i \mathbf{v}_i = 1$, 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\text{Let } \quad \mathbf{C}\mathbf{v}_i &= \lambda \mathbf{v}_i, \nonumber \\\\
+\mathbf{C}_y &= \mathbf{v}_i^\top \lambda \mathbf{v}_i, \nonumber \\\\
+&= \lambda \underbrace{\mathbf{v}_i^\top \mathbf{v}_i}\_{=1} \nonumber \\\\
+&= \lambda \qquad\qquad _\blacksquare
+\tag{\ref{eq:log-incomplete-data} revisited}
+\end{align}.
+\end{spreadlines}
+$$
+Using the singular value matrix then, the number of principal component to retain can be determined. First, eigenvalues are indeed obtained using Equation \ref{eq:singToEig}. 
+
+```r {language=python}
+# Matrix of wine ratings 
+A = pd.DataFrame({"Cab. Sauv.": [73, 73, 84, 80, 47, 54, 46, 63, 70, 59], 
+                  "Merlot":     [76, 71, 88, 80, 49, 49, 46, 61, 67, 58],
+                  "Champagne":  [58, 55, 71, 69, 40, 69, 63, 89, 90, 79],
+                  "Rosé":       [61, 55, 71, 73, 39, 69, 66, 89, 90, 76]})
+
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+
+# Step 2) Compute eigenvalues of correlation matrix 
+df_corr = A.corr()  # or use df_std.T.dot(df_std)/9
+eig_vals = np.linalg.eigvals(df_corr)
+
+# Step 3) Convert singular values to eigenvalues and confirm all values are identical
+eig_converted = S**2/(df_std.shape[0] - 1)
+
+np.testing.assert_array_equal(eig_vals.round(4), eig_converted.round(4))
+```
+
+
+Second, eigenvalues can be used to determine the number of principal component to retain. Although several rules exist for choosing the number of principal component to retain (for a review, see {{< citePara "auerswald2019" >}}), the decision in this example is simple as the data were generated such that only two meaningful principal component exist (i.e., dinner and celebratory wine drinkers). An examination of the eigenvalues confirms this as the first two principal component account for 99.5% of the total variance (or 3.98 out of 4 possible variables).
+
+```r {language=python}
+(eig_converted.cumsum()/eig_converted.sum()).round(3)
+```
+<pre><code class='python-code'>array([0.611, 0.995, 0.998, 1.   ])
+</code></pre>
+
+
+## Computing Loadings and Applying Varimax Rotation
+
+Now that the number of principal axes have been decided, I now show how to determine their meaning. Because loadings are not always guaranteed to be meaningful (due to the problem of rotational indeterminacy), I show how rotations can be used to render principal axes more interpretable. As a result, this section constitutes three parts: 
+
+1) Computing loadings
+2) Rotational indeterminacy
+3) Applying varimax rotation
+
+
+### Computing Loadings {#computing-loadings}
+
+Understanding how to compute loadings simply requires understanding that loadings are correlations between the original variables and the principal axes. Thus, loadings can be computed by obtaining correlations between scores on the original variables and scores on the principal axes. Mathematically, I'll show that this is equivalent to computing 
+
+$$
+\begin{align}
+\mathbf{L} &= \mathbf{VE}^{\frac{1}{2}} = corr(\mathbf{X}, \mathbf{P}), 
+\label{eq:loadings_eq}
+\end{align}
+$$
+where $\mathbf{V}$ is the matrix of eigenvectors, $\mathbf{E}$ is the diagonal matrix of corresponding eigenvalues, $\mathbf{X}$ contains the standardized wine ratings, and $\mathbf{P}$ contains the standardized scores on the principal axes (i.e., standardized principal component scores).
+
+To prove Equation \ref{eq:loadings_eq}, I will first demonstrate the following two proofs: 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+corr(\mathbf{X}, \mathbf{P}) = \frac{\mathbf{X}^\top\mathbf{P}}{N-1}
+\label{eq:loadings-p1} \\\\
+\mathbf{P} = \mathbf{U}\sqrt{N-1}
+\label{eq:loadings-p2}
+\end{align}
+\end{spreadlines}
+$$
+Once the above two points have been proven, Equation \ref{eq:loadings} will be a simple corollary. 
+
+First, Equation \ref{eq:loadings-p1} is proven below by using the equation for the correlation (or loadings; $l$) between one wine's ratings, $\mathbf{x}$, and their corresponding scores on one principal axis, $\mathbf{p}$, is obtained by
+
+$$
+\begin{align}
+corr(\mathbf{x}, \mathbf{p}) = l &= \frac{cov(\mathbf{x}, \mathbf{p})}{sd(\mathbf{x}) sd(\mathbf{p})} \nonumber \\\\
+&= \frac{\frac{\mathbf{x^\top p}}{N-1}}{\sqrt{\frac{\lVert \mathbf{x} \rVert}{N-1}} \sqrt{\frac{\lVert \mathbf{p} \rVert}{N-1}}}\nonumber \\\\
+&= \frac{\frac{\mathbf{x^\top p}}{N-1}}{\sqrt{\frac{N-1}{N-1}} \sqrt{\frac{N-1}{N-1}}} \nonumber \\\\
+&= \frac{\mathbf{x^\top p}}{N-1}
+\label{eq:correlation}
+\end{align}
+$$
+
+Note that, because $\mathbf{x}$ and $\mathbf{p}$ are standardized, their lengths are equivalent to $N-1$ (see [Appendix D](#length-proof)). To finish this first proof, Equation \ref{eq:correlation} can be transformed into its matrix form where the computation computes a matrix of loadings, $\mathbf{L}$, that contains loadings of each variable of wine scores onto each principal axis 
+
+$$
+\begin{align}
+\mathbf{L}= \frac{\mathbf{X}^\top\mathbf{P}}{N-1}. \qquad\qquad _\blacksquare
+\end{align}
+$$
+
+Second, I now show how to compute the matrix of standardized principal component scores, $\mathbf{P}$. Conceptually, principal component scores represent projections of the original variables onto the principal axes. Given that projections are simply obtained by computing dot products (see [dot products](#dot-products)), the unstandardized principal component scores can be obtained with 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{P}_{unstd} &= \mathbf{X}\mathbf{V} \label{eq:dot-prod-scores} \\\\
+&= (\mathbf{U\Sigma V}^\top \mathbf{V}) \nonumber \\\\
+&=\mathbf{U\Sigma}.
+\label{eq:pc-scores}
+\end{align}
+\end{spreadlines}
+$$
+
+To standardize the principal component scores, they must be divided by their standard deviations, $\mathbf{\sigma}_s$. Fortunately, computing $\mathbf{\sigma}_s$ is rather simple because the unstandardized principal component scores are already mean centered (this results because the left singular eigenvectors, $\mathbf{U}$, are normalized). Therefore, no centering is required to compute the standard deviations, and so  
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{\sigma}_s &= \sqrt{\frac{ \mathbf{P}\_{unstd}^\top\mathbf{P}\_{unstd}}{N-1}} \nonumber \\\\
+&= \sqrt{\frac{\mathbf{\Sigma}^\top \mathbf{U}^\top \mathbf{U\Sigma}}{N-1}} \nonumber \\\\
+&= \sqrt{\frac{\mathbf{\Sigma}^2}{N-1}} \nonumber \\\\ 
+&= \frac{\mathbf{\Sigma}}{\sqrt{N-1}} \label{eq:pc-std}. 
+\end{align}
+\end{spreadlines}
+$$
+
+Proving Equation \ref{eq:loadings-p2} now simply using Equation \ref{eq:pc-std} to standardize the principal component scores (Equation \ref{eq:pc-scores}). 
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{P}_{std} &= \frac{\mathbf{P}\_{unstd}}{\mathbf{\sigma}_s} \nonumber \\\\
+&= \frac{\mathbf{U\Sigma}}{\frac{\mathbf{\Sigma}}{\sqrt{N-1}}} \nonumber \\\\
+&= \mathbf{U}\sqrt{N-1}. \qquad\qquad _\blacksquare
+\end{align}
+\end{spreadlines}
+$$
+
+Having proven Equations \ref{eq:loadings-p1}--\ref{eq:loadings-p2}, proving Equation \ref{eq:loadings_eq} becomes a simple exercise that simply requires using substituing for $\mathbf{P}$ and using the singular value decomposition of $\mathbf{X}^\top$.
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{L} &= \frac{\mathbf{X}^\top\mathbf{P}_{std}}{N-1} \nonumber \\\\
+&= \frac{\mathbf{X}^\top \mathbf{U}\sqrt{N-1}}{N-1}\nonumber \\\\ 
+&= \frac{\mathbf{V \Sigma} \mathbf{U}^\top \mathbf{U}}{\sqrt{N-1}} \nonumber \\\\ 
+&= \frac{\mathbf{V \Sigma}}{\sqrt{N-1}}  \nonumber \\\\
+&= \mathbf{VE}^{\frac{1}{2}} \qquad\qquad _\blacksquare
+\tag{\ref{eq:loadings_eq} revisited}
+\end{align}
+\end{spreadlines}
+$$
+
+
+Using the data set of wine drinkers, I now apply the above equations to compute the loadings. To preface (and as mentioned in the [description of the data](#description)), the principal axes were generated such that one measures dinner wine drinking (high loadings of cabernet sauvignon and merlot) and the other one measures celebratory wine drinking (high loadings of champagne and rosé). Using the wine rating data, I now provide Python code below to compute the loadings using Equation \ref{eq:loadings_eq}. 
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2) Compute eigenvalues of correlation matrix 
+df_corr = A.corr()  # or use df_std.T.dot(df_std)/9
+eig_vals = np.linalg.eigvals(df_corr)
+
+# Step 3) Convert singular values to eigenvalues 
+num_obs = df_std.shape[0]
+eig_converted = S**2/(num_obs - 1)
+
+# Step 4) Run PCA and compute loadings using VE^0.5
+pca = decomposition.PCA(n_components=2)
+pca_scores = pca.fit_transform(df_std) # needed to obtain components 
+pca_loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
+
+# Step 5) Use SVD matrices to compute loadings and verify both computations are equivalent
+svd_loadings_1 = df_std.T.dot(U[ : ,:2]) * np.sqrt(num_obs - 1)/(num_obs - 1)
+svd_loadings_2 = V[ : ,:2].dot(np.diag(np.sqrt(eig_converted[0:2])))
+
+
+# Step 6) Show that all computations of the loadings are equivalent 
+# round each array to 4 decimal places
+pca_loadings = np.round(pca_loadings, 4) *-1. # NOTE: multiply by -1 to ensure equivalence
+svd_loadings_1 = np.round(svd_loadings_1, 4)
+svd_loadings_2 = np.round(svd_loadings_2, 4)
+
+assert (np.array_equal(pca_loadings, svd_loadings_1) and 
+                      np.array_equal(svd_loadings_2, svd_loadings_2) == True), """
+                      Loading computations are different."""
+```
 
 
 
+### Rotational Indeterminacy 
 
-# Applications of the Singular Value Decomposition 
+Although loadings can be computed using the matrices of singular value decomposition (which I will call the unrotated loadings), they aren't guaranteed to be meaningful. For instance, consider the set of loadings computed in the previous [section](#computing-loadings) and shown below in Table \ref{tab:loading-table} (created using Python and R code blocks) and their alignment with how the data were generated. To recall, I generated the wine rating data such that two dimensions of wine drinking existed: 
+
+1) *Dinner Wine Drinking*: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M).
+2) *Celebratory Wine Drinking*: prefers drinking champagne (Chp) and rosé (R).
+
+Given how the wine ratings were generated, there should be two general patterns of loadings. In one pattern, cabernet sauvignon and merlot should have high loadings on one principal axis and low loadings on the other axis. With the second pattern, it is simply the opposite of the first one; that is, champagne and rosé will have high loadings on the other principal axis and low loadings on the principal axis with which cabernet sauvignon and merlot have high loadings. In looking at Table \ref{tab:loading-table}, the loadings do not remotely reflect the expected patterns. All the wine have high and negative loadings on the first principal axis and moderate loadings on the second axis. Therefore, in the current example, the unrotated loadings bear no resemblance with expected pattern and are difficult to interpret. 
+
+```r {language=python}
+# matrix of unrotated loadings 
+loadings = pd.DataFrame(data=pca_loadings,
+             index=[df_std.columns], 
+             columns=['Axis 1', 'Axis 2']).reset_index().round(2)
+loadings.rename(columns={'level_0': 'Wine'}, inplace=True)
+```
 
 
-## Principal Components Analysis 
+```r 
+kbl(py$loadings, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c', 'c'),
+    caption = '(Unrotated) Loadings of Each Wine on Each Principal Axis',    
+    escape = F, 
+    table.attr = "style='width:300px;'") %>%
+    kable_styling(position = 'center') %>%
+    column_spec(column = c(2,3), width = "75px")
+```
+<table style="width:300px; color: black; margin-left: auto; margin-right: auto;" class="table">
+<caption>(\#tab:loading-table)(Unrotated) Loadings of Each Wine on Each Principal Axis</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Wine </th>
+   <th style="text-align:center;"> Axis 1 </th>
+   <th style="text-align:center;"> Axis 2 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cab. Sauv. </td>
+   <td style="text-align:center;width: 75px; "> -0.81 </td>
+   <td style="text-align:center;width: 75px; "> -0.58 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Merlot </td>
+   <td style="text-align:center;width: 75px; "> -0.74 </td>
+   <td style="text-align:center;width: 75px; "> -0.67 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Champagne </td>
+   <td style="text-align:center;width: 75px; "> -0.77 </td>
+   <td style="text-align:center;width: 75px; "> 0.63 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rosé </td>
+   <td style="text-align:center;width: 75px; "> -0.80 </td>
+   <td style="text-align:center;width: 75px; "> 0.60 </td>
+  </tr>
+</tbody>
+</table>
 
-## Data Reduction 
 
-## Recommendations 
+
+To understand why loadings are not always meaningful, it is important to understand *rotational determinacy*. Mathematically speaking, an infinite number of loading sets exist that all account for the amount of cumulative variance. Thus, although the loadings in Table \ref{tab:loading-table} were obtained with closed-form solutions, there is nothing unique about them. The non-uniqueness of the above loadings can be better understood by plotting them. Figure \ref{fig:loading-plot} shows the unrotated loadings plotted onto each principal axis. Rotational indeterminacy becomes clear in understanding that the x- and y-axes in Figure \ref{fig:loading-plot} can be rotated in an infinite number of ways that each account for the same amount of cumulative variance (i.e., the eigenvalues sums will be identical). 
+
+```r {language=python}
+# add colors
+loadings['color'] = ['#730534', '#A40448', '#FB8EBD', '#FFFC27']
+color_dict = dict(zip(loadings['Wine'], loadings['color']))
+
+plot_loadings = (pt.ggplot(data=loadings, mapping=pt.aes(x='Axis 1', y='Axis 2', group='Wine', color='Wine')) + 
+                 pt.geom_point(size=2) + 
+                 pt.scale_color_manual(values=color_dict) + 
+                 pt.scale_x_continuous(limits=(-1, 1), expand=(0, 0)) +  # Set x-axis limits
+                 pt.scale_y_continuous(limits=(-1, 1), expand=(0, 0)) +  # Set y-axis limits
+                 pt.geom_hline(yintercept=0, color="#002241") +
+                 pt.geom_vline(xintercept=0, color="#002241") + 
+                 pt.theme_classic(base_family = 'Helvetica', base_size = 14) + 
+                 pt.theme(text=pt.element_text(color="#002241"), 
+                          axis_line=pt.element_blank(), 
+                          axis_ticks=pt.element_line(color="#002241"),
+                          axis_text=pt.element_text(color="#002241")))
+        
+#save as .png
+plot_loadings.save("images/loading_plot.png", width=8, height=6, dpi=1000)
+```
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:loading-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Unrotated Loadings of Wines Onto Principal Axes</span>
+  </div>
+    <img src="images/loading_plot.png" width="80%" height="80%"> 
+  <div class="figNote">
+  <span><em>Note. </em>Unrotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, it is difficult to assign any meaning to the principal axes. </span>
+  </div>
+</div>
+
+To show rotational indeterminacy, I apply four rotations to the unrotated loadings obtained with the wine rating data (see Figure \ref{fig:loading-plot}/Table \ref{tab:loading-table}) and show that the amount of variance accounted for by each rotation is equivalent. 
+
+```r {language=python}
+# compute four different rotated loadings
+varimax = Rotator(method="varimax")
+oblimax = Rotator(method="oblimax")
+quartimax = Rotator(method="quartimax")
+equamax = Rotator(method="equamax")
+
+varimax_loadings = varimax.fit_transform(pca_loadings)
+oblimax_loadings = oblimax.fit_transform(pca_loadings)
+quartimax_loadings = quartimax.fit_transform(pca_loadings)
+equamax_loadings = equamax.fit_transform(pca_loadings)
+
+# assert each set of loadings accounts for same amount of variance
+assert len(set([
+    np.sum(pca_loadings**2).round(4),
+    np.sum(varimax_loadings**2).round(4),
+    np.sum(oblimax_loadings**2).round(4),
+    np.sum(quartimax_loadings**2).round(4),
+    np.sum(equamax_loadings**2).round(4)])) == 1, """The rotated loadings are not all equivalent"""
+```
+
+
+### Applying Varimax Rotation
+
+Having computed unrotated loadings and explained rotational indeterminacy, I now apply a rotation to the loadings. As an aside, given the inevitability of rotational indeterminacy, one immediate question centers around how to handle this issue. Unfortunately, there is no simple solution and readers interested in a historical discussion of this issue can consult chapters 10--11 of {{< citePara "mulaik2009" >}}. In the current case, I apply varimax rotation because it maximizes the loadings of each variable onto each principal axis (this rotation is also one of the more common ones) and allows a meaningful interpretation of the principal axes. In looking at Table \ref{tab:varimax-table}/Figure \ref{fig:varimax-plot}, the varimax-rotated loadings reflect the structure with which the data were generated: The wines of cabernet sauvignon and merlot load highly onto what I now call the *dinner wine drinking* principal axis and the wines of rosé and champagne load onto what I now call the *celebratory wine drinking* principal axis. 
+
+```r {language=python}
+# compute four different rotated loadings
+varimax = Rotator(method="varimax")
+varimax_loadings = varimax.fit_transform(pca_loadings)
+
+# matrix of unrotated loadings 
+df_varimax = pd.DataFrame(data=varimax_loadings,
+             index=[df_std.columns], 
+             columns=['Celebratory', 'Dinner']).reset_index().round(2)
+
+# NOTE: loadings are multiplied by -1 since there is nothing mathematically incorrect with this (see 
+# discussion on rotational indeterminacy) and because this multiplication provides loadings that 
+# make greater conceptual sense
+cols = ['Celebratory', 'Dinner']
+df_varimax[cols] = df_varimax[cols] * -1
+             
+df_varimax.rename(columns={'level_0': 'Wine'}, inplace=True)
+```
+
+
+```r 
+kbl(py$df_varimax, booktabs = TRUE, format = 'html', 
+    align = c('l', 'c', 'c'),
+    caption = 'Varimax-Rotated Loadings of Each Wine on Each Principal Axis',    
+    escape = F, 
+    table.attr = "style='width:300px;'") %>%
+    kable_styling(position = 'center') %>%
+    column_spec(column = c(2,3), width = "75px") %>%
+    add_header_above(c(" " = 1, "Wine Drinking Preferece" = 2))
+```
+<table style="width:300px; color: black; margin-left: auto; margin-right: auto;" class="table">
+<caption>(\#tab:varimax-table)Varimax-Rotated Loadings of Each Wine on Each Principal Axis</caption>
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Wine Drinking Preferece</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;"> Wine </th>
+   <th style="text-align:center;"> Celebratory </th>
+   <th style="text-align:center;"> Dinner </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cab. Sauv. </td>
+   <td style="text-align:center;width: 75px; "> 0.18 </td>
+   <td style="text-align:center;width: 75px; "> 0.98 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Merlot </td>
+   <td style="text-align:center;width: 75px; "> 0.08 </td>
+   <td style="text-align:center;width: 75px; "> 0.99 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Champagne </td>
+   <td style="text-align:center;width: 75px; "> 0.99 </td>
+   <td style="text-align:center;width: 75px; "> 0.08 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rosé </td>
+   <td style="text-align:center;width: 75px; "> 0.99 </td>
+   <td style="text-align:center;width: 75px; "> 0.12 </td>
+  </tr>
+</tbody>
+</table>
+
+
+```r {language=python}
+# add colors
+df_varimax['color'] = ['#730534', '#A40448', '#FB8EBD', '#FFFC27']
+colors_dict = dict(zip(df_varimax['Wine'], df_varimax['color']))
+
+plot_loadings = (pt.ggplot(data=df_varimax, mapping=pt.aes(x='Celebratory', y='Dinner', group='Wine', color='Wine')) + 
+                 pt.geom_point(size=2) + 
+                 pt.scale_color_manual(values=colors_dict) + 
+                 pt.scale_x_continuous(limits=(-1.02, 1.02), expand=(0, 0)) +  # Set x-axis limits
+                 pt.scale_y_continuous(limits=(-1.02, 1.02), expand=(0, 0)) +  # Set y-axis limits
+                 pt.geom_hline(yintercept=0, color="#002241") +
+                 pt.geom_vline(xintercept=0, color="#002241") + 
+                 pt.theme_classic(base_family = 'Helvetica', base_size = 14) + 
+                 pt.theme(text=pt.element_text(color="#002241"), 
+                          axis_line=pt.element_blank(), 
+                          axis_ticks=pt.element_line(color="#002241"),
+                          axis_text=pt.element_text(color="#002241")))
+        
+#save as .png
+plot_loadings.save("images/varimax_loading_plot.png", width=8, height=6, dpi=1000)
+```
+
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:varimax-plot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Varimax-Rotated Loadings of Wines Onto Principal Axes</span>
+  </div>
+    <img src="images/varimax_loading_plot.png" width="80%" height="80%"> 
+  <div class="figNote">
+    <span><em>Note. </em>Rotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, meaning can easily be assigned the principal axes. The first principal axis (x-axis) can be conceptualized as representing  a *celebratory wine drinking* tendency as it has high loadings from the wines of champagne and rosé. The second principal axis (y-axis) can be conceptualized as a *dinner wine drinking* tendency as it has high loadings from the wines of cabernet sauvignon and merlot.</span>
+  </div>
+</div>
+
+
+## Computing Principal Component Scores with Rotated Loadings
+
+Having obtained the rotated loadings, the principal component scores can be computed with rotated loadings. Importantly, before computing the rotated principal component scors, two points require explanation. First, to more explicitly explain a previous statement, principal component scores can simply be obtained by computing the dot products between the standardized data and the eigenvectors (which are normalized; see [dot products](#dot-products)). 
+
+$$
+\begin{align}
+\mathbf{P}\_{unstd} &= \mathbf{X}\mathbf{V} 
+\tag{\ref{eq:dot-prod-scores} revisited}
+\end{align}
+$$
+To show that Equation \ref{eq:dot-prod-scores} does indeed provide the principal component scores, I provide code below to provide this (see Python ...). 
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2) Run PCA and compute PCA scores 
+pca = decomposition.PCA(n_components=2)
+pca_scores = pca.fit_transform(df_std) 
+
+# Step 3) Use SVD matrices to compute PCA scores (*multiply ny -1 to ensure signs are consistent)
+pca_scores_svd = df_std.dot(V[ : , :2])*-1
+
+# assert that both computations are identical
+differences = np.abs(pca_scores - pca_scores_svd)
+
+assert (differences.round(5) == 0).all().all() == True, '''PCA scores are not equivalent.'''
+```
+
+Second, scaled (but unstandardized) principal components scores can be computed using the loadings such that
+
+$$
+\begin{spreadlines}{0.5em}
+\begin{align}
+\mathbf{P}_{scaled} &= \mathbf{X}\mathbf{V}\mathbf{E}^{\frac{1}{2}} \nonumber \\\\
+&=\mathbf{XL} \label{eq:pca-loadings-scores}
+\end{align}
+\end{spreadlines}
+$$
+Using Equation \ref{eq:pca-loadings-scores}, the standard deviations of the principal component scores for each principal axis now match the eigenvalues (with the unscaled scores, the variances match the eigenvalues; see Python code block below).
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2) Use SVD matrices to compute PCA scores (*multiply ny -1 to ensure signs are consistent) 
+# and scaled PCA scores
+pca_scores_svd = df_std.dot(V[ : , :2])*-1
+
+# compute scaled PCA scores
+loadings = V[: , :2].dot(np.sqrt(np.diag((S[0:2]**2)/9)))
+pca_scores_scaled = df_std.dot(loadings)
+
+
+assert (pca_scores_svd.var().round(4) == pca_scores_scaled.std().round(4)).all() == True, \
+"""Scaling of PCA scores is incorrect."""
+```
+
+
+Having covered some necessary preqrequisites, the computation of rotated principal component scores can be explained. The crux of the issue with computing rotated principal component scores is that rotations such as varimax cause the loadings to lose their orthogonality. To prove this, I show that $\mathbf{A}^\top\mathbf{A} = \mathbf{D}$, where $\mathbf{D}$ is a diagonal matrix, for the unrotated loadings but not for the rotated loadings. 
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2) Compute unrotated loadings
+unrotated_loadings = V[: , :2].dot(np.sqrt(np.diag((S[0:2]**2)/9)))
+
+# Step 3 Compute rotated lodaings 
+varimax = Rotator(method="varimax")
+varimax_loadings = varimax.fit_transform(unrotated_loadings)
+
+
+# Step 4) Show that unrotated loadings are orthogonal but not rotated loadings
+unrot_orth = unrotated_loadings.T.dot(unrotated_loadings)
+rot_orth = varimax_loadings.T.dot(varimax_loadings)
+
+# Create a diagonal matrix from the diagonal elements
+unrotated_diagonal = np.diag(np.diag(unrot_orth))
+rotated_diagonal = np.diag(np.diag(rot_orth))
+
+# Check if the original matrix is equal to the diagonal matrix
+is_diagonal = np.allclose(unrot_orth, unrot_orth, atol=1e-5)
+not_diagonal = np.allclose(rot_orth, rotated_diagonal, atol=1e-5)
+
+# Assert that the matrix is diagonal
+assert (is_diagonal == True and not_diagonal==False), """Check computation of 
+rotated and unrotated loadings."""
+```
+
+Because the rotated loadings are not orthogonal, using them to compute principal component scores (Equation \ref{eq:pca-loadings-scores}) would result in principal axes that do not account for difference amounts of variance than expected by the eigenvalues. Therefore, some form of correction matrix is required. As it turns out, a correction matrix, $\mathbf{Q}^{-1}$, can be computed. 
+
+The derivation of $\mathbf{Q}^{-1}$ is actually quite simple. Because the goal is to compute principal component scores whose principal axis variabilities reflect those of the eigenvalues, we first need to compute the variance-covariance of the variance-covariance matrix and then apply an inversion to this matrix. Recall that matrix inversions un-transform basis vectors (see [matrix inverses](#matrix-inverse), and so applying $\mathbf{Q}^{-1}$ ensures that the principal component scores maintain the variance structure implied by the eigenvectors. Thus, Equation \ref{eq:loadings-inverse} below is obtained. 
+
+$$
+\begin{align}
+\mathbf{Q}^{-1} = (\mathbf{L}\_{rotated}^\top\mathbf{L}\_{rotated})^{-1}
+\label{eq:loadings-inverse}
+\end{align}
+$$
+
+Using Equation \ref{eq:loadings-inverse}, the computation for the principal component scores can be modified to obtain the rotated principal component scores, $\mathbf{P}_{rotated}$, such that
+
+$$
+\begin{align}
+\mathbf{P}_{rotated} = \mathbf{XLQ}^{-1}. 
+\label{eq:rotated-pca-scores}
+\end{align}
+$$
+To show Equation \ref{eq:rotated-pca-scores} is indeed correct, I provide the below Python code. Note that the scores obtained with Equation \ref{eq:rotated-pca-scores} are identical to the scores returned with the `FactorAnalyzer` functions and only differ by a scaling factor. 
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2 Compute rotated lodaings 
+unrotated_loadings = V[: , :2].dot(np.sqrt(np.diag((S[0:2]**2)/9)))
+varimax = Rotator(method="varimax")
+varimax_loadings = varimax.fit_transform(unrotated_loadings)
+
+# Step 3) Compute correction matrix Q
+Q = (varimax_loadings.T.dot(varimax_loadings))
+rotated_scores = df_std.dot(varimax_loadings).dot(np.linalg.inv(Q))
+
+# Step 4) Show computation of PC scores is identical to using built-in function (barring a 
+# scaling factor)
+varimax_fac = FactorAnalyzer(rotation='varimax', n_factors=2, method='principal')
+varimax_fac.fit(df_std)
+factor_scores = varimax_fac.transform(df_std)
+```
+
+
+Like the loadings, the rotated principal component scores can also be plotted. For comprehensiveness, I superimpose the factor loadings from Figure \ref{fig:varimax-plot} as vectors and each wine drinker's ratings principal component score as a dot in Figure \ref{fig:biplot}. 
+
+<div class="figure">
+  <div class="figDivLabel">
+    <caption>
+      <span class = 'figLabel'>Figure \ref{fig:biplot}<span> 
+    </caption>
+  </div>
+   <div class="figTitle">
+    <span>Principal Component Biplot</span>
+  </div>
+    <img src="images/pca_biplot.png" width="80%" height="80%"> 
+  <div class="figNote">
+    <span><em>Note. </em>Biplot shows rotated loadings and rotated principal component scores. The vectors represent the loadings of cabernet sauvignon, champagne, merlot, and rosé onto each of the principal axes and the dots represent each wine drinker's principal component score. The first principal axis (x-axis) represents *celebratory wine drinking* as it has high loadings with champagne and rosé. The second principal axis (y-axis) represents *dinner wine drinking* as it has high loadings with cabernet sauvignon and merlot.</span>
+  </div>
+</div>
+
+```r {language=python}
+# standardize data
+df_std = (A - A.mean())/A.std(ddof=1)
+
+# Step 1) Compute SVD
+U, S, V_t = np.linalg.svd(df_std)
+V = V_t.T
+
+# Step 2 Compute rotated lodaings 
+unrotated_loadings = V[: , :2].dot(np.sqrt(np.diag((S[0:2]**2)/9)))
+varimax = Rotator(method="varimax")
+
+df_loadings = pd.DataFrame(varimax.fit_transform(unrotated_loadings)) * -1
+df_loadings.rename(columns= {0: 'Dinner Wine Drinking', 
+                             1: 'Celebratory Wine Drinking'}, inplace=True)
+df_loadings[['x_start', 'y_start']] = 0
+df_loadings['Wine'] = ['Champagne', 'Rosé', 'Cab. Sauv.', 'Merlot']
+df_loadings['color'] = ['#FB8EBD', '#FFFC27', '#730534', '#A40448']
+color_dict = dict(zip(df_loadings['Wine'], df_loadings['color']))
+
+# Step 3) Compute correction matrix Q
+Q = (varimax_loadings.T.dot(varimax_loadings))
+df_rot_scores = pd.DataFrame(df_std.dot(varimax_loadings).dot(np.linalg.inv(Q)))
+df_rot_scores.rename(columns={0: 'Dinner Wine Drinking', 
+                              1: 'Celebratory Wine Drinking'}, inplace=True)
+
+# create biplot
+biplot = (pt.ggplot(data=df_rot_scores, mapping=pt.aes(x='Dinner Wine Drinking', 
+                                              y='Celebratory Wine Drinking')) + 
+  # add PCA scores                                          
+  pt.geom_point() + 
+  # add loadings 
+  pt.geom_segment(data=df_loadings,
+                  mapping=pt.aes(x='x_start', y='y_start', 
+                                 xend='Dinner Wine Drinking', yend='Celebratory Wine Drinking',
+                                 color='Wine'),
+                  arrow=pt.arrow(type="closed", length=0.12, angle=30)) +
+  pt.scale_color_manual(values=color_dict) + 
+  
+  # scale specifications 
+  pt.geom_hline(yintercept=0, color="#002241") +
+  pt.geom_vline(xintercept=0, color="#002241") + 
+  pt.scale_x_continuous(limits=(-2, 2), expand=(0, 0), minor_breaks=[]) +  # Set x-axis limits
+  pt.scale_y_continuous(limits=(-2, 2), expand=(0, 0), minor_breaks=[]) +  # Set y-axis limits
+
+  pt.theme_classic(base_family = 'Helvetica', base_size = 14) + 
+  pt.theme(text=pt.element_text(color="#002241"), 
+           axis_line=pt.element_blank(), 
+           axis_ticks=pt.element_line(color="#002241"),
+           axis_text=pt.element_text(color="#002241")))
+           
+biplot.save("images/pca_biplot", dpi=500, width=8, height=6)
+```
+
+
+
 
 # Conclusion 
 
+In summary, this whitepaper explicated the geometry of the singular value decomposition and its underlying meaning in relation to principal component analysis. Geometrically, the singular value decomposition shows that every matrix can be sequentially decomposed into a rotation followed by stretching and/or dimension change and then followed by another rotation. At a deeper level, the singular value decomposition provides eigenvectors that define principal axes onto which original variables and scores can be projected onto to, respectively, provide loadings and principal component scores. With rotation, the loadings and principal component scores can be transformed into having more interpretable values. 
+
+
+# Acknowledgments
+
+I'd like to to [David Stanley](#https://scholar.google.ca/citations?hl=en&user=krwVUm4AAAAJ&view_op=list_works&sortby=pubdate) for providing assistance in generating the wine rating data and providing insights into principal component rotations. 
 
 # References
 
@@ -1099,6 +1907,7 @@ $$
 \end{align}. 
 \end{spreadlines}
 $$
+
 Ending with the relative angles between the basis vectors, consider any two basis vectors in the matrices of $\mathbf{B}$ and $\mathbf{C}$, $\mathbf{b}_i,\mathbf{b}_j$ and $\mathbf{c}_i,\mathbf{c}_j$. If the two matrices satisfy the unitary freedom condition (Equation \ref{eq:unitaryFreedom}), then the dot product between any corresponding sets of two basis vectors will be equivalent. Mathematically, 
 
 $$
@@ -1135,6 +1944,48 @@ $$
 
 To summarize, if two positive semi-definite matrices satisfy the condition of unitary freedom (Equation \ref{eq:unitaryFreedom}), then the basis vectors of each matrix will have identical lengths and the angles between any two sets of corresponding basis vectors will have identical angles. This equivalence of angles and lengths means that there must exist some orthonormal matrix that can be used to translate between the two positive semi-definite matrices. $\qquad\qquad _\blacksquare$
 
-<script>
-    pseudocode.renderClass("pseudocode");
-</script>
+
+# Appendix D: Proof That the Lenth of Standardized Variable Equals $N-1$ {#length-proof}
+
+If $\mathbf{z}$ is a standardized variable with $N$ observations, then 
+
+$$
+\begin{align}
+\lVert \mathbf{z} \rVert_2^2 &= \sum\_{i=1}^N \mathbf{s}_i^2 = N-1,
+\label{eq:length-proof}
+\end{align}
+$$
+To prove Equation \ref{eq:length-proof} above, consider first the computation of standarizing a variable $\mathbf{x}$  
+
+$$
+\begin{align}
+\mathbf{z} = \frac{\mathbf{x}_i - \mathbf{x}}{\mathbf{s}_x},
+\label{eq:eq-standardize}
+\end{align}
+$$
+where $\mathbf{s}_x$ is the standard deviation of $\mathbf{x}$. Equation \ref{eq:eq-standardize} can be substituted into Equation \ref{eq:length-proof}
+
+$$
+\begin{align}
+\lVert \mathbf{z} \rVert_2^2= \Bigg(\frac{\mathbf{x}_i - \mathbf{x}}{\mathbf{s}_x}\Bigg)^2. 
+\label{eq:proof2}
+\end{align}
+$$
+
+Because the the standard deviation equation is
+
+$$
+\begin{align}
+\mathbf{s}_x = \sqrt{\frac{\sum\_{i=1}^N (\mathbf{x}_i - \bar{\mathbf{x}})^2}{N-1}}
+\end{align}
+$$
+then Equation \ref{eq:proof2} becomes
+
+$$
+\begin{align}
+\lVert \mathbf{z} \rVert &= \Bigg(\frac{\sum\_{i=1}^N (\mathbf{x}_i = \bar{\mathbf{x}})}{\sqrt{\frac{\sum\_{i=1}^N (\mathbf{x}_i = \bar{\mathbf{x}})^2}{N-1}}}\Bigg)^2 \nonumber  \\\\ 
+&= \frac{\sum\_{i=1}^N (\mathbf{x}_i = \bar{\mathbf{x}})^2 (N-1)}{\sum\_{i=1}^N (\mathbf{x}_i = \bar{\mathbf{x}})^2 } \nonumber \\\\
+&= N-1 \qquad\qquad _\blacksquare
+\end{align} 
+$$
+

@@ -275,8 +275,7 @@ class standardBasis(LinearTransformationScene):
         
   def construct(self):
     add_standard_basis(self=self)
-
-
+    
 class nonStandardBasis(LinearTransformationScene):
   
   def __init__(self, **kwargs):
@@ -298,7 +297,7 @@ class nonStandardBasis(LinearTransformationScene):
     add_non_standard_basis(self=self)
    
 
-class tomBasisVectors(LinearTransformationScene):
+class weightedSumMatrix(LinearTransformationScene):
   
   def __init__(self, **kwargs):
         
@@ -318,114 +317,251 @@ class tomBasisVectors(LinearTransformationScene):
     basis_x = Vector([1, 0], color="#4EF716")
     
     # add label for basis_x 
-    label_x = MathTex(r'\mathbf{b}_{\mathbf{t_x}}', color="#4EF716", font_size=35)  
+    label_x = MathTex(r'\mathbf{b}_{\mathbf{e_x}}', color="#4EF716", font_size=35)  
     label_x.align_to(basis_x, UL)
-    label_x.shift(0.25 * DOWN + 0.45 * RIGHT)
+    label_x.shift(0.25 * DOWN + 0.1 * RIGHT)
 
     self.add_vector(basis_x)
+    show_basis_x_label = [Write(label_x)]
+
+    self.play(*show_basis_x_label)
     self.wait(0.5)
+    
     # endregion 
 
-    # region Scene 2: First column with vector label x
-    text = (MathTex(
-            r"\begin{array}{c}\begin{matrix}" + 
-            r"\hspace{1cm} \mathbf{b_{t_x}}\end{matrix} \\ " +
-            r" \mathbf{B}_t = \begin{bmatrix} 1 \\ \\" + 
-            r"0  \end{bmatrix} \end{array}",font_size=35). 
-            to_edge(UL))
-                     
-      
-    # add custom colouring
-    # self.add(index_labels(text[0]))  # help determine what index values to colour
-    text[0][0:3].set_color("#4EF716")
-    text.add_background_rectangle()
-
-    # Display the initial text
-    show_text = [Create(text), Write(label_x)]
-    self.play(*show_text)
-    self.wait(0.5)
-    # endregion 
-
-    # region Scene 3: Basis vector y
+    # region Scene 2: Basis vector y
     basis_y = Vector([0, 1], color="#FB699D")
-        
-    # add label for basis_y
-    label_y = MathTex(r'\mathbf{b}_{\mathbf{t_y}}', color="#FB699D", font_size=35)  
-    label_y.align_to(basis_y, UR)
-    label_y.shift(0.3 * LEFT)
+    
+    # add label for basis_y 
+    label_y = MathTex(r'\mathbf{b}_{\mathbf{e_y}}', color="#FB699D", font_size=35)  
+    label_y.align_to(basis_y, UL)
+    label_y.shift(0.2 * UP + 0.4 * LEFT)
 
     self.add_vector(basis_y)
+    show_basis_y_label = [Write(label_y)]
+    
+    self.play(*show_basis_y_label)
     self.wait(0.5)
+    
     # endregion 
+    
+    # region Scene 3: Add vector g_n and it's text 
+    vec_gn = Vector([1.5, 0.5], color="#f5dc0e")
+        
+    # add label for basis_y
+    label_gn = MathTex(r'\mathbf{g}_n', color="#f5dc0e", font_size=35)  
+    label_gn.align_to(vec_gn, UR)
+    label_gn.shift(0.3 * LEFT + 0.3 * UP)
 
-    # region Scene 4: Second column with vector label y
+    self.add_vector(vec_gn)
+    show_label_gn_label = [Write(label_gn)]
+    
+    self.play(*show_label_gn_label)
+    self.wait(0.5)
 
-    text2 = (MathTex(r"\begin{array}{c}\begin{matrix}" + 
-                       r"\hspace{1cm} \mathbf{b_{t_x}} & \mathbf{b_{t_y}} \end{matrix} \\ " +
-                       r" \mathbf{B}_t = \begin{bmatrix} 1 & \quad 0 \\ \\" + 
-                       r"0 & \quad 1 \end{bmatrix} \end{array}",font_size=35)
-                       .to_edge(UL))
+    text_gn = (MathTex(r"\mathbf{g}_n = \begin{bmatrix} 1.5 \\ \\" + 
+                       r"0.5 \end{bmatrix}",
+                color='#f5dc0e', font_size=35) .to_edge(UL))
+    text_gn.shift(2 * DOWN)
 
     # add custom colouring
     # self.add(index_labels(text[0]))  # help determine what index values to colour
-    text2[0][0:3].set_color("#4EF716")
-    text2[0][3:6].set_color("#FB699D")
-    text2.add_background_rectangle()
+    text_gn.add_background_rectangle()
     
-    self.play(Transform(text, text2), Write(label_y))
+    self.play(Write(text_gn))
     self.wait(0.5)
+
     # endregion
 
-    # region Scene 5: Add x component of vector h
-
-    vec_basis_x = Vector(color="#4EF716")
-    vec_basis_x.put_start_and_end_on(start=[1,0, 0], end=[-2, 0, 0])
-    h_coord_x = MathTex(r'-2\mathbf{b}_{\mathbf{t_x}}', color="#4EF716", font_size=35)  
-    h_coord_x.align_to(vec_basis_x, UL)
-    h_coord_x.shift(0.35 * UP)
-
-
-    self.add_vector(vec_basis_x) 
-    self.wait()
-    self.play(Write(h_coord_x))
-
-    # endregion 
+    # region Scene 4: Add matrix-vector computation  
       
-    # region Scene 6: Add y component of vector h and move to tip of x component
-    vec_basis_y = Vector(color="#FB699D")
-    vec_basis_y.put_start_and_end_on(start=[0,1, 0], end=[0, -1, 0])
-    h_coord_y = MathTex(r'-1\mathbf{b}_{\mathbf{t_y}}', color="#FB699D", font_size=35)  
-    h_coord_y.align_to(vec_basis_y, DL)
-    h_coord_y.shift(1 * LEFT + 0.2 * UP)
+    matrix_vec_text = (MathTex(r"\mathbf{B}_n \mathbf{g}_n = " +
+                               r"\begin{bmatrix} 1 & \quad 2 \\ \\" + 
+                               r"0 & \quad 1 \end{bmatrix}" + 
+                               r"\begin{bmatrix} 1.5 \\ \\ 0.5 \end{bmatrix}",
+                               font_size=35)
+                               .to_edge(DL))
 
-    # Create a VGroup to include both the vector and its label
-    vector_with_label = VGroup(vec_basis_y, h_coord_y)
+    matrix_vec_text.add_background_rectangle()
+    matrix_vec_text.shift(1.75 * UP)
 
-    self.add_vector(vec_basis_y) 
+    show_matrix_text = [Create(matrix_vec_text)]
+    self.play(*show_matrix_text)
+    self.wait(0.5)
+    self.moving_mobjects = []
+
+    matrix_vec_text2 = (MathTex(r"= \mathbf{g_e}", color='#d170c7',
+                           font_size=35)
+                           .to_edge(DL))
+
+    matrix_vec_text2.shift(2.25 * UP + 4*RIGHT)
+    # matrix_vec_text2.add_background_rectangle()
+
+    show_matrix_text = [Create(matrix_vec_text2)]
+    self.play(*show_matrix_text)
+
+    self.wait(0.5)
+    self.moving_mobjects = []
+
+    # endregion
+
+    # region Scene 5: Apply transformation 
+    non_standard_basis = np.array([[1, 1], 
+                                    [0, 2]]) 
+
+    
+    # Function to randomly change color
+    # Define the two alternating animations
+
+    # Play flicker effect 10 times
+    for _ in range(4):  # Repeat the animation 10 times
+        self.play(vec_gn.animate.set_color("#d170c7"), run_time=0.2)  # Change to first color
+        self.play(vec_gn.animate.set_color("#f5dc0e"), run_time=0.2) # Change back
+
+    self.play(vec_gn.animate.set_color("#d170c7"))
+    self.moving_mobjects = []
+    # apply transformation 
+    self.apply_matrix(non_standard_basis)
+    self.moving_mobjects = []
+    # endregion 
+
+    # region Scene 6) Change gn label to ge
+    text_ge = (MathTex(r"\mathbf{g_e}", 
+                color='#d170c7', font_size=35).to_edge(UL))
+        
+    # add custom colouring
+    # self.add(index_labels(text[0]))  # help determine what index values to colour
+    text_ge.add_background_rectangle()
+        
+    # label for first basis vector of orthonormal 
+    text_ge.align_to(vec_gn, UR)
+    text_ge.shift(0.2 * UP + 0.35* RIGHT)
+
+    self.play(Transform(label_gn, text_ge))
+
+    self.wait(0.5)
+    self.moving_mobjects = []      
+    # endregion 
+
+    # region Scene 7) Breakdown basis vectors 
+    matrix_bnx = (MathTex(
+    r"\begin{array}{c}\begin{matrix}" + 
+    r"\hspace{1cm} \mathbf{b_{n_x}}  \quad \hspace{0.6cm} \end{matrix} \\ " +
+    r"\mathbf{B_n} = \begin{bmatrix} 1 & \quad 1 \\ \\" + 
+    r"0 &  \quad 2 \end{bmatrix} \end{array}", font_size=35).to_edge(UL))
+    matrix_bnx.shift(0.3*UP)
+
+    # add custom colouring
+    # self.add(index_labels(matrix_vec_text_x[0]))  # help determine what index values to colour
+    matrix_bnx[0][0:3].set_color("#4EF716")
+    matrix_bnx.add_background_rectangle()
+
+    label_bnx = MathTex(r'\mathbf{b_{n_x}}', color="#4EF716", font_size=35)  
+    label_bnx.add_background_rectangle()
+    label_bnx.align_to(basis_x, UR)
+    label_bnx.shift(0.4 * DOWN + 0.3* LEFT)
+
+    self.play(Transform(label_x, label_bnx))
+    self.play(Wiggle(label_bnx, run_time=0.5))
+    self.play(Write(matrix_bnx))
+    self.wait(0.5)
+    self.moving_mobjects = []  
+    # endregion 
+
+    # region Scene 8) Breakdown basis vector y 
+    matrix_bny = (MathTex(
+    r"\begin{array}{c}\begin{matrix}" + 
+    r"\hspace{1cm} \mathbf{b_{n_x}}  & \mathbf{b_{n_y}} \end{matrix} \\ " +
+    r"\mathbf{B_n} = \begin{bmatrix} 1 & \quad 1 \\ \\" + 
+    r"0 &  \quad 2 \end{bmatrix} \end{array}", font_size=35).to_edge(UL))
+        
+    matrix_bny.shift(0.3*UP)
+    # add custom colouring
+    # self.add(index_labels(matrix_vec_text_x[0]))  # help determine what index values to colour
+    matrix_bny[0][0:3].set_color("#4EF716")
+    matrix_bny[0][3:6].set_color("#FB699D")
+    matrix_bny.add_background_rectangle()
+
+    label_bny = MathTex(r'\mathbf{b_{n_y}}', color="#FB699D", font_size=35)  
+
+    label_bny.add_background_rectangle()
+    label_bny.align_to(basis_y, UR)
+    label_bny.shift(0.2 * UP + 0.3* LEFT)
+
+    self.play(Transform(label_y, label_bny))
+    self.play(Wiggle(label_bny, run_time=0.5))
+    self.play(Transform(matrix_bnx, matrix_bny))
+    self.wait(0.5)
+    self.moving_mobjects = []  
+    # endregion 
+
+
+    # region Scene 9) Show weighted basis vector x
+    weighted_comp_x = (MathTex(
+    r"= 1.5 \begin{bmatrix} 1 \\ 0 \end{bmatrix}", font_size=35).to_edge(DL))
+        
+    # add custom colouring
+    # self.add(index_labels(text[0]))  # help determine what index values to colour
+    weighted_comp_x[0][1:8].set_color("#4EF716")
+    weighted_comp_x.add_background_rectangle()
+
+    # label for first basis vector of orthonormal 
+    vec_basis_x = Vector(color="#4EF716")
+    vec_basis_x.put_start_and_end_on(start=[0, 0, 0], end=[1.5, 0, 0])
+    vec_coord_x = MathTex(r'1.5\mathbf{b}_{\mathbf{n_x}}', color="#4EF716", font_size=35)  
+    vec_coord_x.align_to(vec_basis_x, DL)
+    vec_coord_x.shift(1.2* RIGHT + 0.5*DOWN)
+
+    self.play(Write(weighted_comp_x))
+    self.play(Wiggle(weighted_comp_x))
+    self.add_vector(vec_basis_x) 
+    self.play(Write(vec_coord_x))
+
     self.wait()
-    self.play(Write(h_coord_y))
-
-    vec_basis_y.put_start_and_end_on(start=ORIGIN, end=[0, -1, 0])
-    animation = ApplyMethod(vector_with_label.shift, [-2, 0, 0])
-    self.play(animation)
 
     # endregion 
 
-    # region Scene 7: Add vector h 
-    vec_h = Vector([-2, -1], color='#d170c7')
-    label_vec_h = MathTex(r'\mathbf{h_t} = [-2, -1]', color='#d170c7', font_size=35)
-    label_vec_h.add_background_rectangle()
-    label_vec_h.move_to([-1.5, -1.5, 0])
-    # label_vec_h.next_to(vec_h, direction=[-1, -1, 0], buff=0.1)
+    # region Scene 10) Show weighted basis vector y
+    weighted_comp_y = (MathTex(
+    r"+  0.5 \begin{bmatrix} 1 \\ 2 \end{bmatrix}", 
+    font_size=35).to_edge(DL))
 
-    self.add_vector(vec_h)
-    self.play(Write(label_vec_h))
-    self.wait(1.5)
-    
+    weighted_comp_y.shift(1.6*RIGHT)
+        
+    # add custom colouring
+    # self.add(index_labels(weighted_comp_y[0]))  # help determine what index values to colour
+    weighted_comp_y[0][1:8].set_color("#FB699D")
+    weighted_comp_y.add_background_rectangle()
+
+    # label for first basis vector of orthonormal 
+    vec_basis_y = Vector(color="#FB699D")
+    vec_basis_y.put_start_and_end_on(start=[1.5, 0, 0], end=[2, 1, 0])
+    vec_coord_y = MathTex(r'0.5 \mathbf{b}_{\mathbf{n_y}}', color="#FB699D", font_size=35)  
+    vec_coord_y.align_to(vec_basis_y, DL)
+    vec_coord_y.shift(0.5 * RIGHT + 0.2*UP)
+
+    self.play(Write(weighted_comp_y))
+    self.play(Wiggle(weighted_comp_y))
+    self.add_vector(vec_basis_y) 
+    self.play(Write(vec_coord_y))
+
+    self.wait()
+
+    # endregion 
+
+    # region 11) Show coordiantes of g_e
+    weighted_comp_ge = (MathTex(
+    r"= \begin{bmatrix} 2 \\ 1 \end{bmatrix}", color='#d170c7',
+    font_size=35).to_edge(DL))
+
+    weighted_comp_ge.shift(3*RIGHT)
+        
+    self.play(Write(weighted_comp_ge))
+
     # endregion
 
 
-class sarahBasisVectors(LinearTransformationScene):
+class dotProduct(LinearTransformationScene):
   
   def __init__(self, **kwargs):
         
@@ -441,334 +577,200 @@ class sarahBasisVectors(LinearTransformationScene):
         
   def construct(self):
     
-    # region Scene 1: Basis vector x
-    basis_x = Vector([1, -1], color="#4EF716")
+    # region Scene 1: Vector a
+    vec_a = Vector([1, 2], color="#f5dc0e")
     
-    # add label for basis_x 
-    label_x = MathTex(r'\mathbf{b}_{\mathbf{s_x}}', color="#4EF716", font_size=35)  
-    label_x.align_to(basis_x, UL)
-    label_x.shift(0.5 * DOWN + 1 * RIGHT)
+    # add label for vec_a 
+    label_a = MathTex(r'\mathbf{a}', color="#f5dc0e", font_size=35)  
+    label_a.align_to(vec_a, UR)
+    label_a.shift(0.25*RIGHT)
 
-    self.add_vector(basis_x)
+    self.add_vector(vec_a)
+    show_vec_a_label = [Write(label_a)]
+
+    self.play(*show_vec_a_label)
     self.wait(0.5)
-    # endregion 
-
-    # region Scene 2: First column with vector label x
-    text = (MathTex(
-            r"\begin{array}{c}\begin{matrix}" + 
-            r"\hspace{1cm} \mathbf{b_{s_x}}\end{matrix} \\ " +
-            r" \mathbf{B}_s = \begin{bmatrix} 1 \\ \\" + 
-            r"-1 \end{bmatrix} \end{array}",font_size=35). 
-            to_edge(UL))
-                     
-      
-    # add custom colouring
-    # self.add(index_labels(text[0]))  # help determine what index values to colour
-    text[0][0:3].set_color("#4EF716")
-    text.add_background_rectangle()
-
-    # Display the initial text
-    show_text = [Create(text), Write(label_x)]
-    self.play(*show_text)
-    self.wait(0.5)
-    # endregion 
-
-    # region Scene 3: Basis vector y
-    basis_y = Vector([1, 1], color="#FB699D")
-        
-    # add label for basis_y
-    label_y = MathTex(r'\mathbf{b}_{\mathbf{s_y}}', color="#FB699D", font_size=35)  
-    label_y.align_to(basis_y, UR)
-    label_y.shift(0.6 * RIGHT)
-
-    self.add_vector(basis_y)
-    self.wait(0.5)
-    # endregion 
-
-    # region Scene 4: Second column with vector label y
-
-    text2 = (MathTex(r"\begin{array}{c}\begin{matrix}" + 
-                       r"\hspace{1cm} \mathbf{b_{e_x}} & \mathbf{b_{_y}} \end{matrix} \\ " +
-                       r" \mathbf{B}_e = \begin{bmatrix} 1 & \quad 1 \\ \\" + 
-                       r"-1 & \quad 1 \end{bmatrix} \end{array}",font_size=35)
-                       .to_edge(UL))
-
-    # add custom colouring
-    # self.add(index_labels(text[0]))  # help determine what index values to colour
-    text2[0][0:3].set_color("#4EF716")
-    text2[0][3:6].set_color("#FB699D")
-    text2.add_background_rectangle()
     
-    self.play(Transform(text, text2), Write(label_y))
+
+    # add label for vec_a 
+    text_vec_a = (MathTex(r'\mathbf{a} = \begin{bmatrix}1 \\ \\ 2 \end{bmatrix}', 
+                           color="#f5dc0e", font_size=35).to_edge(UL))
+
+    show_matrix_text = [Write(text_vec_a)]
+    self.play(*show_matrix_text)
     self.wait(0.5)
-    # endregion
-
-    # region Scene 5: Add x component of vector h
-    start_x = np.array([1, -1, 0])
-    end_x = -0.5*start_x
-
-    vec_basis_x = Vector(color="#4EF716")
-    vec_basis_x.put_start_and_end_on(start=start_x, end=end_x)
-    h_coord_x = MathTex(r'-0.5\mathbf{b}_{\mathbf{s_x}}', color="#4EF716", font_size=35)  
-    h_coord_x.align_to(vec_basis_x, UL)
-    h_coord_x.shift(0.1* DOWN + 1.2 * LEFT )
-
-
-    self.add_vector(vec_basis_x) 
-    self.wait()
-    self.play(Write(h_coord_x))
 
     # endregion 
+
+    # region Scene 2: Vector b 
+    vec_b = Vector([3, 1], color="#d170c7")
+    
+    # add label for vec_b 
+    label_b = MathTex(r'\mathbf{b}', color="#d170c7", font_size=35)  
+    label_b.align_to(vec_b, UR)
+    label_b.shift(0.25*RIGHT)
+    self.add_vector(vec_b)
+    show_vec_b_label = [Write(label_b)]
+    
+    self.play(*show_vec_b_label)
+    self.wait(0.5)
+    
+    # add label for vec_ab
+    text_vec_b = (MathTex(r'\mathbf{b} = \begin{bmatrix}3 \\ \\ 1 \end{bmatrix}', 
+                           color="#d170c7", font_size=35).to_edge(UL))
+    text_vec_b.shift(1.5*DOWN)                  
+
+    show_matrix_text = [Write(text_vec_b)]
+    self.play(*show_matrix_text)
+    self.wait(0.5)
+
+    # endregion 
+
+    # region 3) Add basis vectors of b 
+    vec_bx = Vector([3, 0], color='#4EF716')
+    
+    label_bx = MathTex(r'b_x', color="#4EF716", font_size=35)  
+    label_bx.align_to(vec_bx, UR)
+    label_bx.shift(0.4*DOWN)
+
+    self.add_vector(vec_bx)
+    show_vec_bx_label = [Write(label_bx)]
+    
+    self.play(*show_vec_bx_label)
+    self.wait(0.5)
+
+    # transform tex
+    text_vec_bx = (MathTex(r'\mathbf{b} = \begin{bmatrix}3 \\ \\ 1 \end{bmatrix}, b_x=3', 
+                       color="#d170c7", font_size=35).to_edge(UL))
+    text_vec_bx[0][0:8].set_color("#d170c7")
+    text_vec_bx[0][9:13].set_color("#4EF716")
+    text_vec_bx.shift(1.5*DOWN)                  
+
+    self.play(Transform(mobject=text_vec_b, target_mobject=text_vec_bx))
+    self.wait(0.5)
+
+    # add vector b_y
+    vec_by = Vector([1, 0], color='#FB699D')
+    
+    label_by = MathTex(r'b_y', color="#FB699D", font_size=35)  
+    label_by.align_to(vec_by, UR)
+
+    label_by.shift(0.4*DOWN)
+    self.add_vector(vec_by)
+
+    show_vec_by_label = [Write(label_by)]
+    self.play(*show_vec_by_label)
+
+    text_vec_by = (MathTex(r'\mathbf{b} = \begin{bmatrix}3 \\ \\ 1 \end{bmatrix}, b_x=3, b_y=1', 
+                   color="#d170c7", font_size=35).to_edge(UL))
+    text_vec_by[0][0:8].set_color("#d170c7")
+    text_vec_by[0][9:13].set_color("#4EF716")
+    text_vec_by[0][14:18].set_color("#FB699D")
+
+    text_vec_by.shift(1.5*DOWN)                  
+
+    self.play(Transform(mobject=text_vec_b, target_mobject=text_vec_by))
+
+    self.wait(0.5)
+
+    # endregion 
+
+    # region Scene 4: Add matrix-vector computation  
       
-    # region Scene 6: Add y component of vector h and move start of 
-    # x component to to tip of y component
-    start_y = np.array([1, 1, 0])
-    end_y = -1.5*start_y
+    matrix_vec_text = (MathTex(r"\mathbf{a}^\top \mathbf{b} = " +
+                               r"\begin{bmatrix} 1 & 2 \end{bmatrix}" + 
+                               r"\begin{bmatrix} 3 \\ \\ 1 \end{bmatrix}",
+                               font_size=35)
+                               .to_edge(DL))
+
+    matrix_vec_text[0][0:3].set_color("#52aafa")
+    matrix_vec_text[0][4:8].set_color("#f5dc0e")
+    matrix_vec_text[0][8:15].set_color("#d170c7")
+
+
+    matrix_vec_text.add_background_rectangle()
+    matrix_vec_text.shift(1.75 * UP)
+
+    show_matrix_text = [Create(matrix_vec_text)]
+    self.play(*show_matrix_text)
+    self.wait(0.5)
+    self.moving_mobjects = []
+
+    text_calc_x = (MathTex(r"= 1(b_x)", font_size=35, color='#4EF716').to_edge(DL))
+    text_calc_y = (MathTex(r"+ 2(b_y)", font_size=35, color='#FB699D').to_edge(DL))
+
+    text_calc_x.add_background_rectangle()
+    text_calc_y.add_background_rectangle()
+
+    text_calc_x.shift(0.5 * UP + 0.75*RIGHT)
+    text_calc_y.shift(0.5 * UP + 2*RIGHT)
+
+    self.play(Write(VGroup(text_calc_x, text_calc_y)))
+    self.play(Wiggle(mobject=text_calc_x))
+    self.play(Wiggle(mobject=label_bx))
+
+    # endregion 
+
+    # region 5) Show basis y 
+    self.play(Wiggle(mobject=text_calc_y))
 
     vec_basis_y = Vector(color="#FB699D")
-    vec_basis_y.put_start_and_end_on(start=start_y, end=end_y)
-    h_coord_y = MathTex(r'-1.5\mathbf{b}_{\mathbf{s_y}}', color="#FB699D", font_size=35)  
-    h_coord_y.add_background_rectangle()
-    h_coord_y.align_to(vec_basis_y, DL)
-    h_coord_y.shift(0.1* RIGHT + 0.4*DOWN)
+    vec_basis_y.put_start_and_end_on(start=[3,0, 0], end=[5, 0, 0])
+    h_coord_y = MathTex(r'2b_y', color="#FB699D", font_size=35)  
+    h_coord_y.align_to(vec_basis_y, UL)
+    h_coord_y.shift(0.4 * DOWN + 2*RIGHT)
 
-    # Create a VGroup to include both the vector and its label
-    vector_with_label = VGroup(vec_basis_x, h_coord_x)
-
-    self.add_vector(vec_basis_y) 
-    self.wait()
+    self.add_vector(vec_basis_y)
+    self.wait(0.5)
     self.play(Write(h_coord_y))
 
-    vec_basis_x.put_start_and_end_on(start=ORIGIN, end=end_x)
-    animation = ApplyMethod(vector_with_label.shift, end_y)
-    self.play(animation)
-
-    # endregion 
-
-    # region Scene 7: Add vector h 
-    vec_h = Vector([-2, -1], color='#d170c7')
-    label_vec_h = MathTex(r'\mathbf{h_s} = [-0.5, -1.5]', color='#d170c7', font_size=35)
-    label_vec_h.add_background_rectangle()
-    label_vec_h.move_to([-3.4, -0.5, 0])
-    # label_vec_h.next_to(vec_h, direction=[-1, -1, 0], buff=0.1)
-
-    self.add_vector(vec_h)
-    self.play(Write(label_vec_h))
-    self.wait(1.5)
-    
+    self.moving_mobjects = []
     # endregion
 
+    # region 6) Show final vector 
+    text_final = (MathTex(r"=5", font_size=35, color='#52aafa').to_edge(DL))
+    text_final.shift(0.55 * UP + 3.2*RIGHT)
+    text_final.add_background_rectangle()
+    self.play(Write(text_final))
+    self.wait(0.5)
 
-class tomCoordTransformation(LinearTransformationScene):
+    vec_ab = Vector(color="#52aafa")
+    vec_ab.put_start_and_end_on(start=[0,0, 0], end=[5, 0, 0])
 
-    def __init__(self, **kwargs):
-        
-        LinearTransformationScene.__init__(
-            self,
-            show_basis_vectors=False, 
-            show_coordinates=True,  # include coordinate labels
-            leave_ghost_vectors=False,
-            include_foreground_plane=True,  # includes grid lines 
-            include_background_plane=True,  # includes numbers 
-            *kwargs
-        )
+    self.add_vector(vec_ab)
+    self.wait(0.5)
+    self.moving_mobjects = []
+    self.remove(vec_bx, label_bx, vec_by, label_by, vec_basis_y, h_coord_y)
+    self.play(FadeOut(vec_bx, label_bx, vec_by, label_by, vec_basis_y, h_coord_y))
+    self.moving_mobjects = []
 
- 
-    def construct(self):
-        
+    # endregion
 
-        # vector g_e
-        # region Scene 1: Basis vector x
-        vector_g_e = Vector([1.5, 0.5], color="#4EF716")
+    # region Scene 7: Apply transformation 
+    self.play(Wiggle(matrix_vec_text))
+    non_standard_basis = np.array([[1, 2], 
+                                   [0, 0]]) 
 
-        # add label for vector_g_e 
-        # # label_x = MathTex(r'\mathbf{g}_{\mathbf{x}}', color="#4EF716", font_size=35)  
-        # label_x.align_to(vector_g_e, UL)
-        # label_x.shift(0.25 * DOWN + 0.3 * RIGHT)
+    transformed_vec_a = Vector([5, 0], color='#52aafa')  # Adjusted for transformation
+    transformed_vec_b = Vector([5, 0], color='#52aafa')  
 
-        self.add_vector(vector_g_e)
-        self.wait(0.5)  
-        self.moving_mobjects = []
+    self.play(
+        Transform(vec_a, transformed_vec_a, run_time=2),
+        Transform(vec_b, transformed_vec_b, run_time=2),
+        ApplyMatrix(non_standard_basis, self.plane, run_time=2)
+    )
 
-        # non-standard basis
-        non_standard_basis = np.array([[1, 1], 
-                              [0, 2]])
+    # move a and b labels to end of transformed vector
+    text_ab = MathTex(r"\mathbf{a}^\top \mathbf{b}", color='#52aafa', font_size=35)
+    text_ab.align_to(transformed_vec_a, UR)
+    text_ab.shift(0.4*RIGHT + 0.4*UP)
 
-        
-        # apply transformation 
-        self.apply_matrix(non_standard_basis)
-        self.wait()        
+    self.play(Transform(label_a, text_ab),
+             Transform(label_b, text_ab))
+    # endregion 
 
-
-class transformationExample(LinearTransformationScene):
-
-    def __init__(self, **kwargs):
-        
-        LinearTransformationScene.__init__(
-            self,
-            show_basis_vectors=False, 
-            show_coordinates=True,  # include coordinate labels
-            leave_ghost_vectors=True,
-            include_foreground_plane=True,  # includes grid lines 
-            include_background_plane=True,  # includes numbers 
-            *kwargs
-        )
-
- 
-    def construct(self):
-        
-        # region Scene 1: Vector in standard basis 
-        vec_ge = Vector([2, 1], color='#d170c7')
-        vec_ge_label = MathTex(r'\mathbf{g_e} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}', 
-                               color="#d170c7", 
-                               font_size=35)
-        # vec_ge_label.align_to(vec_ge, UR)
-        vec_ge_label.add_background_rectangle()
-        vec_ge_label.move_to([4.75, 1.75, 0])  
-
-        self.add_vector(vec_ge)
-        show_vec_ge_label = [Write(vec_ge_label)]
-        self.play(*show_vec_ge_label)
-        self.wait(0.75)
-
-        # endregion 
-
-        # region Scene 2: Basis vector x
-        basis_x = Vector([1, 0], color="#4EF716")
-
-        # add label for basis_x 
-        label_x = MathTex(r'\mathbf{b}_{\mathbf{e_x}}', color="#4EF716", font_size=35)  
-        label_x.align_to(basis_x, UL)
-        label_x.shift(0.25 * DOWN + 0.45 * RIGHT)
-
-        self.add_vector(basis_x)
-        self.wait(0.5)
-        self.play(Write(label_x))
-        self.wait(0.5)
-
-        # endregion
-
-        # region Scene 3: Basis vector y
-        basis_y = Vector([0, 1], color="#FB699D")
-
-        # add label for basis_y
-        label_y = MathTex(r'\mathbf{b}_{\mathbf{e_y}}', color="#FB699D", font_size=35)  
-        label_y.align_to(basis_y, UR)
-        label_y.shift(0.3 * LEFT)
-
-        self.add_vector(basis_y)
-        self.play(Write(label_y))
-
-        self.wait(0.5)
-        # endregion 
-
-        # region Scene 4: Add equation 
-        equation = (MathTex(r"\mathbf{g_n} = \mathbf{B_n}^{-1} \mathbf{g_e}",
-                            font_size=35)
-                            .to_edge(UR))
-        equation.add_background_rectangle()
-
-        # Display the initial equation
-        show_equation = [Create(equation)]
-        self.play(*show_equation)
-        self.wait(0.5)
-        self.moving_mobjects = []
-
-        # endregion    
-
-        # region Scene 5: Show inverse matrix text
-        # add basis vectors of 
-        inverse_text = (MathTex(r"\mathbf{B}_n^{-1} = \begin{bmatrix} 1 & -0.5 \\ \\" + 
-                       r"0 &  0.5 \end{bmatrix}",
-                       font_size=35)
-                       .to_edge(UL))
-
-        # add custom colouring
-        # self.add(index_labels(text[0]))  # help determine what index values to colour
-        inverse_text.add_background_rectangle()
-
-        # Display the initial inverse_text
-        show_inverse_text = [Create(inverse_text)]
-        self.play(*show_inverse_text)
-        self.wait(0.5)
-        self.moving_mobjects = []
-
-        # endregion
-
-        # region Scene 6: Apply inverse of non-standard basis and transformed vector label
-        # non-standard basis
-        non_standard_basis = np.array([[1, 1], 
-                                        [0, 2]])
-
-        self.add(vec_ge.copy())
-        
-        # apply transformation 
-        self.apply_inverse(non_standard_basis)
-        vec_ge.set_color('#f5dc0e')
-
-
-        # show label of vector g_n
-        vec_gn_label = MathTex(r'\mathbf{g_n} = \begin{bmatrix} 1.5 \\ 0.5 \end{bmatrix}', 
-                               color="#f5dc0e", 
-                               font_size=35)
-        
-        vec_gn_label.add_background_rectangle()
-        vec_gn_label.move_to([4.75, 0.5, 0])  
-        
-        show_vec_gn_label = [Write(vec_gn_label)]
-        self.play(*show_vec_gn_label)
-        self.wait(0.75)
-
-        # endregion 
-
-        # region Scene 7: Change basis x label 
-        inverse_text_labels_x = (MathTex(r"\begin{array}{c}\begin{matrix}" + 
-                           r"\hspace{1cm} \mathbf{b^{-1}_{n_x}}  \quad \hspace{0.6cm} \end{matrix} \\ " +
-                           r" \mathbf{B}^{-1}_n = \begin{bmatrix} 1 & \quad -0.5 \\ \\" + 
-                           r"0 & \quad 0.5 \end{bmatrix} \end{array}", font_size=35)
-                           .to_edge(UL))
-        
-        # add custom colouring
-        # self.add(index_labels(text[0]))  # help determine what index values to colour
-        inverse_text_labels_x[0][0:5].set_color("#4EF716")
-        inverse_text_labels_x.add_background_rectangle()
-        
-        # label for first basis vector of inverse 
-        inverse_label_x = MathTex(r'\mathbf{b^{-1}_{n_x}}', color="#4EF716", font_size=35)  
-        inverse_label_x.add_background_rectangle()
-        inverse_label_x.align_to(basis_x, UL)
-        inverse_label_x.shift(0.3 * DOWN + 0.4* RIGHT)
-
-        self.play(Transform(inverse_text, inverse_text_labels_x), 
-                  Transform(label_x, inverse_label_x))
-
-        self.wait(0.5)
-        self.moving_mobjects = []  
-
-        # endregion 
-
-        # region Scene 8: Change basis y label
-        inverse_text_labels = (MathTex(r"\begin{array}{c}\begin{matrix}" + 
-           r"\hspace{1cm} \mathbf{b^{-1}_{n_x}} & \mathbf{b^{-1}_{n_y}} \end{matrix} \\ " +
-           r" \mathbf{B}^{-1}_n = \begin{bmatrix} 1 & \quad -0.5 \\ \\" + 
-           r"0 & \quad 0.5 \end{bmatrix} \end{array}", font_size=35)
-           .to_edge(UL))
-        
-        inverse_text_labels[0][0:5].set_color("#4EF716")
-        inverse_text_labels[0][5:10].set_color("#FB699D")
-        inverse_text_labels.add_background_rectangle()
-
-        # label for second basis vector of inverse 
-        inverse_label_y = MathTex(r'\mathbf{b^{-1}_{n_y}}', color="#FB699D", font_size=35)  
-        inverse_label_y.add_background_rectangle()
-        inverse_label_y.align_to(basis_y, UR)
-        inverse_label_y.shift(0.5 * LEFT + 0.3*UP)
-
-        self.play(Transform(inverse_text_labels_x, inverse_text_labels), 
-                  Transform(label_y, inverse_label_y))
-    
-        # endregion
-
+    self.wait(2)
+    # endregion 
 
 class diagonalMatrix(LinearTransformationScene):
 
@@ -941,7 +943,6 @@ class diagonalMatrix(LinearTransformationScene):
         self.wait(0.5)
     
         # endregion
-
 
 class orthonormalMatrix(LinearTransformationScene):
 
@@ -1125,7 +1126,7 @@ class inverseMatrix(LinearTransformationScene):
             show_coordinates=True,  # include coordinate labels
             leave_ghost_vectors=True,
             include_foreground_plane=True,  # includes grid lines 
-            include_background_plane=False,  # includes numbers 
+            include_background_plane=True,  # includes numbers 
             *kwargs
         )
 
@@ -1678,7 +1679,6 @@ class eigenvectorMatrix(LinearTransformationScene):
         # endregion 
         
 
-
 import cv2
 from PIL import Image, ImageOps
 from dataclasses import dataclass
@@ -1762,7 +1762,6 @@ class VideoMobject(ImageMobject):
             mobj.pixel_array = change_to_rgba_array(
                 np.asarray(img), mobj.pixel_array_dtype
             )
-
 
 class svd_anim_proof(Scene):
     def construct(self):
@@ -2024,7 +2023,6 @@ class svd_anim_proof(Scene):
 
         self.wait(1.5)
 
-
 class svd(ThreeDScene):
     def construct(self):
         # Set up axes
@@ -2224,99 +2222,3 @@ class svd_piecemeal(ThreeDScene):
         self.wait(2)
 
         # endregion 
-
-
-
-
-
-
-class VectorProjection(LinearTransformationScene): 
-  
-  def __init__(self, **kwargs):
-        
-        LinearTransformationScene.__init__(
-            self,
-            show_basis_vectors=False, 
-            show_coordinates=True,  # include coordinate labels
-            leave_ghost_vectors=False,
-            include_foreground_plane=True,  # includes grid lines 
-            include_background_plane=True,  # includes numbers 
-            *kwargs
-        )
-
-  def construct(self): 
-    plane = NumberPlane()
-    vecu = [-2, 3, 0]
-    vecv = [np.sqrt(2)/2, np.sqrt(2)/2, 0]
-
-    arrowU = Vector(vecu, buff=0, color = YELLOW)
-    # add label for basis_i
-    label_u = MathTex(r'\hat{j}', color="#33c304", font_size=40)  
-    label_u.align_to(arrowU, UL)
-    label_u.shift(0.3 * LEFT)
-
-    # vectorU = Vector()
-    arrowU1 = Vector(vecu, buff=0, color = YELLOW)
-    arrowV = Vector(vecv, buff = 0, color = BLUE)
-
-    # Compute Projection of U onto V
-    numerator = np.dot(vecu, vecv)
-    demoninator = np.linalg.norm(vecv)**2 
-    scalar = numerator / demoninator
-    vecProjUtoV = scalar * np.array(vecv) 
-    ArrowProjection = Vector(vecProjUtoV, buff=0, color = PINK) 
-
-    # Compute Line orthogonal to V
-    line = Line(vecu, vecProjUtoV, buff=0, color = GREY)
-    line2 = Line(ORIGIN, vecv, buff = 0)
-    Rangle = RightAngle(line2, line, length=0.4, color = GREY, 
-                        quadrant = (-1, -1)) 
-
-    # Animation
-    # self.play(Create(plane), run_time = 1)
-    self.play(GrowArrow(arrowU), GrowArrow(arrowV))
-    self.add(arrowU1)
-    self.wait()
-    self.play(Create(line))
-    self.play(Create(Rangle))
-    self.wait()
-    self.play(Transform(arrowU1, ArrowProjection))
-    self.play(FadeOut(line), FadeOut(Rangle))
-    self.wait(2)
-
-
-class VectorProjection1(Scene): 
-  def construct(self): 
-    plane = NumberPlane()
-    coord_vecU = [-2, 3, 0]
-    coord_vecV = [1, 2, 0]
-
-    vecU = Vector(coord_vecU, buff=0, color = YELLOW)
-    # vectorU = Vector()
-   #  arrowU1 = Vector(ORIGIN, coord_vecU, buff=0, color = YELLOW)
-    vecV = Vector(coord_vecV, buff = 0, color = BLUE)
-
-    # Compute Projection of U onto V
-    numerator = np.dot(coord_vecU, coord_vecV)
-    demoninator = np.linalg.norm(coord_vecV)**2 
-    scalar = numerator / demoninator
-    vecProjUtoV = scalar * np.array(coord_vecV) 
-    ArrowProjection = Arrow(ORIGIN, vecProjUtoV, buff=0, color = PINK) 
-
-    # Compute Line orthogonal to V
-    line = Line(coord_vecU, vecProjUtoV, buff=0, color = GREY)
-    line2 = Line(ORIGIN, coord_vecV, buff = 0)
-    Rangle = RightAngle(line2, line, length=0.4, color = GREY, 
-                        quadrant = (-1, -1)) 
-
-    # Animation
-    self.play(Create(plane), run_time = 1)
-    self.play(GrowArrow(vecU), GrowArrow(vecV))
-    self.add(arrowU1)
-    self.wait()
-    self.play(Create(line))
-    self.play(Create(Rangle))
-    self.wait()
-    self.play(Transform(arrowU1, ArrowProjection))
-    self.play(FadeOut(line), FadeOut(Rangle))
-    self.wait(2)
