@@ -376,8 +376,8 @@ class weightedSumMatrix(LinearTransformationScene):
     # region Scene 4: Add matrix-vector computation  
       
     matrix_vec_text = (MathTex(r"\mathbf{B}_n \mathbf{g}_n = " +
-                               r"\begin{bmatrix} 1 & \quad 2 \\ \\" + 
-                               r"0 & \quad 1 \end{bmatrix}" + 
+                               r"\begin{bmatrix} 1 & \quad 1 \\ \\" + 
+                               r"0 & \quad 2 \end{bmatrix}" + 
                                r"\begin{bmatrix} 1.5 \\ \\ 0.5 \end{bmatrix}",
                                font_size=35)
                                .to_edge(DL))
@@ -1679,16 +1679,16 @@ class eigenvectorMatrix(LinearTransformationScene):
         # endregion 
         
 
-import cv2
-from PIL import Image, ImageOps
-from dataclasses import dataclass
-
-@dataclass
-class VideoStatus:
-    time: float = 0
-    videoObject: cv2.VideoCapture = None
-    def __deepcopy__(self, memo):
-        return self
+# import cv2
+# from PIL import Image, ImageOps
+# from dataclasses import dataclass
+# 
+# @dataclass
+# class VideoStatus:
+#     time: float = 0
+#     videoObject: cv2.VideoCapture = None
+#     def __deepcopy__(self, memo):
+#         return self
 
 class VideoMobject(ImageMobject):
     '''
