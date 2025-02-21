@@ -295,7 +295,7 @@ If the vector being projected onto is normalized, then it has length of 1 (i.e.,
    <div class="figTitle">
     <span>Visualization of Vector Projection</span>
   </div>
-    <img src="media/images/proj_plot.png" width="80%" height="80%"> 
+    <img src="images/proj_plot.png" width="80%" height="80%"> 
   <div class="figNote">
   <span><em>Note. </em>The process for deriving projections (Equation \ref{eq:proj-eq}) is visualized. The depicted objective is to find the value of $\mathbf{x}$ on $\mathbf{v}$. For the purposes of comprehension, $\mathbf{v}$ can be conceptualized as another basis that defines the span of $L=c\mathbf{v}$, and we want to know the orthogonal projection of $\mathbf{x}$ on this basis. The solution to this problem becomes obvious once two facts become evident. First, the orthogonal projection will be some $c$ scalar multiple of $\mathbf{v}$, $Proj_L(\mathbf{x}) = c\mathbf{x}$. Second, because the projection is orthogonal, then a vector must exist that has a null dot product with the projection. This is indeed the case: $(\mathbf{x} -Proj_L(\mathbf{x}))$ is orthogonal with $\mathbf{v}$. For readers interested in producing this visualization, the Python code is provided below in lines <a href="#23">23--125</a>.</span>
   </div>
@@ -405,7 +405,7 @@ plot_proj = (pt.ggplot() +
         axis_text=pt.element_blank(),  # Remove default tick labels
         legend_position="none"))
         
-plot_proj.save("media/images/proj_plot.png", dpi=500, width=8, height=6)
+plot_proj.save("images/proj_plot.png", dpi=500, width=8, height=6)
 ```
 
 ## Visualizations of Elementary Matrices  
@@ -1057,7 +1057,7 @@ To understand why loadings are not always meaningful, it is important to underst
    <div class="figTitle">
     <span>Unrotated Loadings of Wines Onto Principal Axes</span>
   </div>
-    <img src="media/images/loading_plot.png" width="80%" height="80%"> 
+    <img src="images/loading_plot.png" width="80%" height="80%"> 
   <div class="figNote">
   <span><em>Note. </em>Unrotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, it is difficult to assign any meaning to the principal axes. The Python code in lines <a href="#273">273--291</a> produced this plot. </span>
   </div>
@@ -1083,7 +1083,7 @@ plot_loadings = (pt.ggplot(data=loadings, mapping=pt.aes(x='Axis 1', y='Axis 2',
                           axis_text=pt.element_text(color="#002241")))
         
 #save as .png
-plot_loadings.save("media/images/loading_plot.png", width=8, height=6, dpi=1000)
+plot_loadings.save("images/loading_plot.png", width=8, height=6, dpi=1000)
 ```
 
 
@@ -1155,7 +1155,7 @@ kbl(py$df_varimax, booktabs = TRUE, format = 'html',
    <div class="figTitle">
     <span>Varimax-Rotated Loadings of Wines Onto Principal Axes</span>
   </div>
-    <img src="media/images/varimax_loading_plot.png" width="80%" height="80%"> 
+    <img src="images/varimax_loading_plot.png" width="80%" height="80%"> 
   <div class="figNote">
     <span><em>Note. </em>Rotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, meaning can easily be assigned the principal axes. The first principal axis (x-axis) can be conceptualized as representing  a *celebratory wine drinking* tendency as it has high loadings from the wines of champagne and rosé. The second principal axis (y-axis) can be conceptualized as a *dinner wine drinking* tendency as it has high loadings from the wines of cabernet sauvignon and merlot. The Python code block in lines <a href="#334">334--352</a> produce this plot.</span>
   </div>
@@ -1180,7 +1180,7 @@ plot_loadings = (pt.ggplot(data=df_varimax, mapping=pt.aes(x='Celebratory', y='D
                           axis_text=pt.element_text(color="#002241")))
         
 #save as .png
-plot_loadings.save("media/images/varimax_loading_plot.png", width=8, height=6, dpi=1000)
+plot_loadings.save("images/varimax_loading_plot.png", width=8, height=6, dpi=1000)
 ```
 
 
@@ -1346,7 +1346,7 @@ Like the loadings, the rotated principal component scores can also be plotted. F
    <div class="figTitle">
     <span>Principal Component Biplot</span>
   </div>
-    <img src="media/images/pca_biplot.png" width="80%" height="80%"> 
+    <img src="images/pca_biplot.png" width="80%" height="80%"> 
   <div class="figNote">
     <span><em>Note. </em>Biplot shows rotated loadings and rotated principal component scores. The vectors represent the loadings of cabernet sauvignon, champagne, merlot, and rosé onto each of the principal axes and the dots represent each wine drinker's principal component score. The first principal axis (x-axis) represents *celebratory wine drinking* as it has high loadings with champagne and rosé. The second principal axis (y-axis) represents *dinner wine drinking* as it has high loadings with cabernet sauvignon and merlot. The Python code below in lines x<a href="#440">440--490</a> produces this plot. </span>
   </div>
@@ -1403,7 +1403,7 @@ biplot = (pt.ggplot(data=df_rot_scores, mapping=pt.aes(x='Dinner Wine Drinking',
            axis_ticks=pt.element_line(color="#002241"),
            axis_text=pt.element_text(color="#002241")))
            
-biplot.save("media/images/pca_biplot", dpi=500, width=8, height=6)
+biplot.save("images/pca_biplot", dpi=500, width=8, height=6)
 ```
 
 
