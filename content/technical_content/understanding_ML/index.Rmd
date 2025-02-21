@@ -120,9 +120,10 @@ py_list_packages(envname = 'blog_posts', type = 'conda')
 
 Fourth, for any reader interested in using the source code for each function, it will be necessary to load `trun_mvnt` Python module from GitHub (see lines <a href="#14">14--15</a> below). 
 
-```{bash, engine = 'bash',  echo=T, eval=T, results = 'hide', hlopts=list( language = 'bash')}
+```{bash, engine = 'bash',  echo=T, eval=F, results = 'hide', hlopts=list( language = 'bash')}
 git clone https://github.com/ralphma1203/trun_mvnt.git
 ```
+
 ```{python trun-mvnt, echo=T, eval=T,  class_name = 'python-code', hlopts=list(language = 'python')}
 from trun_mvnt import trun_mvnt as tvm
 ```
