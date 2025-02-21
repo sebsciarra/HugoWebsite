@@ -1,8 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/782344951_1671348474_223132457.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/1454343519_66111383_227336782.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/1454343519_87160748_2829203664.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/1454343519_66111383_2653702195.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/2213047545_2098436639_3689974801.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/3721692785_3467822883_3669432454.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/200p15/partial_movie_files/svd/3536539613_66111383_547495222.mp4'

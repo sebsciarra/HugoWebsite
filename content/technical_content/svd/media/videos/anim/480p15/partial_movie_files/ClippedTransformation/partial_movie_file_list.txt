@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/ClippedTransformation/279692083_3766774508_1112754006.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/ClippedTransformation/159476039_784179552_249342273.mp4'

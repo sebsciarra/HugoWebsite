@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/279692083_484908114_3380977203.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_2569161387_781484609.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_1210635113_94390183.mp4'
-file 'file:/Users/sebastiansciarra/Desktop/Projects/HugoWebsite/content/technical_content/svd/media/videos/anim/480p15/partial_movie_files/tomCoordTransformation/159476039_1733944848_20726010.mp4'
