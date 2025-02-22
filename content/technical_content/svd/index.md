@@ -11,7 +11,7 @@ header-includes:
   - \usepackage{blkarray}
 always_allow_html: true
 bibFile: content/technical_content/svd/refs.json    
-imgThumbnail: "https://sebastiansciarra.com/technical_content/svd//media2/proj_plot.png"
+imgThumbnail: "https://sebastiansciarra.com/technical_content/svd/media2/proj_plot.png"
 tags: []
 ---   
 
