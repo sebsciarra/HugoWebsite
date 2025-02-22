@@ -1,0 +1,9 @@
+\documentclass[preview]{standalone}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+\begin{align*}
+\begin{array}{ccc}\begin{matrix}\hspace{0.75cm} \mathbf{b_{x}} &  \mathbf{b_{y}} &  \mathbf{b_{z}} \end{matrix} \\ \mathbf{A} = \begin{bmatrix} 2 & \hspace{0.1cm} 1 \hspace{0.1cm}& \hspace{0.1cm} 1 \\ \hspace{0.04cm}  0 \hspace{0.1cm} & \hspace{0.1cm} 2 \hspace{0.1cm}\hspace{0.1cm} & 3 \end{bmatrix} \end{array}= \mathbf{U \Sigma V^\top}= \underbrace{\begin{bmatrix} -0.46 & -0.89 & \\ -0.89 & 0.46 \end{bmatrix}}_{\text{Rotation}} \underbrace{\begin{bmatrix} 3.95 & 0 & 0 \\0 & 1.84 & 0 \end{bmatrix}}_{\text{Stretch + dim. change}}\underbrace{\begin{bmatrix} -0.23 & -0.57 & -0.79 \\-0.96 & 0.01 & 0.27 \\ 0.14 & -0.82 & 0.55 \end{bmatrix}}_{\text{Rotation}}
+\end{align*}
+\end{document}
