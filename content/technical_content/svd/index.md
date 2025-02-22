@@ -166,8 +166,6 @@ Animation \ref{anim:weightedSum} below shows how matrix-vector multiplication of
 {{< insert-video "media/videos/anim/480p15/weightedSumMatrix.mp4" "weightedSum" "Geometry of Matrix-Vector Multiplication from Equation \ref{eq:weighted-sum-ns})" "The example in this animation shows that pre-multiplying a vector by a matrix of basis vectors simply involves taking the weighted sum of basis matrices. Specifically, the first basis vector of $\mathbf{B}_n$, $\mathbf{b}_x = [1, 0]$, is multiplied by 1.5 and the second basis vector, $\mathbf{b}_x = [1, 2]$, is multiplied by 0.5. Both weighted basis vectors are then summed to give $\mathbf{g}_e = [2, 1]$." >}}
 
 
-
-
 ### Dot Products are 1-Dimensional Cases of Matrix-Vector Multiplication 
 
 Although it may not be obvious, dot products are simply 1-dimensional cases of matrix-vector multiplication. That is, dot products also transform bases by computing weighted vector sums. The only nuance is that the transformations applied by dot products occur in a 1-dimensional space (i.e., a line). To understand the geometry of dot products, consider two vectors of $\mathbf{a} = \[1, 2\]$ and $\mathbf{b} = \[3, 1\]$. In computing the dot produict between these vectors, $\mathbf{a}^\top \mathbf{b}$, basis vectors still exist, but they are now 1-dimensional. More specifically, the first basis vector of $\mathbf{b}$, $b_x = 3$, is multiplied by 1 and the second basis vector, $b_y = 1$, is multiplied by 2. I have provided Animation \ref{anim:dot-product} to clearly explain the geometry of dot products. 
