@@ -2,7 +2,7 @@
 title: "The Theory of the Singular Value Decomposition and its Relation to Principal Component Analysis" 
 draft: false
 summary: "This whitepaper explicates the geometry of the singular value decomposition and its deep connection to principal component analysis. Geometrically, the singular value decomposition shows that every matrix can be sequentially decomposed into a rotation followed by stretching and/or dimension change and then followed by another rotation. At a deeper level, the singular value decomposition provides eigenvectors that define principal axes onto which original variables and scores can be projected to, respectively, provide loadings and principal component scores. Using rotations, the loadings and principal component scores can be transformed into having more interpretable values."
-date: "2025-02-21"
+date: "2025-02-22"
 article_type: technical
 output:
   bookdown::html_document2:
@@ -11,7 +11,7 @@ header-includes:
   - \usepackage{blkarray}
 always_allow_html: true
 bibFile: content/technical_content/svd/refs.json    
-imgThumbnail: ""
+imgThumbnail: "https://sebastiansciarra.com/technical_content/svd//media2/proj_plot.png"
 tags: []
 ---   
 
