@@ -1237,40 +1237,40 @@ np.testing.assert_array_equal(eig_vals.round(4), eig_converted.round(4))</code><
 <p>Understanding how to compute loadings simply requires understanding that loadings are correlations between the original variables and the principal axes. Thus, loadings can be computed by obtaining correlations between scores on the original variables and scores on the principal axes. Mathematically, I’ll show that this is equivalent to computing</p>
 <p><span class="math display">\[
 \begin{align}
-\mathbf{L} &amp;= \mathbf{VE}^{\frac{1}{2}} = corr(\mathbf{X}, \mathbf{P}),
+\mathbf{L} &amp;= \mathbf{VE}^{\frac{1}{2}} = corr(\mathbf{X}, \mathbf{P}\_{std}),
 \label{eq:loadings_eq}
 \end{align}
 \]</span>
-where <span class="math inline">\(\mathbf{V}\)</span> is the matrix of eigenvectors, <span class="math inline">\(\mathbf{E}\)</span> is the diagonal matrix of corresponding eigenvalues, <span class="math inline">\(\mathbf{X}\)</span> contains the standardized wine ratings, and <span class="math inline">\(\mathbf{P}\)</span> contains the standardized scores on the principal axes (i.e., standardized principal component scores).</p>
-<p>To prove Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span>, I will first demonstrate the following two proofs:</p>
+where <span class="math inline">\(\mathbf{V}\)</span> is the matrix of eigenvectors, <span class="math inline">\(\mathbf{E}\)</span> is the diagonal matrix of corresponding eigenvalues, <span class="math inline">\(\mathbf{X}\)</span> contains the standardized wine ratings, and <span class="math inline">\(\mathbf{P}\_{std}\)</span> contains the standardized scores on the principal axes (i.e., standardized principal component scores).</p>
+<p>To prove Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span>, I will first prove the the following two equations:</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
-corr(\mathbf{X}, \mathbf{P}) = \frac{\mathbf{X}^\top\mathbf{P}}{N-1}
+corr(\mathbf{X}, \mathbf{P}\_{std}) = \frac{\mathbf{X}^\top\mathbf{P}\_{std}}{N-1}
 \label{eq:loadings-p1} \\\\
-\mathbf{P} = \mathbf{U}\sqrt{N-1}
+\mathbf{P}\_{std} = \mathbf{U}\sqrt{N-1}
 \label{eq:loadings-p2}
 \end{align}
 \end{spreadlines}
 \]</span>
-Once the above two points have been proven, Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span> will be a simple corollary.</p>
-<p>First, Equation <span class="math inline">\(\ref{eq:loadings-p1}\)</span> is proven below by using the equation for the correlation (or loadings; <span class="math inline">\(l\)</span>) between one wine’s ratings, <span class="math inline">\(\mathbf{x}\)</span>, and their corresponding scores on one principal axis, <span class="math inline">\(\mathbf{p}\)</span>, is obtained by</p>
+Once the above equations have been proven, Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span> will be a simple corollary.</p>
+<p>First, Equation <span class="math inline">\(\ref{eq:loadings-p1}\)</span> is proven below by using the equation for the correlation (or loadings; <span class="math inline">\(l\)</span>) between one wine’s ratings, <span class="math inline">\(\mathbf{x}\)</span>, and their corresponding scores on one principal axis, <span class="math inline">\(\mathbf{p}_{std}\)</span>,</p>
 <p><span class="math display">\[
 \begin{align}
-corr(\mathbf{x}, \mathbf{p}) = l &amp;= \frac{cov(\mathbf{x}, \mathbf{p})}{sd(\mathbf{x}) sd(\mathbf{p})} \nonumber \\\\
-&amp;= \frac{\frac{\mathbf{x^\top p}}{N-1}}{\sqrt{\frac{\lVert \mathbf{x} \rVert}{N-1}} \sqrt{\frac{\lVert \mathbf{p} \rVert}{N-1}}}\nonumber \\\\
-&amp;= \frac{\frac{\mathbf{x^\top p}}{N-1}}{\sqrt{\frac{N-1}{N-1}} \sqrt{\frac{N-1}{N-1}}} \nonumber \\\\
-&amp;= \frac{\mathbf{x^\top p}}{N-1}
+corr(\mathbf{x}, \mathbf{p}\_{std}) = l &amp;= \frac{cov(\mathbf{x}, \mathbf{p}\_{std})}{sd(\mathbf{x}) sd(\mathbf{p}\_{std})} \nonumber \\\\
+&amp;= \frac{\frac{\mathbf{x^\top p}\_{std}}{N-1}}{\sqrt{\frac{\lVert \mathbf{x} \rVert}{N-1}} \sqrt{\frac{\lVert \mathbf{p}\_{std} \rVert}{N-1}}}\nonumber \\\\
+&amp;= \frac{\frac{\mathbf{x^\top p}\_{std}}{N-1}}{\sqrt{\frac{N-1}{N-1}} \sqrt{\frac{N-1}{N-1}}} \nonumber \\\\
+&amp;= \frac{\mathbf{x^\top p}\_{std}}{N-1}.
 \label{eq:correlation}
 \end{align}
 \]</span></p>
-<p>Note that, because <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{p}\)</span> are standardized, their lengths are equivalent to <span class="math inline">\(N-1\)</span> (see <a href="#length-proof">Appendix D</a>). To finish this first proof, Equation <span class="math inline">\(\ref{eq:correlation}\)</span> can be transformed into its matrix form where the computation computes a matrix of loadings, <span class="math inline">\(\mathbf{L}\)</span>, that contains loadings of each variable of wine scores onto each principal axis</p>
+<p>Note that, because <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{p}\_{std}\)</span> are standardized, their lengths are equivalent to <span class="math inline">\(N-1\)</span> (see <a href="#length-proof">Appendix D</a>). To finish this first proof, Equation <span class="math inline">\(\ref{eq:correlation}\)</span> can be transformed into its matrix form where the matrix of loadings, <span class="math inline">\(\mathbf{L}\)</span>, contains loadings of each variable of wine scores onto each principal axis</p>
 <p><span class="math display">\[
 \begin{align}
-\mathbf{L}= \frac{\mathbf{X}^\top\mathbf{P}}{N-1}. \qquad\qquad _\blacksquare
+\mathbf{L}= \frac{\mathbf{X}^\top\mathbf{P}\_{std}}{N-1}. \qquad\qquad _\blacksquare
 \end{align}
 \]</span></p>
-<p>Second, I now show how to compute the matrix of standardized principal component scores, <span class="math inline">\(\mathbf{P}\)</span>. Conceptually, principal component scores represent projections of the original variables onto the principal axes. Given that projections are simply obtained by computing dot products (see <a href="#dot-products">dot products</a>), the unstandardized principal component scores can be obtained with</p>
+<p>Second, I now show how to compute the matrix of standardized principal component scores, <span class="math inline">\(\mathbf{P}\_{std}\)</span>. Conceptually, principal component scores represent projections of the original variables onto the principal axes. Given that projections are simply obtained by computing dot products (see <a href="#dot-products">dot products</a>), the unstandardized principal component scores can be obtained with</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -1292,7 +1292,7 @@ corr(\mathbf{x}, \mathbf{p}) = l &amp;= \frac{cov(\mathbf{x}, \mathbf{p})}{sd(\m
 \end{align}
 \end{spreadlines}
 \]</span></p>
-<p>Proving Equation <span class="math inline">\(\ref{eq:loadings-p2}\)</span> now simply using Equation <span class="math inline">\(\ref{eq:pc-std}\)</span> to standardize the principal component scores (Equation <span class="math inline">\(\ref{eq:pc-scores}\)</span>).</p>
+<p>Proving Equation <span class="math inline">\(\ref{eq:loadings-p2}\)</span> now simply requires using Equation <span class="math inline">\(\ref{eq:pc-std}\)</span> to standardize the principal component scores (Equation <span class="math inline">\(\ref{eq:pc-scores}\)</span>).</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -1302,7 +1302,7 @@ corr(\mathbf{x}, \mathbf{p}) = l &amp;= \frac{cov(\mathbf{x}, \mathbf{p})}{sd(\m
 \end{align}
 \end{spreadlines}
 \]</span></p>
-<p>Having proven Equations <span class="math inline">\(\ref{eq:loadings-p1}\)</span>–<span class="math inline">\(\ref{eq:loadings-p2}\)</span>, proving Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span> becomes a simple exercise that simply requires using substituing for <span class="math inline">\(\mathbf{P}\)</span> and using the singular value decomposition of <span class="math inline">\(\mathbf{X}^\top\)</span>.</p>
+<p>Having proven Equations <span class="math inline">\(\ref{eq:loadings-p1}\)</span>–<span class="math inline">\(\ref{eq:loadings-p2}\)</span>, proving Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span> becomes a simple exercise of substituing for <span class="math inline">\(\mathbf{P}\_{std}\)</span> and using the singular value decomposition of <span class="math inline">\(\mathbf{X}^\top\)</span>.</p>
 <p><span class="math display">\[
 \begin{spreadlines}{0.5em}
 \begin{align}
@@ -1315,7 +1315,7 @@ corr(\mathbf{x}, \mathbf{p}) = l &amp;= \frac{cov(\mathbf{x}, \mathbf{p})}{sd(\m
 \end{align}
 \end{spreadlines}
 \]</span></p>
-<p>Using the data set of wine drinkers, I now apply the above equations to compute the loadings. To preface (and as mentioned in the <a href="#description">description of the data</a>), the principal axes were generated such that one measures dinner wine drinking (high loadings of cabernet sauvignon and merlot) and the other one measures celebratory wine drinking (high loadings of champagne and rosé). Using the wine rating data, I now provide Python code (lines <a href="#227">227–260</a> below) to compute the loadings using Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span>.</p>
+<p>Using the data set of wine drinkers, I now apply the above equations to compute the loadings. To preface (and as mentioned in the <a href="#description">description of the data</a>), the principal axes were generated such that one measures <em>dinner wine drinking</em> (high loadings of cabernet sauvignon and merlot) and the other one measures <em>celebratory wine drinking</em> (high loadings of champagne and rosé). Using the wine rating data, I now provide Python code (lines <a href="#227">227–260</a> below) to compute the loadings using Equation <span class="math inline">\(\ref{eq:loadings_eq}\)</span>.</p>
 <pre class="r" language="python"><code># standardize data
 df_std = (A - A.mean())/A.std(ddof=1)
 
@@ -1353,7 +1353,7 @@ assert (np.array_equal(pca_loadings, svd_loadings_1) and
 </div>
 <div id="rotational-indeterminacy" class="section level3" number="5.3.2">
 <h3><span class="header-section-number">5.3.2</span> Rotational Indeterminacy</h3>
-<p>Although loadings can be computed using the matrices of singular value decomposition (which I will call the unrotated loadings), they aren’t guaranteed to be meaningful. For instance, consider the set of loadings computed in the previous <a href="#computing-loadings">section</a> and shown below in Table <span class="math inline">\(\ref{tab:loading-table}\)</span> (created using Python and R code blocks) and their alignment with how the data were generated. To recall, I generated the wine rating data such that two dimensions of wine drinking existed:</p>
+<p>Although loadings can be computed using the matrices from the singular value decomposition (which I will call the unrotated loadings), they aren’t guaranteed to be meaningful. For instance, consider the set of loadings computed in the previous <a href="#computing-loadings">section</a> and shown below in Table <span class="math inline">\(\ref{tab:loading-table}\)</span> and their alignment with how the data were generated. To recall, I generated the wine rating data such that two dimensions of wine drinking existed:</p>
 <ol style="list-style-type: decimal">
 <li><em>Dinner Wine Drinking</em>: prefers drinking red wines such as cabernet sauvignon (CS) and merlot (M).</li>
 <li><em>Celebratory Wine Drinking</em>: prefers drinking champagne (Chp) and rosé (R).</li>
@@ -1435,7 +1435,7 @@ Rosé
 </tr>
 </tbody>
 </table>
-<p>To understand why loadings are not always meaningful, it is important to understand <em>rotational determinacy</em>. Mathematically speaking, an infinite number of loading sets exist that all account for the amount of cumulative variance. Thus, although the loadings in Table <span class="math inline">\(\ref{tab:loading-table}\)</span> were obtained with closed-form solutions, there is nothing unique about them. The non-uniqueness of the above loadings can be better understood by plotting them. Figure <span class="math inline">\(\ref{fig:loading-plot}\)</span> shows the unrotated loadings plotted onto each principal axis. Rotational indeterminacy becomes clear in understanding that the x- and y-axes in Figure <span class="math inline">\(\ref{fig:loading-plot}\)</span> can be rotated in an infinite number of ways that each account for the same amount of cumulative variance (i.e., the eigenvalues sums will be identical).</p>
+<p>To understand why loadings are not always meaningful, it is important to understand <em>rotational determinacy</em>. Mathematically speaking, an infinite number of loading sets exist that all account for the same amount of cumulative variance. Thus, although the loadings in Table <span class="math inline">\(\ref{tab:loading-table}\)</span> were obtained with closed-form solutions, there is nothing unique about them. The non-uniqueness of the above loadings can be better understood by plotting them. Figure <span class="math inline">\(\ref{fig:loading-plot}\)</span> shows the unrotated loadings plotted onto each principal axis. Rotational indeterminacy becomes clear in understanding that the x- and y-axes in Figure <span class="math inline">\(\ref{fig:loading-plot}\)</span> can be rotated in an infinite number of ways that each account for the same amount of cumulative variance (i.e., the eigenvalue sums will be identical).</p>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
@@ -1447,7 +1447,7 @@ Rosé
 </div>
 <pre><code>&lt;img src=&quot;media2/loading_plot.png&quot; width=&quot;80%&quot; height=&quot;80%&quot;&gt; </code></pre>
 <div class="figNote">
-<span><em>Note. </em>Unrotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, it is difficult to assign any meaning to the principal axes. The Python code in lines <a href="#273">273–291</a> produced this plot. </span>
+<span><em>Note. </em>Unrotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, it is difficult to assign any meaning to the principal axes. The Python code in lines <a href="#273">273-291</a> produced this plot. </span>
 </div>
 </div>
 <pre class="r" language="python"><code># add colors
@@ -1600,7 +1600,7 @@ Rosé
 </div>
 <pre><code>&lt;img src=&quot;media2/varimax_loading_plot.png&quot; width=&quot;80%&quot; height=&quot;80%&quot;&gt; </code></pre>
 <div class="figNote">
-<pre><code>&lt;span&gt;&lt;em&gt;Note. &lt;/em&gt;Rotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, meaning can easily be assigned the principal axes. The first principal axis (x-axis) can be conceptualized as representing  a *celebratory wine drinking* tendency as it has high loadings from the wines of champagne and rosé. The second principal axis (y-axis) can be conceptualized as a *dinner wine drinking* tendency as it has high loadings from the wines of cabernet sauvignon and merlot. The Python code block in lines &lt;a href=&quot;#334&quot;&gt;334--352&lt;/a&gt; produce this plot.&lt;/span&gt;</code></pre>
+<pre><code>&lt;span&gt;&lt;em&gt;Note. &lt;/em&gt;Rotated loadings for cabernet sauvignon, champagne, merlot, and rosé are shown on two principal axes. In this case, meaning can easily be assigned the principal axes. The first principal axis (x-axis) can be conceptualized as representing  a *celebratory wine drinking* tendency as it has high loadings from the wines of champagne and rosé. The second principal axis (y-axis) can be conceptualized as a *dinner wine drinking* tendency as it has high loadings from the wines of cabernet sauvignon and merlot. The Python code block in lines &lt;a href=&quot;#334&quot;&gt;334-352&lt;/a&gt; produce this plot.&lt;/span&gt;</code></pre>
 </div>
 </div>
 <pre class="r" language="python"><code># add colors
@@ -1626,14 +1626,14 @@ plot_loadings.save(&quot;images/varimax_loading_plot.png&quot;, width=8, height=
 </div>
 <div id="computing-principal-component-scores-with-rotated-loadings" class="section level2" number="5.4">
 <h2><span class="header-section-number">5.4</span> Computing Principal Component Scores with Rotated Loadings</h2>
-<p>Having obtained the rotated loadings, the principal component scores can be computed with rotated loadings. Importantly, before computing the rotated principal component scors, two points require explanation. First, to more explicitly explain a previous statement, principal component scores can simply be obtained by computing the dot products between the standardized data and the eigenvectors (which are normalized; see <a href="#dot-products">dot products</a>).</p>
+<p>Having obtained the rotated loadings, the associated rotated principal component scores can be computed. Importantly, before computing the rotated principal component scors, two points require explanation. First, to more explicitly explain a previous statement, principal component scores can simply be obtained by computing the dot products between the standardized data and the eigenvectors (which are normalized; see <a href="#dot-products">dot products</a>).</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{P}\_{unstd} &amp;= \mathbf{X}\mathbf{V}
 \tag{\ref{eq:dot-prod-scores} revisited}
 \end{align}
 \]</span>
-To show that Equation <span class="math inline">\(\ref{eq:dot-prod-scores}\)</span> does indeed provide the principal component scores, I provide code below to provide this (see Python code in lines <a href="#353">353–370</a> below).</p>
+To show that Equation <span class="math inline">\(\ref{eq:dot-prod-scores}\)</span> does indeed provide the principal component scores, I provide the below code (see Python code in lines <a href="#353">353–370</a> below).</p>
 <pre class="r" language="python"><code># standardize data
 df_std = (A - A.mean())/A.std(ddof=1)
 
@@ -1711,8 +1711,8 @@ not_diagonal = np.allclose(rot_orth, rotated_diagonal, atol=1e-5)
 # Assert that the matrix is diagonal
 assert (is_diagonal == True and not_diagonal==False), &quot;&quot;&quot;Check computation of 
 rotated and unrotated loadings.&quot;&quot;&quot;</code></pre>
-<p>Because the rotated loadings are not orthogonal, using them to compute principal component scores (Equation <span class="math inline">\(\ref{eq:pca-loadings-scores}\)</span>) would result in principal axes that do not account for difference amounts of variance than expected by the eigenvalues. Therefore, some form of correction matrix is required. As it turns out, a correction matrix, <span class="math inline">\(\mathbf{Q}^{-1}\)</span>, can be computed.</p>
-<p>The derivation of <span class="math inline">\(\mathbf{Q}^{-1}\)</span> is actually quite simple. Because the goal is to compute principal component scores whose principal axis variabilities reflect those of the eigenvalues, we first need to compute the variance-covariance of the variance-covariance matrix and then apply an inversion to this matrix. Recall that matrix inversions un-transform basis vectors (see <a href="#matrix-inverse">matrix inverses</a>, and so applying <span class="math inline">\(\mathbf{Q}^{-1}\)</span> ensures that the principal component scores maintain the variance structure implied by the eigenvectors. Thus, Equation <span class="math inline">\(\ref{eq:loadings-inverse}\)</span> below is obtained.</p>
+<p>Because the rotated loadings are not orthogonal, using them to compute principal component scores (Equation <span class="math inline">\(\ref{eq:pca-loadings-scores}\)</span>) would result in principal axes that do not account for variance in the amounts expected by the eigenvalues. Therefore, some form of correction matrix is required. As it turns out, a correction matrix, <span class="math inline">\(\mathbf{Q}^{-1}\)</span>, can be computed.</p>
+<p>The derivation of <span class="math inline">\(\mathbf{Q}^{-1}\)</span> is actually quite simple. Because the goal is to compute principal component scores whose principal axis variabilities reflect those of the eigenvalues, we first need to first compute the variance-covariance matrix of the rotated loadings and then apply an inversion to this matrix. Recall that matrix inversions un-transform basis vectors (see <a href="#matrix-inverse">matrix inverses</a>, and so applying <span class="math inline">\(\mathbf{Q}^{-1}\)</span> ensures that the principal component scores maintain the variance structure implied by the eigenvalues Thus, Equation <span class="math inline">\(\ref{eq:loadings-inverse}\)</span> below is obtained.</p>
 <p><span class="math display">\[
 \begin{align}
 \mathbf{Q}^{-1} = (\mathbf{L}\_{rotated}^\top\mathbf{L}\_{rotated})^{-1}
@@ -1748,7 +1748,7 @@ rotated_scores = df_std.dot(varimax_loadings).dot(np.linalg.inv(Q))
 varimax_fac = FactorAnalyzer(rotation=&#39;varimax&#39;, n_factors=2, method=&#39;principal&#39;)
 varimax_fac.fit(df_std)
 factor_scores = varimax_fac.transform(df_std)</code></pre>
-<p>Like the loadings, the rotated principal component scores can also be plotted. For comprehensiveness, I superimpose the factor loadings from Figure <span class="math inline">\(\ref{fig:varimax-plot}\)</span> as vectors and each wine drinker’s ratings principal component score as a dot in Figure <span class="math inline">\(\ref{fig:biplot}\)</span>.</p>
+<p>Like the loadings, the rotated principal component scores can also be plotted. For comprehensiveness, I show a biplot below in Figure <span class="math inline">\(\ref{fig:biplot}\)</span> where loadings are shown as vectors and rotated principal component score are shown as a dots.</p>
 <div class="figure">
 <div class="figDivLabel">
 <pre><code>&lt;caption&gt;
@@ -1760,7 +1760,7 @@ factor_scores = varimax_fac.transform(df_std)</code></pre>
 </div>
 <pre><code>&lt;img src=&quot;media2/pca_biplot.png&quot; width=&quot;80%&quot; height=&quot;80%&quot;&gt; </code></pre>
 <div class="figNote">
-<pre><code>&lt;span&gt;&lt;em&gt;Note. &lt;/em&gt;Biplot shows rotated loadings and rotated principal component scores. The vectors represent the loadings of cabernet sauvignon, champagne, merlot, and rosé onto each of the principal axes and the dots represent each wine drinker&#39;s principal component score. The first principal axis (x-axis) represents *celebratory wine drinking* as it has high loadings with champagne and rosé. The second principal axis (y-axis) represents *dinner wine drinking* as it has high loadings with cabernet sauvignon and merlot. The Python code below in lines x&lt;a href=&quot;#440&quot;&gt;440--490&lt;/a&gt; produces this plot. &lt;/span&gt;</code></pre>
+<pre><code>&lt;span&gt;&lt;em&gt;Note. &lt;/em&gt;Biplot shows rotated loadings and rotated principal component scores. The vectors represent the loadings of cabernet sauvignon, champagne, merlot, and rosé onto each of the principal axes and the dots represent each wine drinker&#39;s principal component score. The first principal axis (x-axis) represents *celebratory wine drinking* as it has high loadings with champagne and rosé. The second principal axis (y-axis) represents *dinner wine drinking* as it has high loadings with cabernet sauvignon and merlot. The Python code below in lines x&lt;a href=&quot;#440&quot;&gt;440-490&lt;/a&gt; produces this plot. &lt;/span&gt;</code></pre>
 </div>
 </div>
 <pre class="r" language="python"><code># standardize data
